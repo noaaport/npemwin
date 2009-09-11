@@ -1,8 +1,8 @@
 #
 # $Id$
 #
-.include "../Makefile.inc"
-.include "../VERSION"
+.include "../../Makefile.inc"
+.include "../../VERSION"
 .include "pkginfo.mk"
 
 OS != uname
@@ -22,22 +22,23 @@ option_files = -f pkg-plist \
 
 default: build
 
-../Makefile: ../Makefile.in
-	cd ..; ./configure.sh
+../../Makefile: ../../Makefile.in
+	cd ../..; ./configure.sh
 
-build: ../Makefile
-	cd ..; ${MAKE}
+build: ../../Makefile
+	cd ../..; ${MAKE}
 
 install: build
 	rm -rf pkg
 .if ${OS} == FreeBSD
 	install -d pkg
 	cd pkg; install -d `cat ../dirs`
-	cd ..; ${MAKE} DESTDIR=`pwd`/bsd/pkg PKGCONFDIR=/dist install
+	cd ../..; ${MAKE} DESTDIR=`pwd`/build/bsd/pkg PKGCONFDIR=/dist install
 .elif ${OS} == OpenBSD
 	install -d pkg/${PREFIX}
 	dirslist=`pwd`/dirs; cd pkg/${PREFIX}; install -d `cat $$dirslist`
-	cd ..; ${MAKE} PKGBUILDDIR=`pwd`/bsd/pkg PKGCONFDIR=/dist install
+	cd ../..; \
+	${MAKE} PKGBUILDDIR=`pwd`/build/bsd/pkg PKGCONFDIR=/dist install
 .endif
 
 package: install
@@ -52,4 +53,4 @@ clean:
 	rm -f *~
 	rm -f -r pkg
 	rm -f ${package_file}
-	cd ..; ${MAKE} clean
+	cd ../..; ${MAKE} clean
