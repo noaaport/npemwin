@@ -1,0 +1,88 @@
+#
+# create directories
+#
+dirs="/var/npemwin/spool/data
+/var/npemwin/spool/lock
+/var/npemwin/spool/tmp
+/var/npemwin/spool/qfiles
+/var/npemwin/files
+/var/npemwin/inv
+/var/npemwin/db
+/usr/local/etc/npemwin/defaults
+/usr/local/etc/npemwin/site
+/usr/local/etc/npemwin/rc.d
+/usr/local/etc/npemwin/rc.d/std
+/usr/local/etc/npemwin/rc.d/npemwin
+/usr/local/libexec/npemwin/site"
+
+for d in $dirs
+do
+  install -d -m 755 $d
+done
+
+#
+# install optional files from doc directory
+#
+docdir=/usr/local/share/doc/npemwin
+confdir=/usr/local/etc/npemwin
+rcdir=/etc/init.d
+
+install -m 0755 $docdir/npemwind.sh-sample $rcdir/npemwind
+if [ -n "`which chkconfig`" ]
+then
+	chkconfig --add npemwind
+elif [ -n "`which update-rc.d`" ]
+then
+	update-rc.d npemwind defaults 99
+fi
+
+#
+# configure default
+#
+cd $confdir
+for file in *.conf-sample *.rc-sample
+do
+  name=${file%%"-sample"}
+  cp $file $name
+done
+
+for file in *-defaults
+do
+  name=${file%%"-defaults"}
+  cp $file defaults/$name
+done
+
+cp qrunner.conf-site-sample site/qrunner.conf
+cp filters.conf-site-sample site/filters.conf
+cp stdfilter.rc-ldm-sample  rc.d/std/ldm.rc
+
+cat <<__EOF__
+
+The configuration files are installed in /usr/local/etc/npemwin.
+
+The installation process should have created various directories
+under /var/npemwin, and already enabled the servers.conf file.
+The program will run in this default installation without further
+configuration.
+
+Some common configuration options are indcated in various
+sample configuration files in the /usr/local/etc/npemwin
+directories and the defaults subdirectory.
+
+The directory /usr/local/share/doc/npemwin contains
+instructions for installing filters to process the files as they are
+received.
+
+An init script is installed to start automatically the program
+at boot time, and stop when the system is shutdown.
+It can also be started or stoped manually by executing
+
+        /etc/init.d/npemwind start
+        /etc/init.d/npemwind stop
+
+It is advisable to use a cron job to keep the incoming files
+directory from growing without limit; a sample script has been
+installed in /etc/cron.hourly.
+-
+
+__EOF__

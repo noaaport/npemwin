@@ -1,0 +1,18 @@
+if [ -n "`which chkconfig`" ]
+then
+	chkconfig --del npemwind
+elif [ -n "`which update-rc.d`" ]
+then
+	update-rc.d -f npemwind remove
+fi
+
+cd /usr/local/etc
+rm -rf npemwin
+
+cd /usr/local/libexec
+rm -rf npemwin_site
+
+cd /var
+rm -rf npemwin
+
+

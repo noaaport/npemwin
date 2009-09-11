@@ -1,0 +1,74 @@
+#
+# $Id$
+#
+@include@ @q@../Makefile.inc@q@
+
+INSTALL =	@INSTALL@
+SHELL =		@SHELL@
+TCLSH =         @TCLSH@
+PATH =		@PATH@
+FIND =		@FIND@
+UNZIP =		@UNZIP@
+NPEMWINDSH =    @NPEMWINDSH@
+HOURLYCONF =	@HOURLYCONF@
+STARTCLEANCONF = @STARTCLEANCONF@
+STARTSTOPRC =	@STARTSTOPRC@
+
+SAMPLES =	qrunner.conf-sample qrunner.conf-site-sample \
+		hourly-cleanup.conf-sample \
+		start-cleanup.conf-sample startstop.rc-sample
+LIBTOOLS =	qrunner startstop
+BINTOOLS =	npemwincleanup npemwinversion
+LIBFILES =      npemwind-start.tcl npemwind-stop.tcl
+DOCS =		filter.sh-sample npemwind.sh-sample
+TARGET =	${SAMPLES} ${BINTOOLS} ${LIBTOOLS} ${DOCS}
+
+all: ${TARGET}
+
+qrunner: qrunner.sh.in
+	sed -e "/%SHELL%/s##${SHELL}#" \
+	-e "/%PATH%/s##${PATH}#" \
+	-e "/%FIND%/s##${FIND}#" \
+	-e "/%UNZIP%/s##${UNZIP}#" qrunner.sh.in > qrunner
+
+npemwincleanup: npemwincleanup.tcl
+	sed -e /%TCLSH%/s##${TCLSH}# npemwincleanup.tcl > npemwincleanup
+
+npemwinversion: npemwinversion.tcl
+	sed -e /%TCLSH%/s##${TCLSH}# npemwinversion.tcl > npemwinversion
+
+filter.sh-sample: filter.sh.in
+	sed -e "/%SHELL%/s##${SHELL}#" filter.sh.in > filter.sh-sample
+
+npemwind.sh-sample: ${NPEMWINDSH}
+	cp ${NPEMWINDSH} npemwind.sh-sample
+
+qrunner.conf-sample: qrunner.conf.in
+	sed -e "/%PATH%/s##${PATH}#" \
+	-e "/%FIND%/s##${FIND}#" \
+	-e "/%UNZIP%/s##${UNZIP}#" qrunner.conf.in > qrunner.conf-sample
+
+qrunner.conf-site-sample: qrunner.conf-site
+	 cp qrunner.conf-site qrunner.conf-site-sample
+
+hourly-cleanup.conf-sample: ${HOURLYCONF}
+	cp ${HOURLYCONF} hourly-cleanup.conf-sample
+
+startstop: startstop.tcl
+	sed -e /%TCLSH%/s##${TCLSH}# startstop.tcl > startstop
+
+start-cleanup.conf-sample: ${STARTCLEANCONF}
+	cp ${STARTCLEANCONF} start-cleanup.conf-sample
+
+startstop.rc-sample: ${STARTSTOPRC}
+	cp ${STARTSTOPRC} startstop.rc-sample
+
+install:
+	${INSTALL} -m 0644 ${SAMPLES} ${MYCONFDIR}
+	${INSTALL} -m 0644 ${DOCS} ${MYDOCDIR}
+	${INSTALL} -m 0755 ${BINTOOLS} ${BINDIR}
+	${INSTALL} -m 0755 ${LIBTOOLS} ${MYLIBEXECDIR}
+	${INSTALL} -m 0644 ${LIBFILES} ${MYLIBEXECDIR}
+
+clean:
+	rm -f *~ ${TARGET} Makefile

@@ -1,0 +1,132 @@
+#!%TCLSH%
+#
+# $Id$
+#
+package require nntp;
+
+## The common defaults
+set defaultsfile "/usr/local/etc/npemwin/filters.conf";
+if {[file exists $defaultsfile] == 0} {
+        puts "Filter disabled: $defaultsfile not found.";
+        return 1;
+}
+source $defaultsfile;
+
+## The filter library
+if {[file exists $gf(filterlib)] == 0} {
+        puts "Filter disabled: $gf(filterlib) not found.";
+        return 1;
+}
+source $gf(filterlib);
+
+set nntpfilter(from)	"npemwinfeed@noaaport.net";
+set nntpfilter(server)	"news";
+#
+set nntpfilter(conf)	[file join $gf(confdir) "nntpfilter.conf"];
+set nntpfilter(rc)	[file join $gf(confdir) "nntpfilter.rc"];
+set nntpfilter(rcdir)	[file join $gf(confdir) "rc.d" "nntp"];
+set nntpfilter(confdirs)  $gf(localconfdirs)
+set nntpfilter(postrc)   "";
+set nntpfilter(nntpsendbin) "npemwin-nntpsend";
+set nntpfilter(groupprefix)	"emwin";	# or "npemwin"
+#
+# variables
+#
+set nntpfilter(rcfiles) [list];
+set nntpfilter(condition)	[list];
+set nntpfilter(action)		[list];
+
+if {[file exists $nntpfilter(conf)] == 1} {
+    source $nntpfilter(conf);
+}
+
+if {[file exists $nntpfilter(rc)] == 0} {
+    log_msg "Filter disabled: $nntpfilter(rc) not found.";
+    return 1;
+}
+
+# Build the list of rc files
+set nntpfilter(rcfiles) [filterlib_get_rcfiles [file tail $nntpfilter(rc)] \
+        $nntpfilter(confdirs) $nntpfilter(rcdir) $nntpfilter(postrc)];
+
+# Load the rules sets
+source $nntpfilter(rc);
+
+proc main {} {
+
+    global errorInfo;
+
+    while {[gets stdin line] >= 0} {
+	if {[regexp {^\s*$} $line]} {
+	    continue;
+	}
+	set args [split $line];
+	set argsc [llength $args];
+    	if {$argsc != 2} {
+            log_msg "Incorrect number of arguments: $args";
+	    continue;
+        }
+
+    	set prodname [lindex $args 0];
+    	set fpath [lindex $args 1];
+    
+        set status [catch {process $prodname $fpath} errmsg];
+	if {$status == 1} {
+	    log_msg "Error processing $prodname";
+	    log_msg $errmsg;
+	    log_msg $errorInfo;
+	}
+    }
+}
+
+proc process {prodname fpath} {
+
+    global nntpfilter;
+
+    set rclist [filterlib_get_rcvars $prodname $fpath];
+    array set rc $rclist
+
+    set rc_status 1;
+
+    # Evaluate the condition/action pairs, from all sets.
+    set status [catch {
+	set i 0;		# counts the sets
+	foreach condlist $nntpfilter(condition) {
+	    set actionlist [lindex $nntpfilter(action) $i];
+	    set j 0;	# counts the rules with each set
+	    foreach c $condlist {
+		set a [lindex $actionlist $j];
+		if {[expr $c]} {
+		    eval $a;
+		}
+		incr j;
+	    }
+	    incr i;
+	}
+    } errmsg];
+
+    if {$status == 1} {
+	log_msg "Error processing $fpath";
+	log_msg $errmsg;
+    }
+}
+
+proc send_nntp {fpath subgroup subject encodeflag} {
+
+    global nntpfilter;
+    global errorInfo;
+
+    set newsgroup "$nntpfilter(groupprefix).$subgroup";
+
+    set status [catch {
+        exec $nntpfilter(nntpsendbin) $nntpfilter(server) \
+		$nntpfilter(from) $newsgroup $subject $fpath $encodeflag
+    } errmsg];
+
+    if {$status != 0} {
+        log_msg $errmsg;
+#	log_msg $errorInfo;
+    }
+}
+
+main

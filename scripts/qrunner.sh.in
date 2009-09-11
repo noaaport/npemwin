@@ -1,0 +1,315 @@
+#!%SHELL%
+#
+# $Id$
+#
+# This script is called by the daemon to process the files stored
+# in the que. For those files for which all the blocks have been
+# received, it assembles all the blocks and transfers the files to
+# the public directory.
+#
+# In addition, for each file transfered, it calls the postfilter script,
+# passing the name of the product (file name without the extension) 
+# and the full path to the product file as the argument. 
+
+### defaults
+
+# The configuration file
+conf=/usr/local/etc/npemwin/qrunner.conf
+
+spooldir=/var/npemwin/spool
+datadir=data
+qdir=qfiles
+tmpdir=tmp
+lockdir=lock
+lockfilename=qrunner.lock
+out_dirname=/var/npemwin/files
+
+# Unprocessed files for a product are purged from the data directories
+# if they are older than this.
+max_elapsed_time=60	# in minutes
+
+# The program that the qrunner calls for each completely procesed file.
+# Nothing is installed by default.
+userfilter_enable=0
+userfilter=/usr/local/libexec/npemwin/site/userfilter
+
+# The program that the qrunner calls each time it is executed.
+# npemwin comes with a standard set of filters which are executed
+# using this facility. They can be disabled individually, or all
+# of them can be disabled here by setting postfilter_enable=0.
+postfilter_enable=1
+postfilter=/usr/local/libexec/npemwin/postfilter
+postfilterqfname=postfilter.q
+
+# When the postprocessing filters are enabled, if this variable is 1, then 
+# the retransmissions will be detected and will not be sent to the filters.
+# A soft link is created for every file received. This does not take a
+# significant amount of space, but it does require twice as many ionodes
+# in the file system. To send the retransmissions to the postprocessing
+# filters, set the variable to 0.
+detect_duplicates=1
+
+# 
+verbose=0
+
+# The only external programs used are find and unzip, but to make sure.
+PATH="%PATH%"
+
+# external programs
+FIND=%FIND%
+UNZIP=%UNZIP%
+
+### end defaults
+
+#
+# functions
+#
+
+cleanup(){
+
+    logger -t qrunner "qrunner script finished"
+
+    rm -f $qrunner_lockfile
+}
+
+get_file_parentsubdir(){
+#
+# usage: get_file_parentsubdir $name $ext $fpath
+#
+    _name=$1
+    _ext=$2
+    _fpath=$3
+
+    _awips1=`echo ${_name} | cut -c 1-3`
+    if [ "${_awips1}" = n0r \
+	-o "${_awips1}" = n0s \
+	-o "${_awips1}" = n0v \
+	-o "${_awips1}" = n0z \
+	-o "${_awips1}" = n1p \
+	-o "${_awips1}" = n1r \
+	-o "${_awips1}" = n1s \
+	-o "${_awips1}" = n1v \
+	-o "${_awips1}" = n2r \
+	-o "${_awips1}" = n2s \
+	-o "${_awips1}" = n3r \
+	-o "${_awips1}" = n3s \
+	-o "${_awips1}" = ncr \
+	-o "${_awips1}" = net \
+	-o "${_awips1}" = ntp \
+	-o "${_awips1}" = nvl \
+	-o "${_awips1}" = nvw \
+	]
+    then
+	_sss=`echo ${_name} | cut -c 4-6`
+	[ -z "${_sss}" ] && _sss=zzz
+	_subdir=rad/${_sss}
+    elif [ "${_awips1}" = tig ]
+    then
+	_subdir=sat
+    elif [ "${_ext}" = txt ]
+    then
+	set `head -c 18 ${_fpath}`
+	_wmoid=$1
+	_wmostation=$2
+	_wmotime=$3 
+	# This is a minimal check. We should also check isalpha for station,
+	# isnum for time, and so on. If this function returns an empty _subdir
+	# the calling code should interpret that the file has a corrupted
+	# header and should stop processing the file. Corrupted files can
+	# occur if e.g. "cat" gets a disk error while saving the frames,
+	# (like file system full and so on). We should try to catch those.
+	_subdir=
+	[ ${#_wmoid} -eq 6 ] && [ ${#_wmostation} -eq 4 ] && \
+		[ ${#_wmotime} -eq 6 ] && _subdir=txt/${_wmostation}
+    elif [ -n "${_ext}" ]
+    then
+	_subdir=${_ext}
+    else
+	_subdir=unknown
+    fi
+
+    echo ${_subdir} | tr A-Z a-z
+}
+
+sanity_check(){
+
+    [ ! -d $out_dirname ] && \
+	{ logger -t qrunner "$out_dirname not found. Exiting."; exit 1; }
+}
+
+#
+# main
+#
+[ -r $conf ] && . $conf
+
+sanity_check
+
+in_dirname=${spooldir}/${datadir}
+q_dirname=${spooldir}/${qdir}
+tmp_dirname=${spooldir}/${tmpdir}
+qrunner_lockfile=${spooldir}/${lockdir}/${lockfilename}
+postfilterqfile=${spooldir}/${lockdir}/${postfilterqfname}.$$
+
+[ -f $qrunner_lockfile ] && \
+    { logger -t qrunner "queue is locked"; exit 0; }
+
+trap cleanup HUP INT QUIT ABRT KILL ALRM TERM EXIT
+touch $qrunner_lockfile
+
+logger -t qrunner "qrunner script starting"
+
+# Clean the queue and data directories of unprocessed (incomplete) files.
+# This is not put at the bottom because if the script exits with an error
+# (e.g., due to corrupt file) it would be possible that this portion
+# is never executed.
+#
+for file in `$FIND ${q_dirname} ${in_dirname} ${tmp_dirname} -cmin +${max_elapsed_time}`
+do
+      rm $file
+done 2>&1 | logger -t "qrunner"
+
+# Check if there is something left after removing the obsolete files
+#
+ls ${q_dirname}/*.q > /dev/null 2>&1
+[ $? -ne 0 ] && \
+    { logger -t qrunner "Nothing to process in ${in_dirname}"; exit 0; }
+
+#
+# processing loop
+#
+for qfile in ${q_dirname}/*.q
+do
+    read filename seqnumkey rcvparts numparts stamp < $qfile
+    rm $qfile
+
+    if [ $rcvparts -ne $numparts ]
+    then
+	logger -t qrunner \
+	    "Received $rcvparts of $numparts for $filename $seqnumkey"
+        # continue
+    fi
+
+    i=1
+    complete=1
+    while [ $i -le $numparts ]
+    do
+	if [ ! -f ${in_dirname}/$seqnumkey.$i ]
+	then
+	    logger -t qrunner "Part $seqnumkey.$i of $filename not received."
+	    complete=0
+	    break
+	fi
+	i=`expr $i + 1`
+    done
+    
+    if [ $complete -eq 1 ]
+    then
+	i=1
+	rc=0
+	while [ $i -le $numparts ]
+	do
+	    cat ${in_dirname}/$seqnumkey.$i >> ${tmp_dirname}/$seqnumkey
+	    [ $? -ne 0 ] && rc=1
+	    rm ${in_dirname}/$seqnumkey.$i
+	    i=`expr $i + 1`
+	done
+	[ $rc -eq 1 ] && { rm -f ${tmp_dirname}/$seqnumkey; break; }
+
+	# rename it with the real file name. If we didn't have to deal
+	# with unzipping files we could leave it with the seqnumkey name.
+	# But the unzipped file will have the $filename name so it is
+	# better to have the same name convention at this point.
+	mv ${tmp_dirname}/$seqnumkey ${tmp_dirname}/$filename
+
+	# The filename and directory where our file is
+	_flist=$filename
+	_flistdir=${tmp_dirname}
+
+	# If it is a zip file, unzip in its own tmp dir and process
+	# each file found in that dir.
+	name=${filename%.*}
+	ext=${filename#*.}
+	_deldir=
+	if [ $ext = zis ]
+	then
+	    mkdir ${tmp_dirname}/$name
+	    _deldir=${tmp_dirname}/$name
+	    $UNZIP -qq -L -o -d ${tmp_dirname}/$name ${tmp_dirname}/$filename
+	    rm ${tmp_dirname}/$filename
+
+	    [ $verbose -eq 1 ] && echo "unziped $filename"
+
+	    _flist=`ls ${tmp_dirname}/$name`
+	    _flistdir=${tmp_dirname}/$name
+	fi
+
+	for _f in ${_flist}
+	do
+   	    # Get the product name without the extension, and the extension.
+	    # Then get the subdir where it will be placed, and finally
+	    # the complete fbasename.
+	    name=${_f%.*}
+	    ext=${_f#*.}
+	    subdir=`get_file_parentsubdir $name $ext ${_flistdir}/${_f}`
+
+	    # An empty $subdir signals an error (See the function).
+	    [ -z "$subdir" ] && \
+		{ echo "Corrupted header in ${_flistdir}/${_f}";
+		  rm ${_flistdir}/${_f};
+		  break;
+		}
+	      
+	    [ ! -d ${out_dirname}/${subdir} ] && \
+		mkdir -p ${out_dirname}/${subdir}
+
+	    fbasename=$name.$seqnumkey.$ext
+	    mv ${_flistdir}/${_f} ${out_dirname}/$subdir/$fbasename
+	    [ $verbose -eq 1 ] && echo "created $fbasename"
+
+	    _duplicate=0
+	    if [ $detect_duplicates -eq 1 ]
+	    then
+		#
+		# There is no md5 in linux (FC)
+		# md5sum is similar but not identical.
+		# md5key=`md5 -q ${out_dirname}/$subdir/$fbasename`
+		#
+		md5key=`openssl md5 ${out_dirname}/$subdir/$fbasename | cut -f 2 -d ' '`
+		# The new fbasename is the same, with the md5 instead of seqnum
+		md5fbasename=$name.$md5key.$ext
+	    	if [ -e ${out_dirname}/$subdir/$md5fbasename ]
+	    	then
+		    echo "$fbasename is retransmitting $md5fbasename."
+		    _duplicate=1
+	    	else
+		    mv ${out_dirname}/$subdir/$fbasename \
+			${out_dirname}/$subdir/$md5fbasename
+		    fbasename=$md5fbasename
+		fi
+	    fi
+
+	    # Spawn the userfilter in the background. Omit duplicates.
+	    if [ ${_duplicate} -eq 0 ]
+	    then
+	        [ -x "$userfilter" -a "$userfilter_enable" -eq 1 ] && \
+		    { $userfilter $name ${out_dirname}/$subdir/$fbasename & }
+
+	        # Add the entry to the postfilter queue file
+	        [ "$postfilter_enable" -eq 1 ] && \
+		    echo $name ${out_dirname}/$subdir/$fbasename >> $postfilterqfile
+	    fi
+	done
+
+	# Remove the tmp directory if a file was unziped
+	[ -n "${_deldir}" ]  && rm -r ${_deldir}
+    fi
+done 2>&1 | logger -t "qrunner"
+
+# Execute the postfilter
+if [ -f $postfilterqfile ]
+then
+    $postfilter < $postfilterqfile
+    rm $postfilterqfile
+fi
+
+exit 0

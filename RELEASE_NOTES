@@ -1,0 +1,287 @@
+#
+# $Id$
+#
+
+- This is the ist release of the 1.8 version of the
+NOAAPort Emwin server (npemwin). Packages, sources and documentation
+are available from
+
+    http://www.noaaport.net
+
+Packages for other operating systems or distributions not found there
+can be created upon request.
+
+New in this version -
+
+    - Added optional daily and hourly archives in metarfilter
+      (to add support for Weatherscope). Enabled by default.
+
+What is npemwin -
+
+It will connect to a list of EMWIN servers and save all
+files into a directory based on file type and WFO ID. Extensive
+facilities allow to call a script for each complete file received
+for post-processing (alarms/notifications, database insertion, etc).
+It can in turn serve any number of byte blaster clients (including of course
+other instances of npemwin itself). Alternatively, it can connect to a
+NOAAPort nbsp server and get the data that way. It can also be configured
+to injest from a directly attached serial device.
+
+What to do next -
+
+npemwin can be customized in many ways. The best route to take
+is to install a package (rpm, bsd) and start the program.
+It will work without any further configuration, as long as the
+package installs cleanly (no missing libraries, etc). The raw data
+will be saved in the directory "/var/npemwin/files", and the
+DA-compatible formatted files in the directory "/var/npemwin/data/digatmos".
+After getting a feeling of what the program does, customizations
+can be tried and the way to start is by reading the few README files
+in the configuration directory (etc/npemwin/dist) and the notes below.
+
+- The following are some of the more important features.
+
+o Works "out of the box".
+
+o npemwin can be used as a client to nbsp (The NOAAPort Broadcast
+  System Processor), and it has been optimized for this role.
+  
+o It can also get the data from any number of byte blaster servers,
+  which is the default configuration when it is installed by an rpm
+  or bsd package.
+
+o It can also be configured to injest from an emwin serial device.
+  (see serial.README)
+
+o It can register itself with the NWS master host as a "public" BB server.
+  (see bbserver.README in the configuration directory).
+
+o npemwin can serve any number byteblaster clients. There is no hard-coded
+  limit.
+
+o It has a built-in web server (based on tclhttpd).
+  (see httpd.README).
+
+o It stores all the files received in a directory and file format
+  compatible with many windows programs, in particular Digital Atmosphere,
+  IDV and GrLevel. The filter is enabled by default and no further
+  configuration is required.
+  (See the file da.README).
+
+o Metar data files are processed to produce text reports, which
+  are readily accessible from the web interface of the built-in
+  web server. A facility is provided to define groups of stations
+  ("collectives") as a set with a unique name to track the observations
+  from that group as one unit.
+
+  There is direct support for the MetarWeather program for Windows.
+  The data from each station or collective is summarized in a directory
+  which can be exported via samba and the data files are immediately
+  accessible to the MetarWeather program. 
+
+  The metar observations data is displayed in graphical form
+  in the web interface. Plots are generated for the temperature,
+  dew point, relative humidity, pressure and wind speed for any
+  station.
+
+  The observing station locations is displayed in the reports.
+
+o The latest copy of every file received is saved in a separate
+  "data/latest" subdirectory, index by file type and WFO.
+
+o It can send the files to an ldm server for distribution
+  or for saving the files in a directory structure such that
+  they can be used with Gempak (see ldm.README).
+  (One use of this is to allow npemwin to be used as a backup to a
+  noaaport system.)
+
+o The ``gpfilter'' stores files received in a Gempak-compatible directory
+  structure, so that the data can be use directly by the Geampak programs.
+  The Gempak software must be installed, but ldm is _not_ required.
+
+o It can send every file received to a "news" server such as inn for
+  distribution by nntp (see nntp.README)
+
+o RSS feeds are created for all the text files, and they are accessible
+  through the built-in web server.
+
+o It has a hurricane tracking filter, ``trackfilter''. Each time a hurricane
+  advisory/forecast is received, the filter extracts the relevant data,
+  updates the tarck data file, and updates the track plot. It uses
+  GrADS to do the actual plot, via a set of scripts and templates that
+  are customizable and extensible (see trackfilter.README).
+
+o It is scriptable. For each file received, a script (or any program)
+  or actually any number of them, will be invoked to process the
+  files received. The built-in facilty can be bypassed altogether
+  and replaced by your own.
+  (see the file SCRIPTING and npemwinfilter.README).
+
+o It keeps a complete inventory of every file received by the minute
+  for the last 24 hours. The catalog files and the data files themselves
+  are accessible from the web interface for the last minute, last hour
+  and last 24 hours.
+  (See inventory.README)
+
+o npemwin can be set to drop privileges and run as an ordinary user
+  by setting the variables
+
+	set user
+	set group
+
+  in the configuration file.
+  (see emwinuser.README)  
+
+o A user-configurable scheduler, which runs every minute, can be used
+  to execute any program either regularly or at specified times. It is
+  used now to rotate log files and execute the hourly cleanup script,
+  so that it is not necessary to install any cron jobs for this,
+  in contrast to previous installations.
+
+Several README files in the "dist" subdirectory of the main configuration
+directory contain details and instructions for customizing specific features.
+
+This file contains
+
+	- Overview
+	- Installation
+	- noaaport Configuration
+	- Postfilter
+	- Start and Stop
+	- Cleanup
+-
+
+Overview - 
+
+npemwin is an emwin client and server, designed to get 
+its feed from a noaaport server running nbsp. 
+The idea is to have npemwin in one computer connect to a noaaport server
+running in another computer, thus leaving the noaaport server as unperturbed
+as possible, and let the emwin clients connect to npemwin instead of connecting
+directly to the noaport server. npemwin can also be configured to
+get the data from a standard byteblaster emwin server, or a list of them. 
+In any case, whether it gets the data from an nbsp server or from a
+byteblaster server, npemwin can in turn serve standard emwin clients
+in the usual way.
+
+-
+Installation -
+
+	The package is installed with the appropriate package tool
+for the target OS; rpm in linux:
+
+	rpm -i npemwin-<version>-<release>.<arch>.rpm
+
+and pkg_add in *BSD:
+
+	pkg_add npemwin-<version>-<release>.tbz
+
+The tcl-8.4 and tcllib-1.x libraries are required.
+ 
+Once executed, the package installation should have created a few required
+data directories under
+
+	/var/npemwin
+
+and a set of configuration files under /usr/local/etc/npemwin.
+
+The runtime configuration file is
+
+	/usr/local/etc/npemwin/npemwind.conf
+
+and the file
+
+	/usr/local/etc/npemwin/servers.conf
+
+contains the list of servers that npemwind will ordinarily try to connect to.
+In ordinary operation, the list can contain any standard emwin server
+and npemwind will behave similar to the way an emwin server does.
+
+npemwin has other capabilities to post-process the received files
+which are described separately.
+
+Noaaport Configuration -
+
+	To configure npemwin read from an nbsp noaaport server,
+the files 
+
+	npemwind.conf-noaaport
+	servers.conf-noaaport
+
+should be copied to the "site" are renamed
+
+	site/npemwind.conf
+	site/servers.conf
+
+Those two files contain the configuration parameters suitable
+to use an nbsp-based noaaport system as the master from which
+to get the data. 
+
+The sample "/usr/local/etc/npemwin/site/servers.conf" file
+contains only one entry, and it is actually a place holder
+for illustration purposes (although the entry that apears there
+it is operattional and can be used for testing).
+In a production system, that should be replaced
+with an actual (or several if desired) working system.
+
+No further steps are required for normal operation. Once started,
+npemwin will process the files and save them under /var/npemwin/files,
+and transmit them to any connected emwin clients.
+
+Postfilter -
+
+This version includes a "filtering" facility that allows the post processing
+of files after they are received and saved to disk. The relevant instructions
+for enabling it are given in the SCRIPTING file in the
+/usr/local/share/doc/npemwin directory, and various README and sample
+files in configuration directory.
+
+In addition, using this facility, an nntp gateway has been implemented.
+If enabled, it will send the files to a "news" server such as inn
+for further distribution by nntp. Instructions for enabling it
+are in the nntp.README in the configuration directory.
+
+Simialarly, the file ldm.README has instructions for configuring
+npemwin to send the data files to an ldm process for further processing
+and/or distribution.
+
+Start and Stop -
+
+The bsd package installs a script in /usr/local/etc/rc.d for automatic
+start/stop at boot or shutdown. The variable 
+
+	npemwind_enable=1
+
+must be set in /etc/rc.conf.local.
+
+The rpm package installs an init script in /etc/init.d, and the
+relevant rcN.d directories to start and stop the program at boot
+and shutdown. 
+
+Cleanup -
+
+Contrary to the situation in the previous versions, in this
+one the data files are saved with a unique sequence number in their names.
+This means that new files do not overwrite the old ones, they
+accumulate, and some mechanism must be used to keep the data directory
+from growing forever. 
+
+The package contains a scheduler that runs an hourly script
+for this purpose. Its configuration file "scheduler.conf" can be edited
+to substitute the hourly script for a local version, and/or schedule
+other programs for execution.
+
+NOTE: If there are currently any cron jobs installed for these purposes,
+      they can (and should) be removed.
+
+The sequence number scheme was adopted to avoid the situation in which
+one file would be overwritten by an incoming file of the same type
+before the processing filters had the chance of processing it.
+That situation is not likely to occur when getting the files
+from a standard emwin server, but it does happen when getting
+the files from a noaaport server such as nbsp, in which case
+the files come at a much faster rate.
+
+-
+Jose F Nieves <nieves@ltp.upr.clu.edu>
+Thu Feb  7 06:59:07 AST 2008

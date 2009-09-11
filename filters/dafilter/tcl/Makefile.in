@@ -1,0 +1,43 @@
+#
+# Copyright (c) 2005-2008 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+#
+# See LICENSE
+#
+# $Id$
+#
+@include@ @q@../../../Makefile.inc@q@
+
+TCLTARGET =	dafilter.tcl
+TCLSOURCES =	dafilter.tcl.in
+FILTERNAME =	dafilter
+M4SOURCES =	defs.m4 dup.m4 equivs.m4 file.m4 pipe.m4
+M4MAIN =	dafilter.m4
+M4TARGET =	dafilter.rc-defaults
+SAMPLES =	dafilter.conf-sample dafilter.rc-sample
+DEFAULTS =	${M4TARGET}
+
+TARGET =	${TCLTARGET} ${M4TARGET} ${SAMPLES}
+
+TCLSH =		@TCLSH@
+INSTALL =	@INSTALL@
+
+all: ${TARGET}
+
+dafilter.tcl: dafilter.tcl.in
+	sed -e /%TCLSH%/s##${TCLSH}# dafilter.tcl.in > dafilter.tcl
+
+${M4TARGET}: ${M4MAIN} ${M4SOURCES}
+	m4 ${M4MAIN} > ${M4TARGET}
+
+dafilter.conf-sample: dafilter.conf
+	cp dafilter.conf dafilter.conf-sample
+
+dafilter.rc-sample: dafilter.rc 
+	cp dafilter.rc dafilter.rc-sample
+
+install: ${TARGET}
+	${INSTALL} -m 755 ${TCLTARGET} ${MYLIBEXECDIR}/${FILTERNAME}
+	${INSTALL} -m 644 ${SAMPLES} ${DEFAULTS} ${MYCONFDIR}
+
+clean:
+	rm -f *~ ${TARGET} Makefile

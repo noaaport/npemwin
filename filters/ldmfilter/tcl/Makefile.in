@@ -1,0 +1,31 @@
+#
+# Copyright (c) 2005-2008 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+#
+# See LICENSE
+#
+# $Id$
+#
+@include@ @q@../../../Makefile.inc@q@
+
+TCLTARGET =	ldmfilter.tcl
+TCLSOURCES =	ldmfilter.tcl.in
+FILTERNAME =	ldmfilter
+SAMPLES =	ldmfilter.conf-sample ldmfilter.rc-sample
+DEFAULTS =	ldmfilter.rc-defaults
+
+TARGET =	${TCLTARGET}
+
+TCLSH =		@TCLSH@
+INSTALL =	@INSTALL@
+
+all: ${TARGET}
+
+ldmfilter.tcl: ldmfilter.tcl.in
+	sed -e /%TCLSH%/s##${TCLSH}# ldmfilter.tcl.in > ldmfilter.tcl
+
+install: ${TARGET}
+	${INSTALL} -m 755 ${TCLTARGET} ${MYLIBEXECDIR}/${FILTERNAME}
+	${INSTALL} -m 644 ${SAMPLES} ${DEFAULTS} ${MYCONFDIR}
+
+clean:
+	rm -f *~ ${TARGET} Makefile

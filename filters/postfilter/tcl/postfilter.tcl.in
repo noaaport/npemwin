@@ -1,0 +1,70 @@
+#!%TCLSH%
+#
+# $Id$
+#
+
+# This script provides a framework for executing any number of (post)filters
+# to process files that have been received and saved. It is called by the
+# qrunner each time each runs. The filters must read from stdin, with each line
+# having two elements set to the product name and the full path of the
+# product file; e.g.,
+#
+# 	cfwsjupr /var/npemwin/files/txt/tjsj/cfwsjupr.<seqnumber>.txt
+#
+# This script in turn calls all the filters that are defined in the
+# postfilter.conf file.
+
+## The common defaults
+set defaultsfile "/usr/local/etc/npemwin/filters.conf";
+if {[file exists $defaultsfile] == 0} {
+        puts "postfilter disabled: $defaultsfile not found.";
+        return 1;
+}
+source $defaultsfile;
+
+## The filter library
+if {[file exists $gf(filterlib)] == 0} {
+        puts "Filter disabled: $gf(filterlib) not found.";
+        return 1;
+}
+source $gf(filterlib);
+
+#
+# Functions
+#
+proc main {argc argv} {
+
+    global gf;
+
+    set flist $gf(filterlist);
+    if {[llength $flist] == 0} {
+	return;
+    }
+
+    set queue [read stdin];
+    foreach f $flist {
+	process $f $queue;
+    }
+}
+
+proc process {filter queue} {
+
+    global gf;
+    global errorInfo;
+
+    set status [catch {
+	set F [open "|$filter" w];
+	puts $F $queue;
+	close $F;
+    } errmsg];
+
+    if {$status != 0} {
+	log_msg "Error executing $filter";
+	log_msg $errmsg;
+	if {$gf(debug) == 1} {
+	    log_msg $errorInfo;
+	}
+    }
+}
+
+main $argc $argv

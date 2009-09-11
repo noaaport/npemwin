@@ -1,0 +1,46 @@
+#
+# Copyright (c) 2005-2008 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+#
+# See LICENSE
+#
+# $Id$
+#
+@include@ @q@../../../Makefile.inc@q@
+
+TCLTARGET =	gpfilter.tcl
+TCLSOURCES =	gpfilter.tcl.in
+FILTERNAME =	gpfilter
+M4SOURCES =	defs.m4 equivs.m4 macros.m4 file.m4 pipe.m4
+M4MAIN =	gpfilter.m4
+M4TARGET =	gpfilter.rc-defaults
+SAMPLES =	gpfilter.conf-sample gpfilter.rc-sample
+DEFAULTS =	${M4TARGET}
+
+TARGET =	${TCLTARGET} ${M4TARGET} ${SAMPLES}
+
+TCLSH =		@TCLSH@
+INSTALL =	@INSTALL@
+GPOSNAME =	@GPOSNAME@
+
+all: ${TARGET}
+
+gpfilter.tcl: gpfilter.tcl.in
+	sed -e /%TCLSH%/s##${TCLSH}# \
+	-e /%GPOSNAME%/s##${GPOSNAME}# gpfilter.tcl.in > gpfilter.tcl
+
+${M4TARGET}: ${M4MAIN} ${M4SOURCES}
+	m4 ${M4MAIN} > ${M4TARGET}
+
+gpfilter.conf-sample: gpfilter.conf.in
+	sed -e /%GPOSNAME%/s##${GPOSNAME}# \
+	gpfilter.conf.in > gpfilter.conf-sample
+
+gpfilter.rc-sample: gpfilter.rc 
+	cp gpfilter.rc gpfilter.rc-sample
+
+install: ${TARGET}
+	${INSTALL} -m 755 ${TCLTARGET} ${MYLIBEXECDIR}/${FILTERNAME}
+	${INSTALL} -m 644 ${SAMPLES} ${DEFAULTS} ${MYCONFDIR}
+
+clean:
+	rm -f *~ ${TARGET} Makefile

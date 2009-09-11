@@ -1,0 +1,33 @@
+#
+# $Id$
+#
+# Configuration file for npemwind as a noaaport client. This file,
+# when saved as "site/npemwind.conf", overrides some of the variables
+# that are specified in the npemwind.conf file in the main directory.
+# The file "site/servers.conf" specified below must exist also.
+#
+# NOTE: Noaaport and emwin are very different. Both the nbsp server
+#       and this npemwin client behave correctly with ``any'' seetings here,
+#       but they have been chosen with those differences in mind.
+#       If you have any need to change them, we would like to know about it.
+
+# The connection timeout.
+#
+set connecttimeout		60
+
+# How long (seconds) to wait for a packet from the server before giving up.
+#
+set readtimeout			120
+
+# List of servers to try
+#
+set serverslist		"/usr/local/etc/npemwin/site/servers.conf"
+
+# The queue will be processed when the number of packets received
+# reaches this number
+#
+set qrunperiod		200
+
+# Do not send anything to the nbsp master
+#
+set bbclientid	""

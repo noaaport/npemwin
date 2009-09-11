@@ -1,0 +1,31 @@
+#
+# $Id$
+#
+
+set rssfilter(conf)	[file join $gf(confdir) "rssfilter.conf"];
+set rssfilter(rc)	[file join $gf(confdir) "rssfilter.rc"];
+set rssfilter(rcdir)	[file join $gf(confdir) "rc.d" "rss"];
+set rssfilter(confdirs) $gf(localconfdirs);
+set rssfilter(postrc)   "";
+set rssfilter(datadir)  [file join $gf(npemwindir) "rss"];
+#
+set rssfilter(channelprefix) "noaaport";
+set rssfilter(catsubdir) "cat";
+set rssfilter(catfext) ".log";
+#
+set rssfilter(xmlenable) 1;
+set rssfilter(xmlsubdir) "xml";
+set rssfilter(xmlfext) ".xml";
+set rssfilter(txmldirs) $rssfilter(confdirs);
+set rssfilter(txmlsubdir) "rss";
+set rssfilter(txmlfext) ".txml";
+append rssfilter(hostport) [info hostname] ":8016";
+append rssfilter(baseurl) $rssfilter(hostport) "/_get/spool";
+set rssfilter(createbin) "npemwin-rsscreate";
+set rssfilter(def) [file join $gf(confdir) "rssfilter.def"];
+set rssfilter(wfodef) [file join $gf(confdir) "rssfilter-wfo.def"];
+
+# Overrides in the configuration file. 
+if {[file exists $rssfilter(conf)] == 1} {
+    source $rssfilter(conf);
+}

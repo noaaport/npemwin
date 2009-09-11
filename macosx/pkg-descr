@@ -1,0 +1,5 @@
+This is a daemon designed to connect to a Noaaport processor
+and server the files via a Byte Blaster protocol.
+Facilities for performing arbitrary actions when specified
+products are received, are provided.
+

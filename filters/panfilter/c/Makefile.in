@@ -1,0 +1,49 @@
+#
+# Copyright (c) 2007 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+#
+# See LICENSE
+#
+# $Id$
+#
+@include@ @q@../../../Makefile.inc@q@
+
+SOURCES = npemwinudpsend.c npemwinudprecv.c ${NPEMWINSOURCES}
+OBJECTS = npemwinudpsend.o npemwinudprecv.o 
+HEADERS = ${NPEMWINHEADERS}
+NPEMWINSOURCES = mcast.c
+NPEMWINOBJECTS = mcast.o
+NPEMWINHEADERS = mcast.h
+ALLOBJECTS = ${OBJECTS} ${NPEMWINOBJECTS}
+PROGRAMS =	npemwinudpsend npemwinudprecv
+EXAMPLES =	npemwinudpread.pl npemwinudpread.tcl
+TARGET =	${PROGRAMS} npemwinudpread.tcl
+
+TCLSH =		@TCLSH@
+INSTALL =       @INSTALL@
+CC =		@CC@
+CCWFLAGS =	@CCWFLAGS@
+
+CFLAGS +=	${DEBUGFLAGS} -c ${CCWFLAGS}
+DEBUGFLAGS =	-g
+#DEBUGFLAGS =	-DNDEBUG
+
+all: ${TARGET}
+
+.c.o: ${HEADERS}
+	${CC} ${CFLAGS} $<
+
+npemwinudpsend: npemwinudpsend.o ${NPEMWINOBJECTS}
+	${CC} -o npemwinudpsend npemwinudpsend.o ${NPEMWINOBJECTS}
+
+npemwinudprecv: npemwinudprecv.o ${NPEMWINOBJECTS}
+	${CC} -o npemwinudprecv npemwinudprecv.o ${NPEMWINOBJECTS}
+
+npemwinudpread.tcl: npemwinudpread.tcl.in
+	sed -e /%TCLSH%/s##${TCLSH}# npemwinudpread.tcl.in  > npemwinudpread.tcl
+
+install:
+	${INSTALL} -m 755 ${PROGRAMS} ${BINDIR}
+	${INSTALL} -m 644 ${EXAMPLES} ${MYDOCDIR}/panfilter
+
+clean:
+	rm -f *~ ${TARGET} ${ALLOBJECTS} Makefile 

@@ -1,0 +1,36 @@
+#
+# $Id$
+#
+
+# This is main rc file. It is setp up to read the set of rules from
+# the following files ("defaults/npemwinfilter.rc" is not installed)
+#
+# site/npemwinfilter.rc
+# rc.d/npemwin/*.rc
+#
+# The rules should be put in any of those files. See the file SCRIPTING
+# for some instructions and the npemwinfilter.rc-ex for examples. 
+
+#
+# Each rc file contains a set of conditions and a correspondig
+# set of actions, ech of which is put in a list. Then all such
+# sets are put in a list of lists, stored in
+# the <prefix>filter(cond) and <prefix>filter(action) variables.
+#
+# The rc_status variable is set to 0 when a rule is matched.
+
+# Load all the sets of condition/action pairs.
+if {[llength $npemwinfilter(rcfiles)] != 0} {
+    foreach _rc $npemwinfilter(rcfiles) {
+        if {[file exists ${_rc}] == 1} {
+	    set cond [list];
+	    set action [list];
+            source ${_rc};
+	    lappend npemwinfilter(condition) $cond;
+	    lappend npemwinfilter(action) $action;
+        }
+    }
+    unset _rc;
+    unset cond;
+    unset action;
+}

@@ -1,0 +1,110 @@
+#!/bin/sh
+
+# so that FreeBSD runs it only once 
+name=$1
+key=$2
+[ "$key" = "PRE-INSTALL" ] && exit 0
+
+dirs="/var/npemwin/stats
+/var/npemwin/spool/data
+/var/npemwin/spool/lock
+/var/npemwin/spool/tmp
+/var/npemwin/spool/qfiles
+/var/npemwin/files
+/var/npemwin/inv
+/var/npemwin/rss
+/var/npemwin/data/digatmos
+/var/npemwin/data/latest
+/var/npemwin/data/metar
+/var/npemwin/data/gempak
+/var/npemwin/data/spool
+/var/npemwin/data/track
+/var/npemwin/www
+/var/npemwin/tmp
+/var/run/npemwin
+/var/log/npemwin
+/usr/local/etc/npemwin/defaults
+/usr/local/etc/npemwin/site
+/usr/local/etc/npemwin/rc.d
+/usr/local/etc/npemwin/rc.d/std
+/usr/local/etc/npemwin/rc.d/metar
+/usr/local/etc/npemwin/rc.d/da
+/usr/local/etc/npemwin/rc.d/gp
+/usr/local/etc/npemwin/rc.d/ldm
+/usr/local/etc/npemwin/rc.d/nntp
+/usr/local/etc/npemwin/rc.d/rss
+/usr/local/etc/npemwin/rc.d/npemwin
+/usr/local/etc/npemwin/rc.d/pan
+/usr/local/etc/npemwin/rc.d/msg
+/usr/local/libexec/npemwin/site
+/usr/local/libexec/npemwin/tclhttpd/site"
+
+for d in $dirs
+do
+  install -d -m 755 $d
+done
+
+#
+# install optional files from doc directory
+#
+docdir=/usr/local/share/doc/npemwin
+confdir=/usr/local/etc/npemwin
+rcdir=/usr/local/etc/rc.d
+launchddir=/Library/LaunchDaemons
+
+install -m 0755 $docdir/npemwind.sh-sample $rcdir/npemwind
+install -m 0644 $docdir/macosx-launchd.plist-sample \
+    $launchddir/net.noaaport.npemwind.plist
+install -m 0644 $confdir/dist/npemwind.conf-noserver-sample \
+    $confdir/defaults/npemwind.conf \
+
+#
+# configure default
+#
+cd $confdir/dist
+for file in *.conf-sample *.rc-sample *.def-sample
+do
+  name=${file%%"-sample"}
+  cp $file ../$name
+done
+cp README SCRIPTING ..
+
+for file in *-defaults
+do
+  name=${file%%"-defaults"}
+  cp $file ../defaults/$name
+done
+
+for file in *-templates.tgz
+do
+  tar -C ../defaults -xzf $file
+done
+
+#
+# www and tclhttpd
+#
+cp /usr/local/share/doc/npemwin/www.tgz /var/npemwin/www
+cd /var/npemwin/www
+tar -xzf www.tgz
+rm www.tgz
+chown -R root:wheel *
+cd htdocs/pub
+#
+# Note: If we reverse the test [ ! -e ...] && ....
+# the statement will return 1 if rst exists and pkg_add will
+# think that the script is returning an error.
+#
+[ -e "digatmos" ] || ln -s /var/npemwin/data/digatmos digatmos
+[ -e "latest" ] || ln -s /var/npemwin/data/latest latest
+[ -e "gempak" ] || ln -s /var/npemwin/data/gempak gempak
+[ -e "track" ] || ln -s /var/npemwin/data/track track
+[ -d "metarplot" ] || mkdir metarplot
+
+# Make sure the localhost entry is in /etc/hosts (only for MacOSX)
+hostsfile=/etc/hosts
+grep -q -s -e "^127.0.0.1[[:space:]]\+localhost" $hostsfile
+status=$?
+[ $status -eq 1 -o ! -f $hostsfile ] && {
+    printf "%s\t%s\n" "127.0.0.1" "localhost" >> $hostsfile
+}
+exit 0

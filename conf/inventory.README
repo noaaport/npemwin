@@ -1,0 +1,6 @@
+#
+# $Id$
+#
+npemwin can keep a complete inventory of every file that is received,
+by the minute, for the last 24 hours. This is implemented by means of
+a filter (the "stdfilter"). This functionality is enabled by default.

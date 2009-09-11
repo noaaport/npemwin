@@ -1,0 +1,16 @@
+#
+# $Id$
+#
+
+set spoolfilter(conf)	     [file join $gf(confdir) "spoolfilter.conf"];
+set spoolfilter(datadir)     [file join $gf(datadir) "spool"];
+set spoolfilter(dbdir) "db";
+set spoolfilter(filesdir) "files";
+#set spoolfilter(filessubdir) "%u";     # day of week (1-7)
+set spoolfilter(filessubdir) "%Y%m%d";
+set spoolfilter(uwildregex) {.*};
+
+# Overrides in the configuration file.
+if {[file exists $spoolfilter(conf)] == 1} {
+    source $spoolfilter(conf);
+}

@@ -1,0 +1,36 @@
+#
+# $Id$
+#
+
+# This file is not read by the npemwind daemon. It contains those settings
+# of the npemwind configuration that are used by some of the filters and/or
+# programs (.e.g, tclhttpd, some tools of the inventory filter).
+# If the values in "defaults.h" are changed, then this file must be modified
+# accordingly.
+
+interp create slave;
+slave eval {
+    # The defaults according to "defaults.h"
+    set tclhttpdfifo "/var/run/npemwin/tclhttpd.fifo"
+    set statusfile "/var/npemwin/stats/npemwind.status"
+    set activeserverslist  "/var/npemwin/stats/serverslist.txt"
+    set emwinstatusfile "/var/npemwin/stats/servers.status"
+    set serveractivefile "/var/npemwin/stats/active"
+    set serverthreadsfile "/var/npemwin/stats/npemwind.sthreads"
+
+    # The optional configuration file
+    set _conf "/usr/local/etc/npemwin/npemwind.conf";
+    if {[file exists ${_conf}]} {
+	source ${_conf};
+    }
+    unset _conf;
+}
+
+set npemwind(tclhttpdfifo)	[slave eval {return $tclhttpdfifo}]
+set npemwind(statusfile)	[slave eval {return $statusfile}]
+set npemwind(activeserverslist) [slave eval {return $activeserverslist}]
+set npemwind(emwinstatusfile)	[slave eval {return $emwinstatusfile}]
+set npemwind(serveractivefile)	[slave eval {return $serveractivefile}]
+set npemwind(serverthreadsfile)	[slave eval {return $serverthreadsfile}]
+
+interp delete slave;

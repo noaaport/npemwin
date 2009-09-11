@@ -1,0 +1,46 @@
+#
+# Copyright (c) 2006 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+#
+# See LICENSE
+#
+# $Id$
+#
+@include@ @q@../../../Makefile.inc@q@
+
+TCLTARGET =	nntpfilter.tcl nntpsend.tcl
+TCLSOURCES =	nntpfilter.tcl.in nntpsend.tcl.in
+M4SOURCES =	defs.m4 txt.m4 img.m4 nntpfilter.m4 init.rc
+M4MAIN =	nntpfilter.m4
+M4TARGET =	nntpfilter.rc-defaults
+SAMPLES =	nntpfilter.conf-sample \
+		nntpfilter.rc-sample
+
+TARGET =	${TCLTARGET} ${M4TARGET} ${SAMPLES}
+
+TCLSH =		@TCLSH@
+INSTALL =	@INSTALL@
+
+all: ${TARGET}
+
+nntpfilter.tcl: nntpfilter.tcl.in
+	sed -e /%TCLSH%/s##${TCLSH}# nntpfilter.tcl.in > nntpfilter.tcl
+
+nntpsend.tcl: nntpsend.tcl.in
+	sed -e /%TCLSH%/s##${TCLSH}# nntpsend.tcl.in > nntpsend.tcl
+
+${M4TARGET}: ${M4MAIN} ${M4SOURCES}
+	m4 ${M4MAIN} > ${M4TARGET}
+
+nntpfilter.conf-sample: nntpfilter.conf
+	cp nntpfilter.conf nntpfilter.conf-sample
+
+nntpfilter.rc-sample: nntpfilter.rc 
+	cp nntpfilter.rc nntpfilter.rc-sample
+
+install: ${TARGET}
+	${INSTALL} -m 755 nntpfilter.tcl ${MYLIBEXECDIR}/nntpfilter
+	${INSTALL} -m 755 nntpsend.tcl ${BINDIR}/npemwin-nntpsend
+	${INSTALL} -m 644 ${SAMPLES} ${M4TARGET} ${MYCONFDIR}
+
+clean:
+	rm -f *~ ${TARGET} Makefile

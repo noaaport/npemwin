@@ -1,0 +1,14 @@
+#
+# http://www.tech-recipes.com/rx/939/sms_email_cingular_nextel_sprint_tmobile_verizon_virgin
+#
+T-Mobile: <phonenumber>@tmomail.net
+Virgin Mobile: <phonenumber>@vmobl.com
+Cingular: <phonenumber>@cingularme.com
+Sprint: <phonenumber>@messaging.sprintpcs.com
+Verizon: <phonenumber>@vtext.com
+Nextel: <phonenumber>@messaging.nextel.com
+US Cellular: <phonenumber>@email.uscc.net
+SunCom: <phonenumber>@tms.suncom.com
+Powertel: <phonenumber>@ptel.net
+AT&T: <phonenumber>@txt.att.net
+Alltel: <phonenumber>@message.alltel.com

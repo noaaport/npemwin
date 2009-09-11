@@ -1,0 +1,6 @@
+etc/emwin
+etc/rc.d
+bin
+libexec/emwin
+share/doc/emwin
+man/man1

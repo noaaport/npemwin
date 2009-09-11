@@ -1,0 +1,21 @@
+#
+# $Id$
+#
+@include@ @q@../Makefile.inc@q@
+
+INSTALL =	@INSTALL@
+
+SRC =		npemwind.man
+TARGET =	npemwind.${MANEXT}.gz
+
+all: ${TARGET}
+
+${TARGET}: ${SRC}
+	gzip -c ${SRC} > ${TARGET}
+
+install:
+	${INSTALL} -m 644 ${TARGET} ${MYMANDIR}
+#	${INSTALL} -m 644 ${DOCS} ${MYDOCDIR}
+
+clean:
+	rm -f *~ Makefile ${TARGET}

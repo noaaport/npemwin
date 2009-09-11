@@ -1,0 +1,88 @@
+
+#
+# $Id$
+#
+@include@ @q@../Makefile.inc@q@
+
+SUBDIRS =	libqdb libconnth libtclconf
+
+INSOURCES =     conf.c.in defaults.h.in
+INOBJECTS =     conf.c defaults.h
+
+SOURCES =	main.c access.c appdata.c \
+		bb.c conf.c emwin.c err.c exec.c file.c \
+		httpd.c init.c loop.c pid.c per.c \
+		pw.c readn.c servers.c serverm.c serverc.c signal.c solaris.c \
+		seqnum.c ser.c stats.c strsplit.c tsv.c util.c tclevalfile.c \
+		tclhttpd.c v2.c
+
+OBJECTS =	main.o access.o appdata.o \
+		bb.o conf.o emwin.o err.o exec.o file.o \
+		httpd.o init.o loop.o pid.o per.o \
+		pw.o readn.o servers.o serverm.o serverc.o signal.o solaris.o \
+		seqnum.o ser.o stats.o strsplit.o tsv.o util.o tclevalfile.o \
+		tclhttpd.o v2.o
+
+HEADERS =	access.h appdata.h \
+		bb.h conf.h const.h defaults.h globals.h emwin.h \
+		exec.h file.h httpd.h init.h loop.h pid.h per.h \
+		pw.h readn.h servers.h server.h server_priv.h \
+		seqnum.h signal.h ser.h stats.h strsplit.h tsv.h util.h \
+		tclevalfile.h tclhttpd.h
+
+ALLOBJECTS =	${OBJECTS} ${INOBJECTS}
+
+DAEMON =	npemwind
+TARGET =	${DAEMON}
+
+LIBOBJECTS =	libtclconf/tclconf.o
+
+INCDIRS =	@INCDIRS@
+LIBDIRS =	@LIBDIRS@
+LIBS =		@LIBS@
+INSTALL =	@INSTALL@
+CC =		@CC@
+DEBUGFLAGS =
+
+DEBUGFLAGS +=	-g -ggdb
+# for enabling -D command line option for debug mode(s)
+DEBUGFLAGS +=	-DDEBUG 
+#DEBUGFLAGS +=	-DNDEBUG
+
+# standard flags
+CFLAGS +=	-c -Wall -Wextra ${DEBUGFLAGS} ${INCDIRS}
+LDFLAGS +=	${LIBDIRS} ${LIBS}
+
+all: ${TARGET}
+
+lib:
+	for dir in ${SUBDIRS}; do \
+	(cd $$dir; ${MAKE} DEBUGFLAGS="${DEBUGFLAGS}") \
+	done
+
+@SUFFIXRULES@ ${HEADERS}
+	${CC} ${CFLAGS} -o $*.o $< 
+
+conf.c: conf.c.in
+	awk -f conf.awk conf.c.in > conf.c
+
+defaults.h: defaults.h.in
+	sed -e "/%MYCONFDIR%/ s||${MYCONFDIR}|g" \
+	-e "/%MYLIBEXECDIR%/ s||${MYLIBEXECDIR}|g" \
+	defaults.h.in > defaults.h
+
+${DAEMON}: ${OBJECTS} lib
+	${CC} -o $@ ${OBJECTS} ${LIBOBJECTS} ${LDFLAGS}
+
+install:
+	${INSTALL} -m 755 ${DAEMON} ${SBINDIR}
+	for dir in ${SUBDIRS}; do \
+	(cd $$dir; ${MAKE} install) \
+	done
+
+clean:
+	rm -f *~ ${ALLOBJECTS} ${TARGET} Makefile
+	for dir in ${SUBDIRS}; do \
+	(cd $$dir; ${MAKE} clean) \
+	done
+

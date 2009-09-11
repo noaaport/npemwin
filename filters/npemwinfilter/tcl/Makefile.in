@@ -1,0 +1,38 @@
+#
+# Copyright (c) 2005 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+#
+# See LICENSE
+#
+# $Id$
+#
+@include@ @q@../../../Makefile.inc@q@
+
+TCLTARGET =	npemwinfilter.tcl
+TCLSOURCES =	npemwinfilter.tcl.in
+FILTERNAME =	npemwinfilter
+RCSOURCE =	npemwinfilter.rc
+RCEXAMPLE =	npemwinfilter.rc-ex
+TARGET =	${TCLTARGET} ${SAMPLES}
+SAMPLES =	npemwinfilter.conf-sample \
+		npemwinfilter.rc-sample
+
+TCLSH =		@TCLSH@
+INSTALL =	@INSTALL@
+
+all: ${TARGET}
+
+${TCLTARGET}: ${TCLSOURCES}
+	sed -e /%TCLSH%/s##${TCLSH}# ${TCLSOURCES} > ${TCLTARGET}
+
+npemwinfilter.conf-sample: npemwinfilter.conf
+	cp npemwinfilter.conf npemwinfilter.conf-sample
+
+npemwinfilter.rc-sample: npemwinfilter.rc 
+	cp npemwinfilter.rc npemwinfilter.rc-sample
+
+install: ${TARGET}
+	${INSTALL} -m 755 ${TCLTARGET} ${MYLIBEXECDIR}/${FILTERNAME}
+	${INSTALL} -m 644 ${SAMPLES} ${RCEXAMPLE} ${MYCONFDIR}
+
+clean:
+	rm -f *~ ${TARGET} Makefile

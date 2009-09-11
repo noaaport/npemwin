@@ -1,0 +1,46 @@
+#
+# $Id$
+#
+
+# The rules for keeping an inventory of each file received.
+# The inventory is kept in files with names
+#
+# hhmm.log
+#
+# in the directory $stdfilter(invdir). Each file contains a list
+# of the data files received each minute. Set that variable
+# to a different value to change the directory.
+
+lappend cond {1}
+lappend action {
+
+  if {[file isdirectory $stdfilter(invdir)] == 0} {
+      log_msg "$stdfilter(invdir) not found.";
+	  return;
+  }
+
+  if {[string length $rc(header)] == 0} {
+	  set _header "- - -";
+  } else {
+	  set _header $rc(header);
+  }
+
+  set _now [clock seconds];
+  set _hhmm [clock format ${_now} -gmt true -format "%H%M"];
+  set _invfrootname ${_hhmm};
+  if {[file exists $stdfilter(invhhmmfile)]} {
+      set _last_hhmm [string trimright [exec cat $stdfilter(invhhmmfile)]];
+  } else {
+      set _last_hhmm "";
+  }
+  if {${_hhmm} ne ${_last_hhmm}} {
+      exec echo ${_hhmm} > $stdfilter(invhhmmfile);
+      set _mode "w";
+  } else {
+      set _mode "a";
+  }
+
+  set _f [open "$stdfilter(invdir)/${_invfrootname}$stdfilter(invfext)" ${_mode} 0644];
+  puts ${_f} [format "%d %s %s %s" ${_now} $rc(prodname) ${_header} $rc(fbasename)];
+  close ${_f};
+}

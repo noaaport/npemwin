@@ -1,0 +1,11 @@
+#
+# $Id$
+#
+
+The tcllib-1.8 that is included in Debian is not compatible
+with npemwin. A compatible tcllib package will be available
+in the optional-packages section (soon).
+
+For the moment, unpack file tcllib-1.11-share.tgz and move
+the entire directory tcllib1.11 to /usr/share.
+-

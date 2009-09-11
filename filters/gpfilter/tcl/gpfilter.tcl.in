@@ -1,0 +1,240 @@
+#!%TCLSH%
+#
+# $Id$
+#
+
+## The common defaults
+set _defaultsfile "/usr/local/etc/npemwin/filters.conf";
+if {[file exists ${_defaultsfile}] == 0} {
+    puts "gpfilter disabled: ${_defaultsfile} not found.";
+    return 1;
+}
+source ${_defaultsfile};
+unset _defaultsfile;
+
+## The filter library
+if {[file exists $gf(filterlib)] == 0} {
+    puts "gpfilter disabled: $gf(filterlib) not found.";
+    return 1;
+}
+source $gf(filterlib);
+
+# Defaults
+set gpfilter(conf)	[file join $gf(confdir) "gpfilter.conf"];
+set gpfilter(rc)	[file join $gf(confdir) "gpfilter.rc"];
+set gpfilter(rcdir)	[file join $gf(confdir) "rc.d/gp"];
+set gpfilter(confdirs) $gf(localconfdirs);
+set gpfilter(postrc)	"";
+#
+# Parameters related to the gempak installation.
+#
+set gempak(homedir)     "/usr/local/lib/gempak/NAWIPS";
+set gempak(bindir)      [file join $gempak(homedir) "os/%GPOSNAME%/bin"];
+#
+# The directory that contains "data/gempak" (i.e., in ldm it is /home/ldm)
+# and the data directory itself.
+# The decoders assume a "cd $gpfilter(dec_rootdir)",
+# which is done in the function that invokes them.
+#
+set gpfilter(dec_rootdir)    "/var/npemwin";
+set gpfilter(dec_datadir)    [file join $gpfilter(dec_rootdir) data/gempak];
+#
+# The bin and log directory for decoders
+#
+set gpfilter(dec_bindir)   $gempak(bindir);
+set gpfilter(dec_logdir)   $gf(logdir);
+#
+# These variables are needed by the gempak decoders
+#
+set gpfilter(dec_GEMPAK)   [file join $gempak(homedir) "gempak"];
+set gpfilter(dec_GEMTBL)   [file join $gempak(homedir) "gempak/tables"];
+
+#
+# variables
+#
+set gpfilter(rcfiles)	[list];
+set gpfilter(condition)	[list];
+set gpfilter(action)	[list];
+
+# The default optional configuration file for this filter.
+#
+if {[file exists $gpfilter(conf)] == 1} {
+    source $gpfilter(conf);
+}
+
+# The main rc file is required
+if {[file exists $gpfilter(rc)] == 0} {
+    log_msg "Filter disabled: $gpfilter(rc) not found.";
+    return 1;
+}
+
+# Build the list of rc files
+set gpfilter(rcfiles) [filterlib_get_rcfiles [file tail $gpfilter(rc)] \
+      $gpfilter(confdirs) $gpfilter(rcdir) $gpfilter(postrc)];
+
+# Load the rules sets
+source $gpfilter(rc);
+
+proc main {} {
+
+    global errorInfo;
+
+    while {[gets stdin line] >= 0} {
+	if {[regexp {^\s*$} $line]} {
+	    continue;
+	}
+	set args [split $line];
+	set argsc [llength $args];
+    	if {$argsc != 2} {
+            log_msg "Incorrect number of arguments: $args";
+	    continue;
+        }
+
+    	set prodname [lindex $args 0];
+    	set fpath [lindex $args 1];
+    
+        set status [catch {process $prodname $fpath} errmsg];
+	if {$status == 1} {
+	    log_msg "Error processing $prodname";
+	    log_msg $errmsg;
+	    log_msg $errorInfo;
+	}
+    }
+}
+
+proc process {prodname fpath} {
+
+    global gpfilter;
+
+    set rclist [filterlib_get_rcvars $prodname $fpath];
+    array set rc $rclist
+
+    # The gpfilter rules use these ymdh variables
+    set seconds [filterlib_date_clock_seconds $rc(header_time)];
+    set ymd_hm [clock format $seconds -gmt true -format "%Y%m%d_%H%M"];
+    set ymdh [clock format $seconds -gmt true -format "%Y%m%d%H"];
+    unset seconds;
+
+    set rc_status 1;
+
+    # Evaluate the condition/action pairs, from all sets.
+    set status [catch {
+	set i 0;		# counts the sets
+	foreach condlist $gpfilter(condition) {
+	    set actionlist [lindex $gpfilter(action) $i];
+	    set j 0;	# counts the rules with each set
+	    foreach c $condlist {
+		set a [lindex $actionlist $j];
+		if {[expr $c]} {
+		    eval $a;
+		}
+		incr j;
+	    }
+	    incr i;
+	}
+    } errmsg];
+
+    if {$status == 1} {
+	log_msg "Error processing $fpath";
+	log_msg $errmsg;
+    }
+}
+
+proc filter_file {seq fpath savedir savename awflag} {
+#
+# If "awflag" is a, the output file is opened in "append" mode,
+# otherwise in "write" mode (i.e., it is assumed to be "w").
+
+    global gpfilter;
+
+    # The gempal header/footers
+    set gmpk_header_fmt "\001\r\r\n%03d \r\r\n"; 
+    set gmpk_trailer_str "\r\r\n\003"; 
+
+    set currdir [pwd];
+    cd $gpfilter(dec_datadir);
+    file mkdir $savedir;
+    cd $currdir;
+
+    set fpathout [file join $gpfilter(dec_datadir) $savedir $savename];	
+
+    set status [catch {
+	set fout [open $fpathout $awflag];
+	set fin  [open $fpath r];
+	fconfigure $fin -translation binary -encoding binary;
+	fconfigure $fout -translation binary -encoding binary;
+
+        puts -nonewline $fout [format $gmpk_header_fmt [expr $seq % 1000]];
+        puts -nonewline $fout [read $fin];
+        puts -nonewline $fout $gmpk_trailer_str;        
+    } errmsg];
+
+    if {[info exists fout]} {
+	close $fout;
+    }
+
+    if {[info exists fin]} {
+	close $fin;
+    }
+
+    if {$status != 0} {
+	log_msg $errmsg;
+    }
+}
+
+proc filter_pipe {seq fpath pipe_name cmd_options savename} {
+
+    global gpfilter;
+
+    # The gempak decoders assume the files contain this header/footers
+    set gmpk_header_fmt "\001\r\r\n%03d \r\r\n"; 
+    set gmpk_trailer_str "\r\r\n\003"; 
+
+    # "savename" can be blank, which means that the decoder decides
+    # what name to use. In this case the gempak decoders assume that
+    # the current directory is gpfilter(dec_rootdir). 
+    # When "savename" is set, it is a name relative to $gpfilter(dec_datadir).
+    # if {$savename eq ""} {
+    # 	cd $gpfilter(dec_rootdir);	
+    # } else {
+    #	cd $gpfilter(dec_datadir)
+    # }
+    # But some decoders dump core, and it is best to use a common 
+    # working directory for all of them for cleaning up those.
+
+    cd $gpfilter(dec_rootdir);
+
+    if {$savename ne ""} {
+	set fullsavename [file join $gpfilter(dec_datadir) $savename];
+    } else {
+	set fullsavename "";
+    }
+
+    set cmd_name [file join $gpfilter(dec_bindir) $pipe_name];
+    append cmd_name " " $cmd_options " " $fullsavename;
+
+    set status [catch {
+	set fout [open "|$cmd_name" w];
+	set fin  [open $fpath r];
+	fconfigure $fin -translation binary -encoding binary;
+	fconfigure $fout -translation binary -encoding binary;
+
+	puts -nonewline $fout [format $gmpk_header_fmt [expr $seq % 1000]]
+	puts -nonewline $fout [read $fin];
+	puts -nonewline $fout $gmpk_trailer_str;	
+    } errmsg];
+
+    if {[info exists fout]} {
+	close $fout;
+    }
+
+    if {[info exists fin]} {
+	close $fin;
+    }
+
+    if {$status != 0} {
+        log_msg $errmsg;
+    }
+}
+
+main

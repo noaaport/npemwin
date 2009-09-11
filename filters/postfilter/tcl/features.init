@@ -1,0 +1,59 @@
+#
+# $Id$
+#
+
+# Initialize the filter list according to features chosen.
+# First if any of the stdfilter rules was set, set feature(stdfilter).
+# Then enable the chosen filters.
+
+set feature(stdfilter,inv)      1;
+set feature(stdfilter,latest)   1;
+set feature(dafilter)		1;
+set feature(metarfilter)        1;
+set feature(rssfilter)		1;
+set feature(trackfilter)	0;
+set feature(gpfilter)		0;
+set feature(ldmfilter)      	0;
+set feature(spoolfilter)	0;
+set feature(panfilter)		0;
+set feature(nntpfilter)		0;
+set feature(npemwinfilter)	0;
+set feature(msgfilter)		0;
+#
+set feature(stdfilter) 0;
+set _filterprefixes \
+	[list std da metar rss track gp ldm spool pan nntp npemwin msg];
+
+# Read the local overrides
+set _confname [file tail $gf(featuresconf)];
+
+if {[file exists $gf(featuresconf)]} {
+    source $gf(featuresconf);
+}
+foreach _d $gf(localconfdirs) {
+    set _localconfname ${_d}/${_confname}
+    if {[file exists ${_localconfname}] == 1} {
+        source ${_localconfname};
+    }
+}
+unset _confname;
+unset _d;
+unset _localconfname;
+
+# If any of the std rules are enabled, enable the stdfilter
+foreach k [array names feature] {
+    if {[regexp {^stdfilter,} $k]} {
+        if {$feature($k) == 1} {
+            set feature(stdfilter) 1;
+        }
+    }
+}
+
+# Set the filter list
+foreach k ${_filterprefixes} {
+    if {$feature(${k}filter) == 1} {
+	lappend gf(filterlist)  [file join $gf(filterdir) "${k}filter"];
+    }
+}
+unset k;
+unset _filterprefixes;

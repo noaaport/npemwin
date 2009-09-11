@@ -1,0 +1,1947 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+	<TITLE>Serial Programming Guide for POSIX Operating Systems - Michael R Sweet</TITLE>
+	<LINK REL="STYLESHEET" TYPE="text/css" HREF="http://www.easysw.com/~mike/screen.css">
+	<LINK REL="ALTERNATE" TITLE="Michael R Sweet Blog" TYPE="application/rss+xml" HREF="http://www.easysw.com/~mike/index.rss">
+	<LINK REL="SHORTCUT ICON" HREF="http://www.easysw.com/~mike/favicon.ico" TYPE="image/x-icon">
+	<BASE HREF="http://www.easysw.com/~mike/serial/serial.html">
+</HEAD>
+<BODY>
+<TABLE WIDTH="100%" STYLE="height: 100%;" CELLPADDING="0" CELLSPACING="0" BORDER="0" SUMMARY="Page">
+<TR>
+	<TD COLSPAN="2"><IMG SRC="http://www.easysw.com/~mike/images/winter-sat.jpg" WIDTH="100%" ALT="Saturday winter photo"></TD>
+</TR>
+<TR CLASS="navheader">
+	<TD><A HREF="http://www.easysw.com/~mike/index.php?serial/serial.html+printable" TARGET="printable">Printable Version</A><BR>
+	<A HREF="http://www.easysw.com/~mike/index.php?serial/serial.html+feedback">Send Feedback</A></TD>
+	<TH ALIGN="LEFT"><H1>Serial Programming Guide for POSIX Operating Systems</H1></TH>
+</TR>
+<TR>
+	<TD VALIGN="TOP" CLASS="sidebar" NOWRAP>
+
+	<H1>Pages</H1>
+
+	<A HREF="http://www.easysw.com/~mike/">Home</A><BR>
+	<A HREF="http://www.easysw.com/~mike/about.html">About Me</A><BR>
+	<A HREF="http://www.easysw.com/~mike/index.php?all">All Articles</A><BR>
+
+	<BR>
+	<FORM METHOD="POST" ACTION="http://www.easysw.com/~mike/index.php"><INPUT TYPE="TEXT"
+	SIZE="15" NAME="Q"><BR>
+	<INPUT TYPE="SUBMIT" VALUE="Search"></FORM>
+
+	<H1>Photography</H1>
+
+	<A HREF="http://www.easysw.com/~mike/pictures">My Favorite Pictures</A><BR>
+	<A HREF="http://www.easysw.com/~mike/albums.html">Photo Albums</A><BR>
+	<A HREF="http://www.easysw.com/~mike/photogear.html">Photo Gear</A><BR>
+
+	<H1>Documents</H1>
+
+	<A HREF="http://www.easysw.com/~mike/qm.html">QuickModel Format</A><BR>
+	<A HREF="http://www.easysw.com/~mike/serial/index.html">Serial Programming</A><BR>
+	<A HREF="http://www.easysw.com/~mike/svn-cheat.html">Subversion Cheats</A><BR>
+	<A HREF="http://www.easysw.com/~mike/uiexperiments.html">UI Experiments</A><BR>
+
+	<H1>Software</H1>
+
+	<A HREF="http://www.easysw.com/~mike/flcdsim/index.html">flcdsim</A><BR>
+	<A HREF="http://www.easysw.com/~mike/fldiff/index.html">fldiff</A><BR>
+	<A HREF="http://www.easysw.com/~mike/flifstat/index.html">flifstat</A><BR>
+	<A HREF="http://www.easysw.com/~mike/flphoto/index.html">flPhoto</A><BR>
+	<A HREF="http://www.easysw.com/~mike/gimp/index.html">Gimp Plug-Ins</A><BR>
+	<A HREF="http://www.easysw.com/~mike/opengl/index.html">OpenGL Printing</A><BR>
+	<A HREF="http://www.easysw.com/~mike/rasterview/index.html">RasterView</A><BR>
+	<A HREF="http://www.easysw.com/~mike/sudoku/index.html">Sudoku</A><BR>
+
+	<H1>Projects</H1>
+
+	<A HREF="http://www.cups.org/" TARGET="_blank">CUPS</A><BR>
+	<A HREF="http://www.easysw.com/epm/" TARGET="_blank">EPM</A><BR>
+	<A HREF="http://www.fltk.org/" TARGET="_blank">FLTK</A><BR>
+	<A HREF="http://gutenprint.sf.net/" TARGET="_blank">Gutenprint</A><BR>
+	<A HREF="http://www.htmldoc.org/" TARGET="_blank">HTMLDOC</A><BR>
+	<A HREF="http://www.easysw.com/~mike/mxml/" TARGET="_blank">Mini-XML</A><BR>
+	<A HREF="http://www.easysw.com/~mike/newsd/" TARGET="_blank">Newsd</A><BR>
+	<A HREF="http://www.samba.org/" TARGET="_blank">Samba</A><BR>
+
+	</TD>
+	<TD VALIGN="TOP" CLASS="main" WIDTH="100%" STYLE="height: 100%;"><P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P ALIGN="CENTER"><IMG HEIGHT="5%" SRC="title.gif" WIDTH="100%"></P>
+<H1 ALIGN="CENTER">Serial Programming Guide
+<BR> for
+<BR> POSIX Operating Systems</H1>
+<P ALIGN="CENTER">5th Edition, 6th Revision
+<BR> Copyright 1994-2005 by Michael R. Sweet</P>
+
+<!-- &lt;P ALIGN=&quot;CENTER&quot;&gt;Pig Latin Translation&lt;BR&gt;
+Copyright 20xy by William E. Coyote&lt;/P&gt; -->
+<P ALIGN="CENTER">Permission is granted to copy, distribute and/or
+ modify this document under the terms of the GNU Free Documentation
+ License, Version 1.2 or any later version published by the Free
+ Software Foundation; with no Invariant Sections, no Front-Cover Texts,
+ and no Back-Cover Texts. A copy of the license is included in <A HREF="#license">
+Appendix C, GNU Free Documentation License</A>.</P>
+<HR NOSHADE>
+<H1 ALIGN="CENTER"><A NAME="CONTENTS">Table of Contents</A></H1>
+<BR>
+<BR><B><A HREF="#1">Introduction</A></B>
+<UL>
+<LI><A HREF="#1_1">License</A></LI>
+<LI><A HREF="#1_2">Organization</A></LI>
+</UL>
+<B><A HREF="#basics">Chapter 1, Basics of Serial Communications</A></B>
+<UL>
+<LI><A HREF="#2_1">What Are Serial Communications?</A></LI>
+<LI><A HREF="#2_2">What Is RS-232?</A>
+<UL>
+<LI><A HREF="#2_2_1">Signal Definitions</A></LI>
+</UL>
+</LI>
+<LI><A HREF="#2_3">Asynchronous Communications</A>
+<UL>
+<LI><A HREF="#2_3_1">What Are Full Duplex and Half Duplex?</A></LI>
+<LI><A HREF="#2_3_2">Flow Control</A></LI>
+<LI><A HREF="#2_3_3">What Is a Break?</A></LI>
+</UL>
+</LI>
+<LI><A HREF="#2_4">Synchronous Communications</A></LI>
+<LI><A HREF="#2_5">Accessing Serial Ports</A>
+<UL>
+<LI><A HREF="#2_5_1">Serial Port Files</A></LI>
+<LI><A HREF="#2_5_2">Opening a Serial Port</A></LI>
+<LI><A HREF="#2_5_3">Writing Data to the Port</A></LI>
+<LI><A HREF="#2_5_4">Reading Data from the Port</A></LI>
+<LI><A HREF="#2_5_5">Closing a Serial Port</A></LI>
+</UL>
+</LI>
+</UL>
+<B><A HREF="#config">Chapter 2, Configuring the Serial Port</A></B>
+<UL>
+<LI><A HREF="#3_1">The POSIX Terminal Interface</A>
+<UL>
+<LI><A HREF="#3_1_1">Control Options</A></LI>
+<LI><A HREF="#3_1_2">Local Options</A></LI>
+<LI><A HREF="#3_1_3">Input Options</A></LI>
+<LI><A HREF="#3_1_4">Output Options</A></LI>
+<LI><A HREF="#3_1_5">Control Characters</A></LI>
+</UL>
+</LI>
+</UL>
+<B><A HREF="#modem">Chapter 3, MODEM Communications</A></B>
+<UL>
+<LI><A HREF="#4_1">What Is a MODEM?</A></LI>
+<LI><A HREF="#4_2">Communicating With a MODEM</A>
+<UL>
+<LI><A HREF="#4_2_1">Standard MODEM Commands</A></LI>
+<LI><A HREF="#4_2_2">Common MODEM Communication Problems</A></LI>
+</UL>
+</LI>
+</UL>
+<B><A HREF="#advanced">Chapter 4, Advanced Serial Programming</A></B>
+<UL>
+<LI><A HREF="#5_1">Serial Port IOCTLs</A>
+<UL>
+<LI><A HREF="#5_1_1">Getting the Control Signals</A></LI>
+<LI><A HREF="#5_1_2">Setting the Control Signals</A></LI>
+<LI><A HREF="#5_1_3">Getting the Number of Bytes Available</A></LI>
+</UL>
+</LI>
+<LI><A HREF="#5_2">Selecting Input from a Serial Port</A>
+<UL>
+<LI><A HREF="#5_2_1">The SELECT System Call</A></LI>
+<LI><A HREF="#5_2_2">Using the SELECT System Call</A></LI>
+<LI><A HREF="#5_2_3">Using SELECT with the X Intrinsics Library</A></LI>
+</UL>
+</LI>
+</UL>
+<B><A HREF="#pinouts">Appendix A, Pinouts</A></B>
+<UL>
+<LI><A HREF="#6_1">RS-232 Pinouts</A></LI>
+<LI><A HREF="#6_2">RS-422 Pinouts</A></LI>
+<LI><A HREF="#6_3">RS-574 (IBM PC/AT) Pinouts</A></LI>
+<LI><A HREF="#6_4">SGI Pinouts</A></LI>
+</UL>
+<B><A HREF="#ascii">Appendix B, ASCII Control Codes</A></B>
+<UL>
+<LI><A HREF="#7_1">Control Codes</A></LI>
+</UL>
+<B><A HREF="#license">Appendix C, GNU Free Documentation License</A></B>
+<UL>
+<LI><A HREF="#8_1">How to use this License for your documents</A></LI>
+</UL>
+<B><A HREF="#relnotes">Appendix D, Change History</A></B>
+<UL>
+<LI><A HREF="#9_1">Edition 5, Revision 6</A></LI>
+<LI><A HREF="#9_2">Edition 5, Revision 5</A></LI>
+<LI><A HREF="#9_3">Edition 5, Revision 4</A></LI>
+<LI><A HREF="#9_4">Edition 5, Revision 3</A></LI>
+</UL>
+<HR NOSHADE>
+<DIV ALIGN="justify">
+<H1 ALIGN="RIGHT"><A NAME="1">Introduction</A></H1>
+<P>The Serial Programming Guide for POSIX Operating Systems will teach
+ you how to successfully, efficiently, and portably program the serial
+ ports on your UNIX&reg; workstation or PC. Each chapter provides
+ programming examples that use the POSIX (Portable Standard for UNIX)
+ terminal control functions and should work with very few modifications
+ under IRIX&reg;, HP-UX, SunOS&reg;, Solaris&reg;, Digital UNIX&reg;, Linux&reg;, and most
+ other UNIX operating systems. The biggest difference between operating
+ systems that you will find is the filenames used for serial port device
+ and lock files.</P>
+<H2><A NAME="1_1">License</A></H2>
+<P>Permission is granted to copy, distribute and/or modify this document
+ under the terms of the GNU Free Documentation License, Version 1.2 or
+ any later version published by the Free Software Foundation; with no
+ Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. A
+ copy of the license is included in <A HREF="#license">Appendix C, GNU
+ Free Documentation License</A>.</P>
+<H2><A NAME="1_2">Organization</A></H2>
+<P>This guide is organized into the following chapters and appendices:</P>
+<UL>
+<LI><A HREF="#basics">Chapter 1, Basics of Serial Programming</A></LI>
+<LI><A HREF="#config">Chapter 2, Configuring the Serial Port</A></LI>
+<LI><A HREF="#modems">Chapter 3, Talking to MODEMs</A></LI>
+<LI><A HREF="#advanced">Chapter 4, Advanced Serial Programming</A></LI>
+<LI><A HREF="#pinouts">Appendix A, RS-232 Pinouts</A></LI>
+<LI><A HREF="#ascii">Appendix B, ASCII Control Codes</A></LI>
+<LI><A HREF="#license">Appendix C, GNU Free Documentation License</A></LI>
+<LI><A HREF="#relnotes">Appendix D, Change History</A></LI>
+</UL>
+</DIV><HR NOSHADE>
+<DIV ALIGN="justify">
+<H1 ALIGN="RIGHT"><A NAME="basics">Chapter 1, Basics of Serial
+ Communications</A></H1>
+<P>This chapter introduces serial communications, RS-232 and other
+ standards that are used on most computers as well as how to access a
+ serial port from a C program.</P>
+<H2><A NAME="2_1">What Are Serial Communications?</A></H2>
+<P>Computers transfer information (data) one or more bits at a time.
+ Serial refers to the transfer of data one bit at a time. Serial
+ communications include most network devices, keyboards, mice, MODEMs,
+ and terminals.</P>
+<P>When doing serial communications each word (i.e. byte or character)
+ of data you send or receive is sent one bit at a time. Each bit is
+ either<I> on</I> or<I> off.</I> The terms you'll hear sometimes are<I>
+ mark</I> for the<I> on</I> state and<I> space</I> for the<I> off</I>
+ state.</P>
+<P>The speed of the serial data is most often expressed as
+ bits-per-second (&quot;bps&quot;) or baudot rate (&quot;baud&quot;). This just represents
+ the number of ones and zeroes that can be sent in one second. Back at
+ the dawn of the computer age, 300 baud was considered fast, but today
+ computers can handle RS-232 speeds as high as 430,800 baud! When the
+ baud rate exceeds 1,000, you'll usually see the rate shown in<I> kilo</I>
+baud, or kbps (e.g. 9.6k, 19.2k, etc). For rates above 1,000,000 that
+ rate is shown in<I> mega</I>baud, or Mbps (e.g. 1.5Mbps).</P>
+<P>When referring to serial devices or ports, they are either labeled as<I>
+ Data Communications Equipment</I> (&quot;DCE&quot;) or<I> Data Terminal Equipment</I>
+ (&quot;DTE&quot;). The difference between these is simple - every signal pair,
+ like transmit and receive, is swapped. When connecting two DTE or two
+ DCE interfaces together, a serial<I> null-MODEM</I> cable or adapter is
+ used that swaps the signal pairs.</P>
+<H2><A NAME="2_2">What Is RS-232?</A></H2>
+<P>RS-232 is a standard electrical interface for serial communications
+ defined by the <A HREF="http://www.eia.org">Electronic Industries
+ Association (&quot;EIA&quot;)</A>. RS-232 actually comes in 3 different flavors
+ (A, B, and C) with each one defining a different voltage range for the<I>
+ on</I> and<I> off</I> levels. The most commonly used variety is
+ RS-232C, which defines a mark (on) bit as a voltage between -3V and
+ -12V and a space (off) bit as a voltage between +3V and +12V. The
+ RS-232C specification says these signals can go about 25 feet (8m)
+ before they become unusable. You can usually send signals a bit farther
+ than this as long as the baud is low enough.</P>
+<P>Besides wires for incoming and outgoing data, there are others that
+ provide timing, status, and handshaking:
+<CENTER>
+<TABLE BORDER WIDTH="80%"><CAPTION ALIGN="CENTER"> Table 1 - RS-232 Pin
+ Assignments</CAPTION>
+<TR><TH>Pin</TH><TH>Description</TH><TH>Pin</TH><TH>Description</TH><TH>
+Pin</TH><TH>Description</TH><TH>Pin</TH><TH>Description</TH><TH>Pin</TH><TH>
+Description</TH></TR>
+<TR><TD>1</TD><TD>Earth Ground</TD><TD>6</TD><TD><B>DSR</B> - Data Set
+ Ready</TD><TD>11</TD><TD>Unassigned</TD><TD>16</TD><TD>Secondary RXD</TD><TD>
+21</TD><TD>Signal Quality Detect</TD></TR>
+<TR><TD>2</TD><TD><B>TXD</B> - Transmitted Data</TD><TD>7</TD><TD><B>GND</B>
+ - Logic Ground</TD><TD>12</TD><TD>Secondary DCD</TD><TD>17</TD><TD>
+Receiver Clock</TD><TD>22</TD><TD>Ring Detect</TD></TR>
+<TR><TD>3</TD><TD><B>RXD</B> - Received Data</TD><TD>8</TD><TD><B>DCD</B>
+ - Data Carrier Detect</TD><TD>13</TD><TD>Secondary CTS</TD><TD>18</TD><TD>
+Unassigned</TD><TD>23</TD><TD>Data Rate Select</TD></TR>
+<TR><TD>4</TD><TD><B>RTS</B> - Request To Send</TD><TD>9</TD><TD>
+Reserved</TD><TD>14</TD><TD>Secondary TXD</TD><TD>19</TD><TD>Secondary
+ RTS</TD><TD>24</TD><TD>Transmit Clock</TD></TR>
+<TR><TD>5</TD><TD><B>CTS</B> - Clear To Send</TD><TD>10</TD><TD>Reserved</TD><TD>
+15</TD><TD>Transmit Clock</TD><TD>20</TD><TD><B>DTR</B> - Data Terminal
+ Ready</TD><TD>25</TD><TD>Unassigned</TD></TR>
+</TABLE>
+</CENTER>
+</P>
+<P>Two standards for serial interfaces you may also see are RS-422 and
+ RS-574. RS-422 uses lower voltages and<I> differential</I> signals to
+ allow cable lengths up to about 1000ft (300m). RS-574 defines the 9-pin
+ PC serial connector and voltages.</P>
+<H3><A NAME="2_2_1">Signal Definitions</A></H3>
+<P>The RS-232 standard defines some 18 different signals for serial
+ communications. Of these, only six are generally available in the UNIX
+ environment.</P>
+<H4>GND - Logic Ground</H4>
+<P>Technically the logic ground is not a signal, but without it none of
+ the other signals will operate. Basically, the logic ground acts as a
+ reference voltage so that the electronics know which voltages are
+ positive or negative.</P>
+<H4>TXD - Transmitted Data</H4>
+<P>The TXD signal carries data transmitted from your workstation to the
+ computer or device on the other end (like a MODEM). A mark voltage is
+ interpreted as a value of 1, while a space voltage is interpreted as a
+ value of 0.</P>
+<H4>RXD - Received Data</H4>
+<P>The RXD signal carries data transmitted from the computer or device
+ on the other end to your workstation. Like TXD, mark and space voltages
+ are interpreted as 1 and 0, respectively.</P>
+<H4>DCD - Data Carrier Detect</H4>
+<P>The DCD signal is received from the computer or device on the other
+ end of your serial cable. A space voltage on this signal line indicates
+ that the computer or device is currently connected or on line. DCD is
+ not always used or available.</P>
+<H4>DTR - Data Terminal Ready</H4>
+<P>The DTR signal is generated by your workstation and tells the
+ computer or device on the other end that you are ready (a space
+ voltage) or not-ready (a mark voltage). DTR is usually enabled
+ automatically whenever you open the serial interface on the
+ workstation.</P>
+<H4>CTS - Clear To Send</H4>
+<P>The CTS signal is received from the other end of the serial cable. A
+ space voltage indicates that it is alright to send more serial data
+ from your workstation.</P>
+<P>CTS is usually used to regulate the flow of serial data from your
+ workstation to the other end.</P>
+<H4>RTS - Request To Send</H4>
+<P>The RTS signal is set to the<I> space</I> voltage by your workstation
+ to indicate that more data is ready to be sent.</P>
+<P>Like CTS, RTS helps to regulate the flow of data between your
+ workstation and the computer or device on the other end of the serial
+ cable. Most workstations leave this signal set to the space voltage all
+ the time.</P>
+<H2><A NAME="2_3">Asynchronous Communications</A></H2>
+<P>For the computer to understand the serial data coming into it, it
+ needs some way to determine where one character ends and the next
+ begins. This guide deals exclusively with<I> asynchronous</I> serial
+ data.</P>
+<P>In asynchronous mode the serial data line stays in the mark (1) state
+ until a character is transmitted. A<I> start</I> bit preceeds each
+ character and is followed immediately by each bit in the character, an
+ optional parity bit, and one or more<I> stop</I> bits. The start bit is
+ always a space (0) and tells the computer that new serial data is
+ available. Data can be sent or received at any time, thus the name
+ asynchronous.
+<!-- NEED 1in -->
+</P>
+<P ALIGN="CENTER">Figure 1 - Asynchronous Data Transmission
+<BR> <IMG HEIGHT="16%" SRC="async.gif" WIDTH="50%"></P>
+<P>The optional parity bit is a simple sum of the data bits indicating
+ whether or not the data contains an even or odd number of 1 bits. With<I>
+ even parity</I>, the parity bit is 0 if there is an even number of 1's
+ in the character. With<I> odd parity</I>, the parity bit is 0 if there
+ is an odd number of 1's in the data. You may also hear the terms<I>
+ space parity</I>,<I> mark parity</I>, and<I> no parity</I>. Space
+ parity means that the parity bit is always 0, while mark parity means
+ the bit is always 1. No parity means that no parity bit is present or
+ transmitted.</P>
+<P>The remaining bits are called stop bits. There can be 1, 1.5, or 2
+ stop bits between characters and they always have a value of 1. Stop
+ bits traditionally were used to give the computer time to process the
+ previous character, but now only serve to synchronize the receiving
+ computer to the incoming characters.</P>
+<P>Asynchronous data formats are usually expressed as &quot;8N1&quot;, &quot;7E1&quot;, and
+ so forth. These stand for &quot;8 data bits, no parity, 1 stop bit&quot; and &quot;7
+ data bits, even parity, 1 stop bit&quot; respectively.</P>
+<H3><A NAME="2_3_1">What Are Full Duplex and Half Duplex?</A></H3>
+<P><I>Full duplex</I> means that the computer can send and receive data
+ simultaneously - there are two separate data channels (one coming in,
+ one going out).</P>
+<P><I>Half duplex</I> means that the computer cannot send or receive
+ data at the same time. Usually this means there is only a single data
+ channel to talk over. This does not mean that any of the RS-232 signals
+ are not used. Rather, it usually means that the communications link
+ uses some standard other than RS-232 that does not support full duplex
+ operation.</P>
+<H3><A NAME="2_3_2">Flow Control</A></H3>
+<P>It is often necessary to regulate the flow of data when transferring
+ data between two serial interfaces. This can be due to limitations in
+ an intermediate serial communications link, one of the serial
+ interfaces, or some storage media. Two methods are commonly used for
+ asynchronous data.</P>
+<P>The first method is often called &quot;software&quot; flow control and uses
+ special characters to start (XON or DC1, 021 octal) or stop (XOFF or
+ DC3, 023 octal) the flow of data. These characters are defined in the <A
+HREF="#ascii">American Standard Code for Information Interchange
+ (&quot;ASCII&quot;)</A>. While these codes are useful when transferring textual
+ information, they cannot be used when transferring other types of
+ information without special programming.</P>
+<P>The second method is called &quot;hardware&quot; flow control and uses the
+ RS-232 CTS and RTS signals instead of special characters. The receiver
+ sets CTS to the space voltage when it is ready to receive more data and
+ to the mark voltage when it is not ready. Likewise, the sender sets RTS
+ to the space voltage when it is ready to send more data. Because
+ hardware flow control uses a separate set of signals, it is much faster
+ than software flow control which needs to send or receive multiple bits
+ of information to do the same thing. CTS/RTS flow control is not
+ supported by all hardware or operating systems.</P>
+<H3><A NAME="2_3_3">What Is a Break?</A></H3>
+<P>Normally a receive or transmit data signal stays at the mark voltage
+ until a new character is transferred. If the signal is dropped to the
+ space voltage for a long period of time, usually 1/4 to 1/2 second,
+ then a break condition is said to exist.</P>
+<P>A break is sometimes used to reset a communications line or change
+ the operating mode of communications hardware like a MODEM. <A HREF="#modem">
+Chapter 3, Talking to MODEMs</A> covers these applications in more
+ depth.</P>
+<H2><A NAME="2_4">Synchronous Communications</A></H2>
+<P>Unlike asynchronous data, synchronous data appears as a constant
+ stream of bits. To read the data on the line, the computer must provide
+ or receive a common bit clock so that both the sender and receiver are
+ synchronized.</P>
+<P>Even with this synchronization, the computer must mark the beginning
+ of the data somehow. The most common way of doing this is to use a data
+ packet protocol like Serial Data Link Control (&quot;SDLC&quot;) or High-Speed
+ Data Link Control (&quot;HDLC&quot;).</P>
+<P>Each protocol defines certain bit sequences to represent the
+ beginning and end of a data packet. Each also defines a bit sequence
+ that is used when there is no data. These bit sequences allow the
+ computer to see the beginning of a data packet.</P>
+<P>Because synchronous protocols do not use per-character
+ synchronization bits they typically provide at least a 25% improvement
+ in performance over asynchronous communications and are suitable for
+ remote networking and configurations with more than two serial
+ interfaces.</P>
+<P>Despite the speed advantages of synchronous communications, most
+ RS-232 hardware does not support it due to the extra hardware and
+ software required.</P>
+<H2><A NAME="2_5">Accessing Serial Ports</A></H2>
+<P>Like all devices, UNIX provides access to serial ports via<I> device
+ files</I>. To access a serial port you simply open the corresponding
+ device file.</P>
+<H3><A NAME="2_5_1">Serial Port Files</A></H3>
+<P>Each serial port on a UNIX system has one or more device files (files
+ in the <TT>/dev</TT> directory) associated with it:
+<CENTER>
+<TABLE BORDER="1"><CAPTION ALIGN="CENTER"> Table 2 - Serial Port Device
+ Files</CAPTION>
+<TR><TH>System</TH><TH>Port 1</TH><TH>Port 2</TH></TR>
+<TR><TD>IRIX&reg;</TD><TD>/dev/ttyf1</TD><TD>/dev/ttyf2</TD></TR>
+<TR><TD>HP-UX</TD><TD>/dev/tty1p0</TD><TD>/dev/tty2p0</TD></TR>
+<TR><TD>Solaris&reg;/SunOS&reg;</TD><TD>/dev/ttya</TD><TD>/dev/ttyb</TD></TR>
+<TR><TD>Linux&reg;</TD><TD>/dev/ttyS0</TD><TD>/dev/ttyS1</TD></TR>
+<TR><TD>Digital UNIX&reg;</TD><TD>/dev/tty01</TD><TD>/dev/tty02</TD></TR>
+</TABLE>
+</CENTER>
+</P>
+<H3><A NAME="2_5_2">Opening a Serial Port</A></H3>
+<P>Since a serial port is a file, the<I> open(2)</I> function is used to
+ access it. The one hitch with UNIX is that device files are usually not
+ accessable by normal users. Workarounds include changing the access
+ permissions to the file(s) in question, running your program as the
+ super-user (root), or making your program set-userid so that it runs as
+ the owner of the device file (not recommended for obvious security
+ reasons...)</P>
+<P>For now we'll assume that the file is accessable by all users. The
+ code to open serial port 1 on a PC running Linux is show in <A HREF="#listing1">
+Listing 1</A>.</P>
+<P><A NAME="listing1"><I>Listing 1 - Opening a serial port.</I></A></P>
+<PRE>
+    #include &lt;stdio.h&gt;   /* Standard input/output definitions */
+    #include &lt;string.h&gt;  /* String function definitions */
+    #include &lt;unistd.h&gt;  /* UNIX standard function definitions */
+    #include &lt;fcntl.h&gt;   /* File control definitions */
+    #include &lt;errno.h&gt;   /* Error number definitions */
+    #include &lt;termios.h&gt; /* POSIX terminal control definitions */
+
+    /*
+     * 'open_port()' - Open serial port 1.
+     *
+     * Returns the file descriptor on success or -1 on error.
+     */
+
+    int
+    open_port(void)
+    {
+      int fd; /* File descriptor for the port */
+
+
+      fd = open(&quot;/dev/ttyS0&quot;, O_RDWR | O_NOCTTY | O_NDELAY);
+      if (fd == -1)
+      {
+       /*
+	* Could not open the port.
+	*/
+
+	perror(&quot;open_port: Unable to open /dev/ttyS0 - &quot;);
+      }
+      else
+	fcntl(fd, F_SETFL, 0);
+
+      return (fd);
+    }
+</PRE>
+<P>Other systems would require the corresponding device file name, but
+ otherwise the code is the same.</P>
+<H4>Open Options</H4>
+<P>You'll notice that when we opened the device file we used two other
+ flags along with the read+write mode:</P>
+<PRE>
+    fd = open(&quot;/dev/ttyS0&quot;, O_RDWR | O_NOCTTY | O_NDELAY);
+</PRE>
+<P>The<I> O_NOCTTY</I> flag tells UNIX that this program doesn't want to
+ be the &quot;controlling terminal&quot; for that port. If you don't specify this
+ then any input (such as keyboard abort signals and so forth) will
+ affect your process. Programs like<I> getty(1M/8)</I> use this feature
+ when starting the login process, but normally a user program does not
+ want this behavior.</P>
+<P>The<I> O_NDELAY</I> flag tells UNIX that this program doesn't care
+ what state the DCD signal line is in - whether the other end of the
+ port is up and running. If you do not specify this flag, your process
+ will be put to sleep until the DCD signal line is the space voltage.</P>
+<H3><A NAME="2_5_3">Writing Data to the Port</A></H3>
+<P>Writing data to the port is easy - just use the<I> write(2)</I>
+ system call to send data it:</P>
+<PRE>
+    n = write(fd, &quot;ATZ\r&quot;, 4);
+    if (n &lt; 0)
+      fputs(&quot;write() of 4 bytes failed!\n&quot;, stderr);
+</PRE>
+<P>The<I> write</I> function returns the number of bytes sent or -1 if
+ an error occurred. Usually the only error you'll run into is<I> EIO</I>
+ when a MODEM or data link drops the Data Carrier Detect (DCD) line.
+ This condition will persist until you close the port.</P>
+<H3><A NAME="2_5_4">Reading Data from the Port</A></H3>
+<P>Reading data from a port is a little trickier. When you operate the
+ port in raw data mode, each<I> read(2)</I> system call will return the
+ number of characters that are actually available in the serial input
+ buffers. If no characters are available, the call will block (wait)
+ until characters come in, an interval timer expires, or an error
+ occurs. The<I> read</I> function can be made to return immediately by
+ doing the following:</P>
+<PRE>
+    fcntl(fd, F_SETFL, FNDELAY);
+</PRE>
+<P>The<I> FNDELAY</I> option causes the<I> read</I> function to return 0
+ if no characters are available on the port. To restore normal
+ (blocking) behavior, call<I> fcntl()</I> without the<I> FNDELAY</I>
+ option:</P>
+<PRE>
+    fcntl(fd, F_SETFL, 0);
+</PRE>
+<P>This is also used after opening a serial port with the O_NDELAY
+ option.</P>
+<H3><A NAME="2_5_5">Closing a Serial Port</A></H3>
+<P>To close the serial port, just use the<I> close</I> system call:</P>
+<PRE>
+    close(fd);
+</PRE>
+<P>Closing a serial port will also usually set the DTR signal low which
+ causes most MODEMs to hang up.</P>
+</DIV><HR NOSHADE>
+<DIV ALIGN="justify">
+<H1 ALIGN="RIGHT"><A NAME="config">Chapter 2, Configuring the Serial
+ Port</A></H1>
+<P>This chapter discusses how to configure a serial port from C using
+ the POSIX termios interface.</P>
+<H2><A NAME="3_1">The POSIX Terminal Interface</A></H2>
+<P>Most systems support the POSIX terminal (serial) interface for
+ changing parameters such as baud rate, character size, and so on. The
+ first thing you need to do is include the file <TT>&lt;termios.h&gt;</TT>;
+ this defines the terminal control structure as well as the POSIX
+ control functions.</P>
+<P>The two most important POSIX functions are<I> tcgetattr(3)</I> and<I>
+ tcsetattr(3)</I>. These get and set terminal attributes, respectively;
+ you provide a pointer to a<I> termios</I> structure that contains all
+ of the serial options available:
+<CENTER>
+<TABLE BORDER="1" WIDTH="50%"><CAPTION ALIGN="CENTER"> Table 3 - Termios
+ Structure Members</CAPTION>
+<TR><TH>Member</TH><TH>Description</TH></TR>
+<TR><TD>c_cflag</TD><TD>Control options</TD></TR>
+<TR><TD>c_lflag</TD><TD>Line options</TD></TR>
+<TR><TD>c_iflag</TD><TD>Input options</TD></TR>
+<TR><TD>c_oflag</TD><TD>Output options</TD></TR>
+<TR><TD>c_cc</TD><TD>Control characters</TD></TR>
+<TR><TD>c_ispeed</TD><TD>Input baud (new interface)</TD></TR>
+<TR><TD>c_ospeed</TD><TD>Output baud (new interface)</TD></TR>
+</TABLE>
+</CENTER>
+</P>
+<H3><A NAME="3_1_1">Control Options</A></H3>
+ The<I> c_cflag</I> member controls the baud rate, number of data bits,
+ parity, stop bits, and hardware flow control. There are constants for
+ all of the supported configurations.
+<CENTER>
+<TABLE BORDER="1" WIDTH="50%"><CAPTION ALIGN="CENTER"> Table 4 -
+ Constants for the c_cflag Member</CAPTION>
+<TR><TH>Constant</TH><TH>Description</TH></TR>
+<TR><TD>CBAUD</TD><TD>Bit mask for baud rate</TD></TR>
+<TR><TD>B0</TD><TD>0 baud (drop DTR)</TD></TR>
+<TR><TD>B50</TD><TD>50 baud</TD></TR>
+<TR><TD>B75</TD><TD>75 baud</TD></TR>
+<TR><TD>B110</TD><TD>110 baud</TD></TR>
+<TR><TD>B134</TD><TD>134.5 baud</TD></TR>
+<TR><TD>B150</TD><TD>150 baud</TD></TR>
+<TR><TD>B200</TD><TD>200 baud</TD></TR>
+<TR><TD>B300</TD><TD>300 baud</TD></TR>
+<TR><TD>B600</TD><TD>600 baud</TD></TR>
+<TR><TD>B1200</TD><TD>1200 baud</TD></TR>
+<TR><TD>B1800</TD><TD>1800 baud</TD></TR>
+<TR><TD>B2400</TD><TD>2400 baud</TD></TR>
+<TR><TD>B4800</TD><TD>4800 baud</TD></TR>
+<TR><TD>B9600</TD><TD>9600 baud</TD></TR>
+<TR><TD>B19200</TD><TD>19200 baud</TD></TR>
+<TR><TD>B38400</TD><TD>38400 baud</TD></TR>
+<TR><TD>B57600</TD><TD>57,600 baud</TD></TR>
+<TR><TD>B76800</TD><TD>76,800 baud</TD></TR>
+<TR><TD>B115200</TD><TD>115,200 baud</TD></TR>
+<TR><TD>EXTA</TD><TD>External rate clock</TD></TR>
+<TR><TD>EXTB</TD><TD>External rate clock</TD></TR>
+<TR><TD>CSIZE</TD><TD>Bit mask for data bits</TD></TR>
+<TR><TD>CS5</TD><TD>5 data bits</TD></TR>
+<TR><TD>CS6</TD><TD>6 data bits</TD></TR>
+<TR><TD>CS7</TD><TD>7 data bits</TD></TR>
+<TR><TD>CS8</TD><TD>8 data bits</TD></TR>
+<TR><TD>CSTOPB</TD><TD>2 stop bits (1 otherwise)</TD></TR>
+<TR><TD>CREAD</TD><TD>Enable receiver</TD></TR>
+<TR><TD>PARENB</TD><TD>Enable parity bit</TD></TR>
+<TR><TD>PARODD</TD><TD>Use odd parity instead of even</TD></TR>
+<TR><TD>HUPCL</TD><TD>Hangup (drop DTR) on last close</TD></TR>
+<TR><TD>CLOCAL</TD><TD>Local line - do not change &quot;owner&quot; of port</TD></TR>
+<TR><TD>LOBLK</TD><TD>Block job control output</TD></TR>
+<TR><TD>CNEW_RTSCTS
+<BR> CRTSCTS</TD><TD>Enable hardware flow control (not supported on all
+ platforms)</TD></TR>
+</TABLE>
+</CENTER>
+<P>The<I> c_cflag</I> member contains two options that should always be
+ enabled,<I> CLOCAL</I> and<I> CREAD</I>. These will ensure that your
+ program does not become the 'owner' of the port subject to sporatic job
+ control and hangup signals, and also that the serial interface driver
+ will read incoming data bytes.</P>
+<P>The baud rate constants (<I>CBAUD</I>,<I> B9600</I>, etc.) are used
+ for older interfaces that lack the<I> c_ispeed</I> and<I> c_ospeed</I>
+ members. See the next section for information on the POSIX functions
+ used to set the baud rate.</P>
+<P><B>Never</B> initialize the<I> c_cflag</I> (or any other flag) member
+ directly; you should always use the bitwise AND, OR, and NOT operators
+ to set or clear bits in the members. Different operating system
+ versions (and even patches) can and do use the bits differently, so
+ using the bitwise operators will prevent you from clobbering a bit flag
+ that is needed in a newer serial driver.</P>
+<H4>Setting the Baud Rate</H4>
+<P>The baud rate is stored in different places depending on the
+ operating system. Older interfaces store the baud rate in the<I>
+ c_cflag</I> member using one of the baud rate constants in table 4,
+ while newer implementations provide the<I> c_ispeed</I> and<I> c_ospeed</I>
+ members that contain the actual baud rate value.</P>
+<P>The<I> cfsetospeed(3)</I> and<I> cfsetispeed(3)</I> functions are
+ provided to set the baud rate in the<I> termios</I> structure
+ regardless of the underlying operating system interface. Typically
+ you'd use the code in <A HREF="#listing2">Listing 2</A> to set the baud
+ rate.</P>
+<P><A NAME="listing2"><I>Listing 2 - Setting the baud rate.</I></A></P>
+<PRE>
+    struct termios options;
+
+    /*
+     * Get the current options for the port...
+     */
+
+    tcgetattr(fd, &amp;options);
+
+    /*
+     * Set the baud rates to 19200...
+     */
+
+    cfsetispeed(&amp;options, B19200);
+    cfsetospeed(&amp;options, B19200);
+
+    /*
+     * Enable the receiver and set local mode...
+     */
+
+    options.c_cflag |= (CLOCAL | CREAD);
+
+    /*
+     * Set the new options for the port...
+     */
+
+    tcsetattr(fd, TCSANOW, &amp;options);
+</PRE>
+<P>The<I> tcgetattr(3)</I> function fills the termios structure you
+ provide with the current serial port configuration. After we set the
+ baud rates and enable local mode and serial data receipt, we select the
+ new configuration using<I> tcsetattr(3)</I>. The<I> TCSANOW</I>
+ constant specifies that all changes should occur immediately without
+ waiting for output data to finish sending or input data to finish
+ receiving. There are other constants to wait for input and output to
+ finish or to flush the input and output buffers.</P>
+<P>Most systems do not support different input and output speeds, so be
+ sure to set both to the same value for maximum portability.
+<!-- NEED 2in -->
+<CENTER>
+<TABLE BORDER="1" WIDTH="50%"><CAPTION ALIGN="CENTER"> Table 5 -
+ Constants for tcsetattr</CAPTION>
+<TR><TH>Constant</TH><TH>Description</TH></TR>
+<TR><TD>TCSANOW</TD><TD>Make changes now without waiting for data to
+ complete</TD></TR>
+<TR><TD>TCSADRAIN</TD><TD>Wait until everything has been transmitted</TD>
+</TR>
+<TR><TD>TCSAFLUSH</TD><TD>Flush input and output buffers and make the
+ change</TD></TR>
+</TABLE>
+</CENTER>
+</P>
+<H4>Setting the Character Size</H4>
+<P>Unlike the baud rate, there is no convienience function to set the
+ character size. Instead you must do a little bitmasking to set things
+ up. The character size is specified in bits:</P>
+<PRE>
+    options.c_cflag &amp;= ~CSIZE; /* Mask the character size bits */
+    options.c_cflag |= CS8;    /* Select 8 data bits */
+</PRE>
+<H4>Setting Parity Checking</H4>
+<P>Like the character size you must manually set the parity enable and
+ parity type bits. UNIX serial drivers support even, odd, and no parity
+ bit generation. Space parity can be simulated with clever coding.</P>
+<UL>
+<LI>No parity (8N1):
+<PRE>
+options.c_cflag &amp;= ~PARENB
+options.c_cflag &amp;= ~CSTOPB
+options.c_cflag &amp;= ~CSIZE;
+options.c_cflag |= CS8;
+</PRE>
+<BR></LI>
+<LI>Even parity (7E1):
+<PRE>
+options.c_cflag |= PARENB
+options.c_cflag &amp;= ~PARODD
+options.c_cflag &amp;= ~CSTOPB
+options.c_cflag &amp;= ~CSIZE;
+options.c_cflag |= CS7;
+</PRE>
+<BR></LI>
+<LI>Odd parity (7O1):
+<PRE>
+options.c_cflag |= PARENB
+options.c_cflag |= PARODD
+options.c_cflag &amp;= ~CSTOPB
+options.c_cflag &amp;= ~CSIZE;
+options.c_cflag |= CS7;
+</PRE>
+<BR></LI>
+<LI>Space parity is setup the same as no parity (7S1):
+<PRE>
+options.c_cflag &amp;= ~PARENB
+options.c_cflag &amp;= ~CSTOPB
+options.c_cflag &amp;= ~CSIZE;
+options.c_cflag |= CS8;
+</PRE>
+</LI>
+</UL>
+<H4>Setting Hardware Flow Control</H4>
+<P>Some versions of UNIX support hardware flow control using the CTS
+ (Clear To Send) and RTS (Request To Send) signal lines. If the<I>
+ CNEW_RTSCTS</I> or<I> CRTSCTS</I> constants are defined on your system
+ then hardware flow control is probably supported. Do the following to
+ enable hardware flow control:</P>
+<PRE>
+    options.c_cflag |= CNEW_RTSCTS;    /* Also called CRTSCTS */
+</PRE>
+<P>Similarly, to disable hardware flow control:</P>
+<PRE>
+    options.c_cflag &amp;= ~CNEW_RTSCTS;
+</PRE>
+<H3><A NAME="3_1_2">Local Options</A></H3>
+<P>The local modes member<I> c_lflag</I> controls how input characters
+ are managed by the serial driver. In general you will configure the<I>
+ c_lflag</I> member for<I> canonical</I> or<I> raw</I> input.
+<CENTER>
+<TABLE BORDER="1" WIDTH="50%"><CAPTION ALIGN="CENTER"> Table 6 -
+ Constants for the c_lflag Member</CAPTION>
+<TR><TH>Constant</TH><TH>Description</TH></TR>
+<TR><TD>ISIG</TD><TD>Enable SIGINTR, SIGSUSP, SIGDSUSP, and SIGQUIT
+ signals</TD></TR>
+<TR><TD>ICANON</TD><TD>Enable canonical input (else raw)</TD></TR>
+<TR><TD>XCASE</TD><TD>Map uppercase \lowercase (obsolete)</TD></TR>
+<TR><TD>ECHO</TD><TD>Enable echoing of input characters</TD></TR>
+<TR><TD>ECHOE</TD><TD>Echo erase character as BS-SP-BS</TD></TR>
+<TR><TD>ECHOK</TD><TD>Echo NL after kill character</TD></TR>
+<TR><TD>ECHONL</TD><TD>Echo NL</TD></TR>
+<TR><TD>NOFLSH</TD><TD>Disable flushing of input buffers after interrupt
+ or quit characters</TD></TR>
+<TR><TD>IEXTEN</TD><TD>Enable extended functions</TD></TR>
+<TR><TD>ECHOCTL</TD><TD>Echo control characters as ^char and delete as
+ ~?</TD></TR>
+<TR><TD>ECHOPRT</TD><TD>Echo erased character as character erased</TD></TR>
+<TR><TD>ECHOKE</TD><TD>BS-SP-BS entire line on line kill</TD></TR>
+<TR><TD>FLUSHO</TD><TD>Output being flushed</TD></TR>
+<TR><TD>PENDIN</TD><TD>Retype pending input at next read or input char</TD>
+</TR>
+<TR><TD>TOSTOP</TD><TD>Send SIGTTOU for background output</TD></TR>
+</TABLE>
+</CENTER>
+</P>
+<H4>Choosing Canonical Input</H4>
+<P>Canonical input is line-oriented. Input characters are put into a
+ buffer which can be edited interactively by the user until a CR
+ (carriage return) or LF (line feed) character is received.</P>
+<P>When selecting this mode you normally select the<I> ICANON</I>,<I>
+ ECHO</I>, and<I> ECHOE</I> options:</P>
+<PRE>
+    options.c_lflag |= (ICANON | ECHO | ECHOE);
+</PRE>
+<H4>Choosing Raw Input</H4>
+<P>Raw input is unprocessed. Input characters are passed through exactly
+ as they are received, when they are received. Generally you'll deselect
+ the<I> ICANON</I>,<I> ECHO</I>,<I> ECHOE</I>, and<I> ISIG</I> options
+ when using raw input:</P>
+<PRE>
+    options.c_lflag &amp;= ~(ICANON | ECHO | ECHOE | ISIG);
+</PRE>
+<H4>A Note About Input Echo</H4>
+<P><B>Never</B> enable input echo (<I>ECHO, ECHOE</I>) when sending
+ commands to a MODEM or other computer that is echoing characters, as
+ you will generate a feedback loop between the two serial interfaces!</P>
+<H3><A NAME="3_1_3">Input Options</A></H3>
+<P>The input modes member<I> c_iflag</I> controls any input processing
+ that is done to characters received on the port. Like the<I> c_cflag</I>
+ field, the final value stored in<I> c_iflag</I> is the bitwise OR of
+ the desired options.
+<CENTER>
+<TABLE BORDER="1" WIDTH="50%"><CAPTION ALIGN="CENTER"> Table 7 -
+ Constants for the c_iflag Member</CAPTION>
+<TR><TH>Constant</TH><TH>Description</TH></TR>
+<TR><TD>INPCK</TD><TD>Enable parity check</TD></TR>
+<TR><TD>IGNPAR</TD><TD>Ignore parity errors</TD></TR>
+<TR><TD>PARMRK</TD><TD>Mark parity errors</TD></TR>
+<TR><TD>ISTRIP</TD><TD>Strip parity bits</TD></TR>
+<TR><TD>IXON</TD><TD>Enable software flow control (outgoing)</TD></TR>
+<TR><TD>IXOFF</TD><TD>Enable software flow control (incoming)</TD></TR>
+<TR><TD>IXANY</TD><TD>Allow any character to start flow again</TD></TR>
+<TR><TD>IGNBRK</TD><TD>Ignore break condition</TD></TR>
+<TR><TD>BRKINT</TD><TD>Send a SIGINT when a break condition is detected</TD>
+</TR>
+<TR><TD>INLCR</TD><TD>Map NL to CR</TD></TR>
+<TR><TD>IGNCR</TD><TD>Ignore CR</TD></TR>
+<TR><TD>ICRNL</TD><TD>Map CR to NL</TD></TR>
+<TR><TD>IUCLC</TD><TD>Map uppercase to lowercase</TD></TR>
+<TR><TD>IMAXBEL</TD><TD>Echo BEL on input line too long</TD></TR>
+</TABLE>
+</CENTER>
+</P>
+<H4>Setting Input Parity Options</H4>
+<P>You should enable input parity checking when you have enabled parity
+ in the<I> c_cflag</I> member (<I>PARENB</I>). The revelant constants
+ for input parity checking are<I> INPCK</I>,<I> IGNPAR</I>,<I> PARMRK</I>
+, and<I> ISTRIP</I>. Generally you will select<I> INPCK</I> and<I>
+ ISTRIP</I> to enable checking and stripping of the parity bit:</P>
+<PRE>
+    options.c_iflag |= (INPCK | ISTRIP);
+</PRE>
+<P><I>IGNPAR</I> is a somewhat dangerous option that tells the serial
+ driver to ignore parity errors and pass the incoming data through as if
+ no errors had occurred. This can be useful for testing the quality of a
+ communications link, but in general is not used for practical reasons.</P>
+<P><I>PARMRK</I> causes parity errors to be 'marked' in the input stream
+ using special characters. If<I> IGNPAR</I> is enabled, a NUL character
+ (000 octal) is sent to your program before every character with a
+ parity error. Otherwise, a DEL (177 octal) and NUL character is sent
+ along with the bad character.</P>
+<H4>Setting Software Flow Control</H4>
+<P>Software flow control is enabled using the<I> IXON</I>,<I> IXOFF</I>,
+ and<I> IXANY</I> constants:</P>
+<PRE>
+    options.c_iflag |= (IXON | IXOFF | IXANY);
+</PRE>
+<P>To disable software flow control simply mask those bits:</P>
+<PRE>
+    options.c_iflag &amp;= ~(IXON | IXOFF | IXANY);
+</PRE>
+<P>The XON (start data) and XOFF (stop data) characters are defined in
+ the<I> c_cc</I> array described below.
+<!-- NEED 10in -->
+</P>
+<H3><A NAME="3_1_4">Output Options</A></H3>
+<P>The<I> c_oflag</I> member contains output filtering options. Like the
+ input modes, you can select processed or raw data output.
+<CENTER>
+<TABLE BORDER="1" WIDTH="50%"><CAPTION ALIGN="CENTER"> Table 8 -
+ Constants for the c_oflag Member</CAPTION>
+<TR><TH>Constant</TH><TH>Description</TH></TR>
+<TR><TD>OPOST</TD><TD>Postprocess output (not set = raw output)</TD></TR>
+<TR><TD>OLCUC</TD><TD>Map lowercase to uppercase</TD></TR>
+<TR><TD>ONLCR</TD><TD>Map NL to CR-NL</TD></TR>
+<TR><TD>OCRNL</TD><TD>Map CR to NL</TD></TR>
+<TR><TD>NOCR</TD><TD>No CR output at column 0</TD></TR>
+<TR><TD>ONLRET</TD><TD>NL performs CR function</TD></TR>
+<TR><TD>OFILL</TD><TD>Use fill characters for delay</TD></TR>
+<TR><TD>OFDEL</TD><TD>Fill character is DEL</TD></TR>
+<TR><TD>NLDLY</TD><TD>Mask for delay time needed between lines</TD></TR>
+<TR><TD>NL0</TD><TD>No delay for NLs</TD></TR>
+<TR><TD>NL1</TD><TD>Delay further output after newline for 100
+ milliseconds</TD></TR>
+<TR><TD>CRDLY</TD><TD>Mask for delay time needed to return carriage to
+ left column</TD></TR>
+<TR><TD>CR0</TD><TD>No delay for CRs</TD></TR>
+<TR><TD>CR1</TD><TD>Delay after CRs depending on current column position</TD>
+</TR>
+<TR><TD>CR2</TD><TD>Delay 100 milliseconds after sending CRs</TD></TR>
+<TR><TD>CR3</TD><TD>Delay 150 milliseconds after sending CRs</TD></TR>
+<TR><TD>TABDLY</TD><TD>Mask for delay time needed after TABs</TD></TR>
+<TR><TD>TAB0</TD><TD>No delay for TABs</TD></TR>
+<TR><TD>TAB1</TD><TD>Delay after TABs depending on current column
+ position</TD></TR>
+<TR><TD>TAB2</TD><TD>Delay 100 milliseconds after sending TABs</TD></TR>
+<TR><TD>TAB3</TD><TD>Expand TAB characters to spaces</TD></TR>
+<TR><TD>BSDLY</TD><TD>Mask for delay time needed after BSs</TD></TR>
+<TR><TD>BS0</TD><TD>No delay for BSs</TD></TR>
+<TR><TD>BS1</TD><TD>Delay 50 milliseconds after sending BSs</TD></TR>
+<TR><TD>VTDLY</TD><TD>Mask for delay time needed after VTs</TD></TR>
+<TR><TD>VT0</TD><TD>No delay for VTs</TD></TR>
+<TR><TD>VT1</TD><TD>Delay 2 seconds after sending VTs</TD></TR>
+<TR><TD>FFDLY</TD><TD>Mask for delay time needed after FFs</TD></TR>
+<TR><TD>FF0</TD><TD>No delay for FFs</TD></TR>
+<TR><TD>FF1</TD><TD>Delay 2 seconds after sending FFs</TD></TR>
+</TABLE>
+</CENTER>
+
+<!-- NEED 2in -->
+</P>
+<H4>Choosing Processed Output</H4>
+<P>Processed output is selected by setting the<I> OPOST</I> option in
+ the<I> c_oflag</I> member:</P>
+<PRE>
+    options.c_oflag |= OPOST;
+</PRE>
+<P>Of all the different options, you will only probably use the<I> ONLCR</I>
+ option which maps newlines into CR-LF pairs. The rest of the output
+ options are primarily historic and date back to the time when line
+ printers and terminals could not keep up with the serial data stream!</P>
+<H4>Choosing Raw Output</H4>
+<P>Raw output is selected by resetting the<I> OPOST</I> option in the<I>
+ c_oflag</I> member:</P>
+<PRE>
+    options.c_oflag &amp;= ~OPOST;
+</PRE>
+<P>When the<I> OPOST</I> option is disabled, all other option bits in<I>
+ c_oflag</I> are ignored.</P>
+<H3><A NAME="3_1_5">Control Characters</A></H3>
+<P>The<I> c_cc</I> character array contains control character
+ definitions as well as timeout parameters. Constants are defined for
+ every element of this array.
+<CENTER>
+<TABLE BORDER><CAPTION ALIGN="CENTER"> Table 9 - Control Characters in
+ the c_cc Member</CAPTION>
+<TR><TH>Constant</TH><TH>Description</TH><TH>Key</TH></TR>
+<TR><TD>VINTR</TD><TD>Interrupt</TD><TD>CTRL-C</TD></TR>
+<TR><TD>VQUIT</TD><TD>Quit</TD><TD>CTRL-Z</TD></TR>
+<TR><TD>VERASE</TD><TD>Erase</TD><TD>Backspace (BS)</TD></TR>
+<TR><TD>VKILL</TD><TD>Kill-line</TD><TD>CTRL-U</TD></TR>
+<TR><TD>VEOF</TD><TD>End-of-file</TD><TD>CTRL-D</TD></TR>
+<TR><TD>VEOL</TD><TD>End-of-line</TD><TD>Carriage return (CR)</TD></TR>
+<TR><TD>VEOL2</TD><TD>Second end-of-line</TD><TD>Line feed (LF)</TD></TR>
+<TR><TD>VMIN</TD><TD>Minimum number of characters to read</TD><TD>-</TD></TR>
+<TR><TD>VSTART</TD><TD>Start flow</TD><TD>CTRL-Q (XON)</TD></TR>
+<TR><TD>VSTOP</TD><TD>Stop flow</TD><TD>CTRL-S (XOFF)</TD></TR>
+<TR><TD>VTIME</TD><TD>Time to wait for data (tenths of seconds)</TD><TD>
+-</TD></TR>
+</TABLE>
+</CENTER>
+</P>
+<H4>Setting Software Flow Control Characters</H4>
+<P>The<I> VSTART</I> and<I> VSTOP</I> elements of the<I> c_cc</I> array
+ contain the characters used for software flow control. Normally they
+ should be set to DC1 (021 octal) and DC3 (023 octal) which represent
+ the <A HREF="#ascii">ASCII</A> standard XON and XOFF characters.</P>
+<H4>Setting Read Timeouts</H4>
+<P>UNIX serial interface drivers provide the ability to specify
+ character and packet timeouts. Two elements of the<I> c_cc</I> array
+ are used for timeouts:<I> VMIN</I> and<I> VTIME</I>.<B> Timeouts are
+ ignored in canonical input mode or when the<I> NDELAY</I> option is set
+ on the file via<I> open</I> or<I> fcntl</I>.</B></P>
+<P><I>VMIN</I> specifies the minimum number of characters to read. If it
+ is set to 0, then the<I> VTIME</I> value specifies the time to wait for
+ every character read. Note that this does not mean that a<I> read</I>
+ call for N bytes will wait for N characters to come in. Rather, the
+ timeout will apply to the first character and the<I> read</I> call will
+ return the number of characters immediately available (up to the number
+ you request).</P>
+<P>If<I> VMIN</I> is non-zero,<I> VTIME</I> specifies the time to wait
+ for the first character read. If a character is read within the time
+ given, any read will block (wait) until all<I> VMIN</I> characters are
+ read. That is, once the first character is read, the serial interface
+ driver expects to receive an entire packet of characters (<I>VMIN</I>
+ bytes total). If no character is read within the time allowed, then the
+ call to<I> read</I> returns 0. This method allows you to tell the
+ serial driver you need exactly N bytes and any<I> read</I> call will
+ return 0 or N bytes. However, the timeout only applies to the first
+ character read, so if for some reason the driver misses one character
+ inside the N byte packet then the<I> read</I> call could block forever
+ waiting for additional input characters.</P>
+<P><I>VTIME</I> specifies the amount of time to wait for incoming
+ characters in tenths of seconds. If<I> VTIME</I> is set to 0 (the
+ default), reads will block (wait) indefinitely unless the<I> NDELAY</I>
+ option is set on the port with<I> open</I> or<I> fcntl</I>.</P>
+</DIV><HR NOSHADE>
+<DIV ALIGN="justify">
+<H1 ALIGN="RIGHT"><A NAME="modem">Chapter 3, MODEM Communications</A></H1>
+<P>This chapter covers the basics of dialup telephone
+ Modulator/Demodulator (MODEM) communications. Examples are provided for
+ MODEMs that use the defacto standard &quot;AT&quot; command set.</P>
+<H2><A NAME="4_1">What Is a MODEM?</A></H2>
+<P>MODEMs are devices that modulate serial data into frequencies that
+ can be transferred over an analog data link such as a telephone line or
+ cable TV connection. A standard telephone MODEM converts serial data
+ into tones that can be passed over the phone lines; because of the
+ speed and complexity of the conversion these tones sound more like loud
+ screeching if you listen to them.</P>
+<P>Telephone MODEMs are available today that can transfer data across a
+ telephone line at nearly 53,000 bits per second, or 53kbps. In
+ addition, most MODEMs use data compression technology that can increase
+ the bit rate to well over 100kbps on some types of data.</P>
+<H2><A NAME="4_2">Communicating With a MODEM</A></H2>
+<P>The first step in communicating with a MODEM is to open and configure
+ the port for<I> raw</I> input as shown in <A HREF="#listing3">Listing 3</A>
+.
+<!-- NEED 5in -->
+</P>
+<P><A NAME="listing3"><I>Listing 3 - Configuring the port for raw input.</I>
+</A></P>
+<PRE>
+    int            fd;
+    struct termios options;
+
+    /* open the port */
+    fd = open(&quot;/dev/ttyS0&quot;, O_RDWR | O_NOCTTY | O_NDELAY);
+    fcntl(fd, F_SETFL, 0);
+
+    /* get the current options */
+    tcgetattr(fd, &amp;options);
+
+    /* set raw input, 1 second timeout */
+    options.c_cflag     |= (CLOCAL | CREAD);
+    options.c_lflag     &amp;= ~(ICANON | ECHO | ECHOE | ISIG);
+    options.c_oflag     &amp;= ~OPOST;
+    options.c_cc[VMIN]  = 0;
+    options.c_cc[VTIME] = 10;
+
+    /* set the options */
+    tcsetattr(fd, TCSANOW, &amp;options);
+</PRE>
+<P>Next you need to establish communications with the MODEM. The best
+ way to do this is by sending the &quot;AT&quot; command to the MODEM. This also
+ allows smart MODEMs to detect the baud you are using. When the MODEM is
+ connected correctly and powered on it will respond with the response
+ &quot;OK&quot;.</P>
+<P><A NAME="listing4"><I>Listing 4 - Initializing the MODEM.</I></A></P>
+<PRE>
+    int                  /* O - 0 = MODEM ok, -1 = MODEM bad */
+    init_modem(int fd)   /* I - Serial port file */
+    {
+      char buffer[255];  /* Input buffer */
+      char *bufptr;      /* Current char in buffer */
+      int  nbytes;       /* Number of bytes read */
+      int  tries;        /* Number of tries so far */
+
+      for (tries = 0; tries &lt; 3; tries ++)
+      {
+       /* send an AT command followed by a CR */
+	if (write(fd, &quot;AT\r&quot;, 3) &lt; 3)
+	  continue;
+
+       /* read characters into our string buffer until we get a CR or NL */
+	bufptr = buffer;
+	while ((nbytes = read(fd, bufptr, buffer + sizeof(buffer) - bufptr - 1)) &gt; 0)
+	{
+	  bufptr += nbytes;
+	  if (bufptr[-1] == '\n' || bufptr[-1] == '\r')
+            break;
+	}
+
+       /* nul terminate the string and see if we got an OK response */
+	*bufptr = '\0';
+
+	if (strncmp(buffer, &quot;OK&quot;, 2) == 0)
+	  return (0);
+      }
+
+      return (-1);
+    }
+</PRE>
+<H3><A NAME="4_2_1">Standard MODEM Commands</A></H3>
+<P>Most MODEMs support the &quot;AT&quot; command set, so called because each
+ command starts with the &quot;AT&quot; characters. Each command is sent with the
+ &quot;AT&quot; characters starting in the first column followed by the specific
+ command and a carriage return (CR, 015 octal). After processing the
+ command the MODEM will reply with one of several textual messages
+ depending on the command.</P>
+<H4>ATD - Dial A Number</H4>
+<P>The<I> ATD</I> command dials the specified number. In addition to
+ numbers and dashes you can specify tone (&quot;T&quot;) or pulse (&quot;P&quot;) dialing,
+ pause for one second (&quot;,&quot;), and wait for a dialtone (&quot;W&quot;):</P>
+<PRE>
+    ATDT 555-1212
+    ATDT 18008008008W1234,1,1234
+    ATD T555-1212WP1234
+</PRE>
+<P>The MODEM will reply with one of the following messages:</P>
+<PRE>
+    NO DIALTONE
+    BUSY
+    NO CARRIER
+    CONNECT
+    CONNECT <I>baud</I>
+</PRE>
+<H4>ATH - Hang Up</H4>
+<P>The<I> ATH</I> command causes the MODEM to hang up. Since the MODEM
+ must be in &quot;command&quot; mode you probably won't use it during a normal
+ phone call.</P>
+<P>Most MODEMs will also hang up if DTR is dropped; you can do this by
+ setting the baud to 0 for at least 1 second. Dropping DTR also returns
+ the MODEM to command mode.</P>
+<P>After a successful hang up the MODEM will reply with &quot;NO CARRIER&quot;. If
+ the MODEM is still connected the &quot;CONNECT&quot; or &quot;CONNECT baud&quot; message
+ will be sent.</P>
+<H4>ATZ - Reset MODEM</H4>
+ The<I> ATZ</I> command resets the MODEM. The MODEM will reply with the
+ string &quot;OK&quot;.
+<H3><A NAME="4_2_2">Common MODEM Communication Problems</A></H3>
+<P>First and foremost,<I> don't forget to disable input echoing</I>.
+ Input echoing will cause a feedback loop between the MODEM and
+ computer.</P>
+<P>Second, when sending MODEM commands you must terminate them with a
+ carriage return (CR) and not a newline (NL). The C character constant
+ for CR is &quot;\r&quot;.</P>
+<P>Finally, when dealing with a MODEM make sure you use a baud that the
+ MODEM supports. While many MODEMs do auto-baud detection, some have
+ limits (19.2kbps is common on older MODEMs) that you must observe.</P>
+</DIV><HR NOSHADE>
+<DIV ALIGN="justify">
+<H1 ALIGN="RIGHT"><A NAME="advanced">Chapter 4, Advanced Serial
+ Programming</A></H1>
+<P>This chapter covers advanced serial programming techniques using the<I>
+ ioctl(2)</I> and<I> select(2)</I> system calls.</P>
+<H2><A NAME="5_1">Serial Port IOCTLs</A></H2>
+<P>In <A HREF="#config">Chapter 2, Configuring the Serial Port</A> we
+ used the<I> tcgetattr</I> and<I> tcsetattr</I> functions to configure
+ the serial port. Under UNIX these functions use the<I> ioctl(2)</I>
+ system call to do their magic.</P>
+<P>The<I> ioctl</I> system call takes three arguments:</P>
+<PRE>
+    int ioctl(int fd, int request, ...);
+</PRE>
+<P>The<I> fd</I> argument specifies the serial port file descriptor. The<I>
+ request</I> argument is a constant defined in the <CODE>&lt;termios.h&gt;</CODE>
+ header file and is typically one of the constants listed in <A HREF="#table10">
+Table 10</A>.
+<!-- NEED 6in -->
+<CENTER><A NAME="table10">
+<TABLE BORDER WIDTH="80%"><CAPTION ALIGN="CENTER"> Table 10 - IOCTL
+ Requests for Serial Ports</CAPTION>
+<TR><TH>Request</TH><TH>Description</TH><TH NOWRAP>POSIX Function</TH></TR>
+<TR><TD>TCGETS</TD><TD>Gets the current serial port settings.</TD><TD NOWRAP>
+tcgetattr</TD></TR>
+<TR><TD>TCSETS</TD><TD>Sets the serial port settings immediately.</TD><TD
+NOWRAP>tcsetattr(fd, TCSANOW, &amp;options)</TD></TR>
+<TR><TD>TCSETSF</TD><TD>Sets the serial port settings after flushing the
+ input and output buffers.</TD><TD NOWRAP>tcsetattr(fd, TCSAFLUSH,
+ &amp;options)</TD></TR>
+<TR><TD>TCSETSW</TD><TD>Sets the serial port settings after allowing the
+ input and output buffers to drain/empty.</TD><TD NOWRAP>tcsetattr(fd,
+ TCSADRAIN, &amp;options)</TD></TR>
+<TR><TD>TCSBRK</TD><TD>Sends a break for the given time.</TD><TD NOWRAP>
+tcsendbreak, tcdrain</TD></TR>
+<TR><TD>TCXONC</TD><TD>Controls software flow control.</TD><TD NOWRAP>
+tcflow</TD></TR>
+<TR><TD>TCFLSH</TD><TD>Flushes the input and/or output queue.</TD><TD NOWRAP>
+tcflush</TD></TR>
+<TR><TD>TIOCMGET</TD><TD>Returns the state of the &quot;MODEM&quot; bits.</TD><TD NOWRAP>
+None</TD></TR>
+<TR><TD>TIOCMSET</TD><TD>Sets the state of the &quot;MODEM&quot; bits.</TD><TD NOWRAP>
+None</TD></TR>
+<TR><TD>FIONREAD</TD><TD>Returns the number of bytes in the input
+ buffer.</TD><TD NOWRAP>None</TD></TR>
+</TABLE>
+</A></CENTER>
+</P>
+<H3><A NAME="5_1_1">Getting the Control Signals</A></H3>
+<P>The <CODE>TIOCMGET</CODE><I> ioctl</I> gets the current &quot;MODEM&quot;
+ status bits, which consist of all of the RS-232 signal lines except<B>
+ RXD</B> and<B> TXD</B>, listed in <A HREF="#table11">Table 11</A>.</P>
+<P>To get the status bits, call<I> ioctl</I> with a pointer to an
+ integer to hold the bits, as shown in <A HREF="#listing5">Listing 5</A>
+.</P>
+<P><A NAME="listing5"><I>Listing 5 - Getting the MODEM status bits.</I></A>
+</P>
+<PRE>
+    #include &lt;unistd.h&gt;
+    #include &lt;termios.h&gt;
+
+    int fd;
+    int status;
+
+    ioctl(fd, TIOCMGET, &amp;status);
+</PRE>
+
+<!-- NEED 4in -->
+<CENTER><A NAME="table11">
+<TABLE BORDER><CAPTION ALIGN="CENTER"> Table 11 - Control Signal
+ Constants</CAPTION>
+<TR><TH>Constant</TH><TH>Description</TH></TR>
+<TR><TD>TIOCM_LE</TD><TD>DSR (data set ready/line enable)</TD></TR>
+<TR><TD>TIOCM_DTR</TD><TD>DTR (data terminal ready)</TD></TR>
+<TR><TD>TIOCM_RTS</TD><TD>RTS (request to send)</TD></TR>
+<TR><TD>TIOCM_ST</TD><TD>Secondary TXD (transmit)</TD></TR>
+<TR><TD>TIOCM_SR</TD><TD>Secondary RXD (receive)</TD></TR>
+<TR><TD>TIOCM_CTS</TD><TD>CTS (clear to send)</TD></TR>
+<TR><TD>TIOCM_CAR</TD><TD>DCD (data carrier detect)</TD></TR>
+<TR><TD>TIOCM_CD</TD><TD>Synonym for TIOCM_CAR</TD></TR>
+<TR><TD>TIOCM_RNG</TD><TD>RNG (ring)</TD></TR>
+<TR><TD>TIOCM_RI</TD><TD>Synonym for TIOCM_RNG</TD></TR>
+<TR><TD>TIOCM_DSR</TD><TD>DSR (data set ready)</TD></TR>
+</TABLE>
+</A></CENTER>
+<H3><A NAME="5_1_2">Setting the Control Signals</A></H3>
+<P>The <CODE>TIOCMSET</CODE><I> ioctl</I> sets the &quot;MODEM&quot; status bits
+ defined above. To drop the DTR signal you can use the code in <A HREF="#listing6">
+Listing 6</A>.</P>
+<P><A NAME="listing6"><I>Listing 6 - Dropping DTR with the TIOCMSET
+ ioctl.</I></A></P>
+<PRE>
+    #include &lt;unistd.h&gt;
+    #include &lt;termios.h&gt;
+
+    int fd;
+    int status;
+
+    ioctl(fd, TIOCMGET, &amp;status);
+
+    status &amp;= ~TIOCM_DTR;
+
+    ioctl(fd, TIOCMSET, &amp;status);
+</PRE>
+<P>The bits that can be set depend on the operating system, driver, and
+ modes in use. Consult your operating system documentation for more
+ information.</P>
+<H3><A NAME="5_1_3">Getting the Number of Bytes Available</A></H3>
+<P>The <CODE>FIONREAD</CODE><I> ioctl</I> gets the number of bytes in
+ the serial port input buffer. As with <CODE>TIOCMGET</CODE> you pass in
+ a pointer to an integer to hold the number of bytes, as shown in <A HREF="#listing7">
+Listing 7</A>.</P>
+<P><A NAME="listing7"><I>Listing 7 - Getting the number of bytes in the
+ input buffer.</I></A></P>
+<PRE>
+    #include &lt;unistd.h&gt;
+    #include &lt;termios.h&gt;
+
+    int fd;
+    int bytes;
+
+    ioctl(fd, FIONREAD, &amp;bytes);
+</PRE>
+<P>This can be useful when polling a serial port for data, as your
+ program can determine the number of bytes in the input buffer before
+ attempting a read.</P>
+<H2><A NAME="5_2">Selecting Input from a Serial Port</A></H2>
+<P>While simple applications can poll or wait on data coming from the
+ serial port, most applications are not simple and need to handle input
+ from multiple sources.</P>
+<P>UNIX provides this capability through the<I> select(2)</I> system
+ call. This system call allows your program to check for input, output,
+ or error conditions on one or more file descriptors. The file
+ descriptors can point to serial ports, regular files, other devices,
+ pipes, or sockets. You can poll to check for pending input, wait for
+ input indefinitely, or timeout after a specific amount of time, making
+ the<I> select</I> system call extremely flexible.</P>
+<P>Most GUI Toolkits provide an interface to<I> select</I>; we will
+ discuss the X Intrinsics (&quot;Xt&quot;) library later in this chapter.</P>
+<H3><A NAME="5_2_1">The SELECT System Call</A></H3>
+<P>The<I> select</I> system call accepts 5 arguments:</P>
+<PRE>
+    int select(int max_fd, fd_set *input, fd_set *output, fd_set *error,
+               struct timeval *timeout);
+</PRE>
+<P>The<I> max_fd</I> argument specifies the highest numbered file
+ descriptor in the<I> input</I>,<I> output</I>, and<I> error</I> sets.
+ The<I> input</I>,<I> output</I>, and<I> error</I> arguments specify
+ sets of file descriptors for pending input, output, or error
+ conditions; specify <CODE>NULL</CODE> to disable monitoring for the
+ corresponding condition. These sets are initialized using three macros:</P>
+<PRE>
+    FD_ZERO(&amp;fd_set);
+    FD_SET(fd, &amp;fd_set);
+    FD_CLR(fd, &amp;fd_set);
+</PRE>
+<P>The<I> FD_ZERO</I> macro clears the set entirely. The<I> FD_SET</I>
+ and<I> FD_CLR</I> macros add and remove a file descriptor from the set,
+ respectively.</P>
+<P>The<I> timeout</I> argument specifies a timeout value which consists
+ of seconds (<I>timeout.tv_sec</I>) and microseconds (<I>timeout.tv_usec</I>
+). To poll one or more file descriptors, set the seconds and
+ microseconds to zero. To wait indefinitely specify <CODE>NULL</CODE>
+ for the timeout pointer.</P>
+<P>The<I> select</I> system call returns the number of file descriptors
+ that have a pending condition, or -1 if there was an error.</P>
+<H3><A NAME="5_2_2">Using the SELECT System Call</A></H3>
+<P>Suppose we are reading data from a serial port and a socket. We want
+ to check for input from either file descriptor, but want to notify the
+ user if no data is seen within 10 seconds. To do this we'll need to use
+ the<I> select</I> system call, as shown in <A HREF="#listing8">Listing
+ 8</A>.
+<!-- NEED 6in -->
+</P>
+<P><A NAME="listing8"><I>Listing 8 - Using SELECT to process input from
+ more than one source.</I></A></P>
+<PRE>
+    #include &lt;unistd.h&gt;
+    #include &lt;sys/types.h&gt;
+    #include &lt;sys/time.h&gt;
+    #include &lt;sys/select.h&gt;
+
+    int            n;
+    int            socket;
+    int            fd;
+    int            max_fd;
+    fd_set         input;
+    struct timeval timeout;
+
+    /* Initialize the input set */
+    FD_ZERO(&amp;input);
+    FD_SET(fd, &amp;input);
+    FD_SET(sock, &amp;input);
+
+    max_fd = (sock &gt; fd ? sock : fd) + 1;
+
+    /* Initialize the timeout structure */
+    timeout.tv_sec  = 10;
+    timeout.tv_usec = 0;
+
+    /* Do the select */
+    n = select(max_fd, &amp;input, NULL, NULL, &amp;timeout);
+
+    /* See if there was an error */
+    if (n &lt; 0)
+      perror(&quot;select failed&quot;);
+    else if (n == 0)
+      puts(&quot;TIMEOUT&quot;);
+    else
+    {
+      /* We have input */
+      if (FD_ISSET(fd, &amp;input))
+	process_fd();
+      if (FD_ISSET(sock, &amp;input))
+	process_socket();
+    }
+</PRE>
+<P>You'll notice that we first check the return value of the<I> select</I>
+ system call. Values of 0 and -1 yield the appropriate warning and error
+ messages. Values greater than 0 mean that we have data pending on one
+ or more file descriptors.</P>
+<P>To determine which file descriptor(s) have pending input, we use the<I>
+ FD_ISSET</I> macro to test the input set for each file descriptor. If
+ the file descriptor flag is set then the condition exists (input
+ pending in this case) and we need to do something.</P>
+<H3><A NAME="5_2_3">Using SELECT with the X Intrinsics Library</A></H3>
+<P>The X Intrinsics library provides an interface to the<I> select</I>
+ system call via the<I> XtAppAddInput(3x)</I> and<I>
+ XtAppRemoveInput(3x)</I> functions:</P>
+<PRE>
+int XtAppAddInput(XtAppContext context, int fd, int mask,
+                  XtInputProc proc, XtPointer data);
+void XtAppRemoveInput(XtAppContext context, int input);
+</PRE>
+<P>The<I> select</I> system call is used internally to implement
+ timeouts, work procedures, and check for input from the X server. These
+ functions can be used with any Xt-based toolkit including Xaw, Lesstif,
+ and Motif.</P>
+<P>The<I> proc</I> argument to<I> XtAppAddInput</I> specifies the
+ function to call when the selected condition (e.g. input available)
+ exists on the file descriptor. In the previous example you could
+ specify the<I> process_fd</I> or<I> process_socket</I> functions.</P>
+<P>Because Xt limits your access to the<I> select</I> system call,
+ you'll need to implement timeouts through another mechanism, probably
+ via<I> XtAppAddTimeout(3x)</I>.</P>
+</DIV><HR NOSHADE>
+<DIV ALIGN="justify">
+<H1 ALIGN="RIGHT"><A NAME="pinouts">Appendix A, Pinouts</A></H1>
+<P>This appendix provides pinout information for many of the common
+ serial ports you will find.
+<!-- NEED 7in -->
+</P>
+<H2><A NAME="6_1">RS-232 Pinouts</A></H2>
+<P>RS-232 comes in three flavors (A, B, C) and uses a 25-pin D-Sub
+ connector:</P>
+<P ALIGN="CENTER">Figure 2 - RS-232 Connector
+<BR> <IMG HEIGHT="83" SRC="db25.gif" WIDTH="353"></P>
+<CENTER>
+<TABLE BORDER><CAPTION ALIGN="CENTER"> Table 12 - RS-232 Signals</CAPTION>
+<TR><TH>Pin</TH><TH>Description</TH><TH>Pin</TH><TH>Description</TH></TR>
+<TR><TD>1</TD><TD>Earth Ground</TD><TD>14</TD><TD>Secondary TXD</TD></TR>
+<TR><TD>2</TD><TD><B>TXD</B> - Transmitted Data</TD><TD>15</TD><TD>
+Transmit Clock</TD></TR>
+<TR><TD>3</TD><TD><B>RXD</B> - Received Data</TD><TD>16</TD><TD>
+Secondary RXD</TD></TR>
+<TR><TD>4</TD><TD><B>RTS</B> - Request To Send</TD><TD>17</TD><TD>
+Receiver Clock</TD></TR>
+<TR><TD>5</TD><TD><B>CTS</B> - Clear To Send</TD><TD>18</TD><TD>
+Unassigned</TD></TR>
+<TR><TD>6</TD><TD><B>DSR</B> - Data Set Ready</TD><TD>19</TD><TD>
+Secondary RTS</TD></TR>
+<TR><TD>7</TD><TD><B>GND</B> - Logic Ground</TD><TD>20</TD><TD><B>DTR</B>
+ - Data Terminal Ready</TD></TR>
+<TR><TD>8</TD><TD><B>DCD</B> - Data Carrier Detect</TD><TD>21</TD><TD>
+Signal Quality Detect</TD></TR>
+<TR><TD>9</TD><TD>Reserved</TD><TD>22</TD><TD>Ring Detect</TD></TR>
+<TR><TD>10</TD><TD>Reserved</TD><TD>23</TD><TD>Data Rate Select</TD></TR>
+<TR><TD>11</TD><TD>Unassigned</TD><TD>24</TD><TD>Transmit Clock</TD></TR>
+<TR><TD>12</TD><TD>Secondary DCD</TD><TD>25</TD><TD>Unassigned</TD></TR>
+<TR><TD>13</TD><TD>Secondary CTS</TD></TR>
+</TABLE>
+</CENTER>
+
+<!-- NEED 7in -->
+<H2><A NAME="6_2">RS-422 Pinouts</A></H2>
+<P>RS-422 also uses a 25-pin D-Sub connector, but with differential
+ signals:</P>
+<P ALIGN="CENTER">Figure 3 - RS-422 Connector
+<BR> <IMG HEIGHT="83" SRC="db25.gif" WIDTH="353"></P>
+<CENTER>
+<TABLE BORDER><CAPTION ALIGN="CENTER"> Table 13 - RS-422 Signals</CAPTION>
+<TR><TH>Pin</TH><TH>Description</TH><TH>Pin</TH><TH>Description</TH></TR>
+<TR><TD>1</TD><TD>Earth Ground</TD><TD>14</TD><TD>TXD+</TD></TR>
+<TR><TD>2</TD><TD><B>TXD-</B> - Transmitted Data</TD><TD>15</TD><TD>
+Transmit Clock-</TD></TR>
+<TR><TD>3</TD><TD><B>RXD-</B> - Received Data</TD><TD>16</TD><TD>RXD+</TD>
+</TR>
+<TR><TD>4</TD><TD><B>RTS-</B> - Request To Send</TD><TD>17</TD><TD>
+Receiver Clock-</TD></TR>
+<TR><TD>5</TD><TD><B>CTS-</B> - Clear To Send</TD><TD>18</TD><TD>
+Unassigned</TD></TR>
+<TR><TD>6</TD><TD><B>DSR</B> - Data Set Ready</TD><TD>19</TD><TD>RTS+</TD>
+</TR>
+<TR><TD>7</TD><TD><B>GND</B> - Logic Ground</TD><TD>20</TD><TD><B>DTR-</B>
+ - Data Terminal Ready</TD></TR>
+<TR><TD>8</TD><TD><B>DCD-</B> - Data Carrier Detect</TD><TD>21</TD><TD>
+Signal Quality Detect</TD></TR>
+<TR><TD>9</TD><TD>Reserved</TD><TD>22</TD><TD>Unassigned</TD></TR>
+<TR><TD>10</TD><TD>Reserved</TD><TD>23</TD><TD><B>DTR+</B></TD></TR>
+<TR><TD>11</TD><TD>Unassigned</TD><TD>24</TD><TD>Transmit Clock+</TD></TR>
+<TR><TD>12</TD><TD>DCD+</TD><TD>25</TD><TD>Receiver Clock+</TD></TR>
+<TR><TD>13</TD><TD>CTS+</TD></TR>
+</TABLE>
+</CENTER>
+
+<!-- NEED 4in -->
+<H2><A NAME="6_3">RS-574 (IBM PC/AT) Pinouts</A></H2>
+<P>The RS-574 interface is used exclusively by PC manufacturers and uses
+ a 9-pin male D-Sub connector:</P>
+<P ALIGN="CENTER">Figure 4 - RS-574 Connector
+<BR> <IMG HEIGHT="82" SRC="db9.gif" WIDTH="164"></P>
+<CENTER>
+<TABLE BORDER><CAPTION ALIGN="CENTER"> Table 14 - RS-574 (IBM PC/AT)
+ Signals</CAPTION>
+<TR><TH>Pin</TH><TH>Description</TH><TH>Pin</TH><TH>Description</TH></TR>
+<TR><TD>1</TD><TD><B>DCD</B> - Data Carrier Detect</TD><TD>6</TD><TD>
+Data Set Ready</TD></TR>
+<TR><TD>2</TD><TD><B>RXD</B> - Received Data</TD><TD>7</TD><TD><B>RTS</B>
+ - Request To Send</TD></TR>
+<TR><TD>3</TD><TD><B>TXD</B> - Transmitted Data</TD><TD>8</TD><TD><B>CTS</B>
+ - Clear To Send</TD></TR>
+<TR><TD>4</TD><TD><B>DTR</B> - Data Terminal Ready</TD><TD>9</TD><TD>
+Ring Detect</TD></TR>
+<TR><TD>5</TD><TD><B>GND</B> - Logic Ground</TD></TR>
+</TABLE>
+</CENTER>
+
+<!-- NEED 8in -->
+<H2><A NAME="6_4">SGI Pinouts</A></H2>
+<P>Older SGI equipment uses a 9-pin female D-Sub connector. Unlike
+ RS-574, the SGI pinouts nearly match those of RS-232:</P>
+<P ALIGN="CENTER">Figure 5 - SGI 9-Pin Connector
+<BR> <IMG HEIGHT="82" SRC="db9.gif" WIDTH="164"></P>
+<CENTER>
+<TABLE BORDER><CAPTION ALIGN="CENTER"> Table 15 - SGI 9-Pin DSUB Signals</CAPTION>
+<TR><TH>Pin</TH><TH>Description</TH><TH>Pin</TH><TH>Description</TH></TR>
+<TR><TD>1</TD><TD>Earth Ground</TD><TD>6</TD><TD><B>DSR</B> - Data Set
+ Ready</TD></TR>
+<TR><TD>2</TD><TD><B>TXD</B> - Transmitted Data</TD><TD>7</TD><TD><B>GND</B>
+ - Logic Ground</TD></TR>
+<TR><TD>3</TD><TD><B>RXD</B> - Received Data</TD><TD>8</TD><TD><B>DCD</B>
+ - Data Carrier Detect</TD></TR>
+<TR><TD>4</TD><TD><B>RTS</B> - Request To Send</TD><TD>9</TD><TD><B>DTR</B>
+ - Data Terminal Ready</TD></TR>
+<TR><TD>5</TD><TD><B>CTS</B> - Clear To Send</TD></TR>
+</TABLE>
+</CENTER>
+<P>The SGI Indigo, Indigo2, and Indy workstations use the Apple 8-pin
+ MiniDIN connector for their serial ports:</P>
+<P ALIGN="CENTER">Figure 6 - SGI 8-Pin Connector
+<BR> <IMG HEIGHT="112" SRC="mdin8.gif" WIDTH="112"></P>
+<CENTER>
+<TABLE BORDER><CAPTION ALIGN="CENTER"> Table 16 - SGI 8-Pin MiniDIN
+ Signals</CAPTION>
+<TR><TH>Pin</TH><TH>Description</TH><TH>Pin</TH><TH>Description</TH></TR>
+<TR><TD>1</TD><TD><B>DTR</B> - Data Terminal Ready</TD><TD>5</TD><TD><B>
+RXD</B> - Received Data</TD></TR>
+<TR><TD>2</TD><TD><B>CTS</B> - Clear To Send</TD><TD>6</TD><TD><B>RTS</B>
+ - Request To Send</TD></TR>
+<TR><TD>3</TD><TD><B>TXD</B> - Transmitted Data</TD><TD>7</TD><TD><B>DCD</B>
+ - Data Carrier Detect</TD></TR>
+<TR><TD>4</TD><TD><B>GND</B> - Logic Ground</TD><TD>8</TD><TD><B>GND</B>
+ - Logic Ground</TD></TR>
+</TABLE>
+</CENTER>
+</DIV><HR NOSHADE>
+<DIV ALIGN="justify">
+<H1 ALIGN="RIGHT"><A NAME="ascii">Appendix B, ASCII Control Codes</A></H1>
+<P>This chapter lists the ASCII control codes and their names.</P>
+<H2><A NAME="7_1">Control Codes</A></H2>
+ The following ASCII characters are used for control purposes:
+<CENTER>
+<TABLE BORDER><CAPTION ALIGN="CENTER"> Table 17 - ASCII Control Codes</CAPTION>
+<TR><TH>Name</TH><TH>Binary</TH><TH>Octal</TH><TH>Decimal</TH><TH>
+Hexadecimal</TH></TR>
+<TR><TD>NUL</TD><TD>00000000</TD><TD>000</TD><TD>0</TD><TD>00</TD></TR>
+<TR><TD>SOH</TD><TD>00000001</TD><TD>001</TD><TD>1</TD><TD>01</TD></TR>
+<TR><TD>STX</TD><TD>00000010</TD><TD>002</TD><TD>2</TD><TD>02</TD></TR>
+<TR><TD>ETX</TD><TD>00000011</TD><TD>003</TD><TD>3</TD><TD>03</TD></TR>
+<TR><TD>EOT</TD><TD>00000100</TD><TD>004</TD><TD>4</TD><TD>04</TD></TR>
+<TR><TD>ENQ</TD><TD>00000101</TD><TD>005</TD><TD>5</TD><TD>05</TD></TR>
+<TR><TD>ACK</TD><TD>00000110</TD><TD>006</TD><TD>6</TD><TD>06</TD></TR>
+<TR><TD>BEL</TD><TD>00000111</TD><TD>007</TD><TD>7</TD><TD>07</TD></TR>
+<TR><TD>BS</TD><TD>00001000</TD><TD>010</TD><TD>8</TD><TD>08</TD></TR>
+<TR><TD>HT</TD><TD>00001001</TD><TD>011</TD><TD>9</TD><TD>09</TD></TR>
+<TR><TD>NL</TD><TD>00001010</TD><TD>012</TD><TD>10</TD><TD>0A</TD></TR>
+<TR><TD>VT</TD><TD>00001011</TD><TD>013</TD><TD>11</TD><TD>0B</TD></TR>
+<TR><TD>NP, FF</TD><TD>00001100</TD><TD>014</TD><TD>12</TD><TD>0C</TD></TR>
+
+<!-- NEW PAGE -->
+<TR><TH>Name</TH><TH>Binary</TH><TH>Octal</TH><TH>Decimal</TH><TH>
+Hexadecimal</TH></TR>
+<TR><TD>CR</TD><TD>00001101</TD><TD>015</TD><TD>13</TD><TD>0D</TD></TR>
+<TR><TD>SO</TD><TD>00001110</TD><TD>016</TD><TD>14</TD><TD>0E</TD></TR>
+<TR><TD>SI</TD><TD>00001111</TD><TD>017</TD><TD>15</TD><TD>0F</TD></TR>
+<TR><TD>DLE</TD><TD>00010000</TD><TD>020</TD><TD>16</TD><TD>10</TD></TR>
+<TR><TD>XON, DC1</TD><TD>00010001</TD><TD>021</TD><TD>17</TD><TD>11</TD></TR>
+<TR><TD>DC2</TD><TD>00010010</TD><TD>022</TD><TD>18</TD><TD>12</TD></TR>
+<TR><TD>XOFF, DC3</TD><TD>00010011</TD><TD>023</TD><TD>19</TD><TD>13</TD>
+</TR>
+<TR><TD>DC4</TD><TD>00010100</TD><TD>024</TD><TD>20</TD><TD>14</TD></TR>
+<TR><TD>NAK</TD><TD>00010101</TD><TD>025</TD><TD>21</TD><TD>15</TD></TR>
+<TR><TD>SYN</TD><TD>00010110</TD><TD>026</TD><TD>22</TD><TD>16</TD></TR>
+<TR><TD>ETB</TD><TD>00010111</TD><TD>027</TD><TD>23</TD><TD>17</TD></TR>
+<TR><TD>CAN</TD><TD>00011000</TD><TD>030</TD><TD>24</TD><TD>18</TD></TR>
+<TR><TD>EM</TD><TD>00011001</TD><TD>031</TD><TD>25</TD><TD>19</TD></TR>
+<TR><TD>SUB</TD><TD>00011010</TD><TD>032</TD><TD>26</TD><TD>1A</TD></TR>
+<TR><TD>ESC</TD><TD>00011011</TD><TD>033</TD><TD>27</TD><TD>1B</TD></TR>
+<TR><TD>FS</TD><TD>00011100</TD><TD>034</TD><TD>28</TD><TD>1C</TD></TR>
+<TR><TD>GS</TD><TD>00011101</TD><TD>035</TD><TD>29</TD><TD>1D</TD></TR>
+<TR><TD>RS</TD><TD>00011110</TD><TD>036</TD><TD>30</TD><TD>1E</TD></TR>
+<TR><TD>US</TD><TD>00011111</TD><TD>037</TD><TD>31</TD><TD>1F</TD></TR>
+</TABLE>
+</CENTER>
+</DIV><HR NOSHADE>
+<DIV ALIGN="justify">
+<H1 ALIGN="RIGHT"><A NAME="license">Appendix C, GNU Free Documentation
+ License</A></H1>
+<P> Version 1.2, November 2002</P>
+<P></P>
+<PRE>
+Copyright (C) 2000,2001,2002  Free Software Foundation, Inc.
+59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+Everyone is permitted to copy and distribute verbatim copies
+of this license document, but changing it is not allowed.
+</PRE>
+<P><STRONG> 0. PREAMBLE</STRONG></P>
+<P> The purpose of this License is to make a manual, textbook, or other
+ functional and useful document &quot;free&quot; in the sense of freedom: to
+ assure everyone the effective freedom to copy and redistribute it, with
+ or without modifying it, either commercially or noncommercially.
+ Secondarily, this License preserves for the author and publisher a way
+ to get credit for their work, while not being considered responsible
+ for modifications made by others.</P>
+<P> This License is a kind of &quot;copyleft&quot;, which means that derivative
+ works of the document must themselves be free in the same sense. It
+ complements the GNU General Public License, which is a copyleft license
+ designed for free software.</P>
+<P> We have designed this License in order to use it for manuals for
+ free software, because free software needs free documentation: a free
+ program should come with manuals providing the same freedoms that the
+ software does. But this License is not limited to software manuals; it
+ can be used for any textual work, regardless of subject matter or
+ whether it is published as a printed book. We recommend this License
+ principally for works whose purpose is instruction or reference.</P>
+<P><STRONG> 1. APPLICABILITY AND DEFINITIONS</STRONG></P>
+<P> This License applies to any manual or other work, in any medium,
+ that contains a notice placed by the copyright holder saying it can be
+ distributed under the terms of this License. Such a notice grants a
+ world-wide, royalty-free license, unlimited in duration, to use that
+ work under the conditions stated herein. The &quot;Document&quot;, below, refers
+ to any such manual or work. Any member of the public is a licensee, and
+ is addressed as &quot;you&quot;. You accept the license if you copy, modify or
+ distribute the work in a way requiring permission under copyright law.</P>
+<P> A &quot;Modified Version&quot; of the Document means any work containing the
+ Document or a portion of it, either copied verbatim, or with
+ modifications and/or translated into another language.</P>
+<P> A &quot;Secondary Section&quot; is a named appendix or a front-matter section
+ of the Document that deals exclusively with the relationship of the
+ publishers or authors of the Document to the Document's overall subject
+ (or to related matters) and contains nothing that could fall directly
+ within that overall subject. (Thus, if the Document is in part a
+ textbook of mathematics, a Secondary Section may not explain any
+ mathematics.) The relationship could be a matter of historical
+ connection with the subject or with related matters, or of legal,
+ commercial, philosophical, ethical or political position regarding
+ them.</P>
+<P> The &quot;Invariant Sections&quot; are certain Secondary Sections whose titles
+ are designated, as being those of Invariant Sections, in the notice
+ that says that the Document is released under this License. If a
+ section does not fit the above definition of Secondary then it is not
+ allowed to be designated as Invariant. The Document may contain zero
+ Invariant Sections. If the Document does not identify any Invariant
+ Sections then there are none.</P>
+<P> The &quot;Cover Texts&quot; are certain short passages of text that are
+ listed, as Front-Cover Texts or Back-Cover Texts, in the notice that
+ says that the Document is released under this License. A Front-Cover
+ Text may be at most 5 words, and a Back-Cover Text may be at most 25
+ words.</P>
+<P> A &quot;Transparent&quot; copy of the Document means a machine-readable copy,
+ represented in a format whose specification is available to the general
+ public, that is suitable for revising the document straightforwardly
+ with generic text editors or (for images composed of pixels) generic
+ paint programs or (for drawings) some widely available drawing editor,
+ and that is suitable for input to text formatters or for automatic
+ translation to a variety of formats suitable for input to text
+ formatters. A copy made in an otherwise Transparent file format whose
+ markup, or absence of markup, has been arranged to thwart or discourage
+ subsequent modification by readers is not Transparent. An image format
+ is not Transparent if used for any substantial amount of text. A copy
+ that is not &quot;Transparent&quot; is called &quot;Opaque&quot;.</P>
+<P> Examples of suitable formats for Transparent copies include plain
+ ASCII without markup, Texinfo input format, LaTeX input format, SGML or
+ XML using a publicly available DTD, and standard-conforming simple
+ HTML, PostScript or PDF designed for human modification. Examples of
+ transparent image formats include PNG, XCF and JPG. Opaque formats
+ include proprietary formats that can be read and edited only by
+ proprietary word processors, SGML or XML for which the DTD and/or
+ processing tools are not generally available, and the machine-generated
+ HTML, PostScript or PDF produced by some word processors for output
+ purposes only.</P>
+<P> The &quot;Title Page&quot; means, for a printed book, the title page itself,
+ plus such following pages as are needed to hold, legibly, the material
+ this License requires to appear in the title page. For works in formats
+ which do not have any title page as such, &quot;Title Page&quot; means the text
+ near the most prominent appearance of the work's title, preceding the
+ beginning of the body of the text.</P>
+<P> A section &quot;Entitled XYZ&quot; means a named subunit of the Document whose
+ title either is precisely XYZ or contains XYZ in parentheses following
+ text that translates XYZ in another language. (Here XYZ stands for a
+ specific section name mentioned below, such as &quot;Acknowledgements&quot;,
+ &quot;Dedications&quot;, &quot;Endorsements&quot;, or &quot;History&quot;.) To &quot;Preserve the Title&quot;
+ of such a section when you modify the Document means that it remains a
+ section &quot;Entitled XYZ&quot; according to this definition.</P>
+<P> The Document may include Warranty Disclaimers next to the notice
+ which states that this License applies to the Document. These Warranty
+ Disclaimers are considered to be included by reference in this License,
+ but only as regards disclaiming warranties: any other implication that
+ these Warranty Disclaimers may have is void and has no effect on the
+ meaning of this License.</P>
+<P><STRONG> 2. VERBATIM COPYING</STRONG></P>
+<P> You may copy and distribute the Document in any medium, either
+ commercially or noncommercially, provided that this License, the
+ copyright notices, and the license notice saying this License applies
+ to the Document are reproduced in all copies, and that you add no other
+ conditions whatsoever to those of this License. You may not use
+ technical measures to obstruct or control the reading or further
+ copying of the copies you make or distribute. However, you may accept
+ compensation in exchange for copies. If you distribute a large enough
+ number of copies you must also follow the conditions in section 3.</P>
+<P> You may also lend copies, under the same conditions stated above,
+ and you may publicly display copies.</P>
+<P><STRONG> 3. COPYING IN QUANTITY</STRONG></P>
+<P> If you publish printed copies (or copies in media that commonly have
+ printed covers) of the Document, numbering more than 100, and the
+ Document's license notice requires Cover Texts, you must enclose the
+ copies in covers that carry, clearly and legibly, all these Cover
+ Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+ the back cover. Both covers must also clearly and legibly identify you
+ as the publisher of these copies. The front cover must present the full
+ title with all words of the title equally prominent and visible. You
+ may add other material on the covers in addition. Copying with changes
+ limited to the covers, as long as they preserve the title of the
+ Document and satisfy these conditions, can be treated as verbatim
+ copying in other respects.</P>
+<P> If the required texts for either cover are too voluminous to fit
+ legibly, you should put the first ones listed (as many as fit
+ reasonably) on the actual cover, and continue the rest onto adjacent
+ pages.</P>
+<P> If you publish or distribute Opaque copies of the Document numbering
+ more than 100, you must either include a machine-readable Transparent
+ copy along with each Opaque copy, or state in or with each Opaque copy
+ a computer-network location from which the general network-using public
+ has access to download using public-standard network protocols a
+ complete Transparent copy of the Document, free of added material. If
+ you use the latter option, you must take reasonably prudent steps, when
+ you begin distribution of Opaque copies in quantity, to ensure that
+ this Transparent copy will remain thus accessible at the stated
+ location until at least one year after the last time you distribute an
+ Opaque copy (directly or through your agents or retailers) of that
+ edition to the public.</P>
+<P> It is requested, but not required, that you contact the authors of
+ the Document well before redistributing any large number of copies, to
+ give them a chance to provide you with an updated version of the
+ Document.</P>
+<P><STRONG> 4. MODIFICATIONS</STRONG></P>
+<P> You may copy and distribute a Modified Version of the Document under
+ the conditions of sections 2 and 3 above, provided that you release the
+ Modified Version under precisely this License, with the Modified
+ Version filling the role of the Document, thus licensing distribution
+ and modification of the Modified Version to whoever possesses a copy of
+ it. In addition, you must do these things in the Modified Version:</P>
+<P></P>
+<UL>
+<LI><STRONG>A.</STRONG> Use in the Title Page (and on the covers, if
+ any) a title distinct from that of the Document, and from those of
+ previous versions (which should, if there were any, be listed in the
+ History section of the Document). You may use the same title as a
+ previous version if the original publisher of that version gives
+ permission.</LI>
+<LI><STRONG>B.</STRONG> List on the Title Page, as authors, one or more
+ persons or entities responsible for authorship of the modifications in
+ the Modified Version, together with at least five of the principal
+ authors of the Document (all of its principal authors, if it has fewer
+ than five), unless they release you from this requirement.</LI>
+<LI><STRONG>C.</STRONG> State on the Title page the name of the
+ publisher of the Modified Version, as the publisher.</LI>
+<LI><STRONG>D.</STRONG> Preserve all the copyright notices of the
+ Document.</LI>
+<LI><STRONG>E.</STRONG> Add an appropriate copyright notice for your
+ modifications adjacent to the other copyright notices.</LI>
+<LI><STRONG>F.</STRONG> Include, immediately after the copyright
+ notices, a license notice giving the public permission to use the
+ Modified Version under the terms of this License, in the form shown in
+ the Addendum below.</LI>
+<LI><STRONG>G.</STRONG> Preserve in that license notice the full lists
+ of Invariant Sections and required Cover Texts given in the Document's
+ license notice.</LI>
+<LI><STRONG>H.</STRONG> Include an unaltered copy of this License.</LI>
+<LI><STRONG>I.</STRONG> Preserve the section Entitled &quot;History&quot;,
+ Preserve its Title, and add to it an item stating at least the title,
+ year, new authors, and publisher of the Modified Version as given on
+ the Title Page. If there is no section Entitled &quot;History&quot; in the
+ Document, create one stating the title, year, authors, and publisher of
+ the Document as given on its Title Page, then add an item describing
+ the Modified Version as stated in the previous sentence.</LI>
+<LI><STRONG>J.</STRONG> Preserve the network location, if any, given in
+ the Document for public access to a Transparent copy of the Document,
+ and likewise the network locations given in the Document for previous
+ versions it was based on. These may be placed in the &quot;History&quot; section.
+ You may omit a network location for a work that was published at least
+ four years before the Document itself, or if the original publisher of
+ the version it refers to gives permission.</LI>
+<LI><STRONG>K.</STRONG> For any section Entitled &quot;Acknowledgements&quot; or
+ &quot;Dedications&quot;, Preserve the Title of the section, and preserve in the
+ section all the substance and tone of each of the contributor
+ acknowledgements and/or dedications given therein.</LI>
+<LI><STRONG>L.</STRONG> Preserve all the Invariant Sections of the
+ Document, unaltered in their text and in their titles. Section numbers
+ or the equivalent are not considered part of the section titles.</LI>
+<LI><STRONG>M.</STRONG> Delete any section Entitled &quot;Endorsements&quot;. Such
+ a section may not be included in the Modified Version.</LI>
+<LI><STRONG>N.</STRONG> Do not retitle any existing section to be
+ Entitled &quot;Endorsements&quot; or to conflict in title with any Invariant
+ Section.</LI>
+<LI><STRONG>O.</STRONG> Preserve any Warranty Disclaimers.</LI>
+</UL>
+<P> If the Modified Version includes new front-matter sections or
+ appendices that qualify as Secondary Sections and contain no material
+ copied from the Document, you may at your option designate some or all
+ of these sections as invariant. To do this, add their titles to the
+ list of Invariant Sections in the Modified Version's license notice.
+ These titles must be distinct from any other section titles.</P>
+<P> You may add a section Entitled &quot;Endorsements&quot;, provided it contains
+ nothing but endorsements of your Modified Version by various
+ parties--for example, statements of peer review or that the text has
+ been approved by an organization as the authoritative definition of a
+ standard.</P>
+<P> You may add a passage of up to five words as a Front-Cover Text, and
+ a passage of up to 25 words as a Back-Cover Text, to the end of the
+ list of Cover Texts in the Modified Version. Only one passage of
+ Front-Cover Text and one of Back-Cover Text may be added by (or through
+ arrangements made by) any one entity. If the Document already includes
+ a cover text for the same cover, previously added by you or by
+ arrangement made by the same entity you are acting on behalf of, you
+ may not add another; but you may replace the old one, on explicit
+ permission from the previous publisher that added the old one.</P>
+<P> The author(s) and publisher(s) of the Document do not by this
+ License give permission to use their names for publicity for or to
+ assert or imply endorsement of any Modified Version.</P>
+<P><STRONG> 5. COMBINING DOCUMENTS</STRONG></P>
+<P> You may combine the Document with other documents released under
+ this License, under the terms defined in section 4 above for modified
+ versions, provided that you include in the combination all of the
+ Invariant Sections of all of the original documents, unmodified, and
+ list them all as Invariant Sections of your combined work in its
+ license notice, and that you preserve all their Warranty Disclaimers.</P>
+<P> The combined work need only contain one copy of this License, and
+ multiple identical Invariant Sections may be replaced with a single
+ copy. If there are multiple Invariant Sections with the same name but
+ different contents, make the title of each such section unique by
+ adding at the end of it, in parentheses, the name of the original
+ author or publisher of that section if known, or else a unique number.
+ Make the same adjustment to the section titles in the list of Invariant
+ Sections in the license notice of the combined work.</P>
+<P> In the combination, you must combine any sections Entitled &quot;History&quot;
+ in the various original documents, forming one section Entitled
+ &quot;History&quot;; likewise combine any sections Entitled &quot;Acknowledgements&quot;,
+ and any sections Entitled &quot;Dedications&quot;. You must delete all sections
+ Entitled &quot;Endorsements.&quot;</P>
+<P><STRONG> 6. COLLECTIONS OF DOCUMENTS</STRONG></P>
+<P> You may make a collection consisting of the Document and other
+ documents released under this License, and replace the individual
+ copies of this License in the various documents with a single copy that
+ is included in the collection, provided that you follow the rules of
+ this License for verbatim copying of each of the documents in all other
+ respects.</P>
+<P> You may extract a single document from such a collection, and
+ distribute it individually under this License, provided you insert a
+ copy of this License into the extracted document, and follow this
+ License in all other respects regarding verbatim copying of that
+ document.</P>
+<P><STRONG> 7. AGGREGATION WITH INDEPENDENT WORKS</STRONG></P>
+<P> A compilation of the Document or its derivatives with other separate
+ and independent documents or works, in or on a volume of a storage or
+ distribution medium, is called an &quot;aggregate&quot; if the copyright
+ resulting from the compilation is not used to limit the legal rights of
+ the compilation's users beyond what the individual works permit. When
+ the Document is included in an aggregate, this License does not apply
+ to the other works in the aggregate which are not themselves derivative
+ works of the Document.</P>
+<P> If the Cover Text requirement of section 3 is applicable to these
+ copies of the Document, then if the Document is less than one half of
+ the entire aggregate, the Document's Cover Texts may be placed on
+ covers that bracket the Document within the aggregate, or the
+ electronic equivalent of covers if the Document is in electronic form.
+ Otherwise they must appear on printed covers that bracket the whole
+ aggregate.</P>
+<P><STRONG> 8. TRANSLATION</STRONG></P>
+<P> Translation is considered a kind of modification, so you may
+ distribute translations of the Document under the terms of section 4.
+ Replacing Invariant Sections with translations requires special
+ permission from their copyright holders, but you may include
+ translations of some or all Invariant Sections in addition to the
+ original versions of these Invariant Sections. You may include a
+ translation of this License, and all the license notices in the
+ Document, and any Warranty Disclaimers, provided that you also include
+ the original English version of this License and the original versions
+ of those notices and disclaimers. In case of a disagreement between the
+ translation and the original version of this License or a notice or
+ disclaimer, the original version will prevail.</P>
+<P> If a section in the Document is Entitled &quot;Acknowledgements&quot;,
+ &quot;Dedications&quot;, or &quot;History&quot;, the requirement (section 4) to Preserve
+ its Title (section 1) will typically require changing the actual title.</P>
+<P><STRONG> 9. TERMINATION</STRONG></P>
+<P> You may not copy, modify, sublicense, or distribute the Document
+ except as expressly provided for under this License. Any other attempt
+ to copy, modify, sublicense or distribute the Document is void, and
+ will automatically terminate your rights under this License. However,
+ parties who have received copies, or rights, from you under this
+ License will not have their licenses terminated so long as such parties
+ remain in full compliance.</P>
+<P><STRONG> 10. FUTURE REVISIONS OF THIS LICENSE</STRONG></P>
+<P> The Free Software Foundation may publish new, revised versions of
+ the GNU Free Documentation License from time to time. Such new versions
+ will be similar in spirit to the present version, but may differ in
+ detail to address new problems or concerns. See
+ http://www.gnu.org/copyleft/.</P>
+<P> Each version of the License is given a distinguishing version
+ number. If the Document specifies that a particular numbered version of
+ this License &quot;or any later version&quot; applies to it, you have the option
+ of following the terms and conditions either of that specified version
+ or of any later version that has been published (not as a draft) by the
+ Free Software Foundation. If the Document does not specify a version
+ number of this License, you may choose any version ever published (not
+ as a draft) by the Free Software Foundation.</P>
+<H2><A NAME="8_1">How to use this License for your documents</A></H2>
+<P> To use this License in a document you have written, include a copy
+ of the License in the document and put the following copyright and
+ license notices just after the title page:</P>
+<P></P>
+<PRE>
+      Copyright (c)  YEAR  YOUR NAME.
+      Permission is granted to copy, distribute and/or modify this document
+      under the terms of the GNU Free Documentation License, Version 1.2
+      or any later version published by the Free Software Foundation;
+      with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+	 Texts.  A copy of the license is included in the section entitled &quot;GNU
+      Free Documentation License&quot;.
+</PRE>
+<P> If you have Invariant Sections, Front-Cover Texts and Back-Cover
+ Texts, replace the &quot;with...Texts.&quot; line with this:</P>
+<P></P>
+<PRE>
+    with the Invariant Sections being LIST THEIR TITLES, with the
+    Front-Cover Texts being LIST, and with the Back-Cover Texts being LIST.
+</PRE>
+<P> If you have Invariant Sections without Cover Texts, or some other
+ combination of the three, merge those two alternatives to suit the
+ situation.</P>
+<P> If your document contains nontrivial examples of program code, we
+ recommend releasing these examples in parallel under your choice of
+ free software license, such as the GNU General Public License, to
+ permit their use in free software.</P>
+</DIV><HR NOSHADE>
+<DIV ALIGN="justify">
+<H1 ALIGN="RIGHT"><A NAME="relnotes">Appendix D, Change History</A></H1>
+<P>This appendix lists the changes that have been made in this edition.</P>
+<H2><A NAME="9_1">Edition 5, Revision 6</A></H2>
+<P>The following changes were made for the 6th revision:</P>
+<UL>
+<LI>The select() example did not correctly use the FD macros.</LI>
+<LI>The title page and this appendix were not properly updated.</LI>
+</UL>
+<H2><A NAME="9_2">Edition 5, Revision 5</A></H2>
+<P>The following changes were made for the 5th revision:</P>
+<UL>
+<LI>The select() documentation did not correctly describe the FD macros.</LI>
+<LI>Appendix C was missing the &quot;how to use&quot; part of the GNU FDL.</LI>
+</UL>
+<H2><A NAME="9_3">Edition 5, Revision 4</A></H2>
+<P>The following changes were made for the 4th revision:</P>
+<UL>
+<LI>Changed the description of the read() system call semantics in
+ chapter 1.</LI>
+<LI>Added descriptions for VSTART and VSTOP to chapter 2.</LI>
+</UL>
+<H2><A NAME="9_4">Edition 5, Revision 3</A></H2>
+<P>The following changes were made for the 3rd revision:</P>
+<UL>
+<LI>Now use the GNU Free Documentation License for the guide.</LI>
+<LI>Changed the examples to use the Linux serial port filenames.</LI>
+<LI>Put the infrastructure in place to allow for easier translations of
+ the guide.</LI>
+<LI>The guide text is now fully justified.</LI>
+</UL>
+</TD>
+</TR>
+<TR CLASS="navfooter">
+	<TD COLSPAN="2" ALIGN="RIGHT">Last modified 14 May 2007 - All content copyright 1991-2007 by Michael R Sweet</TD>
+</TR>
+</TABLE>
+</BODY>
+</HTML>

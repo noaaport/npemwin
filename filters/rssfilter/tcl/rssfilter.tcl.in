@@ -1,0 +1,222 @@
+#!%TCLSH%
+#
+# $Id$
+#
+
+## The common defaults
+set defaultsfile "/usr/local/etc/npemwin/filters.conf";
+if {[file exists $defaultsfile] == 0} {
+        puts "Filter disabled: $defaultsfile not found.";
+        return 1;
+}
+source $defaultsfile;
+
+## The filter library
+if {[file exists $gf(filterlib)] == 0} {
+        puts "Filter disabled: $gf(filterlib) not found.";
+        return 1;
+}
+source $gf(filterlib);
+
+# Default configuration is in the init file because it is shared with
+# the http server.
+set _initfile [file join $gf(filterdir) "rssfilter.init"];
+if {[file exists ${_initfile}] == 0} {
+    puts "rssfilter disabled: ${_initfile} not found.";
+    return 1;
+}
+source ${_initfile};
+unset _initfile;
+
+#
+# variables
+#
+set rssfilter(rcfiles) [list];
+set rssfilter(condition)	[list];
+set rssfilter(action)		[list];
+
+if {[file exists $rssfilter(rc)] == 0} {
+    log_msg "Filter disabled: $rssfilter(rc) not found.";
+    return 1;
+}
+
+if {($rssfilter(xmlenable) == 1) && ([file exists $rssfilter(def)] == 0)} {
+    log_msg "Filter disabled: $rssfilter(def) not found.";
+    return 1;
+}
+
+# Build the list of rc files
+set rssfilter(rcfiles) [filterlib_get_rcfiles [file tail $rssfilter(rc)] \
+        $rssfilter(confdirs) $rssfilter(rcdir) $rssfilter(postrc)];
+
+# Load the rules sets
+source $rssfilter(rc);
+
+proc main {} {
+
+    global errorInfo;
+
+    while {[gets stdin line] >= 0} {
+	if {[regexp {^\s*$} $line]} {
+	    continue;
+	}
+	set args [split $line];
+	set argsc [llength $args];
+    	if {$argsc != 2} {
+            log_msg "Incorrect number of arguments: $args";
+	    continue;
+        }
+
+    	set prodname [lindex $args 0];
+    	set fpath [lindex $args 1];
+    
+        set status [catch {process $prodname $fpath} errmsg];
+	if {$status == 1} {
+	    log_msg "Error processing $prodname";
+	    log_msg $errmsg;
+	    log_msg $errorInfo;
+	}
+    }
+}
+
+proc process {prodname fpath} {
+
+    global rssfilter;
+
+    set rclist [filterlib_get_rcvars $prodname $fpath];
+    array set rc $rclist
+
+    set rc_status 1;
+
+    # Evaluate the condition/action pairs, from all sets.
+    set status [catch {
+	set i 0;		# counts the sets
+	foreach condlist $rssfilter(condition) {
+	    set actionlist [lindex $rssfilter(action) $i];
+	    set j 0;	# counts the rules with each set
+	    foreach c $condlist {
+		set a [lindex $actionlist $j];
+		if {[expr $c]} {
+		    eval $a;
+		}
+		incr j;
+	    }
+	    incr i;
+	}
+    } errmsg];
+
+    if {$status == 1} {
+	log_msg "Error processing $fpath";
+	log_msg $errmsg;
+    }
+}
+
+proc send_rss {arglist} {
+#
+# The arguments are:
+#
+#	subchannel channeldesc rsstemplate prodname header fpath
+#
+# They are passed as a list to deal with the fact that channeldesc and header
+# can contain blanks.
+
+    global rssfilter;
+    global errorInfo;
+
+    if {[file isdirectory $rssfilter(datadir)] == 0} {
+        log_msg "$rssfilter(datadir) not found.";
+        return;
+    }
+
+    set subchannel [lindex $arglist 0];
+    set channeldesc [lindex $arglist 1];
+    set rsstemplate [lindex $arglist 2];
+    set prodname [lindex $arglist 3];
+    set header [lindex $arglist 4];
+    set fpath [lindex $arglist 5];
+
+    append cat_frootname \
+         $rssfilter(channelprefix) "." $subchannel $rssfilter(catfext);
+    set cat_dir [file join $rssfilter(datadir) $rssfilter(catsubdir)];
+    file mkdir $cat_dir;
+    set cat_fpath [file join $cat_dir $cat_frootname];
+
+    # For image files, rc(header) is "". Proceed as in the stdfilter-inv.
+    if {[string length $header] == 0} {
+          set header "- - -";
+    }
+
+    set _now [clock seconds];
+    set pinfo  [format "%d %s %s %s" ${_now} $prodname $header $fpath];
+
+    # Now go through the (old) list, delete the old product,
+    # then deleting each file that no longer exists and adding the new one.
+    set cat_plist [list];
+    set cat_plist_new [list];
+    if {[file exists $cat_fpath]} {
+	set cat_plist [split [filterlib_file_cat $cat_fpath] "\n"];
+	set index [lsearch $cat_plist *$prodname*];
+	if {$index >= 0} {
+	    set cat_plist [lreplace $cat_plist $index $index];
+	}
+     }
+    foreach p $cat_plist {
+	set p_parts [split $p];
+	set p_path [lindex $p_parts 5];
+	if {[file exists $p_path]} {
+	    lappend cat_plist_new $p;
+	}
+    }
+    lappend cat_plist_new $pinfo;
+    set cat_body [join $cat_plist_new "\n"];
+
+    set status [catch {
+	filterlib_file_write $cat_fpath $cat_body;
+    } errmsg];
+
+    if {$status != 0} {
+        log_msg $errmsg;
+#	log_msg $errorInfo;
+	return;
+    }
+
+    if {$rssfilter(xmlenable) == 1} {
+	make_xml $cat_body $subchannel $channeldesc $rsstemplate;
+    }
+}
+
+proc make_xml {cat_body subchannel channeldesc rsstemplate} {
+
+    global rssfilter;
+    global errorInfo;
+
+    append channeltitle $rssfilter(channelprefix) "." $subchannel;
+
+    append xml_frootname $channeltitle $rssfilter(xmlfext);
+    set xml_dir [file join $rssfilter(datadir) $rssfilter(xmlsubdir)];
+    file mkdir $xml_dir;
+    set xml_fpath [file join $xml_dir $xml_frootname];
+
+    # Look for the template in rssfilter(txmldirs) and use the last one
+    append txml_fbasename $rsstemplate $rssfilter(txmlfext);
+    set txml_fpath [filterlib_find_conf \
+	$txml_fbasename $rssfilter(txmldirs) $rssfilter(txmlsubdir)];
+    if {$txml_fpath eq ""} {
+	log_msg "$txml_fbasename not found.";
+	return;
+    }
+
+    set status [catch {
+	filterlib_pwrite_block $cat_body \
+	    $rssfilter(createbin) -o $xml_fpath \
+	    -D hostport=$rssfilter(hostport),baseurl=$rssfilter(baseurl) \
+	    $channeltitle $channeldesc $rssfilter(def) $txml_fpath;
+    } errmsg];
+    
+    if {$status != 0} {
+	log_msg $errmsg;
+	return;
+    }
+}
+
+main

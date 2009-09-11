@@ -1,0 +1,112 @@
+#!%TCLSH%
+#
+# $Id$
+#
+
+## The common defaults
+set defaultsfile "/usr/local/etc/npemwin/filters.conf";
+if {[file exists $defaultsfile] == 0} {
+        puts "Filter disabled: $defaultsfile not found.";
+        return 1;
+}
+source $defaultsfile;
+
+## The filter library
+if {[file exists $gf(filterlib)] == 0} {
+        puts "Filter disabled: $gf(filterlib) not found.";
+        return 1;
+}
+source $gf(filterlib);
+
+# The default configuration is shared between the filter and cmd-line tools
+# and therefore it is out in a separate file that is read by both.
+set spool_init_file [file join $gf(filterdir) spoolfilter.init];
+if {[file exists $spool_init_file] == 0} {
+	log_msg "spoolfilter disabled: $spool_init_file not found.";
+	return 1;
+}
+source $spool_init_file;
+unset spool_init_file;
+
+proc main {argc argv} {
+
+    global spoolfilter;
+    global errorInfo;
+
+    # The data directory
+    if {[file isdirectory $spoolfilter(datadir)] == 0} {
+	log_msg "$spoolfilter(datadir) does not exist.";
+	return 1;
+    }
+
+    cd $spoolfilter(datadir);
+	
+    while {[gets stdin line] >= 0} {
+	if {[regexp {^\s*$} $line]} {
+	    continue;
+	}
+	set args [split $line];
+	set argsc [llength $args];
+    	if {$argsc != 2} {
+            log_msg "Incorrect number of arguments: $args";
+	    continue;
+        }
+
+    	set prodname [lindex $args 0];
+    	set fpath [lindex $args 1];
+    
+        set status [catch {process $prodname $fpath} errmsg];
+	if {$status == 1} {
+	    log_msg "Error processing $prodname";
+	    log_msg $errmsg;
+	    log_msg $errorInfo;
+	}
+    }
+}
+
+proc process {prodname fpath} {
+
+    global spoolfilter;
+
+    set rclist [filterlib_get_rcvars $prodname $fpath];
+    array set rc $rclist
+
+    set station $rc(header_station);
+    set fbasename [file tail $fpath];
+
+    if {$rc(ftype) ne "txt"} {
+	return;
+    }
+
+    if {[accept_file [file join $station $fbasename]] == 0} {
+	return;
+    }
+
+    if {$spoolfilter(filessubdir) ne ""} {
+	set now [clock seconds];
+        set filessubdir [clock format $now \
+	    -format $spoolfilter(filessubdir) -gmt true];
+    	set parentdir [file join $spoolfilter(filesdir) $filessubdir $station];
+    } else {
+	set parentdir [file join $spoolfilter(filesdir) $station];
+    }
+    set pathout [file join $parentdir $fbasename];
+
+    file mkdir $parentdir;
+    file copy $fpath $pathout;
+}
+
+proc accept_file {fname} {
+
+    global spoolfilter;
+
+    if {[info exists spoolfilter(uwildregex)] == 0} {
+	set match_status 1;
+    } else {
+	set match_status [filterlib_uwildmat $spoolfilter(uwildregex) $fname];
+    }
+
+    return $match_status;
+}
+
+main $argc $argv

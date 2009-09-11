@@ -1,0 +1,26 @@
+#!/bin/sh
+
+cat <<__EOF__
+To complete the installation, the following must be executed
+
+*****************************************************************************
+ginstall -d -m 755 /var/spool/emwin/data
+ginstall -d -m 755 /var/spool/emwin/lock
+ginstall -d -m 755 /var/spool/emwin/tmp
+ginstall -d -m 755 /var/spool/emwin/qfiles
+ginstall -d -m 755 /var/ftp/pub/emwin/old
+cp /usr/local/etc/emwin/servers.conf-sample /usr/local/etc/emwin/servers.conf 
+*****************************************************************************
+
+A sample configuration file is installed as 
+/usr/local/etc/emwin/emwin.conf-sample.
+To use it, make a copy to emwin.conf and adjust it to your setup.
+Otherwise the program runs with the defaults, which are just fine.
+
+The directory /usr/local/share/doc/emwin contains
+other sample files for processing files as they are
+received.
+
+See also the README and other files in /usr/local/share/doc/emwin.
+__EOF__
+

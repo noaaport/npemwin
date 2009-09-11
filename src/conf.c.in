@@ -1,0 +1,521 @@
+/*
+ * Copyright (c) 2004-2006 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+ *
+ * See LICENSE
+ *
+ * $Id$
+ */
+#include <stdio.h>
+#include <err.h>
+#include <inttypes.h>
+#include <tcl.h>
+#include "libtclconf/tclconf.h"
+#include "defaults.h"
+#include "globals.h"
+#include "conf.h"
+
+#define CONFOPT_USER			@counter@
+#define DEFVAL_USER			EMWIN_USER
+
+#define CONFOPT_GROUP			@counter@
+#define DEFVAL_GROUP			EMWIN_GROUP
+
+#define CONFOPT_UMASK			@counter@
+#define DEFVAL_UMASK			DEFAULT_UMASK
+
+#define CONFOPT_BBCLIENTID		@counter@
+#define DEFVAL_BBCLIENTID		BBCLIENTID
+
+#define CONFOPT_BBCLIENTID_SECS		@counter@
+#define DEFVAL_BBCLIENTID_SECS		BBCLIENTID_SECS
+
+#define CONFOPT_SPOOLDIR		@counter@
+#define DEFVAL_SPOOLDIR			EMWIN_SPOOL_DIR
+
+#define CONFOPT_DATADIR			@counter@
+#define DEFVAL_DATADIR			EMWIN_DATA_DIR
+
+#define CONFOPT_LOCKDIR			@counter@
+#define DEFVAL_LOCKDIR			EMWIN_LOCK_DIR
+
+#define CONFOPT_TMPDIR			@counter@
+#define DEFVAL_TMPDIR			EMWIN_TMP_DIR
+
+#define CONFOPT_QFILESDIR		@counter@
+#define DEFVAL_QFILESDIR		EMWIN_QFILES_DIR
+
+#define CONFOPT_PIDFILE			@counter@
+#define DEFVAL_PIDFILE			EMWIN_PIDFILE
+
+#define CONFOPT_STATUSFILE		@counter@
+#define DEFVAL_STATUSFILE		SERVERSTATUSFILE
+
+#define CONFOPT_NBSPSTATSPERIOD		@counter@
+#define DEFVAL_NBSPSTATSPERIOD		NBSP_STATS_PERIOD
+
+#define CONFOPT_SERVERSLIST		@counter@
+#define DEFVAL_SERVERSLIST		EMWIN_SERVERS_LIST
+
+#define CONFOPT_ACTIVESERVERSLIST	@counter@
+#define DEFVAL_ACTIVESERVERSLIST	EMWIN_ACTIVE_SERVERS_LIST
+
+#define CONFOPT_ACTIVESERVERSRAWLIST	@counter@
+#define DEFVAL_ACTIVESERVERSRAWLIST	EMWIN_ACTIVE_SERVERS_RAWLIST
+
+#define CONFOPT_EMWINSTATUSFILE		@counter@
+#define DEFVAL_EMWINSTATUSFILE		EMWIN_SERVERS_STATUS_FILE
+
+#define CONFOPT_MINCONSECUTIVEPACKETS	@counter@
+#define DEFVAL_MINCONSECUTIVEPACKETS	MIN_CONSECUTIVE_PACKETS
+
+#define CONFOPT_MAXBADPACKETCOUNT	@counter@
+#define DEFVAL_MAXBADPACKETCOUNT	MAX_BAD_PACKET_COUNT
+
+#define CONFOPT_RETRYSLEEP		@counter@
+#define DEFVAL_RETRYSLEEP		SLEEP_SECS_BEFORE_RETRY
+
+#define CONFOPT_SERVERSTATEFILE		@counter@
+#define DEFVAL_SERVERSTATEFILE		SERVERSTATEFILE
+
+#define CONFOPT_SERVERACTIVEFILE	@counter@
+#define DEFVAL_SERVERACTIVEFILE		SERVERACTIVEFILE
+
+#define CONFOPT_SERVERTHREADSFILE	@counter@
+#define DEFVAL_SERVERTHREADSFILE	SERVERTHREADSFILE
+
+#define CONFOPT_CONNECTTIMEOUT		@counter@
+#define DEFVAL_CONNECTTIMEOUT		CONNECT_TIMEOUT_SECS
+
+#define CONFOPT_READTIMEOUT		@counter@
+#define DEFVAL_READTIMEOUT		READ_TIMEOUT_SECS
+
+#define CONFOPT_READTIMEOUTRETRY	@counter@
+#define DEFVAL_READTIMEOUTRETRY		READ_TIMEOUT_RETRY
+
+#define CONFOPT_WRITETIMEOUT		@counter@
+#define DEFVAL_WRITETIMEOUT		WRITE_TIMEOUT_SECS
+
+#define CONFOPT_WRITETIMEOUTRETRY	@counter@
+#define DEFVAL_WRITETIMEOUTRETRY	WRITE_TIMEOUT_RETRY
+
+#define CONFOPT_QRUNNER			@counter@
+#define DEFVAL_QRUNNER			QRUNNER_PROGRAM	      
+
+#define CONFOPT_QRUNPERIOD		@counter@
+#define DEFVAL_QRUNPERIOD		QRUN_PERIOD
+
+#define CONFOPT_QRUNREPORTPERIOD	@counter@
+#define DEFVAL_QRUNREPORTPERIOD		QRUN_REPORT_PERIOD
+
+#define CONFOPT_PREFILTER		@counter@
+#define DEFVAL_PREFILTER		PREFILTER_PROGRAM
+
+#define CONFOPT_STARTSCRIPT		@counter@
+#define DEFVAL_STARTSCRIPT		START_SCRIPT
+
+#define CONFOPT_STOPSCRIPT		@counter@
+#define DEFVAL_STOPSCRIPT		STOP_SCRIPT
+
+#define CONFOPT_SCHEDULER		@counter@
+#define DEFVAL_SCHEDULER		SCHEDULER
+
+#define CONFOPT_HTTPDENABLE		@counter@
+#define DEFVAL_HTTPDENABLE		NBSP_HTTPD_ENABLE
+
+#define CONFOPT_TCLHTTPD		@counter@
+#define DFEVAL_TCLHTTPPD		NBSP_TCLHTTPD
+
+#define CONFOPT_TCLHTTPDFIFO		@counter@
+#define DFEVAL_TCLHTTPPDFIFO		NBSP_TCLHTTPDFIFO
+
+#define CONFOPT_SERVERNAME		@counter@
+#define DEFVAL_SERVERNAME		SERVER_NAME
+
+#define CONFOPT_SERVERPORT		@counter@
+#define DEFVAL_SERVERPORT		SERVER_PORT
+
+#define CONFOPT_MAXNETCLIENTS           @counter@
+#define DEFVAL_MAXNETCLIENTS            MAX_NET_CLIENTS
+
+#define CONFOPT_SERVERPROTOCOL		@counter@
+#define DEFVAL_SERVERPROTOCOL		SERVER_PROTOCOL
+
+#define CONFOPT_CLIENT_ID_WAIT_SECS	@counter@
+#define DEFVAL_CLIENT_ID_WAIT_SECS	CLIENT_ID_WAIT_SECS
+
+#define CONFOPT_MIN_COMPRESS_RATIO	@counter@
+#define DEFVAL_MIN_COMPRESS_RATIO	MIN_COMPRESS_RATIO
+
+#define CONFOPT_DBCACHE_MB		@counter@
+#define DEFVAL_DBCACHE_MB		QUEUE_DBCACHE_MB
+
+#define CONFOPT_CLIENT_QUEUE_MAXSIZE_SOFT 	@counter@
+#define DEFVAL_CLIENT_QUEUE_MAXSIZE_SOFT 	CLIENT_QUEUE_MAXSIZE_SOFT
+
+#define CONFOPT_CLIENT_QUEUE_MAXSIZE_HARD 	@counter@
+#define DEFVAL_CLIENT_QUEUE_MAXSIZE_HARD 	CLIENT_QUEUE_MAXSIZE_HARD
+
+#define CONFOPT_CLIENT_QUEUE_TMOUT_MSECS	@counter@
+#define DEFVAL_CLIENT_QUEUE_TMOUT_MSECS 	CLIENT_QUEUE_TIMEOUT_MSECS 
+
+#define CONFOPT_SERVERSTATE_LOG_PERIOD 	@counter@
+#define DEFVAL_SERVERSTATE_LOG_PERIOD 	SERVERSTATE_LOG_PERIOD
+
+#define CONFOPT_SERVERTHREADS_LOG_FREQ 	@counter@
+#define DEFVAL_SERVERTHREADS_LOG_FREQ 	SERVERTHREADS_LOG_FREQ
+
+static struct confoption_st confoptions[] = {
+  {"user", CONFOPT_USER, TCL_LINK_STRING, NULL, 0},
+  {"group", CONFOPT_GROUP, TCL_LINK_STRING, NULL, 0},
+  {"umask", CONFOPT_UMASK, TCL_LINK_INT, NULL, DEFVAL_UMASK},
+  {"bbclientid", CONFOPT_BBCLIENTID, TCL_LINK_STRING, NULL, 0},
+  {"bbclientid_secs", CONFOPT_BBCLIENTID_SECS, TCL_LINK_INT, NULL,
+	DEFVAL_BBCLIENTID_SECS},
+  {"spooldir", CONFOPT_SPOOLDIR, TCL_LINK_STRING, NULL, 0},
+  {"datadir", CONFOPT_DATADIR, TCL_LINK_STRING, NULL, 0},
+  {"lockdir", CONFOPT_LOCKDIR, TCL_LINK_STRING, NULL, 0},
+  {"tmpdir", CONFOPT_TMPDIR, TCL_LINK_STRING, NULL, 0},
+  {"qfilesdir", CONFOPT_QFILESDIR, TCL_LINK_STRING, NULL, 0},
+  {"pidfile", CONFOPT_PIDFILE, TCL_LINK_STRING, NULL, 0},
+  {"statusfile", CONFOPT_STATUSFILE, TCL_LINK_STRING, NULL, 0},
+  {"statsperiod", CONFOPT_NBSPSTATSPERIOD, TCL_LINK_INT, NULL,
+	DEFVAL_NBSPSTATSPERIOD},
+  {"serverslist", CONFOPT_SERVERSLIST, TCL_LINK_STRING, NULL, 0},
+  {"activeserverslist", CONFOPT_ACTIVESERVERSLIST, TCL_LINK_STRING, NULL, 0},
+  {"activeserversrawlist", CONFOPT_ACTIVESERVERSRAWLIST, TCL_LINK_STRING, NULL, 0},
+  {"emwinstatusfile", CONFOPT_EMWINSTATUSFILE, TCL_LINK_STRING, NULL, 0},
+  {"minconsecutivepackets", CONFOPT_MINCONSECUTIVEPACKETS, TCL_LINK_INT, NULL,
+   DEFVAL_MINCONSECUTIVEPACKETS},
+  {"maxbadpacketcount", CONFOPT_MAXBADPACKETCOUNT, TCL_LINK_INT, NULL,
+   DEFVAL_MAXBADPACKETCOUNT},
+  {"retrysleep", CONFOPT_RETRYSLEEP, TCL_LINK_INT, NULL, DEFVAL_RETRYSLEEP},
+
+  {"serverstatefile", CONFOPT_SERVERSTATEFILE, TCL_LINK_STRING, NULL, 0},
+  {"serveractivefile", CONFOPT_SERVERACTIVEFILE, TCL_LINK_STRING, NULL, 0},
+  {"serverthreadsfile", CONFOPT_SERVERTHREADSFILE, TCL_LINK_STRING, NULL, 0},
+  {"connecttimeout", CONFOPT_CONNECTTIMEOUT, TCL_LINK_INT, NULL,
+   DEFVAL_CONNECTTIMEOUT},
+  {"readtimeout", CONFOPT_READTIMEOUT, TCL_LINK_INT, NULL, DEFVAL_READTIMEOUT},
+  {"readtimeoutretry", CONFOPT_READTIMEOUTRETRY, TCL_LINK_INT, NULL,
+	DEFVAL_READTIMEOUTRETRY},
+  {"writetimeout", CONFOPT_WRITETIMEOUT, TCL_LINK_INT, NULL,
+   DEFVAL_WRITETIMEOUT},
+  {"writetimeoutretry", CONFOPT_WRITETIMEOUTRETRY, TCL_LINK_INT, NULL,
+	DEFVAL_WRITETIMEOUTRETRY},
+  {"qrunner", CONFOPT_QRUNNER, TCL_LINK_STRING, NULL, 0},
+  {"qrunperiod", CONFOPT_QRUNPERIOD, TCL_LINK_INT, NULL, DEFVAL_QRUNPERIOD},
+  {"qrunreportperiod", CONFOPT_QRUNREPORTPERIOD, TCL_LINK_INT, NULL,
+   DEFVAL_QRUNREPORTPERIOD},
+  {"prefilter", CONFOPT_PREFILTER, TCL_LINK_STRING, NULL, 0},
+  {"startscript", CONFOPT_STARTSCRIPT, TCL_LINK_STRING, NULL, 0},
+  {"stopscript", CONFOPT_STOPSCRIPT, TCL_LINK_STRING, NULL, 0},
+  {"scheduler", CONFOPT_SCHEDULER, TCL_LINK_STRING, NULL, 0},
+  {"httpdenable", CONFOPT_HTTPDENABLE, TCL_LINK_INT, NULL, DEFVAL_HTTPDENABLE},
+  {"tclhttpd", CONFOPT_TCLHTTPD, TCL_LINK_STRING, NULL, 0},
+  {"tclhttpdfifo", CONFOPT_TCLHTTPDFIFO, TCL_LINK_STRING, NULL, 0},
+  {"servername", CONFOPT_SERVERNAME, TCL_LINK_STRING, NULL, 0},
+  {"serverport", CONFOPT_SERVERPORT, TCL_LINK_STRING, NULL, 0},
+  {"maxnetclients", CONFOPT_MAXNETCLIENTS, TCL_LINK_INT, NULL,
+   DEFVAL_MAXNETCLIENTS},
+  {"serverprotocol", CONFOPT_SERVERPROTOCOL, TCL_LINK_INT, NULL,
+   DEFVAL_SERVERPROTOCOL},
+  {"client_id_wait_secs", CONFOPT_CLIENT_ID_WAIT_SECS, TCL_LINK_INT, NULL,
+   DEFVAL_CLIENT_ID_WAIT_SECS},
+  {"min_compress_ratio", CONFOPT_MIN_COMPRESS_RATIO, TCL_LINK_INT, NULL,
+   DEFVAL_MIN_COMPRESS_RATIO},
+  {"dbcachemb", CONFOPT_DBCACHE_MB, TCL_LINK_INT, NULL, DEFVAL_DBCACHE_MB},
+  {"client_queue_maxsize_soft", CONFOPT_CLIENT_QUEUE_MAXSIZE_SOFT,
+	TCL_LINK_INT, NULL, DEFVAL_CLIENT_QUEUE_MAXSIZE_SOFT},
+  {"client_queue_maxsize_hard", CONFOPT_CLIENT_QUEUE_MAXSIZE_HARD,
+	TCL_LINK_INT, NULL, DEFVAL_CLIENT_QUEUE_MAXSIZE_HARD},
+  {"client_queue_timeout_msecs", CONFOPT_CLIENT_QUEUE_TMOUT_MSECS,
+	TCL_LINK_INT, NULL, DEFVAL_CLIENT_QUEUE_TMOUT_MSECS},
+  {"serverstate_log_period", CONFOPT_SERVERSTATE_LOG_PERIOD,
+	TCL_LINK_INT, NULL, DEFVAL_SERVERSTATE_LOG_PERIOD},
+  {"serverthreads_log_freq", CONFOPT_SERVERTHREADS_LOG_FREQ,
+	TCL_LINK_INT, NULL, DEFVAL_SERVERTHREADS_LOG_FREQ},
+  {NULL, 0, 0, NULL, 0}
+};  
+
+static void fprintf_str(FILE *f, char *fmt, char *name, char *value);
+
+/*
+static void print_confoptions(void);
+static void print_confoptions(void){
+
+  struct confoption_st *op = &confoptions[0];
+
+  while(op->name != NULL){
+    if(op->type == TCL_LINK_STRING){
+      if(op->p != NULL)
+        fprintf(stdout,"%s %s\n",op->name,op->p);
+      else
+        fprintf(stdout,"%s %s\n",op->name,"NULL");
+   }else
+      fprintf(stdout,"%s %d\n",op->name,op->v);
+
+    ++op;
+  }
+}
+*/
+
+int configure(void){
+
+  int status = 0;
+
+  if(g.configfile != NULL)
+    status = parse_configfile(g.configfile, confoptions);
+  else
+    status = parse_configfile2(g.defconfigfile, confoptions);
+
+  if(status != 0)
+    return(status);
+
+  setoptval(&g.user, confoptions, CONFOPT_USER);
+  setoptval(&g.group, confoptions, CONFOPT_GROUP);
+  setoptval(&g.umask, confoptions, CONFOPT_UMASK);
+  setoptval(&g.bbclientid, confoptions, CONFOPT_BBCLIENTID);
+  setoptval(&g.bbclientid_secs, confoptions, CONFOPT_BBCLIENTID_SECS);
+
+  setoptval(&g.spooldir, confoptions, CONFOPT_SPOOLDIR);
+  setoptval(&g.datadir, confoptions, CONFOPT_DATADIR);
+  setoptval(&g.lockdir, confoptions, CONFOPT_LOCKDIR);
+  setoptval(&g.tmpdir, confoptions, CONFOPT_TMPDIR);
+  setoptval(&g.qfilesdir, confoptions, CONFOPT_QFILESDIR);
+  setoptval(&g.pidfile, confoptions, CONFOPT_PIDFILE);
+  setoptval(&g.statusfile, confoptions, CONFOPT_STATUSFILE);
+  setoptval(&g.nbspstats_period, confoptions, CONFOPT_NBSPSTATSPERIOD);
+
+  setoptval(&g.serverlist, confoptions, CONFOPT_SERVERSLIST);
+  setoptval(&g.activeserverlist, confoptions, CONFOPT_ACTIVESERVERSLIST);
+  setoptval(&g.activeserverlist_raw, confoptions, CONFOPT_ACTIVESERVERSRAWLIST);
+  setoptval(&g.emwinstatusfile, confoptions, CONFOPT_EMWINSTATUSFILE);
+  setoptval(&g.min_consecutive_packets, confoptions,
+	    CONFOPT_MINCONSECUTIVEPACKETS);
+  setoptval(&g.max_bad_packet_count, confoptions,
+	    CONFOPT_MAXBADPACKETCOUNT);
+  setoptval(&g.retrysleep, confoptions, CONFOPT_RETRYSLEEP);
+
+  setoptval(&g.serverstatefile, confoptions, CONFOPT_SERVERSTATEFILE);
+  setoptval(&g.serveractivefile, confoptions, CONFOPT_SERVERACTIVEFILE);
+  setoptval(&g.serverthreadsfile, confoptions, CONFOPT_SERVERTHREADSFILE);
+  setoptval(&g.connecttimeout_s, confoptions, CONFOPT_CONNECTTIMEOUT);
+  setoptval(&g.readtimeout_s, confoptions, CONFOPT_READTIMEOUT);
+  setoptval(&g.readtimeout_retry, confoptions, CONFOPT_READTIMEOUTRETRY);
+  setoptval(&g.writetimeout_s, confoptions, CONFOPT_WRITETIMEOUT);
+  setoptval(&g.writetimeout_retry, confoptions, CONFOPT_WRITETIMEOUTRETRY);
+
+  setoptval(&g.qrunner, confoptions, CONFOPT_QRUNNER);
+  setoptval(&g.qrunperiod, confoptions, CONFOPT_QRUNPERIOD);
+  setoptval(&g.qrunreportperiod, confoptions, CONFOPT_QRUNREPORTPERIOD);
+
+  setoptval(&g.prefilter, confoptions, CONFOPT_PREFILTER);
+  setoptval(&g.startscript, confoptions, CONFOPT_STARTSCRIPT);
+  setoptval(&g.stopscript, confoptions, CONFOPT_STOPSCRIPT);
+  setoptval(&g.scheduler, confoptions, CONFOPT_SCHEDULER);
+
+  setoptval(&g.httpdenable, confoptions, CONFOPT_HTTPDENABLE);
+  setoptval(&g.tclhttpd, confoptions, CONFOPT_TCLHTTPD);
+  setoptval(&g.tclhttpdfifo, confoptions, CONFOPT_TCLHTTPDFIFO);
+
+  setoptval(&g.servername, confoptions, CONFOPT_SERVERNAME);
+  setoptval(&g.serverport, confoptions, CONFOPT_SERVERPORT);
+  setoptval(&g.maxnetclients, confoptions, CONFOPT_MAXNETCLIENTS);
+  setoptval(&g.serverprotocol, confoptions, CONFOPT_SERVERPROTOCOL);
+  setoptval(&g.client_id_wait_secs, confoptions, CONFOPT_CLIENT_ID_WAIT_SECS);
+  setoptval(&g.min_compress_ratio, confoptions, CONFOPT_MIN_COMPRESS_RATIO);
+  setoptval(&g.dbcache_mb, confoptions, CONFOPT_DBCACHE_MB);
+  setoptval(&g.client_queue_maxsize_soft, confoptions,
+	CONFOPT_CLIENT_QUEUE_MAXSIZE_SOFT);
+  setoptval(&g.client_queue_maxsize_hard, confoptions,
+	CONFOPT_CLIENT_QUEUE_MAXSIZE_HARD);
+  setoptval(&g.client_queue_timeout_msecs, confoptions,
+	CONFOPT_CLIENT_QUEUE_TMOUT_MSECS);
+  setoptval(&g.serverstate_log_period, confoptions,
+	CONFOPT_SERVERSTATE_LOG_PERIOD);
+  setoptval(&g.serverthreads_log_freq, confoptions,
+	CONFOPT_SERVERTHREADS_LOG_FREQ);
+
+  return(status);
+}
+
+void release_confoptions(void){
+  
+  kill_confopt_table(confoptions);
+}
+
+void print_confoptions(void){
+
+  char *fmt = "%s %s\n";
+
+  fprintf_str(stdout, fmt, "user", g.user);
+  fprintf_str(stdout, fmt, "group", g.group);
+  fprintf(stdout, "umask %o\n", g.umask);
+
+  fprintf_str(stdout, fmt, "bbclientid", g.bbclientid);
+  fprintf(stdout, "bbclientsid_secs %d\n", g.bbclientid_secs);
+
+  fprintf_str(stdout, fmt, "spooldir", g.spooldir);
+  fprintf_str(stdout, fmt, "datadir", g.datadir);
+  fprintf_str(stdout, fmt, "lockdir", g.lockdir);
+  fprintf_str(stdout, fmt, "tmpdir", g.tmpdir);
+  fprintf_str(stdout, fmt, "qfilesdir", g.qfilesdir);
+  fprintf_str(stdout, fmt, "pidfile", g.pidfile);
+  fprintf_str(stdout, fmt, "statusfile", g.statusfile);
+  fprintf(stdout, "statsperiod " "%" PRIuMAX "\n",
+	(uintmax_t)g.nbspstats_period);
+
+  fprintf_str(stdout, fmt, "serverlist", g.serverlist);
+  fprintf_str(stdout, fmt, "activeserverlist", g.activeserverlist);
+  fprintf_str(stdout, fmt, "activeserverrawlist", g.activeserverlist_raw);
+  fprintf_str(stdout, fmt, "emwinstatusfile", g.emwinstatusfile);
+  fprintf(stdout, "minconsecutivepackets %d\n", g.min_consecutive_packets);
+  fprintf(stdout, "maxbadpacketcount %d\n", g.max_bad_packet_count);
+  fprintf(stdout, "retrysleep %d\n", g.retrysleep);
+
+  fprintf_str(stdout, fmt, "serverstatefile", g.serverstatefile);
+  fprintf_str(stdout, fmt, "serveractivefile", g.serveractivefile);
+  fprintf_str(stdout, fmt, "serverthreads", g.serverthreadsfile);
+  fprintf(stdout, "connecttimeout %d\n", g.connecttimeout_s);
+  fprintf(stdout, "readtimeout %d\n", g.readtimeout_s);
+  fprintf(stdout, "readtimeoutretry %d\n", g.readtimeout_retry);
+  fprintf(stdout, "writetimeout %d\n", g.writetimeout_s);
+  fprintf(stdout, "writetimeoutretry %d\n", g.writetimeout_retry);
+
+  fprintf_str(stdout, fmt, "qrunner", g.qrunner);
+  fprintf(stdout, "qrunperiod %d\n", g.qrunperiod);
+  fprintf(stdout, "qrunreportperiod %d\n", g.qrunreportperiod);
+
+  fprintf_str(stdout, fmt, "prefilter", g.prefilter);
+  fprintf_str(stdout, fmt, "startscript", g.startscript);
+  fprintf_str(stdout, fmt, "stopscript", g.stopscript);
+  fprintf_str(stdout, fmt, "scheduler", g.scheduler);
+
+  fprintf(stdout, "httpdenable %d\n", g.httpdenable); 
+  fprintf_str(stdout, fmt, "tclhttpd", g.tclhttpd);
+  fprintf_str(stdout, fmt, "tclhttpdfifo", g.tclhttpdfifo);
+
+  fprintf_str(stdout, fmt, "servername", g.servername);
+  fprintf_str(stdout, fmt, "serverport", g.serverport);
+  fprintf(stdout, "maxnetclients %d\n", g.maxnetclients);
+  fprintf(stdout, "serverprotocol %d\n", g.serverprotocol);
+  fprintf(stdout, "client_id_wait_secs %d\n", g.client_id_wait_secs);
+  fprintf(stdout, "min_compress_ratio %d\n", g.min_compress_ratio);
+  fprintf(stdout, "dbcachemb %d\n", g.dbcache_mb);
+  fprintf(stdout, "client_queue_maxsize_soft %d\n",
+	g.client_queue_maxsize_soft);
+  fprintf(stdout, "client_queue_maxsize_hard %d\n",
+	g.client_queue_maxsize_hard);
+  fprintf(stdout, "client_queue_timeout_msecs %d\n",
+	g.client_queue_timeout_msecs);
+  fprintf(stdout, "serverstate_log_period %d\n",
+	g.serverstate_log_period);
+  fprintf(stdout, "serverthreads_log_freq %d\n",
+	g.serverthreads_log_freq);
+}
+
+#define VALIDATE_PARAMETER(v, a, b, s) \
+  if((v < a) || (v > b)){varname = s; goto end;}
+
+#define VALIDATE_PARAM_L(v, a, s) \
+  if(v < a){varname = s; goto end;}
+
+#define VALIDATE_STR(v, s) \
+  if((v == NULL) || (v[0] == '\0')){varname = s; goto end;}
+
+int validate_configuration(void){
+
+  char *varname = NULL;
+
+  /*
+   * For these, their type restricts their value.
+   *
+   * VALIDATE_PARAMETER(g.umask, 0, USHRT_MAX, "umask");
+   * VALIDATE_PARAMETER(g.dbfile_mode, 0, USHRT_MAX, "dbfilemode");
+   */
+
+  /*
+   * g.user, g.group, g.bbclientid can be NULL or empty
+   */
+  VALIDATE_PARAM_L(g.bbclientid_secs, 0, "bbclientid_secs");
+
+  VALIDATE_STR(g.spooldir, "spooldir");
+  VALIDATE_STR(g.datadir, "datadir");
+  VALIDATE_STR(g.lockdir, "lockdir");
+  VALIDATE_STR(g.tmpdir, "tmpdir");
+  VALIDATE_STR(g.qfilesdir, "qfilesdir");
+  VALIDATE_STR(g.pidfile, "pidfile");
+  VALIDATE_STR(g.statusfile, "statusfile");
+  VALIDATE_PARAM_L(g.nbspstats_period, 0, "statsperiod");
+
+  VALIDATE_STR(g.serverlist, "serverlist");
+  VALIDATE_STR(g.activeserverlist, "activeserverlist");
+  VALIDATE_STR(g.activeserverlist_raw, "activeserverrawlist");
+  VALIDATE_STR(g.emwinstatusfile, "emwinstatusfile");
+  VALIDATE_PARAM_L(g.min_consecutive_packets, 0, "minconsecutivepackets");
+  VALIDATE_PARAM_L(g.max_bad_packet_count, 0, "maxbadpacketcount");
+  VALIDATE_PARAM_L(g.retrysleep, 0, "retrysleep");
+
+  VALIDATE_STR(g.serverstatefile, "serverstatefile");
+  VALIDATE_STR(g.serveractivefile, "serveractivefile");
+  VALIDATE_STR(g.serverthreadsfile, "serverthreadsfile");
+  VALIDATE_PARAM_L(g.connecttimeout_s, 0, "connecttimeout");
+  VALIDATE_PARAM_L(g.readtimeout_s, 0, "readtimeout");
+  VALIDATE_PARAM_L(g.readtimeout_retry, 0, "readtimeoutretry");
+  VALIDATE_PARAM_L(g.writetimeout_s, 0, "writetimeout");
+  VALIDATE_PARAM_L(g.writetimeout_retry, 0, "writetimeoutretry");
+
+  VALIDATE_STR(g.qrunner, "qrunner");
+  VALIDATE_PARAM_L(g.qrunperiod, 0, "qrunperiod");
+  VALIDATE_PARAM_L(g.qrunreportperiod, 0, "qrunreportperiod");
+
+  /*
+   * g.prefilter, g.startscript, g.stopscript can be NULL or empty.
+   */
+  VALIDATE_STR(g.scheduler, "scheduler");
+
+  VALIDATE_STR(g.tclhttpd, "tclhttpd");
+  VALIDATE_STR(g.tclhttpdfifo, "tclhttpdfifo");
+  VALIDATE_PARAMETER(g.httpdenable, 0, 1, "httpdenable");
+
+  /*
+   * g.servername can be NULL
+   */
+  VALIDATE_STR(g.serverport, "serverport");
+  VALIDATE_PARAM_L(g.maxnetclients, -1, "maxnetclients");
+  VALIDATE_PARAM_L(g.serverprotocol, 0, "serverprotocol");
+  VALIDATE_PARAM_L(g.client_id_wait_secs, 0, "client_id_wait_secs");
+  VALIDATE_PARAMETER(g.min_compress_ratio, 1, 100, "min_compress_ratio");
+  VALIDATE_PARAM_L(g.dbcache_mb, 0, "dbcachemb");
+  VALIDATE_PARAM_L(g.client_queue_maxsize_soft, 0,
+	"client_queue_maxsize_soft");
+  VALIDATE_PARAM_L(g.client_queue_maxsize_hard, 0,
+	"client_queue_maxsize_hard");
+  VALIDATE_PARAM_L(g.client_queue_timeout_msecs, 0,
+	"client_queue_timeout_msecs");
+  VALIDATE_PARAM_L(g.serverstate_log_period, 0, "serverstate_log_period");
+  VALIDATE_PARAM_L(g.serverthreads_log_freq, 0, "serverthreadslog_freq");
+
+ end:
+
+  if(varname != NULL){
+    warnx("Illegal value of %s", varname);
+    print_confoptions();
+    return(1);
+  }
+
+  return(0);
+}
+
+static void fprintf_str(FILE *f, char *fmt, char *name, char *value){
+
+  char *nullstr = "NULL";
+  char *emptystr = "\"\"";
+
+  if(value == NULL)
+    fprintf(f, fmt, name, nullstr);
+  else if(value[0] == '\0')
+    fprintf(f, fmt, name, emptystr);
+  else
+    fprintf(f, fmt, name, value);
+}

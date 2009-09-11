@@ -1,0 +1,5 @@
+#
+# $Id$
+#
+set nntpfilter(from)	"npemwin@localhost";
+set nntpfilter(server)	"localhost";

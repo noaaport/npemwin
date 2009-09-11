@@ -1,0 +1,33 @@
+#
+# Copyright (c) 2006 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+#
+# See LICENSE
+#
+# $Id$
+#
+@include@ @q@../../../Makefile.inc@q@
+
+TCLTARGET =	bbserver
+TCLSOURCES =	bbserver.tcl
+SAMPLES =	bbserver.conf-sample
+
+TARGET =	${TCLTARGET} ${SAMPLES}
+
+TCLSH =		@TCLSH@
+INSTALL =	@INSTALL@
+OSNAME =	@OSNAME@
+
+all: ${TARGET}
+
+${TCLTARGET}: ${TCLTARGET}.tcl
+	sed -e /%TCLSH%/s##${TCLSH}#  ${TCLTARGET}.tcl > ${TCLTARGET}
+
+bbserver.conf-sample: bbserver.conf
+	cp bbserver.conf bbserver.conf-sample
+
+install: ${TARGET}
+	${INSTALL} -m 755 ${TCLTARGET} ${MYLIBEXECDIR}
+	${INSTALL} -m 644 ${SAMPLES} ${MYCONFDIR}
+
+clean:
+	rm -f *~ ${TARGET} Makefile

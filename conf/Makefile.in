@@ -1,0 +1,76 @@
+#
+# $Id$
+#
+@include@ @q@../Makefile.inc@q@
+
+INSTALL =	@INSTALL@
+
+SOURCES =	servers.conf \
+		npemwind.conf \
+		npemwind.init \
+		servers.conf-noaaport \
+		npemwind.conf-noaaport \
+		npemwind.conf-nonpriv \
+		npemwind.conf-noserver \
+		logrotate.conf \
+		newsyslog.conf
+
+SAMPLES =	servers.conf-sample \
+		npemwind.conf-sample \
+		servers.conf-noaaport-sample \
+		npemwind.conf-noaaport-sample \
+		npemwind.conf-nonpriv-sample \
+		npemwind.conf-noserver-sample \
+		logrotate.conf-sample \
+		newsyslog.conf-sample
+
+INITS =		npemwind.init
+
+READMES =	README inventory.README nntp.README npemwinfilter.README \
+		emwinuser.README ldm.README da.README prefilter.README \
+		serial.README bbserver.README httpd.README panfilter.README \
+		metarweather.README batch.README spoolfilter.README \
+		msgfilter.README trackfilter.README \
+		SCRIPTING
+
+DOCSAMPLES =	macosx-launchd.plist-sample
+
+TARGET =	${SAMPLES} ${DOCSAMPLES}
+
+all: ${TARGET}
+
+servers.conf-sample: servers.conf
+	cp servers.conf servers.conf-sample
+
+npemwind.conf-sample: npemwind.conf
+	cp npemwind.conf npemwind.conf-sample
+
+servers.conf-noaaport-sample: servers.conf-noaaport
+	cp servers.conf-noaaport servers.conf-noaaport-sample
+
+npemwind.conf-noaaport-sample: npemwind.conf-noaaport
+	cp npemwind.conf-noaaport npemwind.conf-noaaport-sample
+
+npemwind.conf-nonpriv-sample: npemwind.conf-nonpriv
+	cp npemwind.conf-nonpriv npemwind.conf-nonpriv-sample
+
+npemwind.conf-noserver-sample: npemwind.conf-noserver
+	cp npemwind.conf-noserver npemwind.conf-noserver-sample
+
+newsyslog.conf-sample: newsyslog.conf
+	cp newsyslog.conf newsyslog.conf-sample
+
+logrotate.conf-sample: logrotate.conf
+	cp logrotate.conf logrotate.conf-sample
+
+macosx-launchd.plist-sample: macosx-launchd.plist
+	cp macosx-launchd.plist macosx-launchd.plist-sample
+
+install:
+	${INSTALL} -m 644 ${READMES} ${MYCONFDIR}
+	${INSTALL} -m 644 ${SAMPLES} ${MYCONFDIR}
+	${INSTALL} -m 644 ${INITS} ${MYLIBEXECDIR}
+	${INSTALL} -m 644 ${DOCSAMPLES} ${MYDOCDIR}
+
+clean:
+	rm -f *~ Makefile ${SAMPLES} ${DOCSAMPLES}

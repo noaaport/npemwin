@@ -1,0 +1,35 @@
+#
+# Copyright (c) 2006 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+#
+# See LICENSE
+#
+# $Id$
+#
+@include@ @q@../../../Makefile.inc@q@
+
+TCLTARGET =	prefilter.tcl
+TCLSOURCES =	prefilter.tcl.in
+FILTERNAME =	prefilter
+SAMPLES =	prefilter.conf-sample prefilter.rc-sample
+TARGET =	${TCLTARGET} ${SAMPLES}
+
+TCLSH =		@TCLSH@
+INSTALL =	@INSTALL@
+
+all: ${TARGET}
+
+prefilter.tcl: prefilter.tcl.in
+	sed -e /%TCLSH%/s##${TCLSH}# prefilter.tcl.in > prefilter.tcl
+
+prefilter.conf-sample: prefilter.conf
+	cp prefilter.conf prefilter.conf-sample
+
+prefilter.rc-sample: prefilter.rc
+	cp prefilter.rc prefilter.rc-sample
+
+install: ${TARGET}
+	${INSTALL} -m 644  ${SAMPLES} ${MYDOCDIR}/prefilter
+	${INSTALL} -m 755  ${TCLTARGET} ${MYLIBEXECDIR}/${FILTERNAME}
+
+clean:
+	rm -f *~ ${TARGET} Makefile

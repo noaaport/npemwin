@@ -1,0 +1,26 @@
+#!%SHELL%
+
+#
+# $Id$
+#
+
+# This script is called by the daemon, for every packet received,
+# with the filename of the received packet as the argument
+# (before the file is assembled and saved).
+# The program checks the exit status of the script. If it is 1,
+# then the file is not saved; otherwise (e.g., 0) it is saved.
+# A tcl template for developing a more complete filter for this purpose,
+# is the prefilter script.
+
+# It is not installed nor activated by default. To activate
+# the variable "prefilter" must be set in npemwind.conf to point
+# to the location of this script.
+
+# The script is called with the filename as argument,
+# e.g., "swrrahnc.txt".
+#
+# This sample script just logs the name passed in the argument.
+
+logger -t npemwind-filter "Received $1"
+
+exit 0

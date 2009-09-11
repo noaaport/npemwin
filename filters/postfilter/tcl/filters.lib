@@ -1,0 +1,588 @@
+#
+# $Id$
+#
+# This file contains common functions used by all filters.
+#
+# These functions are similar to those used in nbsp.
+
+package require fileutil;	# tcllib
+
+proc log_msg s {
+
+    syslog_msg $s;
+}
+
+proc syslog_msg s {
+
+    global argv0;
+
+    set name [file tail $argv0];
+    exec logger -t $name -- $s;
+}
+
+proc log_errorInfo {} {
+
+    global errorInfo filterlib;
+
+    if {$filterlib(errorInfo) == 1} {
+	log_msg $errorInfo;
+    }
+}
+
+proc filterlib_get_parts {fpath bodypartsize} {
+
+    set header "";
+    set awips "";
+    set body "";
+
+    set status [catch {
+        set f [open $fpath r];
+        fconfigure $f -translation binary -encoding binary;
+	gets $f line1
+	gets $f line2	
+        set body [read $f $bodypartsize];
+        set header [string range $line1 0 17]
+        scan $line2 "%s" awips
+    } errmsg];
+
+    if {[info exists f]} {
+        close $f;
+    }
+
+    if {$status != 0} {
+        log_msg $errmsg;
+    }
+
+    return [list $header $awips $body]
+}
+
+proc filterlib_get_rcfiles {rcfname confdirs rcdir postrcfile} {
+
+# Build the list of rules rc files. First the rc file in the site directory
+# or in the default directory if the site version does not exist,
+# (i.e., look in confdirs and retain only the last one found)
+# then any rc file in the $rcdir directory, and finally the post rc file.
+
+    set _rcfiles [list];
+    set _rc $rcfname;
+    set _localrc "";
+    foreach _d $confdirs {
+	if {[file exists ${_d}/${_rc}] == 1} {
+	    set _localrc ${_d}/${_rc};
+	}
+    }
+    if {${_localrc} != ""} {
+        lappend _rcfiles ${_localrc};
+    }
+    unset _d;
+    unset _rc;
+    unset _localrc;
+
+    if {[file isdirectory $rcdir] == 1} {
+	set _rcfiles [concat ${_rcfiles} [glob -nocomplain \
+		-directory $rcdir *.rc]];
+    }
+
+    if {[file exists $postrcfile] == 1} {
+	lappend _rcfiles $postrcfile;
+    }
+
+    return $_rcfiles;
+}
+
+proc filterlib_get_rcvars {prodname fpath} {
+
+    global filterlib;
+
+    # Initalize all keys
+    set rc(prodname) $prodname;
+    set rc(fpath) $fpath;
+    set rc(fbasename) "";
+    set rc(fseqnumber) "";
+    set rc(ftype) "";
+    set rc(fsize) "";
+    set rc(bodypart) "";
+    set rc(HEADER) "";
+    set rc(header) "";
+    set rc(header_wmoid) "";
+    set rc(header_station) "";
+    set rc(header_time) "";
+    set rc(AWIPS) "";
+    set rc(awips) "";
+    set rc(AWIPS1) "";
+    set rc(awips1) "";
+    set rc(txtflag) 0;
+
+    set rc(fbasename) [file tail $fpath];
+    set rc(fseqnumber) [lindex [split $rc(fbasename) "."] 1];
+    set rc(ftype) [string range [file extension $rc(fbasename)] 1 end];
+    set rc(fsize) [file size $fpath];
+    if {$rc(ftype) == "txt"} {
+	set _parts [filterlib_get_parts $fpath $filterlib(bodypartsize)];
+
+	# Check if the WMOHEADER is alnum after striping the blanks
+	set _HEADER [lindex ${_parts} 0];
+	if {[string is alnum [string map {" " ""} ${_HEADER}]]} {
+	    set rc(txtflag) 1;
+	    set rc(HEADER) ${_HEADER};
+	    set rc(AWIPS) [lindex ${_parts} 1];
+	    set rc(AWIPS1) [string range $rc(AWIPS) 0 2];
+	    set rc(bodypart) [lindex ${_parts} 2];
+	    unset _parts;
+
+	    set rc(header) [string tolower $rc(HEADER)];
+	    scan $rc(header) "%s %s %s" rc(header_wmoid) rc(header_station) \
+		    rc(header_time);
+	    set rc(awips) [string tolower $rc(AWIPS)];
+	    set rc(awips1) [string tolower $rc(AWIPS1)];
+	}
+	unset _HEADER;
+    }
+    if {$rc(txtflag) == 0} {
+	set rc(awips) [string range $rc(prodname) 0 5];
+	set rc(AWIPS) [string toupper $rc(awips)];
+	set rc(awips1) [string range $rc(prodname) 0 2];
+	set rc(AWIPS1) [string toupper $rc(awips1)];
+    }
+
+    # Return a list of alternates between the indices and the values
+    return [array get rc];
+}
+
+
+proc filterlib_stripcr {body} {
+
+    set lines [split $body "\n"];
+    foreach l $lines {
+        append r [string trimright $l] "\n";
+    }
+
+    return $r;
+}
+
+proc filterlib_find_conf {name dirs {subdir ""}} {
+#
+#   The first argument can be a basename, or a path. If the file is not
+#   found, the in the first case the function returns "",
+#   while in the second case it returns "$name".
+#
+    set fbasename [file tail $name];
+    if {$fbasename eq $name} {
+        set r "";
+    } else {
+        set r $name;
+    }
+
+    foreach d $dirs {
+        if {$subdir ne ""} {
+            set f [file join $d $subdir $fbasename];
+        } else {
+            set f [file join $d $fbasename];
+        }
+        if {[file exists $f]} {
+            set r $f;
+        }
+    }
+
+    return $r;
+}
+
+proc filterlib_uwildmat {uwildregex str} {
+#
+# Behaves similarly to inn's uwildmat(), but uses re's rather than
+# glob style patters. Using only as pair of expressions, the second
+# one of which is negated, is equivalent to use an accept and then reject
+# pattern as described in nbspd.conf. This mechanism generalizes that.
+#
+    if {$uwildregex eq ""} {
+        return 0;
+    }
+
+    set pattlist [split $uwildregex ","];
+    set status 0;
+
+   foreach p $pattlist {
+        set v 1;
+        set regex $p;
+        if {[string range $p 0 0] eq "!"} {
+            set v 0;
+            set regex [string range $p 1 end];
+        }
+        if {[regexp $regex $str]} {
+            set status $v;
+        }
+    }
+
+    return $status;
+}
+
+#
+# Extensions to the fileutil functions to add a newline automatIcally
+#
+proc filterlib_file_write {file data} {
+
+    if {[string range $data end end] ne "\n"} {
+	append data "\n";
+    }
+
+    ::fileutil::writeFile $file $data;
+}
+
+proc filterlib_file_append {file data} {
+
+    if {[string range $data end end] ne "\n"} {
+	append data "\n";
+    }
+
+    ::fileutil::appendToFile $file $data;
+}
+
+proc filterlib_file_cat {file} {
+
+    return [string trim [::fileutil::cat $file]];
+}
+
+#
+# Procedures to mimick the functionality of nbspfile.
+#
+proc filterlib_file_save {inputfile seq outputdir outputfile args} {
+    #
+    # The args are flags:
+    #
+    # [-a] => append
+    # [-t] => do not add gmpk header and trailer
+    #
+
+    global filterlib;
+
+    set gmpk_header_fmt $filterlib(gmpk_header_fmt);
+    set gmpk_trailer_str $filterlib(gmpk_trailer_str);
+
+    # Get the flags
+    set f_append 0;
+    set f_nogmpk_header 0;
+    foreach flag $args {
+        switch -- $flag {
+            "-a" {
+                set f_append 1;
+            }
+            
+            "-t" {
+		set f_nogmpk_header 1;
+            }
+        }
+    }
+
+    if {$outputdir ne ""} {
+	set savepath [file join $outputdir $outputfile];
+    } else {
+	set savepath $outputfile;
+    }
+
+    set status [catch {
+	if {$f_append == 0} {
+	    set fout [open $savepath "w"];
+	} else {
+	    set fout [open $savepath "a"];
+	}
+        set fin  [open $inputfile r];
+        fconfigure $fin -translation binary -encoding binary;
+        fconfigure $fout -translation binary -encoding binary;
+
+	if {$f_nogmpk_header == 0} {
+	    puts -nonewline $fout [format $gmpk_header_fmt [expr $seq % 1000]];
+	}
+
+        puts -nonewline $fout [read $fin];
+
+	if {$f_nogmpk_header == 0} {
+	    puts -nonewline $fout $gmpk_trailer_str;
+	}
+    } errmsg];
+
+    if {[info exists fin]} {
+        close $fin;
+    }
+    if {[info exists fout]} {
+        close $fout;
+    }
+
+    if {$status != 0} {
+        log_msg $errmsg;
+    }
+}
+
+proc filterlib_file_pipe {inputfile seq cmd_line args} {
+    #
+    # The args are flags:
+    #
+    # [-g] => add gmpk header and trailer
+    #
+    # $cmd_line is the full command line including options and arguments.
+
+    global filterlib;
+
+    set gmpk_header_fmt $filterlib(gmpk_header_fmt);
+    set gmpk_trailer_str $filterlib(gmpk_trailer_str);
+
+    # Get the flags
+    set f_addgmpk_header 0;
+    foreach flag $args {
+        switch -- $flag {
+            "-g" {
+                set f_addgmpk_header 1;
+            }
+        }
+    }
+
+    set status [catch {
+	set fout [open "|$cmd_line" "w"];
+	set fin  [open $inputfile "r"];
+	fconfigure $fin -translation binary -encoding binary;
+	fconfigure $fout -translation binary -encoding binary;
+
+        if {$f_addgmpk_header == 1} {
+            puts -nonewline $fout [format $gmpk_header_fmt [expr $seq % 1000]];
+        }
+
+	puts -nonewline $fout [read $fin];
+        if {$f_addgmpk_header == 1} {
+	    puts -nonewline $fout $gmpk_trailer_str;
+	}
+    } errmsg];
+
+    if {[info exists fout]} {
+	close $fout;
+    }
+
+    if {[info exists fin]} {
+	close $fin;
+    }
+
+    if {$status != 0} {
+        log_msg $errmsg;
+    }
+}
+
+#
+# These functions come from the nbsputil package
+# 
+
+proc filterlib_pread {args} {
+#
+# A substitute for
+#
+#   set content [exec <program> <options>];
+#
+# when the output from <program> is binary data that we don't want exec
+# to modify it.
+#
+    set s [join $args " "];
+
+    set content "";
+    set status [catch {
+	set F [open "|$s" r];
+	fconfigure $F -encoding binary -translation binary
+	set content [read $F];
+    } errmsg];
+
+    if {[info exists F]} {
+	catch {close $F};
+    }
+
+    if {$status != 0} {
+	return -code error $errmsg;
+    }
+
+    return $content;
+}
+
+proc filterlib_pwrite_block {data args} {
+
+    set s [join $args " "];
+    set status [catch {
+        set F [open "|$s" w];
+        fconfigure $F -buffering none -encoding binary -translation binary;
+	puts $F $data;
+    } errmsg];
+
+    if {[info exists F]} {
+	catch {close $F};
+    }
+
+    if {$status != 0} {
+	return -code error $errmsg;
+    }
+}
+
+proc filterlib_pwrite_nonblock {data args} {
+
+    set s [join $args " "];
+    set status [catch {
+        set F [open "|$s" w];
+        fconfigure $F -buffering none -encoding binary -translation binary;
+	puts $F $data;
+        fconfigure $F -blocking 0;
+    } errmsg];
+
+    if {[info exists F]} {
+	catch {close $F};
+    }
+
+    if {$status != 0} {
+	return -code error $errmsg;
+    }
+}
+
+#
+# nbsputil::date
+#
+
+proc filterlib_date_guess_clock_seconds {ddhhmm} {
+#
+# The algorith will be like this. First we calculate "now" as
+# ``clock seconds''. From that we determine three points, in seconds:
+#
+# (1) the start of the current month
+# (2) the start of the previous month
+# (3) the start of the next month
+#
+# Then we convert the  ddhhmm to seconds, and calculate three candidates
+# by adding the result to the start times (1-3) above. The winner will
+# be the one that is the closest to ``now''.
+#
+# In addition, we exclude from the above candidates the case in which
+# dd is not valid  for the given month.
+#
+# Of course this is an undetermined problem, so that we will be our best guess.
+
+    if {[regexp {(\d{2})(\d{2})(\d{2})} $ddhhmm match dd HH MM] == 0} {
+	return -code error "Invalid date.";
+    }
+
+    scan $dd "%d" d;
+    scan $HH "%d" H;
+    scan $MM "%d" M;
+
+    # The number of seconds in ddhhmm
+    set ddhhmm_seconds [expr $M * 60 + $H * 3600 + ($d - 1) * 24 * 3600];
+
+    set now [clock seconds];
+
+    scan [clock format $now -format "%M" -gmt true] "%d" current_minute;
+    scan [clock format $now -format "%H" -gmt true] "%d" current_hour;
+    scan [clock format $now -format "%S" -gmt true] "%d" current_second;
+    scan [clock format $now -format "%d" -gmt true] "%d" current_day;
+    scan [clock format $now -format "%m" -gmt true] "%d" current_month;
+    scan [clock format $now -format "%Y" -gmt true] "%d" current_year;
+
+    # The number of seconds at the start of the current month
+    set current_month_seconds [expr $now \
+				   - $current_second \
+				   - $current_minute * 60 \
+				   - $current_hour * 3600 \
+				   - ($current_day - 1) * 24 * 3600];
+
+    set start_candidates [list];
+
+    if {$d <= [_filterlib_date_days_in_month $current_year $current_month]} {
+	lappend start_candidates $current_month_seconds;
+    }
+
+    # Find the start of the previous month
+    set month $current_month;
+    incr month -1;
+    set year $current_year
+    if {$month == 0} {
+	incr year -1;
+	set month 12;
+    }
+    set days_in_month [_filterlib_date_days_in_month $year $month];
+    set prev_month_seconds \
+	[expr $current_month_seconds - $days_in_month * 24 * 3600];
+
+    if {$d <= $days_in_month} {
+	lappend start_candidates $prev_month_seconds; 
+    }
+
+    # Same for next month
+    set days_in_month [_filterlib_date_days_in_month \
+    	$current_year $current_month];
+    set next_month_seconds \
+	[expr $current_month_seconds + $days_in_month * 24 * 3600];
+
+    set month $current_month;
+    set year $current_year;
+    incr month;
+    if {$month == 13} {
+	set month 1;
+	incr year;
+    }
+    if {$d <= [_filterlib_date_days_in_month $year $month]} {
+	lappend start_candidates $next_month_seconds;
+    }
+
+    # The comparison
+    set r "";
+    set diff $now;
+    foreach base $start_candidates {
+	set _r [expr $base + $ddhhmm_seconds];
+	set _diff [expr abs($_r - $now)];
+	if {$_diff < $diff} {
+	    set diff $_diff;
+	    set r $_r;
+	}
+    }
+
+    return $r;
+}
+
+proc filterlib_date_clock_seconds {ddhhmm} {
+
+    set s "";
+
+    if {$ddhhmm ne ""} {
+	set status [catch {
+	    set s [filterlib_date_guess_clock_seconds $ddhhmm];
+	} errmsg];
+    }
+    if {$s eq ""} {
+	set s [clock seconds];
+    }
+
+    return $s;
+}
+
+proc _filterlib_date_is_leap_year {yyyy} {
+#
+# KR p.41
+#
+    if {(([expr $yyyy % 4] == 0) && ([expr $yyyy % 100] != 0)) || \
+	     ([expr $yyyy % 400] == 0)} {
+	return 1;
+    }
+
+    return 0;
+}
+
+proc _filterlib_date_days_in_month {year month} {
+
+    set days(1) 31;
+    set days(2) 28;
+    set days(3) 31;
+    set days(4) 30;
+    set days(5) 31;
+    set days(6) 30;
+    set days(7) 31;
+    set days(8) 31;
+    set days(9) 30;
+    set days(10) 31;
+    set days(11) 30;
+    set days(12) 31;
+
+    if {[_filterlib_date_is_leap_year $year]} {
+	set days(2) 29;
+    }
+
+    return $days($month);
+}

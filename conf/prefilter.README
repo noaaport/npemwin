@@ -1,0 +1,21 @@
+#
+# $Id$
+#
+
+If the variable "prefilter" is set in "npemwind.conf",
+the npemwind daemon calls the prefilter every time that
+the first block of a product is received. If the script returns 1,
+then the block is rejected and the file is not queued. Otherwise
+(e.g., if it returns 0) the block is processed normally.
+This script sources a rules (rc) file specified by the
+variable $prefilter(rc) defined in "prefilter.conf".
+
+To enable this:
+
+- Set the variable "prefilter" in npemwind.conf.
+  (Uncomment the definition given there).
+- Copy the files prefilter.conf and prefilter.rc from the
+  sample files in the doc directory (share/doc/npemwin),
+  and save them in the configuration directory (etc/npemwin).
+- Edit prefilter.rc as indicated in that file.
+

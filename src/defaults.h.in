@@ -1,0 +1,165 @@
+/*
+ * Copyright (c) 2004 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+ *
+ * See LICENSE
+ *
+ * $Id$
+ */
+#ifndef DEFAULTS_H
+#define DEFAULTS_H
+
+#include <syslog.h>
+#include "const.h"
+
+#define DAEMON_NAME		"npemwind"
+#define SYSLOG_IDENT		DAEMON_NAME
+#define SYSLOG_OPTS		LOG_CONS
+#define SYSLOG_FACILITY		LOG_USER
+
+#define CONFIGFILE		"%MYCONFDIR%/npemwind.conf"
+
+/*
+ * When NULL no change is made, so it will remain as it was started;
+ * e.g., root if started automatically at boot.
+ */
+#define EMWIN_USER              NULL
+#define EMWIN_GROUP             NULL
+#define DEFAULT_UMASK           022
+
+/*
+ * For an nbsp master this should be set to empty "" in the conf file.
+ */
+#define BBCLIENTID		"ByteBlast Client|NM-npemwin@noaaport.net|"
+#define BBCLIENTID_SECS		300
+
+#define EMWIN_SPOOL_DIR		"/var/npemwin/spool"
+/* Subdirectories of the spool directory */
+#define EMWIN_DATA_DIR		"data"
+#define EMWIN_LOCK_DIR		"lock"
+#define EMWIN_TMP_DIR		"tmp"
+#define EMWIN_QFILES_DIR	"qfiles"
+
+/* pid file */
+#define SERVERPIDFILE		"/var/run/npemwin/npemwind.pid"
+
+/* statistics file and how often to report it (in seconds) */
+#define SERVERSTATUSFILE	"/var/npemwin/stats/npemwind.status"
+#define NBSP_STATS_PERIOD	60
+
+/*
+ * npemwin connects to the servers listed in the specified file.
+ */
+#define EMWIN_SERVERS_LIST	"%MYCONFDIR%/servers.conf"
+
+/* 
+ * Where the list of active servers (received from the servers themselves)
+ * is written
+ */
+#define EMWIN_ACTIVE_SERVERS_LIST	"/var/npemwin/stats/serverslist.txt"
+#define EMWIN_ACTIVE_SERVERS_RAWLIST	"/var/npemwin/stats/serverslist.raw"
+
+/* Where the status of servers is written */
+#define EMWIN_SERVERS_STATUS_FILE	"/var/npemwin/stats/servers.status"
+
+/* mininum number of consecutive packets received to avoid a bad mark */
+#define MIN_CONSECUTIVE_PACKETS	20
+
+/* max number of consecutive bad marks before switching to a new server */
+#define MAX_BAD_PACKET_COUNT	3
+
+/* sleep time before retrying the server list when none was available */
+#define SLEEP_SECS_BEFORE_RETRY	60
+
+/*
+ * The server client connections and server threads statistics files.
+ */
+#define SERVERSTATEFILE		"/var/npemwin/stats/npemwind.server"
+#define SERVERACTIVEFILE	"/var/npemwin/stats/active"
+#define SERVERTHREADSFILE	"/var/npemwin/stats/npemwind.sthreads"
+
+/*
+ * seconds to wait for connecting to a server (the default is like 75-80 secs)
+ */
+#define CONNECT_TIMEOUT_SECS	10
+
+/* 
+ * seconds waiting in a read() for a packet from the server, and how many
+ * more times to try.
+ */
+#define READ_TIMEOUT_SECS	10
+#define READ_TIMEOUT_RETRY	2
+
+/* seconds waiting writing to clients and how many more times to try */
+#define WRITE_TIMEOUT_SECS	1
+#define WRITE_TIMEOUT_RETRY	2
+
+/* the programs that the daemon and the tool run to process the que */
+#define QRUNNER_PROGRAM		"%MYLIBEXECDIR%/qrunner"
+
+/* 
+ * When to process the queue. It will be processed after this number of
+ * packets are received. 
+ */
+#define QRUN_PERIOD		20
+
+/* inform when the queue has been processed after this number of times */
+#define QRUN_REPORT_PERIOD	100
+
+/* external pre-filter (there is no default) */
+#define PREFILTER_PROGRAM	NULL
+
+/*
+ * These scripts are evaluated by the npemwind daemon itself as the last step
+ * during the initalization and shutdown phase, respectively.
+ */
+#define START_SCRIPT		"%MYLIBEXECDIR%/npemwind-start.tcl"
+#define STOP_SCRIPT		"%MYLIBEXECDIR%/npemwind-stop.tcl"
+
+/* The scheduler script */
+#define SCHEDULER		"%MYLIBEXECDIR%/scheduler"
+
+/* Whether the httpd server should be enabled, the tclhttpd script and fifo */
+#define NBSP_HTTPD_ENABLE	1
+#define NBSP_TCLHTTPD		"%MYLIBEXECDIR%/httpd"
+#define NBSP_TCLHTTPD_FIFO	"/var/run/npemwin/tclhttpd.fifo"
+
+/*
+ * Server functions
+ *
+ * The officially assigned port by IANA is
+ *
+ * emwin           2211/tcp   EMWIN
+ * emwin           2211/udp   EMWIN
+ *
+ * and the multicast ip (not used at this moment 10mar2008)
+ *
+ * 224.0.1.143	   EMWIN
+ */
+#define SERVER_NAME		NULL
+#define SERVER_PORT		"2211"
+#define LISTEN_BACKLOG		5
+#define MAX_NET_CLIENTS		-1	/* no limit */
+#define SERVER_PROTOCOL		PROTOCOL_ALL  /* PROTOCOL_NONE disables it */
+#define CLIENT_ID_WAIT_SECS	5
+#define MIN_COMPRESS_RATIO	60	/* percentage wise */
+
+/* 
+ * Configuration for db queues (libconnth). Each entry in each queue
+ * is an emwin packet that occupies QUEUE_PACKET_SIZE bytes (1120).
+ * So, a 1 MB cache is about 1000 entries.
+ */
+#define QUEUE_DBCACHE_MB		1
+#define CLIENT_QUEUE_MAXSIZE_SOFT	256
+#define CLIENT_QUEUE_MAXSIZE_HARD	512
+#define CLIENT_QUEUE_TIMEOUT_MSECS      10000
+
+/* How often to write the state of the server conections (in seconds). */
+#define SERVERSTATE_LOG_PERIOD	60
+
+/* 
+ * How often to write the server threads statistics (in terms of the
+ * number of packets processed).
+ */
+#define SERVERTHREADS_LOG_FREQ		100
+
+#endif

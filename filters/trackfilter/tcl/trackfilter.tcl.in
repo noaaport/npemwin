@@ -1,0 +1,171 @@
+#!%TCLSH%
+#
+# $Id$
+#
+
+## The common defaults
+set defaultsfile "/usr/local/etc/npemwin/filters.conf";
+if {[file exists $defaultsfile] == 0} {
+        puts "Filter disabled: $defaultsfile not found.";
+        return 1;
+}
+source $defaultsfile;
+
+## The filter library
+if {[file exists $gf(filterlib)] == 0} {
+        puts "Filter disabled: $gf(filterlib) not found.";
+        return 1;
+}
+source $gf(filterlib);
+
+# The default configuration is shared between the filter and cmd-line tools
+# and therefore it is out in a separate file that is read by both.
+set track_init_file [file join $gf(filterdir) "trackfilter.init"];
+if {[file exists $track_init_file] == 0} {
+        log_msg "trackfilter disabled: $track_init_file not found.";
+        return 1;
+}
+source $track_init_file;
+unset track_init_file;
+
+#
+# Functions
+#
+proc trackfilterlib_name {body} {
+
+    set name "";
+
+    if {[regexp {\s(\S+) FORECAST/ADVISORY NUMBER\s+(\d+)} $body s s1 s2]} {
+	set name [string tolower $s1];
+	set advnumber $s2;
+    }
+
+    return $name;
+}
+
+proc main {argc argv} {
+
+    global trackfilter;
+    global errorInfo;
+
+    # cd to the main data directory once and for all
+    if {[file isdirectory $trackfilter(datadir)] == 0} {
+	log_msg "$trackfilter(datadir) not found.";
+	return 1;
+    }
+    cd $trackfilter(datadir);
+
+    while {[gets stdin line] >= 0} {
+       if {[regexp {^\s*$} $line]} {
+            continue;
+        }
+        set args [split $line];
+        set argsc [llength $args];
+        if {$argsc != 2} {
+            log_msg "Incorrect number of arguments: $args";
+            continue;
+        }
+
+        set prodname [lindex $args 0];
+        set fpath [lindex $args 1];
+    
+        set status [catch {process $prodname $fpath} errmsg];
+        if {$status == 1} {
+            log_msg "Error processing $prodname";
+            log_msg $errmsg;
+            log_msg $errorInfo;
+        }
+    }
+}
+
+proc process {prodname fpath} {
+
+    global trackfilter;
+
+    set rclist [filterlib_get_rcvars $prodname $fpath];
+    array set rc $rclist
+
+    set seconds [filterlib_date_clock_seconds $rc(header_time)];
+    set ymd_hm [clock format $seconds -gmt true -format "%Y%m%d_%H%M"];
+    set ymdh [clock format $seconds -gmt true -format "%Y%m%d%H"];
+    set ymd [clock format $seconds -gmt true -format "%Y%m%d"];
+    set ym [clock format $seconds -gmt true -format "%Y%m"];
+    set yyyy [clock format $seconds -gmt true -format "%Y"];
+
+    if {($rc(awips) eq "") || \
+	([regexp {^tcm(.{2})(\d)} $rc(awips) s region index] == 0)} {
+	return;
+    }
+
+    set name [trackfilterlib_name $rc(bodypart)];
+    if {$name eq ""} {
+	log_msg "Cannot determine name in $rc(fpath)";
+	return;
+    }
+    set tcmsavedir [file join $trackfilter(trackfilesdir) $region];
+    set tcmsavename ${yyyy}.${name}$trackfilter(tcmfext);
+    set tcmsavepath [file join $tcmsavedir $tcmsavename];
+    set status [save_file $rc(fpath) $tcmsavedir $tcmsavename];
+
+    if {$status != 0} {
+	return;
+    }
+
+    # Update the tracking data
+    set datasavepath [file join $trackfilter(trackdatadir) \
+	$region ${yyyy}.${name}$trackfilter(datafext)];
+    set status [catch {
+	# npemwintrackdata uses ::fileutil::writeFile, which creates
+	# the parent directories.
+	exec npemwintrackdata -o $datasavepath $tcmsavepath;
+    } errmsg];
+    
+    if {$status != 0} {
+	log_msg $errmsg;
+	return;
+    }
+
+    # Update the tracking plot
+    if {$trackfilter(grads_enable) == 0} {
+	return;
+    }
+
+    set imgsavepath [file join $trackfilter(trackimgdir) \
+	$region ${yyyy}.${name}$trackfilter(imgfext)];
+    file mkdir [file dirname $imgsavepath];
+    
+    set status [catch {
+        exec npemwintrackplot -o $imgsavepath -r $region $name;
+    } errmsg];
+
+    if {$status != 0} {
+	log_msg "Cannot create track plot for $name: $errmsg";
+    } elseif {$trackfilter(grads_post_script) ne ""} {
+	set status [catch {
+	    exec $trackfilter(grads_post_script) $imgsavepath;
+	} errmsg];
+	if {$status != 0} {
+	    log_msg $errmsg;
+	}
+    }
+}
+
+proc save_file {fpath savedir savename} {
+
+    global trackfilter;
+
+    file mkdir $savedir;
+
+    set status [catch {
+	# file copy -force $fpath [file join $savedir $savename];
+	exec cat $fpath >> [file join $savedir $savename];
+    } errmsg];
+
+    if {$status != 0} {
+	log_msg $errmsg;
+    }
+
+    return $status;
+}
+
+main $argc $argv

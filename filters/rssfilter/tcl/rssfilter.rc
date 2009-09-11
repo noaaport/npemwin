@@ -1,0 +1,36 @@
+#
+# $Id$
+#
+
+# The main rc file reads the set of rules in all the files in the 
+# list $<prefix>filterrcfiles. That list is
+#
+# <prefix>filter.rc
+# defaults/<prefix>filter.rc
+# site/<prefix>filter.rc
+# rc.d/<prefix>/*.rc
+# 
+# and finally from the file named in $<prefix>filterpostrc.
+#
+# Each rc file contains a set of conditions and a correspondig
+# set of actions, ech of which is put in a list. Then all such
+# sets are put in a list of lists, stored in
+# the <prefix>filter(cond) and <prefix>filter(action) variables.
+#
+# The rc_status variable is set to 0 when a rule is matched.
+
+# Load all the sets of condition/action pairs.
+if {[llength $rssfilter(rcfiles)] != 0} {
+    foreach _rc $rssfilter(rcfiles) {
+        if {[file exists ${_rc}] == 1} {
+	    set cond [list];
+	    set action [list];
+            source ${_rc};
+	    lappend rssfilter(condition) $cond;
+	    lappend rssfilter(action) $action;
+        }
+    }
+    unset _rc;
+    unset cond;
+    unset action;
+}

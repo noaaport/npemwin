@@ -1,0 +1,62 @@
+#
+# $Id$
+#
+
+# For each file in the "files" directory, a copy is created
+# in  the directory "data/latest", with the sequence number deleted from
+# the name. The directory structure of the "data/latest" directory mirrors
+# the structure of the "files" directory.
+#
+# Example -
+# 
+# Original:
+#       $rc(prodname) = flssjupr
+#       $rc(fpath) =  /var/npemwin/files/txt/tjsj/flssjupr.<seqnumber>.txt
+#       $rc(ftype) = txt
+#
+# Copy:
+#	/var/npemwin/data/latest/txt/tjsj/flssjupr.txt
+
+lappend cond {1}
+lappend action {
+if {$rc(ftype) == "txt"} {
+    set _destsubdir [list [file join $rc(ftype) "all" $rc(header_station)]];
+    if {[regexp {URGENT} $rc(bodypart)]} {
+	lappend _destsubdir [file join $rc(ftype) "urgent" $rc(header_station)];
+    }
+    if {[regexp {EAS ACTIVATION} $rc(bodypart)]} {
+	lappend _destsubdir [file join $rc(ftype) "eas" $rc(header_station)];
+    }
+    if {[regexp {^n} $rc(header_wmoid)]} {
+	lappend _destsubdir [file join $rc(ftype) "adm" $rc(header_station)];
+    }
+    if {[regexp {^a} $rc(header_wmoid)]} {
+	lappend _destsubdir [file join $rc(ftype) "summary" $rc(header_station)];
+    }
+    if {[regexp {^f} $rc(header_wmoid)]} {
+	lappend _destsubdir [file join $rc(ftype) "forecast" $rc(header_station)];
+    }
+    if {[regexp {^w} $rc(header_wmoid)]} {
+	lappend _destsubdir [file join $rc(ftype) "warnings" $rc(header_station)];
+    }
+    if {[regexp {^[crstu]} $rc(header_wmoid)]} {
+	lappend _destsubdir [file join $rc(ftype) "data" $rc(header_station)];
+    }
+} else {
+    set _destsubdir $rc(ftype);
+}
+set _destname $rc(prodname).$rc(ftype);
+
+set _currdir [pwd];
+cd $stdfilter(latestdir);
+foreach _subdir ${_destsubdir} {
+    file mkdir ${_subdir};
+    file copy -force $rc(fpath) [file join ${_subdir} ${_destname}];
+}
+cd ${_currdir};
+
+unset _destsubdir;
+unset _destname;
+unset _currdir;
+unset _subdir;
+}

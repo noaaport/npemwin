@@ -1,0 +1,21 @@
+#
+# $Id$
+#
+
+The tcllib-1.8 that is included in MacOSX is not compatible
+with npemwin. A package for tcllib-1.10 is available
+in the optional-packages section.
+
+Some of the filters require
+
+	- gnuplot
+
+A suitable package for MacOSX is available from the Fink Project site
+
+	www.finkproject.org
+
+The default configuration is client-only mode. To enable the server
+follow one of the steps indicated in the file 
+
+	/usr/local/etc/npemwin/defaults/npemwind.conf
+-

@@ -1,0 +1,26 @@
+#
+# $Id$
+#
+
+The web server is enabled by default, but it can be disabled in the
+npemwind.conf file if desired.
+
+It is accessed by point the browser to
+
+	http://localhost:8016
+
+or
+
+	http://<hostname>.<domain>:8016
+
+with the correct hostname and domain of the npemwin server machine.
+
+The web server files are in
+
+	/var/npemwin/www
+
+and the web serevr configuration file is httpd.conf in the npemwin
+configuration directory.
+
+The server is started and stoped automatically from within npemwin.
+-

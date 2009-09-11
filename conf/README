@@ -1,0 +1,47 @@
+#
+# $Id$
+#
+
+>> The original "sample" configuration files are in the "dist" subdirectory, <<
+>> as well as several README files.
+
+The directory
+
+	/usr/local/etc/npemwin
+
+contains the main configuration file "npemwind.conf", and other configuration
+files. After the program reads it, it looks for the files
+
+	defaults/npemwind.conf
+	site/npemwind.conf
+
+and if they exist they will be read, in that order. Latter settings
+override previous ones. Similar conventions are used in the
+configuration files for the qrunner and the filters.
+
+Every npemwin package is distributed with an identical set of configuration
+files. The purpose of the "defaults" subdirectory is to be able to distribute
+packages pre-configured for a particular purpose. The corresponding
+configuration files are placed in that subdirectory.
+
+The "site" subdirectory is always distributed empty, and this is
+where the configuration files that contain the local modifications
+should be placed. The files named
+
+	*.conf-<something>-sample
+
+contain some common options as examples. They
+can be copied to the site directory, renamed, and edited to build
+the local configuration if desired.
+
+npemwin is configured by default to get the data from a list of byteblaster
+servers. To configure it to advertise itself as as server, follow the
+instructions in bbserver.README.
+
+To configure npemwin to read from a serial port device instead,
+follow the instructions in serial.README.
+
+npemwin can be configured instead as a client of a Noaaport nbsp server.
+The dist directory contains two *-noaaport-sample files that can be
+copied to the site subdirectory and will enable this mode of operation.
+-

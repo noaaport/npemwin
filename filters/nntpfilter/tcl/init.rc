@@ -1,0 +1,7 @@
+#
+# $Id$
+#
+
+set rc_nntp_subgroup "";
+set rc_nntp_subject "";
+set rc_nntp_encode 0;

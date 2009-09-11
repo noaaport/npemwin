@@ -1,0 +1,14 @@
+#
+# $Id$
+#
+
+To enable the ldm gateway:
+
+1) In the file features.conf
+
+set features(ldmfilter) 1
+
+2) In "ldmfilter.conf", verify that the $ldmfilter(pqinsert)
+variable has the correct path to the pqinsert program.
+
+3) Start ldm, then start npemwin, in that order.

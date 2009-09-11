@@ -1,0 +1,12 @@
+#
+# $Id$
+#
+
+# Defaults.
+#
+## set ldmfilter(conf)	[file join $gf(confdir) "ldmfilter.conf"];
+## set ldmfilter(rc)	[file join $gf(confdir) "ldmfilter.rc"];
+## set ldmfilter(rcdir)	[file join $gf(confdir) "rc.d/ldm"];
+## set ldmfilter(confdirs) $gf(localconfdirs);
+## set ldmfilter(postrc)	"";
+## set ldmfilter(pqinsert) "/usr/local/lib/ldm/bin/pqinsert";

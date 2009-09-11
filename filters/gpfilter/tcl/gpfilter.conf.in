@@ -1,0 +1,42 @@
+#
+# $Id$
+#
+
+# Defaults. These are standard parameters of the filters.
+#
+## set gpfilter(conf)	[file join $gf(confdir) "gpfilter.conf"];
+## set gpfilter(rc)	[file join $gf(confdir) "gpfilter.rc"];
+## set gpfilter(rcdir)	[file join $gf(confdir) "rc.d/gp"];
+## set gpfilter(confdirs) $gf(localconfdirs);
+## set gpfilter(postrc)	"";
+
+# Parameters related to the gempak installation.
+#
+## set gempak(homedir)     "/usr/local/lib/gempak/NAWIPS";
+## set gempak(bindir)      [file join $gempak(homedir) "os/%GPOSNAME%/bin"];
+
+# The directory that contains "data/gempak" (i.e., in ldm it is /home/ldm)
+# and the data directory itself.
+# The decoders assume a "cd $gpfilter(dec_rootdir)",
+# which is done in the function that invokes them.
+#
+## set gpfilter(dec_rootdir)  "/var/npemwin";
+## set gpfilter(dec_datadir) [file join $gpfilter(dec_rootdir) "data/gempak"];
+
+# The bin and log directory for decoders
+#
+## set gpfilter(dec_bindir)	$gempak(bindir);
+## set gpfilter(dec_logdir)	$gf(logdir);
+
+# These variables are needed by the gempak decoders
+#
+## set gpfilter(dec_GEMPAK)   [file join $gempak(homedir) "gempak"];
+## set gpfilter(dec_GEMTBL)   [file join $gempak(homedir) "gempak/tables"];
+
+# Individual decoder rules can be disabled by setting the variables
+#
+# set gpfilter(<decoder>,enable)        0
+#
+# where <decoder> is the decoder name (e.g., demetr, dcmsfc, dcuair, ...).
+# If the variable is undefined (that is the default) or if it is set to 1,
+# the decoder rule is enabled, othwerwise it is disabled.

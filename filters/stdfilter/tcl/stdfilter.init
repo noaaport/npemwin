@@ -1,0 +1,37 @@
+#
+# $Id$
+#
+
+set stdfilter(conf)	[file join $gf(confdir) "stdfilter.conf"];
+set stdfilter(rc)	[file join $gf(confdir) "stdfilter.rc"];
+set stdfilter(rcdir)	[file join $gf(confdir) "rc.d/std"];
+set stdfilter(lib)	[file join $gf(filterdir) "stdfilter.lib"];
+set stdfilter(confdirs) $gf(localconfdirs);
+set stdfilter(postrc)	"";
+# The rules list is initialized from the features.conf file, which
+# is already sourced by the time this file is read.
+set stdfilter(defaultsrc) [list];
+
+# Enable the inventory
+if {[info exists feature(stdfilter,inv)] && ($feature(stdfilter,inv) == 1)} {
+    lappend stdfilter(defaultsrc) \
+	"/usr/local/etc/npemwin/defaults/stdfilter-inv.rc";
+}
+set stdfilter(invdir) "/var/npemwin/inv";
+set stdfilter(invfext) ".log";
+set stdfilter(invhhmmfile) [file join $stdfilter(invdir) "hhmm.state"];
+
+# Enable the bookeeping of the "latest" copy
+if {[info exists feature(stdfilter,latest)] && \
+	($feature(stdfilter,latest) == 1)} {
+    lappend stdfilter(defaultsrc) \
+	"/usr/local/etc/npemwin/defaults/stdfilter-latest.rc";
+}
+set stdfilter(latestdir) [file join $gf(datadir) "latest"];
+
+#
+# Read the default configuration file for this filter.
+#
+if {[file exists $stdfilter(conf)] == 1} {
+    source $stdfilter(conf);
+}

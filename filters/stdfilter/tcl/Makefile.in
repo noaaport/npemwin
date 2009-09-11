@@ -1,0 +1,46 @@
+#
+# Copyright (c) 2005 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+#
+# See LICENSE
+#
+# $Id$
+#
+@include@ @q@../../../Makefile.inc@q@
+
+TCLTARGET =	stdfilter.tcl
+TCLSOURCES =	stdfilter.tcl.in
+FILTERNAME =	stdfilter
+TOOLNAMES =	npemwinbatch
+SAMPLES =	stdfilter.conf-sample \
+		stdfilter.rc-sample
+TARGET =	${TCLTARGET} ${M4TARGET} ${SAMPLES} ${TOOLNAMES}
+DEFAULTS =	stdfilter-inv.rc-defaults \
+		stdfilter-latest.rc-defaults
+
+INITS =		stdfilter.init
+
+TCLSH =		@TCLSH@
+INSTALL =	@INSTALL@
+
+all: ${TARGET}
+
+${TCLTARGET}: ${TCLSOURCES}
+	sed -e /%TCLSH%/s##${TCLSH}# ${TCLSOURCES} > ${TCLTARGET}
+
+stdfilter.conf-sample: stdfilter.conf
+	cp stdfilter.conf stdfilter.conf-sample
+
+stdfilter.rc-sample: stdfilter.rc 
+	cp stdfilter.rc stdfilter.rc-sample
+
+npemwinbatch: npemwinbatch.tcl
+	sed -e /%TCLSH%/s##${TCLSH}# npemwinbatch.tcl > npemwinbatch
+
+install: ${TARGET}
+	${INSTALL} -m 755 ${TCLTARGET} ${MYLIBEXECDIR}/${FILTERNAME}
+	${INSTALL} -m 755 ${TOOLNAMES} ${BINDIR}
+	${INSTALL} -m 644 ${INITS} ${MYLIBEXECDIR}
+	${INSTALL} -m 644 ${SAMPLES} ${DEFAULTS} ${MYCONFDIR}
+
+clean:
+	rm -f *~ ${TARGET} Makefile

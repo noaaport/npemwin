@@ -1,0 +1,71 @@
+#
+# $Id$
+#
+
+# This is the configuration file for the hourly script.
+# It deletes files in the specified directories that are
+# older than the specified time or based on a retention count.
+#
+# The lines are of one of the following two the forms:
+#
+# <timespec>:<dir>:<expression>
+# <timespec>:<dir>:<exclude subdirs>:<expression>
+#
+# In the first form, `find' is applied to <dir>. In the second form, `find'
+# is applied to the subdirectories of <dir>, excluding the subdirectories
+# whose names match the regular expression <exclude subdirs>.
+# <expression> is the time specification expression that is passed to find,
+# or an option string of the form -c <count> [-d] [-e <excludelist>] indicating
+# a retention count and optionally a regexp specifying file names to
+# exclude from the deletion list.
+# A retention count can be specified only if the files in the directory
+# and its subdirectories are saved with a date-time based name so that
+# they sort according to their age.
+# If the "-d" is given, then the subdirectories of <dir> are treated as files
+# instead of being processed recursively. This is useful, for example, when
+# when <dir> has subdirectories with names like 20090223 20090224.
+#
+#
+# The time specification is one of
+#
+# H		=> run every hour
+# H=ll|mm|nn	=> run at the hours in the list
+# H/n		=> run if the remainder of the (current hour)/n is zero. 
+#
+# D=ddhh|d'd'h'h'|...	=> run at the days of the month and hours in the list.
+#			   Here the dd is between 01-31.
+# Dhh|h'h'|.../n	=> run if the remainder of (current day of month)/n
+#			   is zero and the current hour is in the list.
+#			
+# W=dhh|d'h'h'|...	=> run at the days of the week and hours in the list.
+#			   Here the d is between 0-6 with 0 = sunday.
+# Whh|h'h'|.../n	=> run if the remainder of (current day of week)/n
+#			   is zero and the current hour is in the list.
+#
+# Examples
+#
+# H/3  => run at 0, 3, 6, ...
+# H=03|09|18|23  => run at 03, 09, 18 and 23.
+# W=523 => run on fridays at 11 pm
+# D=0101 => run on the first of the month at 1 am.
+# D03|21/2  => run every other day at 3 am and 9 pm.
+
+# Delete _files_ in the data directories (older than two days).
+# The data/{latest,metar,track} directories do not have to be checked;
+# Note that the "digatmos/hurricane" subdirectory is excluded.
+# If the metar archives are enabled, then the setting below
+# allows seven days of daily and hourly archives.
+
+H:/var/npemwin/files: -mtime +2 ! -type d
+H:/var/npemwin/data/digatmos:hurricane: -mtime +2 ! -type d
+H:/var/npemwin/data/gempak: -mtime +2 ! -type d
+H=02:/var/noaaport/data/metar/archive: -c 7 -d
+
+# Delete _files_ leftover in the spool directory
+H:/var/npemwin/spool: -mtime +4h ! -type d
+
+# Keep a week of the old www logfiles
+H=01:/var/npemwin/www/log: -mtime +7
+
+# Delete files leftover in the tmp directory
+H/4:/var/npemwin/tmp: -mtime +1h

@@ -1,0 +1,25 @@
+#
+# $Id$
+#
+
+# By the time that this file is sourced by the main prefilter script,
+# the following variables are already defined
+#
+#  rc_fname	(for example, cfwsjupr.txt)
+#  rc_prodname  (for example, cfwsjupr)
+#  set rc_ftype (for example, txt)
+#
+# In addition, the variable rc_skip is initialized to the value given by
+# $prefilter(defaultskip). If the script reaches the end of the rc file,
+# (that is, no return statement has been seen yet), then
+# it exits with a statement "return $rc_skip". 
+
+# For example, to skip images, the following can be used.
+if {[regexp {gif|jpg} $rc_ftype]} {
+	exit 1;
+}
+
+# or
+if {[regexp {gif|jpg} $rc_ftype]} {
+	set rc_skip 1;
+}

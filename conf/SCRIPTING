@@ -1,0 +1,163 @@
+#
+# $Id$
+#
+
+npemwin will save to disk all the files that are received
+in a directory, by default
+
+	/var/npemwin/files
+
+For each file file that is received and saved to disk,
+npemwin can execute a series of programs and/or scripts to process the files
+further. For future reference, any of those programs/scripts will
+be called ``filters''.
+
+There are two different types of filter. The "userfilter" is
+executed for each file received, with two arguments: the product awips code
+and the full path to the file. A "postfilter" on the other hand
+is executed once, with that same information passed on stdin for
+each file received. There is no userfilter installed by default.
+A postfilter is installed and enabled by default. Both are enabled/disabled
+by editing the file(s) qrunnner.conf in one of the configuration
+directories.
+
+Then, there are different ways to use this facility. The recommended
+(and supported) way is explained next. 
+
+(Note that some of the steps mentined below may have already been made
+by the package installation process. In particular, to use the npemwinfilter
+the only step required may be to simply create the file
+"site/npemwinfilter.rc" using "dist/npemwinfilter.rc-ex" as a guide.)
+
+I - Using npemwinfilter
+
+npemwin comes with three filters which are provided to implement
+particular features. For example the ``nntpfilter'' will dispatch
+the files to a ``news'' server for distributing the files via nntp.
+
+The ``npemwinfilter'' is a filter written in tcl. To enable it,
+apart from the setting in "qrunner.conf"  explained above,
+the following line must be added in filters.conf
+(or in defaults/filters.conf or better in site/filters.conf)
+
+lappend gf(filterlist) $gf(filterdir)/npemwinfilter;
+
+The package installation may have done this already.
+
+The filter will be called for each file received and this filter
+will in turn read (source) the file ``npemwinfilter.rc'' in the
+main configuration directory. Using this filter then is just a matter
+of writing rules, in tcl, to process the files.
+At the time that the npemwinfilter.rc is read, various variables have been set,
+all in the array "rc" (see the file ``npemwinfilter.rc-ex"
+in the configuration directory). Thus, using this filter becomes a matter of
+writing rules such as
+
+lappend cond {
+  [regexp {tjtj} $rc(station)]
+}
+lappend action {
+        exec mail -s tjsj nieves@ltp.upr.clu.edu < $rc(fpath);
+        break;
+}
+
+A line like
+
+exec /path/to/myfilter $rc(prodname) $rc(fpath)
+
+will execute the named filter, passing as arguments the product name
+(.e.g, cfwsjupr) and the full path name to the file. 
+
+The npemwinfilter looks for programs in the standard directories,
+and also
+
+	/usr/local/libexec/npemwin/site
+
+If a script (or any program) is installed there, then for example
+a line like
+
+lapend cond {
+	[regexp {cfw} $rc(awips1)]
+}
+lappend action {
+        exec my_cfw_filter.pl $rc(fpath)
+        break;
+}
+
+can be used to execute particular programs to process files according
+to a type or other criteria. In any case, the full set of rc_* variables
+that are defined, and can be passed as arguments to other programs,
+are specified in the file "npemwinfilter.rc-ex". Of course, any
+tcl language construct can be used, besides executing other programs.
+
+The advantage of this method is that all the variables described in
+the ``npemwinfilter.rc-ex'' file have already been set and can be used
+to write the rules.
+
+As already mentioned, this is the recommended and supported way
+to use the filter facility. Two other methods exist, and while
+they are documented for completeness, they are not recommended
+and not supported. 
+
+II - Using your own filter
+
+The use of the ``npemwinfilter'' requires writing tcl. If, for
+whatever reason, that is not wanted, the alternative to install
+a new filter. That can be written in any language. To install it,
+a line like
+
+lappend gf(filterlist) /path/to/myfilter
+
+must be added in one of the filters.conf files.
+The``/usr/local/libexec/npemwin/site'' directory can be used to
+install those filters if desired.
+
+The filter must be written to read from stdin one line at a time.
+Each line contains the product name and the full path to the file
+separated by a space, such as, for example
+
+       flssjupr  /var/npemwin/files/pr/flssjupr.<seqnum>.txt
+
+(<seqnum> is a string of digits used to separate files of the same type).
+
+The disadvantage of this method is that the ``myfilter''
+has to do all the work to extract from the file all the variables that the
+filter may need to process the file. On the other hand, the filter can
+of course be written in any language.
+
+III - Bypassing everything
+
+The way it really works is that the npemwind daemon, periodically
+executes the qrunner script (a shell script) to process the spool directory,
+assemble the parts together and save each file. Each time the qrunner is
+executed, it spwans a program, the "postfilter"
+as explained above. The name of that program is defined in the variable
+
+	postfilter=/usr/local/libexec/npemwin/postfilter
+
+in the qrunner.conf file. That program (actually a tcl script)
+then executes all the filters that appear in the variable
+$gf(filterlist).
+
+Therefore, it is possible to bypass all this and install instead the
+``myfilter'' by setting
+
+	postfilter=/path/to/myfilter
+
+in one of the qrunner.conf files. The filter will then be called
+as in (II).
+
+The advantage of this alternative is complete control of the filtering.
+
+(IV) Another alternative, which can be used instead or in addition to this one,
+is to set the variable
+
+userfilter=/path/to/userfilter
+
+to a propgram. The difference between this "userfilter" and the "postfilter"
+is that the user filter is executed like
+
+	userfilter flssjupr  /var/npemwin/files/pr/flssjupr.<seqnum>.txt
+
+for every file received.
+-

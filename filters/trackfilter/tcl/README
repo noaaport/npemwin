@@ -1,0 +1,8 @@
+#
+# $Id$
+#
+(This README is from nbsp) -
+
+The files in grads/track have have to be edited if the trackfilter
+is imported in other applications (.e.g, npemwin). The map files make explicit
+reference to the installation directory.

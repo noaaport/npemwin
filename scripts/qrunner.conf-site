@@ -1,0 +1,20 @@
+#
+# $Id$
+#
+
+# To enable the user filter copy this file to "site/qrunner.conf",
+# and set the variable "userfilter" appropriately.
+#
+# For each file received, the userfilter is called like this:
+#
+# userfilter <prodcode> <full path>
+#
+# e.g., 
+#
+# userfilter flssjupr  /var/npemwin/files/pr/flssjupr.<seqnum>.txt
+#
+# For more details, and for explanations about the difference between
+# a userfilter and a postfilter see the file SCRIPTING.
+
+userfilter_enable=1
+## userfilter=/usr/local/libexec/npemwin/site/userfilter

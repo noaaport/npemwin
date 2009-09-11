@@ -1,0 +1,38 @@
+#!%TCLSH%
+#
+# $Id$
+#
+
+# If installed, the npemwind daemon calls this script every time that
+# the first block of a product is received. If the script returns 1,
+# then the block is rejected and the file is not queued. Otherwise
+# (e.g., if it returns 0) the block is processed normally.
+# This script sources a rules (rc) file specified by the
+# variable $prefilter(rc).
+
+set prefilter(conf)    "/usr/local/etc/npemwin/prefilter.conf";
+set prefilter(rc)      "/usr/local/etc/npemwin/prefilter.rc";
+set prefilter(defaultskip) 0;
+
+#
+# Read the default configuration file for this filter.
+#
+if {[file exists $prefilter(conf)]} {
+    source $prefilter(conf);
+}
+
+# Initialize
+set rc_skip $prefilter(defaultskip);
+set rc_fname "";
+set rc_prodname "";
+set rc_ftype "";
+
+set rc_fname [lindex $argv 0];
+set rc_prodname [file rootname $rc_fname];
+set rc_ftype [string range [file extension $rc_fname] 1 3];
+
+if {[file exists $prefilter(rc)]} {
+    source $prefilter(rc);
+}
+
+exit $rc_skip;

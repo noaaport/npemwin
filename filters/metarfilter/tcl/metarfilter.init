@@ -1,0 +1,83 @@
+#
+# $Id$
+#
+
+# default configuration file
+set metarfilter(conf)		[file join $gf(confdir) "metarfilter.conf"];
+#
+set metarfilter(reportenable)	0;
+#
+
+set metarfilter(stationconf) [file join $gf(confdir) "metarfilter-st.conf"];
+set metarfilter(icaodef)     [file join $gf(confdir) "metarfilter-icao.def"];
+set metarfilter(datadir)     [file join $gf(datadir) "metar"];
+set metarfilter(reportdir)	"txt";
+set metarfilter(stationdatadir)	"st";
+set metarfilter(collectivedatadir)	"cl";
+set metarfilter(reportfext)	".txt";
+set metarfilter(rawfext)	".csv";
+set metarfilter(rawfcount)      60;
+set metarfilter(FS)		",";
+set metarfilter(postfilter)	"";
+# These are settings to support MetarWeather
+set metarfilter(mwsupport) 1;
+set metarfilter(mwdir) "metarweather";
+set metarfilter(mwfcount) 60;
+set metarfilter(mwfext) ".metar";
+
+# Daily and hourly archives. Not enabled by default.
+# If enabled, than an entry must be included in the hourly conf file.
+# The archives have the same format as the "metarweather" files, and
+# will have the same extension "metarfilter(rawfext)".
+set metarfilter(daily_arcv_enable) 1;
+set metarfilter(hourly_arcv_enable) 1;
+set metarfilter(arcv_dir) "archive";
+set metarfilter(daily_arcv_datadir) "daily";
+set metarfilter(hourly_arcv_datadir) "hourly";
+
+# These settings are used by the nbspmtrplot tool. 
+# The xe0e0e0 makes a light gray background, and small is
+# the font size (tiny, small, medium, large) but tiny is not in
+# gnuplot-4.0 which is what centos-5.2 and debian-4.0 have).
+set metarfilter(plotfmt) "png";
+set metarfilter(plotfmtoptions) "small xe0e0e0";  # tiny xe0e0e0
+set metarfilter(plotdataext) ".dat";
+set metarfilter(plottemplatedirs) $gf(localconfdirs);
+set metarfilter(plottemplatesubdir) [file join "gnuplot" "metar"];
+set metarfilter(plottemprc) "temp.g";
+set metarfilter(plotprerc) "pre.g";
+set metarfilter(plotwindrc) "wind.g";
+set metarfilter(plotnumpoints) 25;
+
+# Overrides in the configuration file.
+if {[file exists $metarfilter(conf)] == 1} {
+    source $metarfilter(conf);
+}
+
+#
+# Read the station collectives configuration files.
+#
+set _confname $metarfilter(stationconf);
+set _localconfname [file join $gf(confdir) ${_confname}];
+if {[file exists ${_localconfname}]} {
+    source ${_localconfname};
+}
+
+#
+# Only the last file found is used.
+#
+set _conffile "";
+foreach _d $gf(localconfdirs) {
+    set _localconfname [file join ${_d} ${_confname}];
+    if {[file exists ${_localconfname}]} {
+	set _conffile ${_localconfname};
+    }
+}
+if {${_conffile} != ""} {
+    source ${_conffile};
+}
+
+unset _d;
+unset _conffile;
+unset _confname;
+unset _localconfname;

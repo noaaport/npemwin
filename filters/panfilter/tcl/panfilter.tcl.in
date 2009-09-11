@@ -1,0 +1,137 @@
+#!%TCLSH%
+#
+# $Id$
+#
+
+## The common defaults
+set _defaultsfile "/usr/local/etc/npemwin/filters.conf";
+if {[file exists ${_defaultsfile}] == 0} {
+    puts "panfilter disabled: ${_defaultsfile} not found.";
+    return 1;
+}
+source ${_defaultsfile};
+
+## The filter library
+if {[file exists $gf(filterlib)] == 0} {
+        puts "panfilter disabled: $gf(filterlib) not found.";
+        return 1;
+}
+source $gf(filterlib);
+
+# default configuration file and rc script
+set panfilter(conf)    [file join $gf(confdir) "panfilter.conf"];
+set panfilter(rc)      [file join $gf(confdir) "panfilter.rc"];
+set panfilter(rcdir)   [file join $gf(confdir) "rc.d" "pan"];
+set panfilter(confdirs) $gf(localconfdirs)
+set panfilter(postrc)   "";
+# variables
+set panfilter(rcfiles)  [list];
+set panfilter(condition)	[list];
+set panfilter(action)		[list];
+
+#
+# Read the default configuration file for this filter.
+#
+if {[file exists $panfilter(conf)] == 1} {
+    source $panfilter(conf);
+}
+
+# The main rc file is required
+if {[file exists $panfilter(rc)] == 0} {
+    log_msg "Filter disabled: $panfilter(rc) not found.";
+    return 1;
+}
+
+# Build the list of rc files
+set panfilter(rcfiles) [filterlib_get_rcfiles \
+    [file tail $panfilter(rc)] \
+    $panfilter(confdirs) $panfilter(rcdir) $panfilter(postrc)];
+
+# Load the rules sets
+source $panfilter(rc);
+
+proc main {} {
+
+    global errorInfo;
+
+    while {[gets stdin line] >= 0} {
+	if {[regexp {^\s*$} $line]} {
+	    continue;
+	}
+	set args [split $line];
+	set argsc [llength $args];
+    	if {$argsc != 2} {
+            log_msg "Incorrect number of arguments: $args";
+	    continue;
+        }
+
+    	set prodname [lindex $args 0];
+    	set fpath [lindex $args 1];
+    
+        set status [catch {process $prodname $fpath} errmsg];
+	if {$status == 1} {
+	    log_msg "Error processing $prodname";
+	    log_msg $errmsg;
+	    log_msg $errorInfo;
+	}
+    }
+}
+
+proc process {prodname fpath} {
+
+    global panfilter;
+
+    set rclist [filterlib_get_rcvars $prodname $fpath];
+    array set rc $rclist
+
+    # Initialize the global variables
+    set udp(status) 1;
+    set udp(host) [list];
+
+    # Evaluate the condition/action pairs, from all sets.
+    set status [catch {
+	set i 0;		# counts the sets
+	foreach condlist $panfilter(condition) {
+	    set actionlist [lindex $panfilter(action) $i];
+	    set j 0;	# counts the rules with each set
+	    foreach c $condlist {
+		set a [lindex $actionlist $j];
+		if {[expr $c]} {
+		    eval $a;
+		}
+		incr j;
+	    }
+	    incr i;
+	}
+    } errmsg];
+
+    if {$status == 1} {
+	log_msg "Error processing $fpath";
+	log_msg $errmsg;
+	return;
+    }
+
+    if {$udp(status) == 0} {
+	panfilter_udp $rc(HEADER) $rc(AWIPS) $rc(fbasename) $udp(host);
+    }
+}
+
+proc panfilter_udp {HEADER AWIPS fbasename udphost} {
+
+    set str [string trimleft [join [list $HEADER $AWIPS $fbasename]]];
+
+    foreach _hostport $udphost {
+	set _hostport_parts [split ${_hostport} :];
+	set host [lindex ${_hostport_parts} 0]
+	set port [lindex ${_hostport_parts} 1];
+
+	set status [catch {
+	    exec npemwinudpsend -e $str $host $port;
+        } errmsg];
+	if {$status != 0} {
+	    log_msg $errmsg;
+	}
+    }
+} 
+
+main

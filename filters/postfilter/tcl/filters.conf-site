@@ -1,0 +1,15 @@
+#
+# $Id$
+#
+
+# Copy this file to site/filters.conf and uncomment the appropriate line
+# to install the additional filters included, or your own.
+
+# To add your own filter instead of writing rules in npemwinfilter.rc
+#
+### lappend gf(filterlist) /usr/local/libexec/npemwin/site/myfilter;
+
+# To disable all the filters and install your own
+#
+### set gf(filterlist) [list /usr/local/libexec/npemwin/site/myfilter1 \
+#			/usr/local/libexec/npemwin/site/myfilter2];

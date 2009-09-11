@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+# $Id$
+#
+# PROVIDE: npemwind
+# REQUIRE: DAEMON
+# KEYWORD: shutdown
+#
+. /etc/rc.subr
+
+#
+# To enable, set "npemwind_enable=1" in rc.conf or rc.conf.local
+#
+name=npemwind
+command=/usr/local/sbin/${name}
+[ -z "$npemwind_enable" ] && npemwind_enable=0
+
+rcvar=`set_rcvar`
+load_rc_config $name
+run_rc_command "$1"

@@ -1,0 +1,19 @@
+#
+# $Id$
+#
+
+To enable the nntp gateway:
+
+1)
+	qrunner.conf-site-sample
+
+to
+	site/qrunner.conf
+
+2) Create the file
+
+	site/filters.conf
+
+with the line
+
+lappend gf(filterlist) $gf(filterdir)/nntpfilter

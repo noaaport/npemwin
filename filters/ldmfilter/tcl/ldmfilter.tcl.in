@@ -1,0 +1,158 @@
+#!%TCLSH%
+#
+# $Id$
+#
+
+## The common defaults
+set _defaultsfile "/usr/local/etc/npemwin/filters.conf";
+if {[file exists ${_defaultsfile}] == 0} {
+    puts "ldmfilter disabled: ${_defaultsfile} not found.";
+    return 1;
+}
+source ${_defaultsfile};
+unset _defaultsfile;
+
+## The filter library
+if {[file exists $gf(filterlib)] == 0} {
+    puts "ldmfilter disabled: $gf(filterlib) not found.";
+    return 1;
+}
+source $gf(filterlib);
+
+# Defaults
+set ldmfilter(conf)	[file join $gf(confdir) "ldmfilter.conf"];
+set ldmfilter(rc)	[file join $gf(confdir) "ldmfilter.rc"];
+set ldmfilter(rcdir)	[file join $gf(confdir) "rc.d/ldm"];
+set ldmfilter(confdirs) $gf(localconfdirs);
+set ldmfilter(postrc)	"";
+set ldmfilter(pqinsert) "/usr/local/lib/ldm/bin/pqinsert";
+#
+# variables
+#
+set ldmfilter(tmpdir)   $gf(tmpdir);
+set ldmfilter(rcfiles)	[list];
+set ldmfilter(condition)	[list];
+set ldmfilter(action)	[list];
+
+# The default optional configuration file for this filter.
+#
+if {[file exists $ldmfilter(conf)] == 1} {
+    source $ldmfilter(conf);
+}
+
+# The main rc file is required
+if {[file exists $ldmfilter(rc)] == 0} {
+    log_msg "Filter disabled: $ldmfilter(rc) not found.";
+    return 1;
+}
+
+# Build the list of rc files
+set ldmfilter(rcfiles) [filterlib_get_rcfiles [file tail $ldmfilter(rc)] \
+      $ldmfilter(confdirs) $ldmfilter(rcdir) $ldmfilter(postrc)];
+
+# Load the rules sets
+source $ldmfilter(rc);
+
+proc main {} {
+
+    global errorInfo;
+
+    while {[gets stdin line] >= 0} {
+	if {[regexp {^\s*$} $line]} {
+	    continue;
+	}
+	set args [split $line];
+	set argsc [llength $args];
+    	if {$argsc != 2} {
+            log_msg "Incorrect number of arguments: $args";
+	    continue;
+        }
+
+    	set prodname [lindex $args 0];
+    	set fpath [lindex $args 1];
+    
+        set status [catch {process $prodname $fpath} errmsg];
+	if {$status == 1} {
+	    log_msg "Error processing $prodname";
+	    log_msg $errmsg;
+	    log_msg $errorInfo;
+	}
+    }
+}
+
+proc process {prodname fpath} {
+
+    global ldmfilter;
+
+    set rclist [filterlib_get_rcvars $prodname $fpath];
+    array set rc $rclist
+
+    # The ldmfilter rules use these ymdh variables
+    set seconds [filterlib_date_clock_seconds $rc(header_time)];
+    set ymd_hm [clock format $seconds -gmt true -format "%Y%m%d_%H%M"];
+    set ymdh [clock format $seconds -gmt true -format "%Y%m%d%H"];
+    unset seconds;
+
+    set rc_status 1;
+
+    # Evaluate the condition/action pairs, from all sets.
+    set status [catch {
+	set i 0;		# counts the sets
+	foreach condlist $ldmfilter(condition) {
+	    set actionlist [lindex $ldmfilter(action) $i];
+	    set j 0;	# counts the rules with each set
+	    foreach c $condlist {
+		set a [lindex $actionlist $j];
+		if {[expr $c]} {
+		    eval $a;
+		}
+		incr j;
+	    }
+	    incr i;
+	}
+    } errmsg];
+
+    if {$status == 1} {
+	log_msg "Error processing $fpath";
+	log_msg $errmsg;
+    }
+}
+
+proc proc_pipe_ldm {fpathin fpathout seq} {
+#
+# The only purpose of this function is to insert the standard
+# trailer and footer (that the gempak decoders and friends assume)
+# prior to sending the file to pqinsert.
+# This is an alternative to using a tool like nbsppipe.
+# The best alternative would be to use nbsp2ldm, but that requires
+# that the user compiles that tool.
+
+    # The gempak decoders assume the files contain this header/footers
+    set gmpk_header_fmt "\001\r\r\n%03d \r\r\n"; 
+    set gmpk_trailer_str "\r\r\n\003"; 
+
+    set status [catch {
+	set fout [open $fpathout w];
+	set fin  [open $fpathin r];
+	fconfigure $fin -translation binary -encoding binary;
+	fconfigure $fout -translation binary -encoding binary;
+
+	puts -nonewline $fout [format $gmpk_header_fmt [expr $seq % 1000]];
+	puts -nonewline $fout [read $fin];
+	puts -nonewline $fout $gmpk_trailer_str;	
+    } errmsg];
+
+    if {[info exists fout]} {
+	close $fout;
+    }
+
+    if {[info exists fin]} {
+	close $fin;
+    }
+
+    if {$status != 0} {
+        log_msg $errmsg;
+    }
+}
+
+main

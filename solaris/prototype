@@ -1,0 +1,35 @@
+i pkginfo
+i postinstall
+#
+! default 755 root bin
+d none bin
+d none libexec
+d none libexec/emwin
+d none etc
+d none etc/emwin
+d none etc/rc.d
+d none share
+d none share/doc
+d none share/doc/emwin
+d none man
+d none man/man1
+f none bin/emwind
+f none libexec/emwin/qrunnerd
+#
+! default 644 root other
+# f none man/man1/emwin.1
+#f none share/doc/upsmon/README
+f none share/doc/emwin/alert.sh-sample
+f none share/doc/emwin/plugin.sh-sample
+f none etc/emwin/emwin.conf-sample
+f none etc/emwin/servers.conf-sample
+f none etc/emwin/qrunner.conf-sample
+#
+# init scripts
+# 
+! default 644 root sys
+f none etc/rc.d/emwin.sh-sample
+
+
+
+

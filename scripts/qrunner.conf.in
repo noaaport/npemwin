@@ -1,0 +1,93 @@
+#
+# $Id$
+#
+# Configuration file for the qrunner script. The commented values
+# are the defaults. This file in turn reads the files
+# 
+# defaults/qrunner.conf
+# site/qrunner.conf
+#
+# The recomended way to override these settings is to put them in the "site"
+# file.
+
+# Directory where all raw data files, q files, etc, are stored.
+#
+### spooldir=/var/npemwin/spool
+
+# Subdirectory where the daemon write the block files as they are received
+#
+### datadir=data
+
+# Subdirectory where it keeps the q files
+#
+### qdir=qfiles
+
+# Subdirectory where it keeps the lock file (to prevent two instances
+# of the script from running), and the file name.
+#
+### lockdir=lock
+### lockfilename=qrunner.lock
+ 
+# Where the qrunner saves the processed files.
+# NOTE: This setting must be in sync with the corresponding setting in
+#       the tclhttpd configuration file.
+#
+### out_dirname=/var/npemwin/files
+
+# The qrunner purges unprocessed files from the data directories
+# if they are older than this.
+#
+### max_elapsed_time=60		# in minutes
+
+# The program that the qrunner calls for each completely procesed file.
+# Nothing is installed by default.
+#
+### userfilter_enable=0
+### userfilter=/usr/local/libexec/npemwin_site/userfilter
+
+# The program that the qrunner calls each time it is executed.
+# npemwin comes with a standard set of filters which are executed
+# using this facility. They can be disabled individually, or all
+# of them can be disabled here by setting postfilter_enable=0.
+#
+### postfilter_enable=1
+### postfilter=/usr/local/libexec/npemwin/postfilter
+### postfilterqfname=postfilter.q
+
+# When the postprocessing filters are enabled, if this variable is 1, then 
+# the retransmissions will be detected and will not be sent to the filters.
+# A soft link is created for every file received. This does not take a
+# significant amount of space, but it does require twice as many ionodes
+# in the file system. To send the retransmissions to the postprocessing
+# filters, set the variable to 0.
+#
+### detect_duplicates=1
+
+# Log a message for every file received 
+#
+### verbose=0
+
+# The only external programs used are find and unzip, but to make sure.
+#
+### PATH="%PATH%"
+### FIND=%FIND%
+### UNZIP=%UNZIP%
+
+#
+# Directories containing the local overrrides
+#
+npemwinconfdir=/usr/local/etc/npemwin
+npemwinlocalconfdirs="$npemwinconfdir/defaults $npemwinconfdir/site"
+
+# Read the local overrides
+_confname=qrunner.conf
+
+if [ -z "$source_qrunner_conf_defined" ]
+then
+    source_qrunner_conf_defined=1
+    for _d in $npemwinlocalconfdirs
+    do
+	_localconfname=${_d}/${_confname}
+	[ -r ${_localconfname} ] && . ${_localconfname}
+    done
+fi

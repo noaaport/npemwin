@@ -1,0 +1,31 @@
+#
+# $Id$
+#
+
+In order to have npemwin read from a serial device, the appropriate line
+must appear in the file
+
+	servers.conf
+
+A commented example is given in the default file. If the other lines
+are commented, then npemwin will read exclusively from the device.
+Otherwise, it will try the servers listed there when reading from
+the device fails beyond a certain threshold.
+
+Although the default "servers.conf" can be edited directly, the recommended
+procedure is to create the file
+
+	site/npemwind.conf
+
+(within the main configuration directory)
+with the line
+
+	set serverslist     "/usr/local/etc/npemwin/site/servers.conf"
+
+and then in that same "site" subdirectory create the file "servers.conf"
+with the line such as
+
+	 /dev/cuad0  9600,n,8,1
+
+optionally followed by the betwork servers if desired. In this way the
+"site" edits will not overrriden when the npemwin package is re-installed.

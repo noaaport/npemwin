@@ -1,0 +1,137 @@
+#
+# create directories
+#
+dirs="/var/npemwin/stats
+/var/npemwin/spool/data
+/var/npemwin/spool/lock
+/var/npemwin/spool/tmp
+/var/npemwin/spool/qfiles
+/var/npemwin/files
+/var/npemwin/inv
+/var/npemwin/rss
+/var/npemwin/data/digatmos
+/var/npemwin/data/latest
+/var/npemwin/data/metar
+/var/npemwin/data/gempak
+/var/npemwin/data/spool
+/var/npemwin/data/track
+/var/npemwin/www
+/var/npemwin/tmp
+/var/run/npemwin
+/var/log/npemwin
+/usr/local/etc/npemwin/defaults
+/usr/local/etc/npemwin/site
+/usr/local/etc/npemwin/rc.d
+/usr/local/etc/npemwin/rc.d/std
+/usr/local/etc/npemwin/rc.d/metar
+/usr/local/etc/npemwin/rc.d/da
+/usr/local/etc/npemwin/rc.d/gp
+/usr/local/etc/npemwin/rc.d/ldm
+/usr/local/etc/npemwin/rc.d/nntp
+/usr/local/etc/npemwin/rc.d/rss
+/usr/local/etc/npemwin/rc.d/npemwin
+/usr/local/etc/npemwin/rc.d/pan
+/usr/local/etc/npemwin/rc.d/msg
+/usr/local/libexec/npemwin/site
+/usr/local/libexec/npemwin/tclhttpd/site"
+
+for d in $dirs
+do
+  install -d -m 755 $d
+done
+
+#
+# install optional files from doc directory
+#
+docdir=/usr/local/share/doc/npemwin
+confdir=/usr/local/etc/npemwin
+rcdir=/etc/init.d
+
+install -m 0755 $docdir/npemwind.sh-sample $rcdir/npemwind
+if [ -n "`which chkconfig`" ]
+then
+	chkconfig --add npemwind
+elif [ -n "`which update-rc.d`" ]
+then
+	update-rc.d npemwind defaults 99
+fi
+
+#
+# configure default
+#
+cd $confdir/dist
+for file in *.conf-sample *.rc-sample *.def-sample
+do
+  name=${file%%"-sample"}
+  cp $file ../$name
+done
+cp README SCRIPTING ..
+
+for file in *-defaults
+do
+  name=${file%%"-defaults"}
+  cp $file ../defaults/$name
+done
+
+for file in *-templates.tgz
+do
+  tar -C ../defaults -xzf $file
+done
+
+#
+# www and tclhttpd
+#
+cp /usr/local/share/doc/npemwin/www.tgz /var/npemwin/www
+cd /var/npemwin/www
+tar -xzf www.tgz
+rm www.tgz
+chown -R root:root *
+cd htdocs/pub
+#
+# Note: If we reverse the test [ ! -e ...] && ....
+# the statement will return 1 if rst exists and pkg_add will
+# think that the script is returning an error.
+#
+[ -e "digatmos" ] || ln -s /var/npemwin/data/digatmos digatmos
+[ -e "latest" ] || ln -s /var/npemwin/data/latest latest
+[ -e "gempak" ] || ln -s /var/npemwin/data/gempak gempak
+[ -e "track" ] || ln -s /var/npemwin/data/track track
+[ -d "metarplot" ] || mkdir metarplot
+
+cat <<__EOF__
+
+The configuration files are installed in /usr/local/etc/npemwin.
+
+The installation process should have created various directories
+under /var/npemwin, and already enabled the servers.conf file.
+The program will run in this default installation without further
+configuration.
+
+Some common configuration options are indicated in various
+sample configuration files in the /usr/local/etc/npemwin
+directories and the defaults subdirectory.
+
+The directory /usr/local/share/doc/npemwin contains
+instructions for installing filters to process the files as they are
+received.
+
+An init script is installed to start automatically the program
+at boot time, and stop when the system is shutdown.
+It can also be started or stoped manually by executing
+
+        /etc/init.d/npemwind start
+        /etc/init.d/npemwind stop
+
+The installation process should have created various directories
+under /var/noaaport, and already enabled the rstfilter and dafilter.
+In addition the web server is enabled by default, and can be
+accesed as
+	
+	http://localhost:8016
+or
+	http://<hostname>:8016
+
+The program will run in this default installation without further
+configuration.
+-
+__EOF__

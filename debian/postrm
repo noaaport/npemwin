@@ -1,0 +1,19 @@
+#!/bin/sh
+
+if [ -n "`which chkconfig`" ]
+then
+	chkconfig --del npemwind
+elif [ -n "`which update-rc.d`" ]
+then
+	update-rc.d -f npemwind remove
+fi
+
+cat <<EOF
+To deinstall completely this package, the directories
+
+/usr/local/etc/npemwin
+/usr/local/libexec/npemwin
+/var/npemwin
+
+may have be removed manually.
+EOF

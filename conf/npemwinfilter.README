@@ -1,0 +1,22 @@
+#
+# $Id$
+#
+
+(See also the file SCRIPTING in the /usr/local/share/doc/npemwin directory.)
+
+The stdfilter and nntpfilter are meant to be used for implementing
+certain features of the system. They can be called the system filters.
+For example, the inventory is implemented using the stdfilter.
+The configuration and rc files of those filters
+can be modified for fine-tuning purposes, but they are not meant
+to be extensively modified for general purpose post-processing.
+With that in mind, the npemwinfilter is supplied, which is
+can be considered the "user" filter. It is enabled by default.
+
+npemwinfilter will read the rules from the following files,
+in that order:
+
+	site/npemwinfilter.rc
+	rc.d/npemwin/*.rc
+
+Some rules examples are in npemwinfilter.rc-ex.

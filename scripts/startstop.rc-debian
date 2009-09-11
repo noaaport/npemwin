@@ -1,0 +1,49 @@
+#
+# $Id$
+#
+
+# This is the configuration file for the start/stop scripts.
+# Each script is executed once, and this file is ``sourced'' (as a tcl script)
+# both times.
+#
+# The start/stop script looks for the file named "startstop.conf" first in the
+# "site" subdirectory, then the "defaults" subdirectory and finally
+# in the main directory, and uses the first one that it finds.
+#
+# The ``schedule'' is a list, in which element is of the form
+#
+# <timespec>:<program> <options>
+#
+# where <options> may be blank. The <options> string is split on blanks
+# and each part is passed to <program> as a separate argument.
+#
+# When this script is run, PATH is set to
+#
+# 	PATH=$PATH:/usr/local/{bin,sbin,libexec/npemwin,libexec/npemwin/site}:
+#
+# <timespec> is a time specification in one of the following forms:
+#
+# start		=> run <program> at startup
+# stop		=> run <program> at shutdown
+
+#
+# Default Configuration
+#
+set confdir /usr/local/etc/npemwin
+set logdir /var/log/npemwin
+set rundir /var/run/npemwin
+
+# Execute the start cleanup script
+lappend schedule {
+  start:npemwincleanup $confdir/start-cleanup.conf >& \
+    $logdir/start-cleanup.log &
+}
+
+# This is not needed by debian, but it is needed by ubuntu
+if {$startstop(stage) eq "start"} {
+  file mkdir $rundir;
+}
+
+#
+# local additions
+#

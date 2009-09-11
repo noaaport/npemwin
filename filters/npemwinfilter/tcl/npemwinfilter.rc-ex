@@ -1,0 +1,211 @@
+#
+# $Id$
+#
+
+# This is not a working file. It is a documentation file with some
+# background information and a few sample rule/action instructions
+# to illustrate the syntax and possible uses of a real filter rc file,
+# and in particular in npemwinfilter.rc.
+
+	Contents -
+
+		Background
+		Functions
+		Examples
+
+#
+# - Background information
+#
+
+# The main script script is written in tcl, so this file must be written
+# in that same language. This file is ``sourced'' by the main script by
+# an instruction equivalent to
+#
+#	source /usr/local/etc/npemwin/npemwinfilter.rc
+#
+ This instructions loads a set of condition/action pairs contained
+# in the file, which are evaluated for each file that is received.
+#
+# NOTE: This file is not sourced each time a file is received. The file
+#       is sourced once, and then the "rules" are kept in memory and
+#       they are evaluated for each file received.
+# 
+# At the time the rules are evaluated, the following variables are visible
+# and can be used in this script:
+#
+#	rc(prodname)
+#	rc(fpath)
+#	rc(fbasename)
+#	rc(fseqnumber)
+#	rc(ftype)
+#	rc(fsize)
+#	rc(bodypart)
+#	rc(HEADER)
+#	rc(header)
+#	rc(header_wmoid)
+#	rc(header_station)
+#	rc(header_time)
+#	rc(AWIPS)
+#	rc(awips)
+#	rc(AWIPS1)
+#	rc(awips1)
+#
+#
+# For example, a file that has been saved as
+#
+# 	/var/npemwin/files/txt/tjsj/flssjupr.<seqnumber>.txt
+#
+# which contains
+#
+#	WGCA82 TJSJ 022135
+#	FLSSJU
+#
+# in the first two lines
+#
+# then
+#	$rc(prodname) = flssjupr
+#	$rc(fpath) =  /var/npemwin/files/txt/tjsj/flssjupr.<seqnumber>.txt
+#    	$rc(fbasename) = flssjupr.<seqnumber>.txt
+#	$rc(fseqnumber) = <seqnumber>
+#    	$rc(ftype) = txt 
+#    	$rc(fsize) = size in bytes
+#	$rc(bodypart) = 512 bytes of the file after header and awips lines
+#	$rc(HEADER) = WGCA82 TJSJ 022135
+#	$rc(header) = wgca82 tjsj 022135
+#	$rc(header_wmoid) = wgca82
+#	$rc(header_station) = tjsj
+#	$rc(header_time) = 022135
+#	rc(AWIPS) = FLSSJU
+#	rc(awips) = flssju
+#	rc(AWIPS1) = FLS
+#	rc(awips1) = fls
+
+#
+# Other file types are "gif" for radar images or "jpg" for satellite images.
+# The variables rc(bodypart) and rc(header).... are defined only for
+# text files, otherwise they are "".
+
+#
+# Functions -
+#
+
+# Functions to be used in the rc rules can be defined in the following files
+# and they will be loaded automatically:
+#
+#	site/npemwinfilter.lib
+#	rc.d/npemwin/*.lib
+#
+#
+# The same convention should be followed with any variables names
+# introduced in the rc files.
+
+#
+# - Examples
+#
+
+# To save all messages containing the word URGENT in the body in a directory
+# "/var/npemwin/URGENT"
+#
+lappend cond {
+  [regexp {URGENT} $rc(bodypart)]
+}
+lappend action {
+  exec cat $rc(fpath) > /var/npemwin/URGENT/$rc_basename;
+  break;
+}
+
+# To email all such messages to nieves@ltp.upr.clu.edu, with the subject
+# URGENT
+
+lappend cond {
+  [regexp {URGENT} $rc(bodypart)]
+}
+lappend action {
+  exec mail -s URGENT nieves@ltp.upr.clu.edu < $rc(fpath);
+  break;
+}
+
+# Instead of sending all those messages, to restrict them only to those
+# coming from the TJSJ station 
+
+lappend cond {
+  [regexp {URGENT} $rc(bodypart)] && [regexp {tjsj} $rc(header_station)]
+}
+lappend action {
+  exec mail -s "URGENT TJSJ" nieves@ltp.upr.clu.edu < $rc(fpath);
+  break;
+}
+
+# The regular expression argument to the regexp function can be
+# much more complicated. For example, this will send by email almost
+# all the weather text bulletins from TJSJ:
+
+lappend cond {
+  [regexp {^(f[glnopxz]ca[457]2)|(a[sw]ca[468]2)|(c[dsx]ca[456]2)|(w[gh]ca[578]2)} $rc(header_wmoid)] && regexp {tjsj} $rc(header_station)]
+}
+lappend action {
+  exec mail -s "URGENT $rc(header_wmoid)" nieves@ltp.upr.clu.edu;
+  break;
+}
+
+# This will write a one line entry in a logfile, for each file received
+lappend cond {1}
+lappend action {
+  set rc_time [clock format [clock seconds]];
+  exec echo $rc(fbasename)  $rc(header_time) > /var/npemwin/list.log;
+}
+ 
+# Note that the keyword ``break'' prevents processing subsequent rules
+# when a rule is found to match. If that keyword is omitted then
+# the subsequent rules are processed as well (until a rule with the ``break''
+# keyword matches).
+# For example, these will save all the
+# URGENT files _and_ also email the files from TJSJ
+
+lappend cond {
+  [regexp {URGENT} $rc(bodypart)]
+}
+lappend action {
+  exec cat $rc(fpath) > /var/npemwin/data/URGENT/$rc(fbasename);
+}
+
+lappend cond {
+  [regexp {tjtj} $rc(header_station)]
+}
+lappend action {
+  exec mail -s "tjsj" nieves@ltp.upr.clu.edu;
+  break;
+}
+
+# If the ``break'' keyword were added in the first rule, then the
+# URGENT files from TJSJ would not reach the second rule and would
+# not be emailed.
+
+# The next rule will catch and email the administrative messages
+# to the user "npemwinadmin"
+lappend cond {
+  [regexp {^(admn[0-68]|admn9[^9]|admn7[^5]|noxx|nous[^46789]|nous9[^7])} $rc(header_wmoid)]
+}
+lappend action {
+  exec mail -s ADM npemwinadmin < $rc(fpath);
+  break;
+}
+
+lappend cond {
+  [regexp {nous[4678]} $rc(header_wmoid)] && [regexp {kwno|kwbc|kncf} $rc(header_station)]
+}
+lappend action {
+  exec mail -s ADM npemwinadmin < $rc(fpath);
+  break;
+}
+
+#
+# Tornado, thunderstorm wrnings, etc, in Virginia
+#
+lappend cond {
+  [regexp {^(svr|svs|tor).+va$} $rc(prodname)]
+}
+lappend action {
+  exec mail -s $rc(prodname) anybody@somewhere.net < $rc(fpath);
+  break;
+}

@@ -1,0 +1,7 @@
+#
+# $Id$
+#
+
+# Configuration for npemwind running in client-only mode. To re-enable the
+# server, remove or rename this file, or comment out the line below.
+set serverprotocol 0;

@@ -1,0 +1,31 @@
+#!/bin/sh
+# 
+# $Id$
+#
+# rc script for npemwind
+#
+# chkconfig: 35 99 99
+# description: emwin client and server
+
+daemon=/usr/local/sbin/npemwind
+options=
+
+[ -x $daemon ] || exit 0
+
+case "$1" in
+  start)
+    echo Starting `basename $daemon ...`
+    $daemon $options
+    ;;
+  stop)
+    echo Stoping `basename $daemon.`
+    pkill `basename $daemon`
+    ;;
+  *)
+    echo "Usage: $0 {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
+

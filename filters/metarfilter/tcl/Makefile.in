@@ -1,0 +1,74 @@
+#
+# Copyright (c) 2005-2007 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+#
+# See LICENSE
+#
+# $Id$
+#
+@include@ @q@../../../Makefile.inc@q@
+
+TCLTARGET =	metarfilter.tcl
+TCLSOURCES =	metarfilter.tcl.in
+FILTERNAME =	metarfilter
+FILTERINIT =	metarfilter.init
+TOOLNAMES =	npemwinmtr npemwinmtrcsv npemwinmtrcsvd \
+		npemwinmtrplot npemwinmtrplot1 npemwinmtrplotdat
+SAMPLES =	metarfilter.conf-sample \
+		metarfilter-st.conf-sample metarfilter-icao.def-sample
+GPLOTSOURCES =	temp.g pre.g wind.g
+GPLOTPDIR =	gnuplot
+GPLOTDIR =	${GPLOTPDIR}/metar
+GPLOTTARGET =	metarplot-templates.tgz
+
+TARGET =	${TCLTARGET} ${TOOLNAMES} ${SAMPLES} ${GPLOTTARGET}
+
+TCLSH =		@TCLSH@
+INSTALL =	@INSTALL@
+
+all: ${TARGET}
+
+metarfilter.tcl: metarfilter.tcl.in
+	sed -e /%TCLSH%/s##${TCLSH}# metarfilter.tcl.in > metarfilter.tcl
+
+metarfilter.conf-sample: metarfilter.conf
+	cp metarfilter.conf metarfilter.conf-sample
+
+metarfilter-st.conf-sample: metarfilter-st.conf
+	cp metarfilter-st.conf metarfilter-st.conf-sample
+
+metarfilter-icao.def-sample: metarfilter-icao.def
+	cp metarfilter-icao.def metarfilter-icao.def-sample
+
+npemwinmtr: npemwinmtr.tcl
+	sed -e /%TCLSH%/s##${TCLSH}# npemwinmtr.tcl > npemwinmtr
+
+npemwinmtrcsv: npemwinmtrcsv.tcl
+	sed -e /%TCLSH%/s##${TCLSH}#  npemwinmtrcsv.tcl > npemwinmtrcsv
+
+npemwinmtrcsvd: npemwinmtrcsvd.tcl
+	sed -e /%TCLSH%/s##${TCLSH}#  npemwinmtrcsvd.tcl > npemwinmtrcsvd
+
+npemwinmtrplot: npemwinmtrplot.tcl
+	sed -e /%TCLSH%/s##${TCLSH}# npemwinmtrplot.tcl > npemwinmtrplot
+
+npemwinmtrplot1: npemwinmtrplot1.tcl
+	sed -e /%TCLSH%/s##${TCLSH}# npemwinmtrplot1.tcl > npemwinmtrplot1
+
+npemwinmtrplotdat: npemwinmtrplotdat.tcl
+	sed -e /%TCLSH%/s##${TCLSH}# npemwinmtrplotdat.tcl > npemwinmtrplotdat
+
+${GPLOTTARGET}: ${GPLOTSOURCES}
+	rm -rf ${GPLOTDIR}
+	mkdir -p ${GPLOTDIR}
+	cp ${GPLOTSOURCES} ${GPLOTDIR}
+	tar -czf ${GPLOTTARGET} ${GPLOTDIR}
+
+install: ${TARGET}
+	${INSTALL} -m 755 ${FILTERNAME}.tcl ${MYLIBEXECDIR}/${FILTERNAME}
+	${INSTALL} -m 644 ${FILTERINIT} ${MYLIBEXECDIR}
+	${INSTALL} -m 755 ${TOOLNAMES} ${BINDIR}
+	${INSTALL} -m 644 ${SAMPLES} ${GPLOTTARGET} ${MYCONFDIR}
+
+clean:
+	rm -f *~ ${TARGET} Makefile
+	rm -rf ${GPLOTPDIR}

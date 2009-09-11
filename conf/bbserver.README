@@ -1,0 +1,40 @@
+#
+# $Id$
+#
+
+npemwin can register itself as "public" BB server with the NW master host.
+This should be used only if npemwin is configured to read from a NWS
+bytesblaster server or from a serial device.
+
+However, two configuration settings must be made to enable this. The relevant
+file is
+
+	bbserver.conf
+
+and the settings are:
+
+	set bbserver(addrandport) "A0.0.0.0:2211";
+
+where the correct ip (and port) should appear, and
+
+	set bbserver(configured) 0;
+
+which should be set to 1.
+
+Two additional settings that should be revised are:
+
+	set bbserver(privacy) "SPU";    # or SPR for private
+	set bbserver(rate)    "DE9600"; # or DW for internet
+
+No additional changes are strictly required.
+
+To make it easier in the cases in which the ip changes dynamically,
+the ip can be specified in the form
+
+	set bbserver(addrandport) "A/etc/myip:2211";
+
+where /etc/myip is the full path of a file whose first line is your
+external ip address. In this case a simple script can be configured to run
+in the scheduler.conf file to get the ip (from a service such as
+dyndns or whatismyip) and write it to that file.
+-

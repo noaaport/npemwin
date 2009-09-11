@@ -1,0 +1,78 @@
+.\"
+.\" $Id$
+.\"
+.\" See LICENSE
+.\"
+.TH NPEMWIND 1 "23 DECEMBER, 2007"
+.SH NAME
+npemwind \- Noaaport Client and Emwin Server
+.SH SYNOPSIS
+\fBnpemwind\fR [-C] [-D [-D]] [-V [-V [-V]]] [-c \fIconfigfile\fR]
+
+.SH DESCRIPTION
+\fInpemwind\fR is a daemon which is designed to connect to a
+Noaaport Broadcast System Processor (nbsp), either in the same
+or in a remote machine, and then redistribute
+the files that it receives to emwin (byte blaster) clients.
+Altenatively, \fInpemwind\fR can also connect to a standard
+byte blaster server, or a list of them, or directly to an emwin
+serial device.
+
+\fInpemwind\fR can use the default configuration file 
+\fI/usr/local/etc/npemwin/npemwind.conf\fR if that file exists,
+and an additional configuration file passed via the \fB[-c]\fR option.
+Many configuration options can be specified in those configuration files.
+The default file, if it exists, is read first.
+If the \fB[-c]\fR switch
+is used, the named file is also used as a configuration file, but
+it is read, and the settings are applied, after the default file,
+so that latter settings override earlier ones.
+A commented sample default configuration is provided which
+explains all of the configurable options.
+
+The other command-line options are for special purpose, rather than general,
+use. The \fB[-C]\fR option option causes the program to print its configuration
+and quit. One instance of the \fB[-D]\fR option runs the program in debug mode
+and two instances disables becomming a daemon. The \fB[-V]\fR option increases
+the verbosity level.
+
+In the normal mode of operation 
+the files are saved following a simple convention to
+make storage and retrieval manageable. 
+By design, \fInpemwind\fR itself does not do anything else with the files 
+received beyond saving the product files once they are complete. However,
+two simple mechanisms have been built in to extend
+its capabilities in a flexible way. \fInpemind\fR
+accepts network client connections and it can redistribute
+the files to regular emwin clients. This is independent of whether
+\fnpemwind\fR is reading from a byte blaster server, an nbsp server
+ot directly from a serial device.
+In addition, any number of programs (filters) can be loaded
+to post-process the files as the received. For each file that
+is received, each user-specified program is executed with a 
+set of command line arguments that identify the product and the
+location of the saved file.
+
+Some sample filters are supplied with the distribution,
+and the program has many additional capabilities that are not mentioned here.
+Since these aspects are subject to revision and evolution,
+this man page does not explain how to enable and configure all the
+available features. Further instructions are given in the program's
+web site, www.noaaport.net, and in the program's documentation
+and configuration directories.
+
+.LP
+.SS FILES
+/usr/local/etc/npemwin/
+.br
+/usr/local/share/doc/npemwin/
+.LP
+.SS VERSION
+1.5r1 - january 2008
+.SS AUTHOR 
+Jose F. Nieves
+.br
+nieves@ltp.upr.clu.edu
+.br
+Copyright 2004-2008
+.br

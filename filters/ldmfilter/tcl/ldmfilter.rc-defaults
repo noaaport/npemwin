@@ -1,0 +1,18 @@
+#
+# $Id$
+#
+
+lappend cond {
+  ($rc(txtflag) == 1)
+}
+lappend action {
+  set ldm_prodid "";
+  append ldm_prodid $rc(HEADER) " /p" $rc(AWIPS);
+  set ldm_seqnumber [clock clicks];
+
+  set tmp [file join $ldmfilter(tmpdir) [file tail $rc(fpath)]];
+
+  proc_pipe_ldm $rc(fpath) $tmp $ldm_seqnumber;
+  exec $ldmfilter(pqinsert) -f WMO -s $ldm_seqnumber -p $ldm_prodid $tmp;
+  file delete $tmp;
+}

@@ -1,0 +1,13 @@
+# Text bulletins
+
+        <base>.txt.<kkkk>
+        <base>.{urgent,warnings,data,forecast,summary}.<kkkk>
+        <base>.misc.adm
+        <base>.{urgent,warnings,data,forecast,summary}
+
+# Emwin images
+
+        <base>.img
+
+where <base> is "emwin" if npemwin is running as a bb server, or
+"npemwin" if npemwin is runing as an Nbsp client.
