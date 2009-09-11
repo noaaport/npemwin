@@ -2,7 +2,7 @@
 
 . upload.conf
 
-cp ../RELEASE_NOTES ../conf/*.README .
+cp ../../RELEASE_NOTES ../../conf/*.README .
 upload_files="RELEASE_NOTES *.README"
 
 readme_file=RELEASE_NOTES

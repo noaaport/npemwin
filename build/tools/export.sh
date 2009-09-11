@@ -1,32 +1,35 @@
 #!/bin/sh
-#
-# $Id$
-#
 
+project=npemwin
+
+# npemwintclhttpd receives special treatment
+tcllibs="tclmetar"
+srclibs="libconnth libqdb libtclconf"
+tclhttpd=${project}tclhttpd
+
+exclude="build dev-notes"
 tmpdir=tmp
-exclude="tools dev-notes bsd rpm macosx debian solaris"
-libs="libconnth libqdb libtclconf"
 
 # read name and version
-. ../VERSION
+. ../../VERSION
 
 rm -r -f $tmpdir
 mkdir $tmpdir
-
 cd $tmpdir
-cvs export -D now -d ${name}-${version} ${name}
 
-cd ${name}-${version}
+svn export file:///home/svn/$project/trunk $project-$version
+cd $project-$version
 rm -r $exclude
-cvs export -D now -d tclhttpd npemwintclhttpd
-#cvs export -D now tclmetarlib
-cvs -d :ext:nieves@tclmetar.cvs.sourceforge.net:/cvsroot/tclmetar \
-    export -D now tclmetar
+for p in $tcllibs
+do
+  svn export file:///home/svn/$p/trunk $p
+done
+svn export file:///home/svn/$tclhttpd/trunk tclhttpd
 
 cd src
-for l in $libs
+for p in $srclibs
 do
-  cvs export -D now ${l}
+  svn export file:///home/svn/$p/trunk $p
 done
 
 cd ../.. 
