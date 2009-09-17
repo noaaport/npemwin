@@ -9,6 +9,7 @@
 #define GLOBALS_H
 
 #include <sys/types.h>
+#include <stdio.h>
 #include "stats.h"
 
 struct npemwin_globals {
@@ -57,8 +58,7 @@ struct npemwin_globals {
   char *stopscript;	/* just before exiting */
   char *scheduler;
   int httpdenable;
-  char *tclhttpd;		/* tclhttpd script */
-  char *tclhttpdfifo;		/* fifo for nbsp -> httpd communicatiobn */
+  char *httpd;		/* tclhttpd script */
   char *servername;	/* null => gethostname */
   char *serverport;	/* listening port */
   int  listen_backlog;
@@ -79,7 +79,7 @@ struct npemwin_globals {
   int  packet_count;	/* # of packets received  - determines when to runq */
   int  qrun_count;	/* number of times the que has been processed. */
   pid_t qrunner_pid;   /* pid of last qrunner executed */
-  struct tclhttpd_st *httpd;	/* http server */
+  FILE *httpdfp;
   struct nbsp_stats_st nbspstats;
   int  server_fd;	/* listening socket for client connections */
   struct conn_table_st *ct;     /* libconnth table */

@@ -86,8 +86,7 @@ void init_globals(void){
   g.scheduler = SCHEDULER;
 
   g.httpdenable = NBSP_HTTPD_ENABLE;
-  g.tclhttpd = NBSP_TCLHTTPD;
-  g.tclhttpdfifo = NBSP_TCLHTTPD_FIFO;
+  g.httpd = NBSP_HTTPD;
 
   g.servername = SERVER_NAME;
   g.serverport = SERVER_PORT;
@@ -109,7 +108,7 @@ void init_globals(void){
   g.packet_count = 0;
   g.qrun_count = 0;
   g.qrunner_pid = -1;
-  g.httpd = NULL;
+  g.httpdfp = NULL;
   nbspstats_init();
   g.server_fd = -1;
   g.ct = NULL;

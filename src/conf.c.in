@@ -122,11 +122,8 @@
 #define CONFOPT_HTTPDENABLE		@counter@
 #define DEFVAL_HTTPDENABLE		NBSP_HTTPD_ENABLE
 
-#define CONFOPT_TCLHTTPD		@counter@
-#define DFEVAL_TCLHTTPPD		NBSP_TCLHTTPD
-
-#define CONFOPT_TCLHTTPDFIFO		@counter@
-#define DFEVAL_TCLHTTPPDFIFO		NBSP_TCLHTTPDFIFO
+#define CONFOPT_HTTPD			@counter@
+#define DFEVAL_HTTPPD			NBSP_HTTPD
 
 #define CONFOPT_SERVERNAME		@counter@
 #define DEFVAL_SERVERNAME		SERVER_NAME
@@ -211,8 +208,7 @@ static struct confoption_st confoptions[] = {
   {"stopscript", CONFOPT_STOPSCRIPT, TCL_LINK_STRING, NULL, 0},
   {"scheduler", CONFOPT_SCHEDULER, TCL_LINK_STRING, NULL, 0},
   {"httpdenable", CONFOPT_HTTPDENABLE, TCL_LINK_INT, NULL, DEFVAL_HTTPDENABLE},
-  {"tclhttpd", CONFOPT_TCLHTTPD, TCL_LINK_STRING, NULL, 0},
-  {"tclhttpdfifo", CONFOPT_TCLHTTPDFIFO, TCL_LINK_STRING, NULL, 0},
+  {"httpd", CONFOPT_HTTPD, TCL_LINK_STRING, NULL, 0},
   {"servername", CONFOPT_SERVERNAME, TCL_LINK_STRING, NULL, 0},
   {"serverport", CONFOPT_SERVERPORT, TCL_LINK_STRING, NULL, 0},
   {"maxnetclients", CONFOPT_MAXNETCLIENTS, TCL_LINK_INT, NULL,
@@ -315,8 +311,7 @@ int configure(void){
   setoptval(&g.scheduler, confoptions, CONFOPT_SCHEDULER);
 
   setoptval(&g.httpdenable, confoptions, CONFOPT_HTTPDENABLE);
-  setoptval(&g.tclhttpd, confoptions, CONFOPT_TCLHTTPD);
-  setoptval(&g.tclhttpdfifo, confoptions, CONFOPT_TCLHTTPDFIFO);
+  setoptval(&g.httpd, confoptions, CONFOPT_HTTPD);
 
   setoptval(&g.servername, confoptions, CONFOPT_SERVERNAME);
   setoptval(&g.serverport, confoptions, CONFOPT_SERVERPORT);
@@ -392,8 +387,7 @@ void print_confoptions(void){
   fprintf_str(stdout, fmt, "scheduler", g.scheduler);
 
   fprintf(stdout, "httpdenable %d\n", g.httpdenable); 
-  fprintf_str(stdout, fmt, "tclhttpd", g.tclhttpd);
-  fprintf_str(stdout, fmt, "tclhttpdfifo", g.tclhttpdfifo);
+  fprintf_str(stdout, fmt, "httpd", g.httpd);
 
   fprintf_str(stdout, fmt, "servername", g.servername);
   fprintf_str(stdout, fmt, "serverport", g.serverport);
@@ -474,9 +468,8 @@ int validate_configuration(void){
    */
   VALIDATE_STR(g.scheduler, "scheduler");
 
-  VALIDATE_STR(g.tclhttpd, "tclhttpd");
-  VALIDATE_STR(g.tclhttpdfifo, "tclhttpdfifo");
   VALIDATE_PARAMETER(g.httpdenable, 0, 1, "httpdenable");
+  VALIDATE_STR(g.httpd, "httpd");
 
   /*
    * g.servername can be NULL
