@@ -9,7 +9,9 @@ dnl
 match_file($rc(wmoid), ^u[ab], pirep, ${ymdh}.airep)
 
 match_file($rc(wmoid), ^ud, acars, ${ymdh}.amdar)
-match_and_file($rc(wmoid), ^u[efklms], $rc(nawips), ^tt(aa|bb|cc|dd),
+dnl match_and_file($rc(wmoid), ^u[efklms], $rc(nawips), ^tt(aa|bb|cc|dd),
+dnl upperair, ${ymdh}.fm35)
+match_and_file($rc(wmoid), ^u[efklms], $rc(awips1), ^air,
 upperair, ${ymdh}.fm35)
 
 # 
