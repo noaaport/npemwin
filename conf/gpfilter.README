@@ -1,0 +1,13 @@
+#
+# $Id$
+#
+The ``gpfilter'' saves the data files in a Gempak compatible
+layout, without the need to install and run ldm and the ldm filter.
+The data directory is by default ``/var/npemwin/data/gempak''
+and this must be set in the Gemenviron configuration file of the gempak
+package. It is enabled by setting
+
+set feature(gpfilter) 1
+
+in the ``features.conf'' file in the npemwin configuration directory.
+-
