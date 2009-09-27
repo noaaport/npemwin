@@ -97,10 +97,12 @@ int init_server(void){
 
   /* 
    * This server does not (yet) have a control socket. The server entry
-   * is added with pid = 0, ip = NULL, name = NULL, and timeout 0.
+   * is added with pid = 0, ip = NULL, name = NULL,
+   * and the options (timeout, reconnect_sleep, reconnect_retry) 0.
    */
-  status = conn_table_add_element(g.ct, g.server_fd, CONN_TYPE_SERVER_NET,
-				  0, NULL, NULL, 0);
+  status = conn_table_add_element(g.ct, g.server_fd,
+				  CONN_TYPE_SERVER_NET, 0, NULL, NULL,
+				  0, 0, 0);
 
   if(status != 0)
     log_err("Cannot init server.");
@@ -233,6 +235,12 @@ static void process_connections(void){
   clientopts.nonblock = 1;
   clientopts.cloexec = 1;
   clientopts.write_timeout_ms = g.writetimeout_s * 1000; /* not used */
+  clientopts.reconnect_wait_sleep_secs = 0;	/* not used */
+  clientopts.reconnect_wait_sleep_retry = 0;	/* not used */
+  /*
+  clientopts.reconnect_wait_sleep_secs = g.client_reconnect_wait_sleep_secs;
+  clientopts.reconnect_wait_sleep_retry = g.client_reconnect_wait_sleep_retry;
+  */
 
   process_finished_connections();
   process_unidentified_connections();
