@@ -98,11 +98,12 @@ int init_server(void){
   /* 
    * This server does not (yet) have a control socket. The server entry
    * is added with pid = 0, ip = NULL, name = NULL,
-   * and the options (timeout, reconnect_sleep, reconnect_retry) 0.
+   * and the options (timeout_ms, timeout_retry, reconnect_sleep,
+   * reconnect_retry) 0.
    */
   status = conn_table_add_element(g.ct, g.server_fd,
 				  CONN_TYPE_SERVER_NET, 0, NULL, NULL,
-				  0, 0, 0);
+				  0, 0, 0, 0);
 
   if(status != 0)
     log_err("Cannot init server.");

@@ -9,7 +9,7 @@
 # p = prerelase (release candidate)
 # r = release
 name=npemwin
-branch=1.8
-releaselevel=p
-releasenumber=4.2
+branch=2.0
+releaselevel=d
+releasenumber=1.2
 version=${branch}.${releaselevel}${releasenumber}

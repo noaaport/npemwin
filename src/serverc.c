@@ -173,7 +173,7 @@ static int send_emwin_client(struct conn_element_st *ce, void *data,
   fd = conn_element_get_fd(ce);
   nameorip = conn_element_get_nameorip(ce);
 
-  /* We are not using ce->write_timeout_ms in npemwin */
+  /* We are not using ce->write_<options> in npemwin */
   n = writen(fd, data, (size_t)data_size, (unsigned int)g.writetimeout_s,
 	     g.writetimeout_retry);
 
