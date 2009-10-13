@@ -18,7 +18,7 @@ Release = ${package_build}
 License =  BSD
 Group =  Applications/Internet
 Source =  ftp://www.noaaport.net/software/${pkgsrc_name}/src/${pkgsrc_name}.tgz
-BuildRoot = ${rpmroot}/BUILD/${pkgsrc_name}/rpm/pkg
+BuildRoot = ${rpmroot}/BUILD/${pkgsrc_name}/build/rpm/pkg
 Requires = tcp_wrappers-libs db4 tcl tcllib gnuplot unzip
 
 ifeq (${FLAVOR}, opensuse)

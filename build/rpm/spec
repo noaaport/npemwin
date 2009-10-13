@@ -6,11 +6,11 @@ Noaaport Emwin ByteBlaster server
 ./configure.sh
 
 %build
-cd rpm
+cd build/rpm
 make 
 
 %install
-cd rpm
+cd build/rpm
 make install
 
 %post
@@ -20,7 +20,7 @@ make install
 @POSTUNINSTALL@
 
 %clean
-cd rpm
+cd build/rpm
 make clean
 
 %files
