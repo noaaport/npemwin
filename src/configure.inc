@@ -28,6 +28,8 @@ case $os in
     Linux)       
 	LIBDIRS="$COMMON_LIBDIRS"
 	LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread -lnsl -lresolv"
+	[ $flavor = debian ] && \
+		LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread"
 	# For CentOS and Debian use the local db-4.6 until they upgrade
 	[ $flavor = centos ] && LIBDIRS="$COMMON_LIBDIRS -L /usr/local/lib"
 	[ $flavor = debian ] && LIBDIRS="$COMMON_LIBDIRS -L /usr/local/lib"
