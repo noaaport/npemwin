@@ -19,6 +19,9 @@ CCWFLAGS="-Wall -Wextra"
 INSTALL=install
 SUFFIXRULES=".c.o:"
 
+# excude options to tar
+EXCLUDE="-W exclude="
+
 # scripts dir
 SHELL="/bin/sh"
 FIND=find
@@ -71,6 +74,7 @@ case $os in
 	TCLSH=/usr/bin/tclsh
 
 	SUFFIXRULES="%.o: %.c"
+	EXCLUDE="--exclude "
 
 	# Override the defaults for flavor != fedoracore
     	if [ $flavor = opensuse ]
@@ -122,5 +126,6 @@ configure_default () {
       -e "/@CC@/ s||$CC|" \
       -e "/@CCWFLAGS@/ s||$CCWFLAGS|" \
       -e "/@SUFFIXRULES@/ s||$SUFFIXRULES|" \
+      -e "/@EXCLUDE@/ s||$EXCLUDE|" \
       $makefile_in > $makefile_out
 }
