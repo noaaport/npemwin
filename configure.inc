@@ -11,8 +11,8 @@ TCL_INCDIR="-I /usr/local/include/tcl8.5"
 TCL_LIB="tcl85"
 TCLSH=/usr/local/bin/tclsh8.5
 
-DB_INCDIR="-I /usr/local/include/db46"
-DB_LIB="db-4.6"
+DB_INCDIR="-I /usr/local/include/db47"
+DB_LIB="db-4.7"
 
 CC=cc
 CCWFLAGS="-Wall -Wextra"
