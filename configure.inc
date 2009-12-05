@@ -7,9 +7,9 @@ INCLUDE=".include"
 Q='"'
 PREFIX=usr/local
 
-TCL_INCDIR="-I /usr/local/include/tcl8.5"
-TCL_LIB="tcl85"
-TCLSH=/usr/local/bin/tclsh8.5
+TCL_INCDIR="-I /usr/local/include/tcl8.6"
+TCL_LIB="tcl86"
+TCLSH=/usr/local/bin/tclsh8.6
 
 DB_INCDIR="-I /usr/local/include/db47"
 DB_LIB="db-4.7"
