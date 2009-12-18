@@ -45,6 +45,7 @@ libexec/npemwin/msgfilter
 libexec/npemwin/trackfilter
 libexec/npemwin/trackfilter.init
 libexec/npemwin/filters.lib
+libexec/npemwin/archive.init
 libexec/npemwin/tclmetar/metar.tcl
 libexec/npemwin/tclmetar/pkgIndex.tcl
 etc/npemwin/dist/README
@@ -67,13 +68,14 @@ etc/npemwin/dist/msgfilter.README
 etc/npemwin/dist/trackfilter.README
 etc/npemwin/dist/npemwind.conf-sample
 etc/npemwin/dist/servers.conf-sample
+etc/npemwin/dist/features.conf-sample
 etc/npemwin/dist/npemwind.conf-noaaport-sample
 etc/npemwin/dist/npemwind.conf-nonpriv-sample
 etc/npemwin/dist/npemwind.conf-noserver-sample
 etc/npemwin/dist/servers.conf-noaaport-sample
 etc/npemwin/dist/filters.conf-sample
 etc/npemwin/dist/filters.conf-site-sample
-etc/npemwin/dist/features.conf-sample
+etc/npemwin/dist/archive.conf-sample
 etc/npemwin/dist/nntpfilter.conf-sample
 etc/npemwin/dist/nntpfilter.rc-sample
 etc/npemwin/dist/nntpfilter.rc-defaults

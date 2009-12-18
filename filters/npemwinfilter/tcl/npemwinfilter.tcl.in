@@ -82,8 +82,7 @@ proc process {prodname fpath} {
 
     global npemwinfilter;
 
-    set rclist [filterlib_get_rcvars $prodname $fpath];
-    array set rc $rclist
+    filterlib_get_rcvars rc $prodname $fpath;
 
     set rc_status 1;
 

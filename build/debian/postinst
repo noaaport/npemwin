@@ -15,8 +15,10 @@ dirs="/var/npemwin/stats
 /var/npemwin/data/latest
 /var/npemwin/data/metar
 /var/npemwin/data/gempak
-/var/npemwin/data/spool
 /var/npemwin/data/track
+/var/npemwin/archive/data/spool
+/var/npemwin/archive/data/digatmos
+/var/npemwin/archive/inv
 /var/npemwin/www
 /var/npemwin/tmp
 /var/run/npemwin

@@ -82,15 +82,14 @@ proc process {prodname fpath} {
 
     global trackfilter;
 
-    set rclist [filterlib_get_rcvars $prodname $fpath];
-    array set rc $rclist
+    filterlib_get_rcvars rc $prodname $fpath;
 
-    set seconds [filterlib_date_clock_seconds $rc(header_time)];
-    set ymd_hm [clock format $seconds -gmt true -format "%Y%m%d_%H%M"];
-    set ymdh [clock format $seconds -gmt true -format "%Y%m%d%H"];
-    set ymd [clock format $seconds -gmt true -format "%Y%m%d"];
-    set ym [clock format $seconds -gmt true -format "%Y%m"];
-    set yyyy [clock format $seconds -gmt true -format "%Y"];
+    set ymd_hm $rc(ymd_hm);
+    set ymdhm $rc(ymdhm);
+    set ymdh $rc(ymdh);
+    set ymd $rc(ymd);
+    set ym $rc(ym);
+    set yyyy $rc(yyyy);
 
     if {($rc(awips) eq "") || \
 	([regexp {^tcm(.{2})(\d)} $rc(awips) s region index] == 0)} {

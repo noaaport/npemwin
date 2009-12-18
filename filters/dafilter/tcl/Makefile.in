@@ -13,8 +13,9 @@ FILTERNAME =	dafilter
 M4SOURCES =	defs.m4 dup.m4 equivs.m4 file.m4 pipe.m4
 M4MAIN =	dafilter.m4
 M4TARGET =	dafilter.rc-defaults
-SAMPLES =	dafilter.conf-sample dafilter.rc-sample
+SAMPLES =	dafilter.conf-sample dafilter.rc-sample archive.conf-sample
 DEFAULTS =	${M4TARGET}
+LIBEXECINITS =  archive.init
 
 TARGET =	${TCLTARGET} ${M4TARGET} ${SAMPLES}
 
@@ -35,9 +36,13 @@ dafilter.conf-sample: dafilter.conf
 dafilter.rc-sample: dafilter.rc 
 	cp dafilter.rc dafilter.rc-sample
 
+archive.conf-sample: archive.conf
+	cp archive.conf archive.conf-sample
+
 install: ${TARGET}
 	${INSTALL} -m 755 ${TCLTARGET} ${MYLIBEXECDIR}/${FILTERNAME}
 	${INSTALL} -m 644 ${SAMPLES} ${DEFAULTS} ${MYCONFDIR}
+	${INSTALL} -m 644 ${LIBEXECINITS} ${MYLIBEXECDIR}
 
 clean:
 	rm -f *~ ${TARGET} Makefile

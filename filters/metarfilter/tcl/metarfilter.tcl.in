@@ -71,8 +71,7 @@ proc main {argc argv} {
 
 proc process {prodname fpath} {
 
-    set rclist [filterlib_get_rcvars $prodname $fpath];
-    array set rc $rclist
+    filterlib_get_rcvars rc $prodname $fpath;
 
     if {[regexp {^s[ap]} $rc(header_wmoid)]} {
 	save_rawdata rc;

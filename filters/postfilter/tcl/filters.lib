@@ -90,8 +90,9 @@ proc filterlib_get_rcfiles {rcfname confdirs rcdir postrcfile} {
     return $_rcfiles;
 }
 
-proc filterlib_get_rcvars {prodname fpath} {
+proc filterlib_get_rcvars {rc_name prodname fpath} {
 
+    upvar $rc_name rc;
     global filterlib;
 
     # Initalize all keys
@@ -112,12 +113,19 @@ proc filterlib_get_rcvars {prodname fpath} {
     set rc(AWIPS1) "";
     set rc(awips1) "";
     set rc(txtflag) 0;
+    set rc(seconds) "";
+    set rc(ymd_hm) "";
+    set rc(ymdhm) "";
+    set rc(ymdh) "";
+    set rc(ymd) "";
+    set rc(ym) "";
+    set rc(yyyy) "";
 
     set rc(fbasename) [file tail $fpath];
     set rc(fseqnumber) [lindex [split $rc(fbasename) "."] 1];
     set rc(ftype) [string range [file extension $rc(fbasename)] 1 end];
     set rc(fsize) [file size $fpath];
-    if {$rc(ftype) == "txt"} {
+    if {$rc(ftype) eq "txt"} {
 	set _parts [filterlib_get_parts $fpath $filterlib(bodypartsize)];
 
 	# Check if the WMOHEADER is alnum after striping the blanks
@@ -145,8 +153,16 @@ proc filterlib_get_rcvars {prodname fpath} {
 	set rc(AWIPS1) [string toupper $rc(awips1)];
     }
 
-    # Return a list of alternates between the indices and the values
-    return [array get rc];
+    # This is initialized to the default (extracted from the wmo header if it
+    # exists, or the current, arrival, time).
+    set rc(seconds) [filterlib_date_clock_seconds $rc(header_time)];
+
+    set rc(ymd_hm) [clock format $rc(seconds) -gmt true -format "%Y%m%d_%H%M"];
+    set rc(ymdhm) [clock format $rc(seconds) -gmt true -format "%Y%m%d%H%M"];
+    set rc(ymdh) [clock format $rc(seconds) -gmt true -format "%Y%m%d%H"];
+    set rc(ymd) [clock format $rc(seconds) -gmt true -format "%Y%m%d"];
+    set rc(ym) [clock format $rc(seconds) -gmt true -format "%Y%m"];
+    set rc(yyyy) [clock format $rc(seconds) -gmt true -format "%Y"];
 }
 
 
@@ -245,7 +261,7 @@ proc filterlib_file_cat {file} {
 #
 # Procedures to mimick the functionality of nbspfile.
 #
-proc filterlib_file_save {inputfile seq outputdir outputfile args} {
+proc filterlib_file_save {seq inputfile outputdir outputfile args} {
     #
     # The args are flags:
     #

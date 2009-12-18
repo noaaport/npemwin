@@ -112,8 +112,7 @@ proc process {prodname fpath} {
 
     global msgfilter;
 
-    set rclist [filterlib_get_rcvars $prodname $fpath];
-    array set rc $rclist
+    filterlib_get_rcvars rc $prodname $fpath;
 
     set prod_code [string range $prodname 0 2];
     set prod_body [::fileutil::cat $fpath];

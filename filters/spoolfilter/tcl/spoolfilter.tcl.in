@@ -68,8 +68,7 @@ proc process {prodname fpath} {
 
     global spoolfilter;
 
-    set rclist [filterlib_get_rcvars $prodname $fpath];
-    array set rc $rclist
+    filterlib_get_rcvars rc $prodname $fpath;
 
     set station $rc(header_station);
     set fbasename [file tail $fpath];
@@ -82,13 +81,13 @@ proc process {prodname fpath} {
 	return;
     }
 
-    if {$spoolfilter(filessubdir) ne ""} {
+    if {$spoolfilter(datasubdir) ne ""} {
 	set now [clock seconds];
-        set filessubdir [clock format $now \
-	    -format $spoolfilter(filessubdir) -gmt true];
-    	set parentdir [file join $spoolfilter(filesdir) $filessubdir $station];
+        set datasubdir [clock format $now \
+	    -format $spoolfilter(datasubdir) -gmt true];
+    	set parentdir [file join $datasubdir $station];
     } else {
-	set parentdir [file join $spoolfilter(filesdir) $station];
+	set parentdir $station;
     }
     set pathout [file join $parentdir $fbasename];
 

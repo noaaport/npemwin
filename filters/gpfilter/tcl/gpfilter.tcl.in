@@ -106,14 +106,11 @@ proc process {prodname fpath} {
 
     global gpfilter;
 
-    set rclist [filterlib_get_rcvars $prodname $fpath];
-    array set rc $rclist
+    filterlib_get_rcvars rc $prodname $fpath;
 
     # The gpfilter rules use these ymdh variables
-    set seconds [filterlib_date_clock_seconds $rc(header_time)];
-    set ymd_hm [clock format $seconds -gmt true -format "%Y%m%d_%H%M"];
-    set ymdh [clock format $seconds -gmt true -format "%Y%m%d%H"];
-    unset seconds;
+    set ymd_hm $rc(ymd_hm);
+    set ymdh $rc(ymdh);
 
     set rc_status 1;
 

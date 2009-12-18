@@ -8,7 +8,7 @@ lappend cond {
 }
 lappend action {
     set rc_status 0;
-    proc_file $rc(seq) $rc(fpath) "$3" "$4" a;
+    filter_file rc $rc(seq) $rc(fpath) "$3" "$4" "-a";
 })
 
 define(match_and_file,
@@ -17,7 +17,7 @@ lappend cond {
 }
 lappend action {
     set rc_status 0;
-    proc_file $rc(seq) $rc(fpath) "$5" "$6" a;
+    filter_file rc $rc(seq) $rc(fpath) "$5" "$6" "-a";
 })
 
 define(match_or_file,
@@ -26,7 +26,7 @@ lappend cond {
 }
 lappend action {
     set rc_status 0;
-    proc_file $rc(seq) $rc(fpath) "$5" "$6" a;
+    filter_file rc $rc(seq) $rc(fpath) "$5" "$6" "-a";
 })
 
 define(matchstop_file,
@@ -35,7 +35,7 @@ lappend cond {
 }
 lappend action {
     set rc_status 0;
-    proc_file $rc(seq) $rc(fpath) "$3" "$4" a;
+    filter_file rc $rc(seq) $rc(fpath) "$3" "$4" "-a";
     break;
 })
 
@@ -45,7 +45,7 @@ lappend cond {
 }
 lappend action {
     set rc_status 0;
-    proc_file $rc(seq) $rc(fpath) "$5" "$6" a;
+    filter_file rc $rc(seq) $rc(fpath) "$5" "$6" "-a";
     break;
 })
 
@@ -55,7 +55,7 @@ lappend cond {
 }
 lappend action {
     set rc_status 0;
-    proc_file $rc(seq) $rc(fpath) "$5" "$6" a;
+    filter_file rc $rc(seq) $rc(fpath) "$5" "$6" "-a";
     break;
 })
 
@@ -65,7 +65,7 @@ lappend cond {
 }
 lappend action {
     set rc_status 0;
-    proc_file $rc(seq) $rc(fpath) "$3" "$4" w;
+    filter_file rc $rc(seq) $rc(fpath) "$3" "$4";
 })
 
 define(matchstop_file_noappend,
@@ -74,7 +74,7 @@ lappend cond {
 }
 lappend action {
     set rc_status 0;
-    proc_file $rc(seq) $rc(fpath) "$3" "$4" w;
+    filter_file rc $rc(seq) $rc(fpath) "$3" "$4";
     break;
 })
 

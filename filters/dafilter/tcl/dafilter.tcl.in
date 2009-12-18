@@ -19,13 +19,29 @@ if {[file exists $gf(filterlib)] == 0} {
 }
 source $gf(filterlib);
 
+## This filter is archive-aware
+set initfile [file join $gf(filterdir) "archive.init"];
+if {[file exists $initfile] == 0} {
+    puts "dafilter disabled: $initfile not found.";
+    return 1;
+}
+source $initfile;
+
+
 # Defaults
 set dafilter(conf)	[file join $gf(confdir) "dafilter.conf"];
 set dafilter(rc)	[file join $gf(confdir) "dafilter.rc"];
 set dafilter(rcdir)	[file join $gf(confdir) "rc.d/da"];
-set dafilter(confdirs) $gf(localconfdirs);
+set dafilter(confdirs)  $gf(localconfdirs);
 set dafilter(postrc)	"";
 set dafilter(datadir)	[file join $gf(datadir) "digatmos"];
+
+# The default optional configuration file for this filter.
+#
+if {[file exists $dafilter(conf)] == 1} {
+    source $dafilter(conf);
+}
+
 #
 # variables
 #
@@ -33,10 +49,19 @@ set dafilter(rcfiles)	[list];
 set dafilter(condition)	[list];
 set dafilter(action)	[list];
 
-# The default optional configuration file for this filter.
+# The archive variables
 #
-if {[file exists $dafilter(conf)] == 1} {
-    source $dafilter(conf);
+# If the archive is enabled, the next three variables are reset according
+# to the current date: the wmo header or file data for archive_subdir;
+# the arrival time for the inv subdir and name. In addition, we copy
+# the archive(da,xxx) filter files for easy reference in the functions here.
+#
+set dafilter(archive_subdir) "";
+set dafilter(archive_inv_subdir) "";
+set dafilter(archive_inv_name) "";
+foreach key [array names archive "da,*"] {
+    set k [string range $key 3 end];
+    set dafilter(archive_${k}) $archive($key);
 }
 
 # The main rc file is required
@@ -83,17 +108,27 @@ proc process {prodname fpath} {
 
     global dafilter;
 
-    set rclist [filterlib_get_rcvars $prodname $fpath];
-    array set rc $rclist
+    filterlib_get_rcvars rc $prodname $fpath;
 
-    # The dafilter rules use these ymdh variables
-    set seconds [filterlib_date_clock_seconds $rc(header_time)];
-    set ymd_hm [clock format $seconds -gmt true -format "%Y%m%d_%H%M"];
-    set ymdh [clock format $seconds -gmt true -format "%Y%m%d%H"];
-    set ymd [clock format $seconds -gmt true -format "%Y%m%d"];
-    set ym [clock format $seconds -gmt true -format "%Y%m"];
-    set yyyy [clock format $seconds -gmt true -format "%Y"];
-    unset seconds;
+    set dafilter(archive_subdir) [clock format $rc(seconds) -format \
+        $dafilter(archive_subdirfmt) -gmt true];
+
+    # The inventory names are based on the arrival time
+    set arrseconds [clock seconds];
+    set dafilter(archive_inv_subdir) [clock format $arrseconds -format \
+        $dafilter(archive_inv_subdirfmt) -gmt true];
+    set dafilter(archive_inv_name) [clock format $arrseconds -format \
+        $dafilter(archive_inv_namefmt) -gmt true];
+    unset arrseconds;
+
+    # These variables are based on the time determined by the filterlib.
+    # The default is the wmotime, or the arrival time if there is no header.
+    set ymd_hm $rc(ymd_hm);
+    set ymdhm $rc(ymdhm);
+    set ymdh $rc(ymdh);
+    set ymd $rc(ymd);
+    set ym $rc(ym);
+    set yyyy $rc(yyyy);
 
     set rc_status 1;
 
@@ -120,45 +155,95 @@ proc process {prodname fpath} {
     }
 }
 
-proc proc_file {seq fpath savedir savename awflag} {
+proc filter_file {rc_array seq fpath savedir savename args} {
 #
-# If "awflag" is a, the output file is opened in "append" mode,
-# otherwise in "write" mode (i.e., it is assumed to be "w").
-
+# args is the append flag "-a" or nothing.
+#
+    upvar $rc_array rc;
     global dafilter;
 
-    # The gempal-like header/footers
-    set gmpk_header_fmt "\001\r\r\n%03d \r\r\n"; 
-    set gmpk_trailer_str "\r\r\n\003"; 
+    if {$dafilter(archive_enable) != 2} {
+        filter_file_normal $seq $fpath $savedir $savename $args;
+    }
+
+    if {$dafilter(archive_enable) != 0} {
+        filter_file_archive rc $seq $fpath $savedir $savename $args;
+    }
+}
+
+proc filter_file_normal {seq fpath savedir savename args} {
+#
+# If "args" is -a, the output file is opened in "append" mode,
+# otherwise in "write" mode (i.e., it is assumed to be "w").
+#
+    global dafilter;
 
     set currdir [pwd];
     cd $dafilter(datadir);
-    file mkdir $savedir;
-    cd $currdir;
 
-    set fpathout [file join $dafilter(datadir) $savedir $savename];	
+    file mkdir $savedir;
 
     set status [catch {
-	set fout [open $fpathout $awflag];
-	set fin  [open $fpath r];
-	fconfigure $fin -translation binary -encoding binary;
-	fconfigure $fout -translation binary -encoding binary;
-
-        puts -nonewline $fout [format $gmpk_header_fmt [expr $seq % 1000]];
-        puts -nonewline $fout [read $fin];
-        puts -nonewline $fout $gmpk_trailer_str;        
+	filterlib_file_save $seq $fpath $savedir $savename $args;
     } errmsg];
 
-    if {[info exists fout]} {
-	close $fout;
-    }
-
-    if {[info exists fin]} {
-	close $fin;
-    }
+    cd $currdir;
 
     if {$status != 0} {
 	log_msg $errmsg;
+    }
+}
+
+proc filter_file_archive {rc_array seq fpath savedir savename args} {
+
+    upvar $rc_array rc;
+    global dafilter;
+
+    set currdir [pwd];
+    cd $dafilter(archive_datadir);
+
+    set archive_savedir [file join $dafilter(archive_subdir) $savedir];
+    file mkdir $archive_savedir;
+
+    set status [catch {
+	filterlib_file_save $seq $fpath $archive_savedir $savename $args;
+    } errmsg];
+
+    cd $currdir;
+
+    if {$status != 0} {
+	log_msg $errmsg;
+    }
+
+    filter_register_archive_inventory rc $savedir $savename;
+}
+
+proc filter_register_archive_inventory {rc_array \
+        archive_savedir archive_name} {
+#
+# subdir is the common subdirectory of the main archive, for example 2009/12/01
+# savedir is the data directory, for example, nwx/nhc
+#
+    upvar $rc_array rc;
+    global dafilter;
+
+    set invfpath [file join $dafilter(archive_invdir) \
+                       $dafilter(archive_inv_subdir) \
+                       $dafilter(archive_inv_name)];
+
+    set invdata [list];
+    foreach key [list header_station header_wmoid awips header_time seconds] {
+        lappend invdata $rc($key);
+    }
+    lappend invdata $dafilter(archive_datadir) $dafilter(archive_subdir) \
+        $archive_savedir $archive_name;
+
+    set status [catch {
+        filterlib_file_append $invfpath [join $invdata ","];
+    } errmsg];
+
+    if {$status != 0} {
+        log_msg $errmsg;
     }
 }
 

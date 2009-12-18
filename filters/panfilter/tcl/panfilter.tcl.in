@@ -81,8 +81,7 @@ proc process {prodname fpath} {
 
     global panfilter;
 
-    set rclist [filterlib_get_rcvars $prodname $fpath];
-    array set rc $rclist
+    filterlib_get_rcvars rc $prodname $fpath;
 
     # Initialize the global variables
     set udp(status) 1;

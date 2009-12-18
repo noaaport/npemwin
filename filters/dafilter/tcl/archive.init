@@ -1,0 +1,27 @@
+#
+# $Id$
+#
+
+#
+# archive configuration
+#
+
+# Common section
+set archive(conf)    [file join $gf(confdir) "archive.conf"];
+set archive(datadir) $gf(archivedatadir);
+set archive(invdir)  $gf(archiveinvdir);
+
+# da
+set archive(da,datadir) [file join $archive(datadir) "digatmos"];
+set archive(da,subdirfmt) "%Y/%m/%d";
+set archive(da,invdir) [file join $archive(invdir) "digatmos"];
+set archive(da,inv_subdirfmt) "%Y%m%d";   # based on arrival time
+set archive(da,inv_namefmt) "%H%M.inv";   # based on arrival time
+
+set archive(da,enable) 0;
+set archive(da,regex) {.*};
+
+## The configuration file that overrides the defaults, if it exists.
+if {[file exists $archive(conf)] == 1} {
+    source $archive(conf);
+}

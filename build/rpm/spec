@@ -71,6 +71,7 @@ make clean
 /usr/local/libexec/npemwin/trackfilter
 /usr/local/libexec/npemwin/trackfilter.init
 /usr/local/libexec/npemwin/filters.lib
+/usr/local/libexec/npemwin/archive.init
 /usr/local/libexec/npemwin/tclmetar/metar.tcl
 /usr/local/libexec/npemwin/tclmetar/pkgIndex.tcl
 /usr/local/etc/npemwin/dist/README
@@ -93,13 +94,14 @@ make clean
 /usr/local/etc/npemwin/dist/trackfilter.README
 /usr/local/etc/npemwin/dist/npemwind.conf-sample
 /usr/local/etc/npemwin/dist/servers.conf-sample
+/usr/local/etc/npemwin/dist/features.conf-sample
 /usr/local/etc/npemwin/dist/npemwind.conf-noaaport-sample
 /usr/local/etc/npemwin/dist/npemwind.conf-nonpriv-sample
 /usr/local/etc/npemwin/dist/npemwind.conf-noserver-sample
 /usr/local/etc/npemwin/dist/servers.conf-noaaport-sample
 /usr/local/etc/npemwin/dist/filters.conf-sample
 /usr/local/etc/npemwin/dist/filters.conf-site-sample
-/usr/local/etc/npemwin/dist/features.conf-sample
+/usr/local/etc/npemwin/dist/archive.conf-sample
 /usr/local/etc/npemwin/dist/nntpfilter.conf-sample
 /usr/local/etc/npemwin/dist/nntpfilter.rc-sample
 /usr/local/etc/npemwin/dist/nntpfilter.rc-defaults

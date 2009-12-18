@@ -79,18 +79,7 @@ proc process {prodname fpath} {
 
     global stdfilter;
 
-    set rclist [filterlib_get_rcvars $prodname $fpath];
-    array set rc $rclist
-
-    # The da rules uses these variables. The da rules have now a separate
-    # filter however so this no longer used.
-    set seconds [filterlib_date_clock_seconds $rc(header_time)];
-    set ymd_hm [clock format $seconds -gmt true -format "%Y%m%d_%H%M"];
-    set ymdh [clock format $seconds -gmt true -format "%Y%m%d%H"];
-    set ymd [clock format $seconds -gmt true -format "%Y%m%d"];
-    set ym [clock format $seconds -gmt true -format "%Y%m"];
-    set yyyy [clock format $seconds -gmt true -format "%Y"];
-    unset seconds;
+    filterlib_get_rcvars rc $prodname $fpath;
 
     set rc_status 1;
 
@@ -113,53 +102,6 @@ proc process {prodname fpath} {
 
     if {$status == 1} {
 	log_msg "Error processing $fpath";
-	log_msg $errmsg;
-    }
-}
-
-#
-# The are functions to support the da and ldm filters.
-# (Both are now in a separate filter so this function is not used).
-#
-
-proc proc_file {seq fpath savedir savename awflag} {
-#
-# If "awflag" is a, the output file is opened in "append" mode,
-# otherwise in "write" mode (i.e., it is assumed to be "w").
-
-    global stdfilter;
-
-    # The gempal-like header/footers
-    set gmpk_header_fmt "\001\r\r\n%03d \r\r\n"; 
-    set gmpk_trailer_str "\r\r\n\003"; 
-
-    set currdir [pwd];
-    cd $stdfilter(dadir);
-    file mkdir $savedir;
-    cd $currdir;
-
-    set fpathout [file join $stdfilter(dadir) $savedir $savename];	
-
-    set status [catch {
-	set fout [open $fpathout $awflag];
-	set fin  [open $fpath r];
-	fconfigure $fin -translation binary -encoding binary;
-	fconfigure $fout -translation binary -encoding binary;
-
-        puts -nonewline $fout [format $gmpk_header_fmt [expr $seq % 1000]];
-        puts -nonewline $fout [read $fin];
-        puts -nonewline $fout $gmpk_trailer_str;        
-    } errmsg];
-
-    if {[info exists fout]} {
-	close $fout;
-    }
-
-    if {[info exists fin]} {
-	close $fin;
-    }
-
-    if {$status != 0} {
 	log_msg $errmsg;
     }
 }
