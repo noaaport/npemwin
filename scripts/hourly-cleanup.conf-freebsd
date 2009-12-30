@@ -65,7 +65,7 @@ H=02:/var/noaaport/data/metar/archive: -c 7 -d
 H:/var/npemwin/spool: -mtime +4h ! -type d
 
 # Keep a week of the old www logfiles
-H=01:/var/npemwin/www/log: -mtime +7
+H=01:/var/log/npemwin/www: -mtime +7
 
 # Delete files leftover in the tmp directory
 H/4:/var/npemwin/tmp: -mtime +1h

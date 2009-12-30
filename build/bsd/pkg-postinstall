@@ -25,6 +25,7 @@ dirs="/var/npemwin/stats
 /var/npemwin/tmp
 /var/run/npemwin
 /var/log/npemwin
+/var/log/npemwin/www
 /usr/local/etc/npemwin/defaults
 /usr/local/etc/npemwin/site
 /usr/local/etc/npemwin/rc.d
