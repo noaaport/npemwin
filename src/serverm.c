@@ -44,6 +44,23 @@ static void handle_client_hup(struct conn_table_st *ct, int i, int condition);
 static void spawn_client_threads(void);
 static int client_thread_create(struct conn_element_st *ce, pthread_t *t_id);
 static int client_thread_kill(struct conn_element_st *ce);
+
+/*
+ * This portion is copied from nbsp.
+ *
+ * The process_connections() function is executed periodically,
+ * but we feel there is no need to let the period be a run-time
+ * configuration option. In case we later decide to do that, we leave
+ * here some place holders for the flag functions that can be used in
+ * per.c, similar to the other flags of the server.
+ *
+ * static int gprocess_connections = 0;
+ * static pthread_mutex_t gprocess_connections_mutex =
+ * PTHREAD_MUTEX_INITIALIZER;
+ */
+#define SERVER_PROCESS_CONNECTIONS_PERIOD_SECS 1
+static time_t gprocess_connections_time = 0;	/* next time to process */
+static int get_process_connections_flag(void);
 static void process_connections(void);
 static void process_unidentified_connections(void);
 static void process_finished_connections(void);
@@ -133,7 +150,9 @@ void terminate_server(void){
 
 void server_loop(void){
 
-  process_connections();
+  if(get_process_connections_flag()){
+    process_connections();
+  }
 
   if(get_report_client_connections_flag())
     report_client_connections();
@@ -465,6 +484,53 @@ static int get_report_client_connections_flag(void){
 void set_report_client_connections_flag(void){
 
   greport_client_connections_flag = 1;
+}
+
+#if 0
+/*
+ * See comment in the top of this file about these two functions.
+ */
+static int get_process_connections_flag(void){
+
+  int r = 0;
+
+  if(gprocess_connections == 0)
+    return(0);
+
+  if(pthread_mutex_trylock(&gprocess_connections_mutex) == 0){
+    r = gprocess_connections;
+    gprocess_connections = 0;
+    pthread_mutex_unlock(&gprocess_connections_mutex);
+  }else
+    log_info("Cannot lock mutex in get_process_connections_flag().");
+
+  return(r);
+}
+
+void set_process_connections_flag(void){
+
+  int status = 0;
+
+  if((status = pthread_mutex_lock(&gprocess_connections_mutex)) == 0){
+    gprocess_connections = 1;
+    pthread_mutex_unlock(&gprocess_connections_mutex);
+  }else
+    log_errx("Error %d locking mutex in set_process_connections_flag().",
+	     status);
+}
+#endif
+
+static int get_process_connections_flag(void){
+
+  time_t now;
+
+  now = time(NULL);
+  if(now < gprocess_connections_time)
+    return(0);
+
+  gprocess_connections_time = now + SERVER_PROCESS_CONNECTIONS_PERIOD_SECS;
+
+  return(1);
 }
 
 /*
