@@ -2,7 +2,7 @@
 # $Id$
 #
 
-- This is the ist release of the 1.8 version of the
+- This is the 1st release of the 2.0 version of the
 NOAAPort Emwin server (npemwin). Packages, sources and documentation
 are available from
 
@@ -13,8 +13,7 @@ can be created upon request.
 
 New in this version -
 
-    - Added optional daily and hourly archives in metarfilter
-      (to add support for Weatherscope). Enabled by default.
+    - A revised networking library imported from Nbsp.
 
 What is npemwin -
 
