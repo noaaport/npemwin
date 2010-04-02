@@ -11,4 +11,11 @@ set features(ldmfilter) 1
 2) In "ldmfilter.conf", verify that the $ldmfilter(pqinsert)
 variable has the correct path to the pqinsert program.
 
-3) Start ldm, then start npemwin, in that order.
+3) Make the ldm.pq file
+
+	chgrp noaaport ldm.pq
+	chmod 664 ldm.pq
+
+   NOTE: An easier solution is install ldm as user "noaaport:noaaport".
+
+4) Start ldm, then start npemwin, in that order.

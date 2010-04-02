@@ -8,12 +8,14 @@ key=$2
 [ -f /usr/local/etc/rc.d/npemwind ] && rm /usr/local/etc/rc.d/npemwind
 
 cat <<EOF
-To deinstall completely this package, the directories
+To deinstall completely this package, the noaaport user directories
 
 /usr/local/etc/npemwin
 /usr/local/share/doc/npemwin
 /usr/local/libexec/npemwin
 /var/npemwin
+/var/run/npemwin
+/var/log/npemwin
 
 must be removed manually.
 EOF

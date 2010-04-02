@@ -7,11 +7,14 @@ then
 fi
 
 cat <<EOF
-To deinstall completely this package, the directories
+To deinstall completely this package, the noaaport user directories
 
 /usr/local/etc/npemwin
+/usr/local/share/doc/npemwin
 /usr/local/libexec/npemwin
 /var/npemwin
+/var/run/npemwin
+/var/log/npemwin
 
-may have be removed manually.
+must be removed manually.
 EOF

@@ -70,7 +70,6 @@ etc/npemwin/dist/npemwind.conf-sample
 etc/npemwin/dist/servers.conf-sample
 etc/npemwin/dist/features.conf-sample
 etc/npemwin/dist/npemwind.conf-noaaport-sample
-etc/npemwin/dist/npemwind.conf-nonpriv-sample
 etc/npemwin/dist/npemwind.conf-noserver-sample
 etc/npemwin/dist/servers.conf-noaaport-sample
 etc/npemwin/dist/filters.conf-sample

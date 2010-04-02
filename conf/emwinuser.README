@@ -2,17 +2,11 @@
 # $Id$
 #
 
-The file ``npemwind.conf-nonpriv'' is a sample file with
-configuration instructions for running npemwind as a non-root
-user; e.g., emiwn:emwin. It is important to follow also the instructions
-explained there to set the owner and group of the directories
+By default, npemwind runs as the user/group "noaaport:noaaport". While the
+package installation creates the various directories with the
+apropriate ownership, it may be necesary sometimes to recreate them
+by hand:
 
-	/var/npemwin
-	/var/run/npemwin
-
-For example
-
-	chown -R <user>:<group> /var/npemwin
-	chown -R <user>:<group> /var/run/npemwin
-
-replacing <user> and <group> with the appropriate names.
+	chown -R noaaport:noaaport /var/npemwin
+	chown -R noaaport:noaaport /var/run/npemwin
+	chown -R noaaport:noaaport /var/log/npemwin

@@ -1,7 +1,14 @@
 #
-# create directories
+# npemwin user/group, directories owned by user, and directories owned by root
 #
-dirs="/var/npemwin/stats
+user=noaaport
+#
+userdirs="/var/run/npemwin
+/var/log/npemwin
+/var/log/npemwin/www
+/var/npemwin
+/var/npemwin/stats
+/var/npemwin/spool
 /var/npemwin/spool/data
 /var/npemwin/spool/lock
 /var/npemwin/spool/tmp
@@ -9,20 +16,21 @@ dirs="/var/npemwin/stats
 /var/npemwin/files
 /var/npemwin/inv
 /var/npemwin/rss
+/var/npemwin/data
 /var/npemwin/data/digatmos
 /var/npemwin/data/latest
 /var/npemwin/data/metar
 /var/npemwin/data/gempak
 /var/npemwin/data/track
+/var/npemwin/archive
+/var/npemwin/archive/data
 /var/npemwin/archive/data/spool
 /var/npemwin/archive/data/digatmos
 /var/npemwin/archive/inv
 /var/npemwin/www
-/var/npemwin/tmp
-/var/run/npemwin
-/var/log/npemwin
-/var/log/npemwin/www
-/usr/local/etc/npemwin/defaults
+/var/npemwin/tmp"
+#
+rootdirs="/usr/local/etc/npemwin/defaults
 /usr/local/etc/npemwin/site
 /usr/local/etc/npemwin/rc.d
 /usr/local/etc/npemwin/rc.d/std
@@ -38,9 +46,22 @@ dirs="/var/npemwin/stats
 /usr/local/libexec/npemwin/site
 /usr/local/libexec/npemwin/tclhttpd/site"
 
-for d in $dirs
+useradd -M $user > /dev/null 2>&1
+status=$?
+if [ $status -ne 9 -a $status -ne 0 ]
+then
+    echo "Error creating user $user."
+    exit 1
+fi
+
+for d in $userdirs
 do
-  install -d -m 755 $d
+  [ -e $d ] || install -d -m 755 -o $user -g $user $d
+done
+
+for d in $rootdirs
+do
+  [ -e $d ] || install -d -m 755 $d
 done
 
 #
@@ -88,7 +109,7 @@ cp /usr/local/share/doc/npemwin/www.tgz /var/npemwin/www
 cd /var/npemwin/www
 tar -xzf www.tgz
 rm www.tgz
-chown -R root:root *
+chown -R $user:$user *
 cd htdocs/pub
 #
 # Note: If we reverse the test [ ! -e ...] && ....
@@ -136,5 +157,19 @@ or
 
 The program will run in this default installation without further
 configuration.
+
+NOTE:
+----
+  As of version 2.0.r2, npemwind runs as user noaaport, and therefore
+  the directories where the daemon writes must be owned by that user:
+
+    chown -R noaaport:noaaport /var/npemwin
+    chown -R noaaport:noaaport /var/log/npemwin
+    chown -R noaaport:noaaport /var/run/npemwin
+
+  During a fresh install, the package installer will create the
+  directories with the appropriate ownership, bit not during an upgrade.
+  If you are uprading from an older version, those commands must be
+  executed manually.
 -
 __EOF__

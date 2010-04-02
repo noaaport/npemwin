@@ -10,7 +10,6 @@ SOURCES =	servers.conf \
 		npemwind.init \
 		servers.conf-noaaport \
 		npemwind.conf-noaaport \
-		npemwind.conf-nonpriv \
 		npemwind.conf-noserver \
 		logrotate.conf \
 		newsyslog.conf
@@ -19,7 +18,6 @@ SAMPLES =	servers.conf-sample \
 		npemwind.conf-sample \
 		servers.conf-noaaport-sample \
 		npemwind.conf-noaaport-sample \
-		npemwind.conf-nonpriv-sample \
 		npemwind.conf-noserver-sample \
 		logrotate.conf-sample \
 		newsyslog.conf-sample
@@ -50,9 +48,6 @@ servers.conf-noaaport-sample: servers.conf-noaaport
 
 npemwind.conf-noaaport-sample: npemwind.conf-noaaport
 	cp npemwind.conf-noaaport npemwind.conf-noaaport-sample
-
-npemwind.conf-nonpriv-sample: npemwind.conf-nonpriv
-	cp npemwind.conf-nonpriv npemwind.conf-nonpriv-sample
 
 npemwind.conf-noserver-sample: npemwind.conf-noserver
 	cp npemwind.conf-noserver npemwind.conf-noserver-sample

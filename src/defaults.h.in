@@ -19,11 +19,11 @@
 #define CONFIGFILE		"%MYCONFDIR%/npemwind.conf"
 
 /*
- * When NULL no change is made, so it will remain as it was started;
- * e.g., root if started automatically at boot.
+ * If user/group are set to NULL, npemwind will run as the invoking user,
+ * e.g., root if started automatically at boot time.
  */
-#define EMWIN_USER              NULL
-#define EMWIN_GROUP             NULL
+#define EMWIN_USER              "noaaport"
+#define EMWIN_GROUP             "noaaport"
 #define DEFAULT_UMASK           022
 
 /*
