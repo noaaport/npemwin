@@ -1,0 +1,39 @@
+#
+# $Id$
+#
+UPGRADE NOTES -
+
+1) Starting with version 2.0, Npemwin can be upgraded easily.
+The first thing is to install the nbspadm package for your OS.
+That package contains the program _nbspupdate_ which is used as follows.
+Executing
+
+	nbspupdate npemwin
+
+without arguments, will check the version of the installed Npemwin package
+against the latest one available, and if the latter is newer than the
+former it will download it. The Npemwin package can then be upgraded
+manually as usual. Alternatively, executing
+
+	nbspupdate -u npemwin
+
+will do the upgrade automatically after downloading the package as above.
+By passing the [-F] option as well, i.e.,
+
+	nbspupdate -u -F npemwin
+
+nbspupdate will do as above, even if the installed version is the same
+as the latest one, or if Npemwin had not been installed before.
+
+2) Starting with version 2.0.r2, npemwin runs as the user
+"noaaport", and therefore the directories where the daemon writes
+must be owned by that user:
+
+    chown -R noaaport:noaaport /var/npemwin
+    chown -R noaaport:noaaport /var/log/npemwin
+    chown -R noaaport:noaaport /var/run/npemwin
+
+During a fresh install, the package installer will create the
+directories with the appropriate ownership, but not during an upgrade.
+If you are uprading from an older version, those commands must be
+executed manually.
