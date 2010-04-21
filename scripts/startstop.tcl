@@ -38,7 +38,7 @@ if {$argc == 1} {
     set startstop(stage) [lindex $argv 0];
 }
 if {($startstop(stage) ne "start") && ($startstop(stage) ne "stop")} {
-    puts "$argv0 disabled: $usage";
+    log_msg "$argv0 disabled: $usage";
     return 1;
 }
 
@@ -54,42 +54,22 @@ if {$conffile == ""} {
     return 1;
 }
 
-set schedule [list];
+set start [list];
+set stop [list];
 source $conffile;
-set program_list [list];
+eval set script_list \$$startstop(stage);
 
-foreach entry $schedule {
-
-    set parts [split $entry :];
-    if {[llength $parts] != 2} {
-        log_msg "Error: Invalid specification: $entry"; 
-        continue;
-    }
-    set code [string trim [lindex $parts 0]];
-    set program [string trim [lindex $parts 1]];
-
-    if {$code ne $startstop(stage)} {
-        continue;
-    }
-
-    lappend program_list $program;
-}
-
-foreach program $program_list {
+foreach script $script_list {
 
     # The eval causes the $program string to be split on blanks
     # in case there are options, and any variables to be substituted
     # by their value.
-    # "program" is not explicitly executed in the background here. That
-    # can be specified in the <program> part in the configuration file itself,
-    # depending on the particular conditions of the program that is being
-    # executed.
 
     set status [catch {
-        eval exec $program;
+        eval $script;
     } errmsg];
 
     if {$status != 0} {
-	log_msg $errmsg;
+        log_msg $errmsg;
     }     
 }

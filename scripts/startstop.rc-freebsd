@@ -10,21 +10,9 @@
 # "site" subdirectory, then the "defaults" subdirectory and finally
 # in the main directory, and uses the first one that it finds.
 #
-# The ``schedule'' is a list, in which element is of the form
-#
-# <timespec>:<program> <options>
-#
-# where <options> may be blank. The <options> string is split on blanks
-# and each part is passed to <program> as a separate argument.
-#
 # When this script is run, PATH is set to
 #
-# 	PATH=$PATH:/usr/local/{bin,sbin,libexec/npemwin,libexec/npemwin/site}:
-#
-# <timespec> is a time specification in one of the following forms:
-#
-# start		=> run <program> at startup
-# stop		=> run <program> at shutdown
+#       PATH=$PATH:/usr/local/{bin,sbin,libexec/nbsp,libexec/nbsp/site}:
 
 #
 # Default Configuration
@@ -33,8 +21,8 @@ set confdir /usr/local/etc/npemwin
 set logdir /var/log/npemwin
 
 # Execute the start cleanup script
-lappend schedule {
-  start:npemwincleanup $confdir/start-cleanup.conf >& \
+lappend start {
+  exec npemwincleanup $confdir/start-cleanup.conf >& \
     $logdir/start-cleanup.log &
 }
 

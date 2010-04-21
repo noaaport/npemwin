@@ -10,6 +10,7 @@ PATH =		@PATH@
 FIND =		@FIND@
 UNZIP =		@UNZIP@
 NPEMWINDSH =    @NPEMWINDSH@
+NPEMWINDSHCONF =    @NPEMWINDSHCONF@
 HOURLYCONF =	@HOURLYCONF@
 STARTCLEANCONF = @STARTCLEANCONF@
 STARTSTOPRC =	@STARTSTOPRC@
@@ -21,6 +22,7 @@ LIBTOOLS =	qrunner startstop
 BINTOOLS =	npemwincleanup npemwinversion
 LIBFILES =      npemwind-start.tcl npemwind-stop.tcl
 DOCS =		filter.sh-sample npemwind.sh-sample
+EXTRA_DOCS =	${NPEMWINDSHCONF}
 TARGET =	${SAMPLES} ${BINTOOLS} ${LIBTOOLS} ${DOCS}
 
 all: ${TARGET}
@@ -65,7 +67,7 @@ startstop.rc-sample: ${STARTSTOPRC}
 
 install:
 	${INSTALL} -m 0644 ${SAMPLES} ${MYCONFDIR}
-	${INSTALL} -m 0644 ${DOCS} ${MYDOCDIR}
+	${INSTALL} -m 0644 ${DOCS} ${EXTRA_DOCS} ${MYDOCDIR}
 	${INSTALL} -m 0755 ${BINTOOLS} ${BINDIR}
 	${INSTALL} -m 0755 ${LIBTOOLS} ${MYLIBEXECDIR}
 	${INSTALL} -m 0644 ${LIBFILES} ${MYLIBEXECDIR}

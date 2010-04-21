@@ -1,0 +1,19 @@
+#
+# $Id$
+#
+
+# This file can be installed as
+#
+# /etc/default/npemwin
+#
+# to change some of the default settings used in
+#
+# /etc/init.d/npemwind
+
+#
+# Defaults
+#
+
+# RUNDIR=/var/run/npemwin
+# OWNER=noaaport
+# GROUP=noaaport

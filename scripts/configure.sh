@@ -11,6 +11,7 @@ sed -e "/@include@/s||$INCLUDE|" \
     -e "/@SHELL@/s||$SHELL|" \
     -e "/@TCLSH@/s||$TCLSH|" \
     -e "/@NPEMWINDSH@/s||$NPEMWINDSH|" \
+    -e "/@NPEMWINDSHCONF@/s||$NPEMWINDSHCONF|" \
     -e "/@HOURLYCONF@/s||$HOURLYCONF|" \
     -e "/@STARTCLEANCONF@/s||$STARTCLEANCONF|" \
     -e "/@STARTSTOPRC@/s||$STARTSTOPRC|" \

@@ -10,21 +10,13 @@
 # "site" subdirectory, then the "defaults" subdirectory and finally
 # in the main directory, and uses the first one that it finds.
 #
-# The ``schedule'' is a list, in which element is of the form
-#
-# <timespec>:<program> <options>
-#
-# where <options> may be blank. The <options> string is split on blanks
-# and each part is passed to <program> as a separate argument.
-#
 # When this script is run, PATH is set to
 #
-# 	PATH=$PATH:/usr/local/{bin,sbin,libexec/npemwin,libexec/npemwin/site}:
+#       PATH=$PATH:/usr/local/{bin,sbin,libexec/nbsp,libexec/nbsp/site}:
 #
-# <timespec> is a time specification in one of the following forms:
-#
-# start		=> run <program> at startup
-# stop		=> run <program> at shutdown
+# This file is executed as the normal user (e.g. noaaport). Any commands
+# that must be executed as root must appear in the init script
+# (i.e., re-creating /var/run/<subdir> in Ubuntu).
 
 #
 # Default Configuration
@@ -34,15 +26,18 @@ set logdir /var/log/npemwin
 set rundir /var/run/npemwin
 
 # Execute the start cleanup script
-lappend schedule {
-  start:npemwincleanup $confdir/start-cleanup.conf >& \
+lappend start {
+  exec npemwincleanup $confdir/start-cleanup.conf >& \
     $logdir/start-cleanup.log &
 }
 
-# This is not needed by debian, but it is needed by ubuntu
-if {$startstop(stage) eq "start"} {
-  file mkdir $rundir;
-}
+# This is not needed by debian but it is needed by ubuntu. If the program
+# runs as root this is ok here, otherwise the equivalent of this must
+# appear in the init script.
+#
+# lappend start {
+#   file mkdir $nbsprundir;
+# }
 
 #
 # local additions
