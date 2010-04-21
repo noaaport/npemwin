@@ -37,8 +37,11 @@ set filterlib(errorInfo)    $gf(debug);
 #
 set gf(logdir)		"/var/log/npemwin";
 #
+set env(PATH)    "%PATH%";
 append env(PATH) ":/usr/local/bin:/usr/local/sbin";
 append env(PATH) ":$gf(filterdir):$gf(localfilterdir)";
+#
+lappend auto_path $gf(filterdir) $gf(localfilterdir);
 #
 # Filter list.
 #

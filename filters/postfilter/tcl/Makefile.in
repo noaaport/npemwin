@@ -11,6 +11,8 @@ TCLTARGET =	postfilter.tcl
 TCLSOURCES =	postfilter.tcl.in
 SAMPLES =	filters.conf-sample filters.conf-site-sample \
 		features.conf-sample
+TCLLIBS =	pkgIndex.tcl errx.tcl syslog.tcl
+
 TARGET =	${TCLTARGET} ${SAMPLES}
 
 TCLSH =		@TCLSH@
@@ -21,8 +23,10 @@ all: ${TARGET}
 postfilter.tcl: postfilter.tcl.in
 	sed -e /%TCLSH%/s##${TCLSH}# postfilter.tcl.in > postfilter.tcl
 
-filters.conf-sample: filters.conf
-	cp filters.conf filters.conf-sample
+filters.conf-sample: filters.conf.in
+	sed \
+	-e /%PATH%/s##${PATH}# \
+	filters.conf.in > filters.conf-sample
 
 filters.conf-site-sample: filters.conf-site
 	cp filters.conf-site filters.conf-site-sample
@@ -33,6 +37,7 @@ features.conf-sample: features.conf
 install: ${TARGET}
 	${INSTALL} -m 755 postfilter.tcl ${MYLIBEXECDIR}/postfilter
 	${INSTALL} -m 644 filters.lib features.init ${MYLIBEXECDIR}
+	${INSTALL} -m 644 ${TCLLIBS} ${MYLIBEXECDIR}
 	${INSTALL} -m 644 ${SAMPLES} ${MYCONFDIR}
 
 clean:
