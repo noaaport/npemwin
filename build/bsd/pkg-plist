@@ -46,6 +46,9 @@ libexec/npemwin/msgfilter
 libexec/npemwin/trackfilter
 libexec/npemwin/trackfilter.init
 libexec/npemwin/filters.lib
+libexec/npemwin/pkgIndex.tcl
+libexec/npemwin/errx.tcl
+libexec/npemwin/syslog.tcl
 libexec/npemwin/archive.init
 libexec/npemwin/tclmetar/metar.tcl
 libexec/npemwin/tclmetar/pkgIndex.tcl

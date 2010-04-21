@@ -72,6 +72,9 @@ make clean
 /usr/local/libexec/npemwin/trackfilter
 /usr/local/libexec/npemwin/trackfilter.init
 /usr/local/libexec/npemwin/filters.lib
+/usr/local/libexec/npemwin/pkgIndex.tcl
+/usr/local/libexec/npemwin/errx.tcl
+/usr/local/libexec/npemwin/syslog.tcl
 /usr/local/libexec/npemwin/archive.init
 /usr/local/libexec/npemwin/tclmetar/metar.tcl
 /usr/local/libexec/npemwin/tclmetar/pkgIndex.tcl
