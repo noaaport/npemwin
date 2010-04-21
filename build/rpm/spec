@@ -39,6 +39,7 @@ make clean
 /usr/local/bin/npemwinbatch
 /usr/local/bin/npemwincleanup
 /usr/local/bin/npemwinversion
+/usr/local/bin/npemwinctl
 /usr/local/bin/npemwin-nntpsend
 /usr/local/bin/npemwin-rsscreate
 /usr/local/bin/npemwintrackdata

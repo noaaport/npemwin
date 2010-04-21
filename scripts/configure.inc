@@ -3,8 +3,9 @@
 #
 . ../configure.inc
 
-NPEMWINDSH=npemwind.sh-freebsd
-NPEMWINDSHCONF=
+RCINIT=npemwind.sh-freebsd
+RCFPATH=/usr/local/etc/rc.d/npemwind
+RCCONF=
 HOURLYCONF=hourly-cleanup.conf-freebsd
 STARTCLEANCONF=start-cleanup.conf-freebsd
 STARTSTOPRC=startstop.rc-freebsd
@@ -14,22 +15,24 @@ case $os in
     FreeBSD) 
     	;;
     OpenBSD) 
-	NPEMWINDSH=npemwind.sh-generic
+	RCINIT=npemwind.sh-generic
     	;;
     SunOS)
-	NPEMWINDSH=npemwind.sh-generic
+	RCINIT=npemwind.sh-generic
 	HOURLYCONF=hourly-cleanup.conf-generic
 	STARTCLEANCONF=start-cleanup.conf-generic
     	;;
     Linux)
-	NPEMWINDSH=npemwind.sh-${flavor}
+	RCINIT=npemwind.sh-${flavor}
+	RCFPATH=/etc/init.d/npemwind
 	HOURLYCONF=hourly-cleanup.conf-generic
 	STARTCLEANCONF=start-cleanup.conf-generic
+
 	[ $flavor = debian ] && STARTSTOPRC=startstop.rc-debian
-	[ $flavor = debian ] && NPEMWINDSHCONF=npemwind.sh.conf-debian
+	[ $flavor = debian ] && RCCONF=npemwind.sh.conf-debian
     	;;
     Darwin)
-	NPEMWINDSH=npemwind.sh-macosx
+	RCINIT=npemwind.sh-macosx
 	STARTSTOPRC=startstop.rc-macosx
 	PATH="$PATH:/sw/bin:/sw/sbin"
 	;;

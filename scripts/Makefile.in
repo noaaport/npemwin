@@ -9,8 +9,9 @@ TCLSH =         @TCLSH@
 PATH =		@PATH@
 FIND =		@FIND@
 UNZIP =		@UNZIP@
-NPEMWINDSH =    @NPEMWINDSH@
-NPEMWINDSHCONF =    @NPEMWINDSHCONF@
+RCINIT =	@RCINIT@
+RCFPATH = 	@RCFPATH@
+RCCONF =    	@RCCONF@
 HOURLYCONF =	@HOURLYCONF@
 STARTCLEANCONF = @STARTCLEANCONF@
 STARTSTOPRC =	@STARTSTOPRC@
@@ -19,10 +20,10 @@ SAMPLES =	qrunner.conf-sample qrunner.conf-site-sample \
 		hourly-cleanup.conf-sample \
 		start-cleanup.conf-sample startstop.rc-sample
 LIBTOOLS =	qrunner startstop
-BINTOOLS =	npemwincleanup npemwinversion
+BINTOOLS =	npemwincleanup npemwinversion npemwinctl
 LIBFILES =      npemwind-start.tcl npemwind-stop.tcl
 DOCS =		filter.sh-sample npemwind.sh-sample
-EXTRA_DOCS =	${NPEMWINDSHCONF}
+EXTRA_DOCS =	${RCCONF}
 TARGET =	${SAMPLES} ${BINTOOLS} ${LIBTOOLS} ${DOCS}
 
 all: ${TARGET}
@@ -39,11 +40,16 @@ npemwincleanup: npemwincleanup.tcl
 npemwinversion: npemwinversion.tcl
 	sed -e /%TCLSH%/s##${TCLSH}# npemwinversion.tcl > npemwinversion
 
+npemwinctl: npemwinctl.tcl
+	sed -e /%TCLSH%/s##${TCLSH}# \
+	-e /%RCFPATH%/s##${RCFPATH}# \
+	npemwinctl.tcl > npemwinctl
+
 filter.sh-sample: filter.sh.in
 	sed -e "/%SHELL%/s##${SHELL}#" filter.sh.in > filter.sh-sample
 
-npemwind.sh-sample: ${NPEMWINDSH}
-	cp ${NPEMWINDSH} npemwind.sh-sample
+npemwind.sh-sample: ${RCINIT}
+	cp ${RCINIT} npemwind.sh-sample
 
 qrunner.conf-sample: qrunner.conf.in
 	sed -e "/%PATH%/s##${PATH}#" \
