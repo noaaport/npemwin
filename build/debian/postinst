@@ -122,7 +122,7 @@ cd htdocs/pub
 [ -e "latest" ] || ln -s /var/npemwin/data/latest latest
 [ -e "gempak" ] || ln -s /var/npemwin/data/gempak gempak
 [ -e "track" ] || ln -s /var/npemwin/data/track track
-[ -d "metarplot" ] || mkdir metarplot
+[ -d "metarplot" ] || install -d -m 755 -o $user -g $user metarplot
 
 cat <<__EOF__
 
