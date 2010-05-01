@@ -15,7 +15,7 @@ slave eval {
     set statusfile "/var/npemwin/stats/npemwind.status"
     set activeserverslist  "/var/npemwin/stats/serverslist.txt"
     set emwinstatusfile "/var/npemwin/stats/servers.status"
-    set serveractivefile "/var/npemwin/stats/active"
+    set serveractivefile "/var/npemwin/stats/npemwind.active"
     set serverthreadsfile "/var/npemwin/stats/npemwind.sthreads"
 
     # The optional configuration file

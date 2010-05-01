@@ -74,7 +74,7 @@
  * The server client connections and server threads statistics files.
  */
 #define SERVERSTATEFILE		"/var/npemwin/stats/npemwind.server"
-#define SERVERACTIVEFILE	"/var/npemwin/stats/active"
+#define SERVERACTIVEFILE	"/var/npemwin/stats/npemwind.active"
 #define SERVERTHREADSFILE	"/var/npemwin/stats/npemwind.sthreads"
 
 /*

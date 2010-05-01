@@ -166,7 +166,11 @@ static void periodic(struct conn_element_st *ce){
     return;
   }
 
-  status = conn_element_report_cstats(ce, g.serverthreads_log_freq,
+  /*
+   * In npemwin the criterion for loging is based on the packet count, not
+   * in a period.
+   */
+  status = conn_element_report_cstats(ce, g.serverthreads_log_freq, 0,
 				      g.serverthreadsfile);
   if(status != 0)
     log_err_write(g.serverthreadsfile);
