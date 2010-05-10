@@ -2,7 +2,9 @@
 # $Id$
 #
 
-- This is the 2nd release of the 2.0 version of the
+- Mon May 10 10:15:55 AST 2010
+
+This is the 2nd release of the 2.0 version of the
 NOAAPort Emwin server (npemwin). Packages, sources and documentation
 are available from
 
@@ -11,8 +13,9 @@ are available from
 Packages for other operating systems or distributions not found there
 can be created upon request.
 
-As of version 2.0.r2, npemwind runs as user noaaport, and therefore
-the directories where the daemon writes must be owned by that user:
+As of version 2.0.r2 (this release), npemwind runs as user noaaport,
+and therefore the directories where the daemon writes must be owned
+by that user:
 
     chown -R noaaport:noaaport /var/npemwin
     chown -R noaaport:noaaport /var/log/npemwin

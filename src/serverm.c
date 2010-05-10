@@ -556,8 +556,8 @@ static void spawn_client_threads(void){
   char *nameorip;
   int i;
 
-  assert(g.dbcache_mb >= 0);
-  cqparam.cache_mb = (uint32_t)g.dbcache_mb;
+  assert(g.client_queue_dbcache_mb >= 0);
+  cqparam.cache_mb = (uint32_t)g.client_queue_dbcache_mb;
   cqparam.reclen = QUEUE_PACKET_SIZE; /* EMWIN_PACKET_SIZE + envelope */
   /*
    * XXX cqparam.softlimit = g.client_queue_maxsize_soft;

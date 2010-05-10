@@ -67,7 +67,7 @@ struct npemwin_globals {
   int client_id_wait_secs; /* how long to wait for client to send (first) id */
   int min_compress_ratio;  /* percentage wise */
   /* libconnth queue db related variables */
-  int dbcache_mb;		/* memory size for each client db queue */
+  int client_queue_dbcache_mb;	  /* size for each client db queue */
   int client_queue_maxsize_soft;
   int client_queue_maxsize_hard;
   int client_queue_timeout_msecs;

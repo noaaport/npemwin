@@ -143,8 +143,8 @@
 #define CONFOPT_MIN_COMPRESS_RATIO	@counter@
 #define DEFVAL_MIN_COMPRESS_RATIO	MIN_COMPRESS_RATIO
 
-#define CONFOPT_DBCACHE_MB		@counter@
-#define DEFVAL_DBCACHE_MB		QUEUE_DBCACHE_MB
+#define CONFOPT_CLIENT_QUEUE_DBCACHE_MB		@counter@
+#define DEFVAL_CLIENT_QUEUE_DBCACHE_MB		CLIENT_QUEUE_DBCACHE_MB
 
 #define CONFOPT_CLIENT_QUEUE_MAXSIZE_SOFT 	@counter@
 #define DEFVAL_CLIENT_QUEUE_MAXSIZE_SOFT 	CLIENT_QUEUE_MAXSIZE_SOFT
@@ -219,7 +219,8 @@ static struct confoption_st confoptions[] = {
    DEFVAL_CLIENT_ID_WAIT_SECS},
   {"min_compress_ratio", CONFOPT_MIN_COMPRESS_RATIO, TCL_LINK_INT, NULL,
    DEFVAL_MIN_COMPRESS_RATIO},
-  {"dbcachemb", CONFOPT_DBCACHE_MB, TCL_LINK_INT, NULL, DEFVAL_DBCACHE_MB},
+  {"client_queue_dbcache_mb", CONFOPT_CLIENT_QUEUE_DBCACHE_MB,
+	TCL_LINK_INT, NULL, DEFVAL_CLIENT_QUEUE_DBCACHE_MB},
   {"client_queue_maxsize_soft", CONFOPT_CLIENT_QUEUE_MAXSIZE_SOFT,
 	TCL_LINK_INT, NULL, DEFVAL_CLIENT_QUEUE_MAXSIZE_SOFT},
   {"client_queue_maxsize_hard", CONFOPT_CLIENT_QUEUE_MAXSIZE_HARD,
@@ -319,7 +320,8 @@ int configure(void){
   setoptval(&g.serverprotocol, confoptions, CONFOPT_SERVERPROTOCOL);
   setoptval(&g.client_id_wait_secs, confoptions, CONFOPT_CLIENT_ID_WAIT_SECS);
   setoptval(&g.min_compress_ratio, confoptions, CONFOPT_MIN_COMPRESS_RATIO);
-  setoptval(&g.dbcache_mb, confoptions, CONFOPT_DBCACHE_MB);
+  setoptval(&g.client_queue_dbcache_mb, confoptions,
+	CONFOPT_CLIENT_QUEUE_DBCACHE_MB);
   setoptval(&g.client_queue_maxsize_soft, confoptions,
 	CONFOPT_CLIENT_QUEUE_MAXSIZE_SOFT);
   setoptval(&g.client_queue_maxsize_hard, confoptions,
@@ -395,7 +397,7 @@ void print_confoptions(void){
   fprintf(stdout, "serverprotocol %d\n", g.serverprotocol);
   fprintf(stdout, "client_id_wait_secs %d\n", g.client_id_wait_secs);
   fprintf(stdout, "min_compress_ratio %d\n", g.min_compress_ratio);
-  fprintf(stdout, "dbcachemb %d\n", g.dbcache_mb);
+  fprintf(stdout, "client_queue_dbcache_mb %d\n", g.client_queue_dbcache_mb);
   fprintf(stdout, "client_queue_maxsize_soft %d\n",
 	g.client_queue_maxsize_soft);
   fprintf(stdout, "client_queue_maxsize_hard %d\n",
@@ -479,7 +481,7 @@ int validate_configuration(void){
   VALIDATE_PARAM_L(g.serverprotocol, 0, "serverprotocol");
   VALIDATE_PARAM_L(g.client_id_wait_secs, 0, "client_id_wait_secs");
   VALIDATE_PARAMETER(g.min_compress_ratio, 1, 100, "min_compress_ratio");
-  VALIDATE_PARAM_L(g.dbcache_mb, 0, "dbcachemb");
+  VALIDATE_PARAM_L(g.client_queue_dbcache_mb, 0, "client_queue_dbcache_mb");
   VALIDATE_PARAM_L(g.client_queue_maxsize_soft, 0,
 	"client_queue_maxsize_soft");
   VALIDATE_PARAM_L(g.client_queue_maxsize_hard, 0,

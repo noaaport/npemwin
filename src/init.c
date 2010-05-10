@@ -96,7 +96,7 @@ void init_globals(void){
   g.client_id_wait_secs = CLIENT_ID_WAIT_SECS;
   g.min_compress_ratio = MIN_COMPRESS_RATIO;
 
-  g.dbcache_mb = QUEUE_DBCACHE_MB;
+  g.client_queue_dbcache_mb = CLIENT_QUEUE_DBCACHE_MB;
   g.client_queue_maxsize_soft = CLIENT_QUEUE_MAXSIZE_SOFT;
   g.client_queue_maxsize_hard = CLIENT_QUEUE_MAXSIZE_HARD;
   g.client_queue_timeout_msecs = CLIENT_QUEUE_TIMEOUT_MSECS;

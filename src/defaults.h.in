@@ -147,7 +147,7 @@
  * is an emwin packet that occupies QUEUE_PACKET_SIZE bytes (1120).
  * So, a 1 MB cache is about 1000 entries.
  */
-#define QUEUE_DBCACHE_MB		1
+#define CLIENT_QUEUE_DBCACHE_MB		1
 #define CLIENT_QUEUE_MAXSIZE_SOFT	256
 #define CLIENT_QUEUE_MAXSIZE_HARD	512
 #define CLIENT_QUEUE_TIMEOUT_MSECS      10000
