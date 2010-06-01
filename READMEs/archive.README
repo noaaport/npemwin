@@ -1,0 +1,46 @@
+#
+# $Id$
+#
+In normal operation, the files that are saved in the data directory
+
+	/var/npemwin/data
+
+are deleted periodically. Npemwin can archive permanently the data files
+in two different ways. One way is to enable the ``spoolfilter'' to
+save the raw data files (see spoolfilter.README). The other way is
+described here.
+
+The `dafilter'' has an option to archive the data files in
+a directory tree that mirrors the structure of
+	
+	/var/npemwin/data/digatmos
+
+under
+
+	/var/npemwin/archive/digatmos
+
+The relevant parameters are
+
+set archive(da,enable) 0;
+set archive(da,regex) {.*};
+
+and their meaning is the following.
+
+A non-zero setting of ``archive(da,enable)'' enables the archive.
+If the setting is 1, than a copy of all the data is saved
+permamently (it is not deleted by the hourly cleanup script) in the
+archive directory. A setting of 2 also enables the archive
+but it disables the usual mode of saving the data. If the archive
+is enabled, the variable archive(da,regex) can be used to select what is
+archived in finer detail. The regexp is matched against
+the dafilter data subdirectory name, e.g., surface, nwx/hpc/fronts.
+
+In the default configuration, the files are saved in subdirectories
+named like 20080521 (yyyymmdd). All the files of a given day
+are saved in the corresponding subdirectory. The variable
+``archive(da,subdirfmt)'' can be used to specify a different
+naming convention of those subdirectories. Likewise, a variable
+exists to specify the format of the archive file names.
+
+-
+JFN

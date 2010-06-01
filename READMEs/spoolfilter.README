@@ -16,7 +16,7 @@ the raw data files to be kept around for longer periods. The spoolfilter
 simply saves a copy of each raw data file in a directory tree that is rooted
 at
 
-	/var/npemwin/data/spool/files
+	/var/npemwin/archive/spool
 
 called the "secondary" spool directory. In the default configuration,
 the spoolfilter creates subdirectories named like 20080521 (yyyymmdd)

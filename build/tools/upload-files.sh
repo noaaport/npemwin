@@ -4,7 +4,7 @@
 #
 . upload.conf
 
-cp ../../RELEASE_NOTES ../../UPGRADING ../../conf/*.README .
+cp ../../RELEASE_NOTES ../../UPGRADING ../../READMEs/*.README .
 upload_files="RELEASE_NOTES UPGRADING *.README"
 
 release_file=RELEASE_NOTES

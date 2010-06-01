@@ -166,7 +166,8 @@ proc filter_file {rc_array seq fpath savedir savename args} {
         filter_file_normal $seq $fpath $savedir $savename $args;
     }
 
-    if {$dafilter(archive_enable) != 0} {
+    if {($dafilter(archive_enable) != 0) && \
+	([filterlib_uwildmat $dafilter(archive_regex) $savedir] == 1)} {
         filter_file_archive rc $seq $fpath $savedir $savename $args;
     }
 }

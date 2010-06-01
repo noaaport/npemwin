@@ -22,14 +22,9 @@ SAMPLES =	servers.conf-sample \
 		logrotate.conf-sample \
 		newsyslog.conf-sample
 
-INITS =		npemwind.init
+READMES =	README SCRIPTING
 
-READMES =	README inventory.README nntp.README npemwinfilter.README \
-		emwinuser.README ldm.README da.README prefilter.README \
-		serial.README bbserver.README httpd.README panfilter.README \
-		metarweather.README batch.README spoolfilter.README \
-		msgfilter.README trackfilter.README \
-		SCRIPTING
+INITS =		npemwind.init
 
 DOCSAMPLES =	macosx-launchd.plist-sample
 
@@ -62,8 +57,8 @@ macosx-launchd.plist-sample: macosx-launchd.plist
 	cp macosx-launchd.plist macosx-launchd.plist-sample
 
 install:
-	${INSTALL} -m 644 ${READMES} ${MYCONFDIR}
 	${INSTALL} -m 644 ${SAMPLES} ${MYCONFDIR}
+	${INSTALL} -m 644 ${READMES} ${MYCONFDIR}
 	${INSTALL} -m 644 ${INITS} ${MYLIBEXECDIR}
 	${INSTALL} -m 644 ${DOCSAMPLES} ${MYDOCDIR}
 
