@@ -45,6 +45,7 @@ void init_globals(void){
 
   g.user = EMWIN_USER;
   g.group = EMWIN_GROUP;
+  g.home = EMWIN_HOME;
   g.umask = DEFAULT_UMASK;
 
   g.bbclientid = BBCLIENTID;
@@ -124,9 +125,17 @@ void init_globals(void){
 int init_daemon(void){
 
   int status = 0;
+  int nochdir = 0;
+
+  /*
+   * If g.home is set, then drop_privs() will have already set
+   * the root directory to the normal user's home directory.
+   */
+  if(valid_str(g.home))
+    nochdir = 1;
 
   if(g.option_F == 0)
-    status = daemon(0, 0);
+    status = daemon(nochdir, 0);
 
   if(status != 0)
     return(status);

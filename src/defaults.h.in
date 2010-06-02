@@ -21,13 +21,21 @@
 /*
  * If user/group are set to NULL, npemwind will run as the invoking user,
  * e.g., root if started automatically at boot time.
+ *
+ * NOTE: In order to generate core dump files, it may be necessary to
+ *       set, at least temporarily, the user and group to NULL so that
+ *       the deamon runs as root. Otherwise, the core files are generated
+ *       only if several conditions are met (see Stevens, apue, p.265).
  */
+
 #define EMWIN_USER              "noaaport"
 #define EMWIN_GROUP             "noaaport"
+#define EMWIN_HOME             "/var/npemwin"
+
 #define DEFAULT_UMASK           022
 
 /*
- * For an nbsp master this should be set to empty "" in the conf file.
+ * For an npemwin master this should be set to empty "" in the conf file.
  */
 #define BBCLIENTID		"ByteBlast Client|NM-npemwin@noaaport.net|"
 #define BBCLIENTID_SECS		300

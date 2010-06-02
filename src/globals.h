@@ -22,6 +22,7 @@ struct npemwin_globals {
    */
   char *user;
   char *group;
+  char *home;
   mode_t umask;
   char *bbclientid;	/* the junk for the BB servers */
   int bbclientid_secs;  /* how often */

@@ -20,6 +20,9 @@
 #define CONFOPT_GROUP			@counter@
 #define DEFVAL_GROUP			EMWIN_GROUP
 
+#define CONFOPT_HOME			@counter@
+#define DEFVAL_HOME			EMWIN_HOME
+
 #define CONFOPT_UMASK			@counter@
 #define DEFVAL_UMASK			DEFAULT_UMASK
 
@@ -164,6 +167,7 @@
 static struct confoption_st confoptions[] = {
   {"user", CONFOPT_USER, TCL_LINK_STRING, NULL, 0},
   {"group", CONFOPT_GROUP, TCL_LINK_STRING, NULL, 0},
+  {"home", CONFOPT_HOME, TCL_LINK_STRING, NULL, 0},
   {"umask", CONFOPT_UMASK, TCL_LINK_INT, NULL, DEFVAL_UMASK},
   {"bbclientid", CONFOPT_BBCLIENTID, TCL_LINK_STRING, NULL, 0},
   {"bbclientid_secs", CONFOPT_BBCLIENTID_SECS, TCL_LINK_INT, NULL,
@@ -270,6 +274,7 @@ int configure(void){
 
   setoptval(&g.user, confoptions, CONFOPT_USER);
   setoptval(&g.group, confoptions, CONFOPT_GROUP);
+  setoptval(&g.home, confoptions, CONFOPT_HOME);
   setoptval(&g.umask, confoptions, CONFOPT_UMASK);
   setoptval(&g.bbclientid, confoptions, CONFOPT_BBCLIENTID);
   setoptval(&g.bbclientid_secs, confoptions, CONFOPT_BBCLIENTID_SECS);
@@ -347,6 +352,7 @@ void print_confoptions(void){
 
   fprintf_str(stdout, fmt, "user", g.user);
   fprintf_str(stdout, fmt, "group", g.group);
+  fprintf_str(stdout, fmt, "home", g.home);
   fprintf(stdout, "umask %o\n", g.umask);
 
   fprintf_str(stdout, fmt, "bbclientid", g.bbclientid);
@@ -431,7 +437,7 @@ int validate_configuration(void){
    */
 
   /*
-   * g.user, g.group, g.bbclientid can be NULL or empty
+   * g.user, g.group, g.home, g.bbclientid can be NULL or empty
    */
   VALIDATE_PARAM_L(g.bbclientid_secs, 0, "bbclientid_secs");
 
