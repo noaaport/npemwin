@@ -52,13 +52,13 @@
 # Delete _files_ in the data directories (older than two days)
 # The data{latest,metar,track} directories do not have to be checked.
 # Note that the "digatmos/hurricane" subdirectory is excluded.
-# If the metar archives are enabled, then the setting below
+# If the metar (weatherscope) archives are enabled, then the setting below
 # allows seven days of daily and hourly archives.
 
 H:/var/npemwin/files: -mtime +1 ! -type d
 H:/var/npemwin/data/digatmos:hurricane: -mtime +1 ! -type d
 H:/var/npemwin/data/gempak: -mtime +1 ! -type d
-H=02:/var/noaaport/data/metar/archive: -c 7 -d
+H=02:/var/npemwin/data/metar/weatherscope: -c 7 -d
 
 # Delete _files_ leftover in the spool directory
 H:/var/npemwin/spool: -mmin +240 ! -type d
