@@ -11,15 +11,31 @@ set archive(conf)    [file join $gf(confdir) "archive.conf"];
 set archive(datadir) $gf(archivedatadir);
 set archive(invdir)  $gf(archiveinvdir);
 
+#
 # da
+#
 set archive(da,datadir) [file join $archive(datadir) "digatmos"];
-set archive(da,subdirfmt) "%Y/%m/%d";
+set archive(da,subdirfmt) "%Y%m%d";
 set archive(da,invdir) [file join $archive(invdir) "digatmos"];
 set archive(da,inv_subdirfmt) "%Y%m%d";   # based on arrival time
 set archive(da,inv_namefmt) "%H%M.inv";   # based on arrival time
-
+#
 set archive(da,enable) 0;
 set archive(da,regex) {.*};
+
+#
+# metar
+#
+set archive(metar,datadir) [file join $archive(datadir) "metar"];
+set archive(metar,subdirfmt) "%Y%m%d";
+set archive(metar,fext) ".metar";
+#
+set archive(metar,daily_subdir) "daily";
+set archive(metar,hourly_subdir) "hourly";
+#
+set archive(metar,enable) 0;
+set archive(metar,daily_enable) 1;
+set archive(metar,hourly_enable) 1;
 
 ## The configuration file that overrides the defaults, if it exists.
 if {[file exists $archive(conf)] == 1} {

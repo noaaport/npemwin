@@ -11,5 +11,5 @@
 name=npemwin
 branch=2.0
 releaselevel=p
-releasenumber=3.1
+releasenumber=3.2
 version=${branch}.${releaselevel}${releasenumber}

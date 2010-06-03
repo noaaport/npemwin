@@ -200,13 +200,13 @@ proc filter_file_archive {rc_array seq fpath savedir savename args} {
     upvar $rc_array rc;
     global dafilter;
 
+    set archive_savedir [file join $dafilter(archive_subdir) $savedir];
+
     set currdir [pwd];
     cd $dafilter(archive_datadir);
 
-    set archive_savedir [file join $dafilter(archive_subdir) $savedir];
-    file mkdir $archive_savedir;
-
     set status [catch {
+        file mkdir $archive_savedir;
 	filterlib_file_save $seq $fpath $archive_savedir $savename $args;
     } errmsg];
 
@@ -228,8 +228,7 @@ proc filter_register_archive_inventory {rc_array \
     upvar $rc_array rc;
     global dafilter;
 
-    set invfpath [file join $dafilter(archive_invdir) \
-                       $dafilter(archive_inv_subdir) \
+    set invpath [file join $dafilter(archive_inv_subdir) \
                        $dafilter(archive_inv_name)];
 
     set invdata [list];
@@ -239,9 +238,15 @@ proc filter_register_archive_inventory {rc_array \
     lappend invdata $dafilter(archive_datadir) $dafilter(archive_subdir) \
         $archive_savedir $archive_name;
 
+    set currdir [pwd];
+    cd  $dafilter(archive_invdir);
+    
     set status [catch {
-        filterlib_file_append $invfpath [join $invdata ","];
+	file mkdir $dafilter(archive_inv_subdir);
+        filterlib_file_append $invpath [join $invdata ","];
     } errmsg];
+
+    cd $currdir;
 
     if {$status != 0} {
         log_msg $errmsg;

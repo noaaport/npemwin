@@ -31,9 +31,11 @@ userdirs="/var/run/npemwin
 /var/npemwin/data/track
 /var/npemwin/archive
 /var/npemwin/archive/data
-/var/npemwin/archive/data/spool
 /var/npemwin/archive/data/digatmos
+/var/npemwin/archive/data/metar
+/var/npemwin/archive/data/spool
 /var/npemwin/archive/inv
+/var/npemwin/archive/inv/digatmos
 /var/npemwin/www
 /var/npemwin/tmp"
 #
