@@ -131,8 +131,9 @@ void periodic(void){
    * executed again, but then the zombie is left until the next time
    * runq() is called. There is no harm in that, but just to keep it
    * clean, wait() is called more often here. We don't call runq
-   * (i.e., wait another round) if wait_qrunner() returns
-   * positive (i.e., if a qrunner has just exited).
+   * (i.e., we wait another round) if wait_qrunner() returns
+   * non-negative (i.e., if a qrunner is still running or has just
+   * "waited" for.)
    */
   pid = wait_qrunner();
 
