@@ -205,6 +205,15 @@ int drop_privs(void){
       log_err2("Could not change to user", g.user);
   }
 
+  /*
+   * This is needed when running as a normal user since otherwise
+   * it cannot dump core (to "/") if it has to.
+   */
+  if((status == 0) && valid_str(g.home)){
+    status = chdir(g.home);
+    if(status != 0)
+      log_err2("Could not chdir to", g.home);
+  }
 
   return(status);
 }
