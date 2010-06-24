@@ -23,7 +23,7 @@
 #
 #	source /usr/local/etc/npemwin/npemwinfilter.rc
 #
- This instructions loads a set of condition/action pairs contained
+# This instructions loads a set of condition/action pairs contained
 # in the file, which are evaluated for each file that is received.
 #
 # NOTE: This file is not sourced each time a file is received. The file
