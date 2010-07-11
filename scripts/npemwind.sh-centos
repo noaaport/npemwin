@@ -18,8 +18,15 @@ case "$1" in
     $daemon $options
     ;;
   stop)
-    echo Stoping `basename $daemon.`
-    pkill `basename $daemon`
+    printf "%s" "Stoping `basename $daemon`"
+    pkill -o `basename $daemon`
+    i=0
+    while [ -f $pidfile ]
+    do
+      sleep 1
+      i=`expr $i + 1`
+      [ $i -eq 4 ] && { printf " %s" "."; i=0; }
+    done
     ;;
   *)
     echo "Usage: $0 {start|stop}"

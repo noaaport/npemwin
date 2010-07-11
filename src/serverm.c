@@ -120,7 +120,7 @@ int init_server(void){
    */
   status = conn_table_add_element(g.ct, g.server_fd,
 				  CONN_TYPE_SERVER_NET, 0, NULL, NULL,
-				  0, 0, 0, 0);
+				  0, 0, 0, 0, 0);
 
   if(status != 0)
     log_err("Cannot init server.");
@@ -257,6 +257,8 @@ static void process_connections(void){
   clientopts.write_timeout_ms = g.writetimeout_s * 1000; /* not used */
   clientopts.reconnect_wait_sleep_secs = 0;	/* not used */
   clientopts.reconnect_wait_sleep_retry = 0;	/* not used */
+  clientopts.queue_read_timeout_ms = 
+    g.client_queue_timeout_msecs; /* not used */
   /*
   clientopts.reconnect_wait_sleep_secs = g.client_reconnect_wait_sleep_secs;
   clientopts.reconnect_wait_sleep_retry = g.client_reconnect_wait_sleep_retry;

@@ -87,7 +87,8 @@ static void loop(struct conn_element_st *ce){
   char *bbdata;
   uint32_t bbdata_size;
   int timeout_ms = g.client_queue_timeout_msecs;
-  
+
+  /* We are not using ce->queue_read_timeout_ms in npemwin */  
   status = connqueue_rcv(ce->cq, &data, &data_size, timeout_ms, &dberror);
   if(status == -1)
     log_err2_db("Error reading from queue for %s.",
