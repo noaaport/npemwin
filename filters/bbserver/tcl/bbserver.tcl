@@ -135,10 +135,10 @@ set bbserver_str [join $bbserver_list "|"];
 
 set status [catch {
     puts $socket $bbserver_str;
+    close $socket;
 } errmsg];
 if {$status != 0} {
     log_msg $errmsg;
 } else {
     log_msg $bbserver_str;
 }
-close $socket;
