@@ -13,10 +13,11 @@ slave eval {
     # The defaults according to "defaults.h"
     set tclhttpdfifo "/var/run/npemwin/tclhttpd.fifo"
     set statusfile "/var/npemwin/stats/npemwind.status"
-    set activeserverslist  "/var/npemwin/stats/serverslist.txt"
     set emwinstatusfile "/var/npemwin/stats/servers.status"
     set serveractivefile "/var/npemwin/stats/npemwind.active"
     set serverthreadsfile "/var/npemwin/stats/npemwind.sthreads"
+    set bbserver_mserverlist "/var/npemwin/stats/mserverlist.txt"
+    set bbserver_bbserverlist "/var/npemwin/stats/bbserverlist.txt"
 
     # The optional configuration file
     set _conf "/usr/local/etc/npemwin/npemwind.conf";
@@ -28,9 +29,11 @@ slave eval {
 
 set npemwind(tclhttpdfifo)	[slave eval {return $tclhttpdfifo}]
 set npemwind(statusfile)	[slave eval {return $statusfile}]
-set npemwind(activeserverslist) [slave eval {return $activeserverslist}]
 set npemwind(emwinstatusfile)	[slave eval {return $emwinstatusfile}]
 set npemwind(serveractivefile)	[slave eval {return $serveractivefile}]
 set npemwind(serverthreadsfile)	[slave eval {return $serverthreadsfile}]
+set npemwind(bbserver_mserverlist) [slave eval {return $bbserver_mserverlist}]
+set npemwind(bbserver_bbserverlist) \
+	[slave eval {return $bbserver_bbserverlist}]
 
 interp delete slave;

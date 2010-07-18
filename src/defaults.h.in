@@ -55,16 +55,9 @@
 #define NBSP_STATS_PERIOD	60
 
 /*
- * npemwin connects to the servers listed in the specified file.
+ * npemwin connects to the bb servers listed in the specified file.
  */
-#define EMWIN_SERVERS_LIST	"%MYCONFDIR%/servers.conf"
-
-/* 
- * Where the list of active servers (received from the servers themselves)
- * is written
- */
-#define EMWIN_ACTIVE_SERVERS_LIST	"/var/npemwin/stats/serverslist.txt"
-#define EMWIN_ACTIVE_SERVERS_RAWLIST	"/var/npemwin/stats/serverslist.raw"
+#define EMWIN_SERVERS_LIST_FILE	"%MYCONFDIR%/servers.conf"
 
 /* Where the status of servers is written */
 #define EMWIN_SERVERS_STATUS_FILE	"/var/npemwin/stats/servers.status"
@@ -129,6 +122,36 @@
 /* Whether the httpd server should be enabled, and the tclhttpd script */
 #define NBSP_HTTPD_ENABLE	1
 #define NBSP_HTTPD		"%MYLIBEXECDIR%/httpd"
+
+/*
+ * Whether to register with the NWS master host and the parameters
+ * related to that.
+ */
+#define BBSERVER_ENABLE		1
+#define BBSERVER		"%MYLIBEXECDIR%/bbserver"
+
+/* The various lists received from the NWS master host */
+#define BBSERVER_MSERVERLIST    "/var/npemwin/stats/mserverlist.txt"
+#define BBSERVER_MSERVERLIST_RAW "/var/npemwin/stats/mserverlist.raw"
+
+#define BBSERVER_MSERVERPUBLIST  "/var/npemwin/stats/mserverpublist.txt"
+#define BBSERVER_MSERVERPUBLIST_RAW  "/var/npemwin/stats/mserverpublist.raw"
+
+#define BBSERVER_MSERVERDIRLIST  "/var/npemwin/stats/mserverdirlist.txt"
+#define BBSERVER_MSERVERDIRLIST_RAW  "/var/npemwin/stats/mserverdirlist.raw"
+
+#define BBSERVER_MSERVERSATLIST  "/var/npemwin/stats/mserversatlist.txt"
+#define BBSERVER_MSERVERSATLIST_RAW  "/var/npemwin/stats/mserversatlist.raw"
+
+/* 
+ * Where the lists of active servers (received from the bb servers themselves)
+ * are written.
+ */
+#define BBSERVER_BBSERVERLIST  "/var/npemwin/stats/bbserverlist.txt"
+#define BBSERVER_BBSERVERLIST_RAW  "/var/npemwin/stats/bbserverlist.raw"
+
+#define BBSERVER_BBSERVERSATLIST  "/var/npemwin/stats/bbserversatlist.txt"
+#define BBSERVER_BBSERVERSATLIST_RAW  "/var/npemwin/stats/bbserversatlist.raw"
 
 /*
  * Server functions

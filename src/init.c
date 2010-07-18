@@ -22,6 +22,7 @@
 #include "servers.h"
 #include "server.h"
 #include "httpd.h"
+#include "bbreg.h"
 #include "stats.h"
 #include "util.h"
 #include "pid.h"
@@ -60,9 +61,7 @@ void init_globals(void){
   g.statusfile = SERVERSTATUSFILE;
   g.nbspstats_period = NBSP_STATS_PERIOD;
 
-  g.serverlist = EMWIN_SERVERS_LIST;
-  g.activeserverlist = EMWIN_ACTIVE_SERVERS_LIST;
-  g.activeserverlist_raw = EMWIN_ACTIVE_SERVERS_RAWLIST;
+  g.serverslistfile = EMWIN_SERVERS_LIST_FILE;
   g.emwinstatusfile = EMWIN_SERVERS_STATUS_FILE;
   g.min_consecutive_packets = MIN_CONSECUTIVE_PACKETS;
   g.max_bad_packet_count = MAX_BAD_PACKET_COUNT;
@@ -86,8 +85,24 @@ void init_globals(void){
   g.stopscript = STOP_SCRIPT;
   g.scheduler = SCHEDULER;
 
-  g.httpdenable = NBSP_HTTPD_ENABLE;
+  g.httpd_enable = NBSP_HTTPD_ENABLE;
   g.httpd = NBSP_HTTPD;
+
+  g.bbserver_enable = BBSERVER_ENABLE;
+  g.bbserver = BBSERVER;
+
+  g.mserverlist = BBSERVER_MSERVERLIST;
+  g.mserverlist_raw = BBSERVER_MSERVERLIST_RAW;
+  g.mserverpublist = BBSERVER_MSERVERPUBLIST;
+  g.mserverpublist_raw = BBSERVER_MSERVERPUBLIST_RAW;
+  g.mserverdirlist = BBSERVER_MSERVERDIRLIST;
+  g.mserverdirlist_raw = BBSERVER_MSERVERDIRLIST_RAW;
+  g.mserversatlist = BBSERVER_MSERVERSATLIST;
+  g.mserversatlist_raw = BBSERVER_MSERVERSATLIST_RAW;
+  g.bbserverlist = BBSERVER_BBSERVERLIST;
+  g.bbserverlist_raw = BBSERVER_BBSERVERLIST_RAW;
+  g.bbserversatlist = BBSERVER_BBSERVERSATLIST;
+  g.bbserversatlist_raw = BBSERVER_BBSERVERSATLIST_RAW;
 
   g.servername = SERVER_NAME;
   g.serverport = SERVER_PORT;
@@ -110,6 +125,7 @@ void init_globals(void){
   g.qrun_count = 0;
   g.qrunner_pid = -1;
   g.httpdfp = NULL;
+  g.bbserverfp = NULL;
   nbspstats_init();
   g.server_fd = -1;
   g.ct = NULL;
@@ -175,6 +191,7 @@ void cleanup(void){
   destroy_emwin_qfiles();
 
   kill_httpd_server();
+  kill_bbregistrar();
 
   if(g.f_lock == 1){
     if(remove_pidfile(g.pidfile) != 0)
@@ -222,13 +239,13 @@ int init_server_list(void){
 
   int status = 0;
 
-  status = get_server_list(g.serverlist);
+  status = get_server_list(g.serverslistfile);
   if(status == -1)
-    err(1, "Error reading %s.", g.serverlist);
+    err(1, "Error reading %s.", g.serverslistfile);
   else if(status == 1)
-    errx(1, "Error reading %s.", g.serverlist);
+    errx(1, "Error reading %s.", g.serverslistfile);
   else if(status == 2)
-    errx(1, "No servers in %s.", g.serverlist);
+    errx(1, "No servers in %s.", g.serverslistfile);
 
   return(status);
 }

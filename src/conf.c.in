@@ -56,14 +56,8 @@
 #define CONFOPT_NBSPSTATSPERIOD		@counter@
 #define DEFVAL_NBSPSTATSPERIOD		NBSP_STATS_PERIOD
 
-#define CONFOPT_SERVERSLIST		@counter@
-#define DEFVAL_SERVERSLIST		EMWIN_SERVERS_LIST
-
-#define CONFOPT_ACTIVESERVERSLIST	@counter@
-#define DEFVAL_ACTIVESERVERSLIST	EMWIN_ACTIVE_SERVERS_LIST
-
-#define CONFOPT_ACTIVESERVERSRAWLIST	@counter@
-#define DEFVAL_ACTIVESERVERSRAWLIST	EMWIN_ACTIVE_SERVERS_RAWLIST
+#define CONFOPT_SERVERSLISTFILE		@counter@
+#define DEFVAL_SERVERSLISTFILE		EMWIN_SERVERS_LIST_FILE
 
 #define CONFOPT_EMWINSTATUSFILE		@counter@
 #define DEFVAL_EMWINSTATUSFILE		EMWIN_SERVERS_STATUS_FILE
@@ -122,11 +116,53 @@
 #define CONFOPT_SCHEDULER		@counter@
 #define DEFVAL_SCHEDULER		SCHEDULER
 
-#define CONFOPT_HTTPDENABLE		@counter@
-#define DEFVAL_HTTPDENABLE		NBSP_HTTPD_ENABLE
+#define CONFOPT_HTTPD_ENABLE		@counter@
+#define DEFVAL_HTTPD_ENABLE		NBSP_HTTPD_ENABLE
 
 #define CONFOPT_HTTPD			@counter@
 #define DFEVAL_HTTPPD			NBSP_HTTPD
+
+#define CONFOPT_BBSERVER_ENABLE		@counter@
+#define DEFVAL_BBSERVER_ENABLE		BBSERVER_ENABLE
+
+#define CONFOPT_BBSERVER		@counter@
+#define DEFVAL_BBSERVER			BBSERVER
+
+#define CONFOPT_BBSERVER_MSERVERLIST	@counter@
+#define DEFVAL_BBSERVER_MSERVERLIST	BBSERVER_MSERVERLIST
+
+#define CONFOPT_BBSERVER_MSERVERLIST_RAW	@counter@
+#define DEFVAL_BBSERVER_MSERVERLIST_RAW		BBSERVER_MSERVERLIST_RAW
+
+#define CONFOPT_BBSERVER_MSERVERPUBLIST		@counter@
+#define DEFVAL_BBSERVER_MSERVERPUBLIST		BBSERVER_MSERVERPUBLIST
+
+#define CONFOPT_BBSERVER_MSERVERPUBLIST_RAW	@counter@
+#define DEFVAL_BBSERVER_MSERVERPUBLIST_RAW	BBSERVER_MSERVERPUBLIST_RAW
+
+#define CONFOPT_BBSERVER_MSERVERDIRLIST		@counter@
+#define DEFVAL_BBSERVER_MSERVERDIRLIST		BBSERVER_MSERVERDIRLIST
+
+#define CONFOPT_BBSERVER_MSERVERDIRLIST_RAW	@counter@
+#define DEFVAL_BBSERVER_MSERVERDIRLIST_RAW	BBSERVER_MSERVERDIRLIST_RAW
+
+#define CONFOPT_BBSERVER_MSERVERSATLIST		@counter@
+#define DEFVAL_BBSERVER_MSERVERSATLIST		BBSERVER_MSERVERSATLIST
+
+#define CONFOPT_BBSERVER_MSERVERSATLIST_RAW	@counter@
+#define DEFVAL_BBSERVER_MSERVERSATLIST_RAW	BBSERVER_MSERVERSATLIST_RAW
+
+#define CONFOPT_BBSERVER_BBSERVERLIST		@counter@
+#define DEFVAL_BBSERVER_BBSERVERLIST		BBSERVER_BBSERVERLIST
+
+#define CONFOPT_BBSERVER_BBSERVERLIST_RAW	@counter@
+#define DEFVAL_BBSERVER_BBSERVERLIST_RAW	BBSERVER_BBSERVERLIST_RAW
+
+#define CONFOPT_BBSERVER_BBSERVERSATLIST	@counter@
+#define DEFVAL_BBSERVER_BBSERVERSATLIST		BBSERVER_BBSERVERSATLIST
+
+#define CONFOPT_BBSERVER_BBSERVERSATLIST_RAW	@counter@
+#define DEFVAL_BBSERVER_BBSERVERSATLIST_RAW	BBSERVER_BBSERVERSATLIST_RAW
 
 #define CONFOPT_SERVERNAME		@counter@
 #define DEFVAL_SERVERNAME		SERVER_NAME
@@ -181,16 +217,13 @@ static struct confoption_st confoptions[] = {
   {"statusfile", CONFOPT_STATUSFILE, TCL_LINK_STRING, NULL, 0},
   {"statsperiod", CONFOPT_NBSPSTATSPERIOD, TCL_LINK_INT, NULL,
 	DEFVAL_NBSPSTATSPERIOD},
-  {"serverslist", CONFOPT_SERVERSLIST, TCL_LINK_STRING, NULL, 0},
-  {"activeserverslist", CONFOPT_ACTIVESERVERSLIST, TCL_LINK_STRING, NULL, 0},
-  {"activeserversrawlist", CONFOPT_ACTIVESERVERSRAWLIST, TCL_LINK_STRING, NULL, 0},
+  {"serverslistfile", CONFOPT_SERVERSLISTFILE, TCL_LINK_STRING, NULL, 0},
   {"emwinstatusfile", CONFOPT_EMWINSTATUSFILE, TCL_LINK_STRING, NULL, 0},
   {"minconsecutivepackets", CONFOPT_MINCONSECUTIVEPACKETS, TCL_LINK_INT, NULL,
    DEFVAL_MINCONSECUTIVEPACKETS},
   {"maxbadpacketcount", CONFOPT_MAXBADPACKETCOUNT, TCL_LINK_INT, NULL,
    DEFVAL_MAXBADPACKETCOUNT},
   {"retrysleep", CONFOPT_RETRYSLEEP, TCL_LINK_INT, NULL, DEFVAL_RETRYSLEEP},
-
   {"serverstatefile", CONFOPT_SERVERSTATEFILE, TCL_LINK_STRING, NULL, 0},
   {"serveractivefile", CONFOPT_SERVERACTIVEFILE, TCL_LINK_STRING, NULL, 0},
   {"serverthreadsfile", CONFOPT_SERVERTHREADSFILE, TCL_LINK_STRING, NULL, 0},
@@ -211,8 +244,37 @@ static struct confoption_st confoptions[] = {
   {"startscript", CONFOPT_STARTSCRIPT, TCL_LINK_STRING, NULL, 0},
   {"stopscript", CONFOPT_STOPSCRIPT, TCL_LINK_STRING, NULL, 0},
   {"scheduler", CONFOPT_SCHEDULER, TCL_LINK_STRING, NULL, 0},
-  {"httpdenable", CONFOPT_HTTPDENABLE, TCL_LINK_INT, NULL, DEFVAL_HTTPDENABLE},
+  {"httpd_enable", CONFOPT_HTTPD_ENABLE, TCL_LINK_INT, NULL,
+	DEFVAL_HTTPD_ENABLE},
   {"httpd", CONFOPT_HTTPD, TCL_LINK_STRING, NULL, 0},
+
+  {"bbserver_enable", CONFOPT_BBSERVER_ENABLE, TCL_LINK_INT, NULL,
+	DEFVAL_BBSERVER_ENABLE},
+  {"bbserver", CONFOPT_BBSERVER, TCL_LINK_STRING, NULL, 0},
+  {"bbserver_mserverlist", CONFOPT_BBSERVER_MSERVERLIST,
+	TCL_LINK_STRING, NULL, 0},
+  {"bbserver_mserverlist_raw", CONFOPT_BBSERVER_MSERVERLIST_RAW,
+	TCL_LINK_STRING, NULL, 0},
+  {"bbserver_mserverpublist", CONFOPT_BBSERVER_MSERVERPUBLIST,
+	TCL_LINK_STRING, NULL, 0},
+  {"bbserver_mserverpublist_raw", CONFOPT_BBSERVER_MSERVERPUBLIST_RAW,
+	TCL_LINK_STRING, NULL, 0},
+  {"bbserver_mserverdirlist", CONFOPT_BBSERVER_MSERVERDIRLIST,
+	TCL_LINK_STRING, NULL, 0},
+  {"bbserver_mserverdirlist_raw", CONFOPT_BBSERVER_MSERVERDIRLIST_RAW,
+	TCL_LINK_STRING, NULL, 0},
+  {"bbserver_mserversatlist", CONFOPT_BBSERVER_MSERVERSATLIST,
+	TCL_LINK_STRING, NULL, 0},
+  {"bbserver_mserversatlist_raw", CONFOPT_BBSERVER_MSERVERSATLIST_RAW,
+	TCL_LINK_STRING, NULL, 0},
+  {"bbserver_bbserverlist", CONFOPT_BBSERVER_BBSERVERLIST,
+	TCL_LINK_STRING, NULL, 0},
+  {"bbserver_bbserverlist_raw", CONFOPT_BBSERVER_BBSERVERLIST_RAW,
+	TCL_LINK_STRING, NULL, 0},
+  {"bbserver_bbserversatlist", CONFOPT_BBSERVER_BBSERVERSATLIST,
+	TCL_LINK_STRING, NULL, 0},
+  {"bbserver_bbserversatlist_raw", CONFOPT_BBSERVER_BBSERVERSATLIST_RAW,
+	TCL_LINK_STRING, NULL, 0},
   {"servername", CONFOPT_SERVERNAME, TCL_LINK_STRING, NULL, 0},
   {"serverport", CONFOPT_SERVERPORT, TCL_LINK_STRING, NULL, 0},
   {"maxnetclients", CONFOPT_MAXNETCLIENTS, TCL_LINK_INT, NULL,
@@ -288,9 +350,7 @@ int configure(void){
   setoptval(&g.statusfile, confoptions, CONFOPT_STATUSFILE);
   setoptval(&g.nbspstats_period, confoptions, CONFOPT_NBSPSTATSPERIOD);
 
-  setoptval(&g.serverlist, confoptions, CONFOPT_SERVERSLIST);
-  setoptval(&g.activeserverlist, confoptions, CONFOPT_ACTIVESERVERSLIST);
-  setoptval(&g.activeserverlist_raw, confoptions, CONFOPT_ACTIVESERVERSRAWLIST);
+  setoptval(&g.serverslistfile, confoptions, CONFOPT_SERVERSLISTFILE);
   setoptval(&g.emwinstatusfile, confoptions, CONFOPT_EMWINSTATUSFILE);
   setoptval(&g.min_consecutive_packets, confoptions,
 	    CONFOPT_MINCONSECUTIVEPACKETS);
@@ -316,8 +376,36 @@ int configure(void){
   setoptval(&g.stopscript, confoptions, CONFOPT_STOPSCRIPT);
   setoptval(&g.scheduler, confoptions, CONFOPT_SCHEDULER);
 
-  setoptval(&g.httpdenable, confoptions, CONFOPT_HTTPDENABLE);
+  setoptval(&g.httpd_enable, confoptions, CONFOPT_HTTPD_ENABLE);
   setoptval(&g.httpd, confoptions, CONFOPT_HTTPD);
+
+  setoptval(&g.bbserver_enable, confoptions, CONFOPT_BBSERVER_ENABLE);
+  setoptval(&g.bbserver, confoptions, CONFOPT_BBSERVER);
+
+  setoptval(&g.mserverlist, confoptions,
+        CONFOPT_BBSERVER_MSERVERLIST);
+  setoptval(&g.mserverlist_raw, confoptions,
+        CONFOPT_BBSERVER_MSERVERLIST_RAW);
+  setoptval(&g.mserverpublist, confoptions,
+        CONFOPT_BBSERVER_MSERVERPUBLIST);
+  setoptval(&g.mserverpublist_raw, confoptions,
+        CONFOPT_BBSERVER_MSERVERPUBLIST_RAW);
+  setoptval(&g.mserverdirlist, confoptions,
+        CONFOPT_BBSERVER_MSERVERDIRLIST);
+  setoptval(&g.mserverdirlist_raw, confoptions,
+        CONFOPT_BBSERVER_MSERVERDIRLIST_RAW);
+  setoptval(&g.mserversatlist, confoptions,
+        CONFOPT_BBSERVER_MSERVERSATLIST);
+  setoptval(&g.mserversatlist_raw, confoptions,
+        CONFOPT_BBSERVER_MSERVERSATLIST_RAW);
+  setoptval(&g.bbserverlist, confoptions,
+        CONFOPT_BBSERVER_BBSERVERLIST);
+  setoptval(&g.bbserverlist_raw, confoptions,
+        CONFOPT_BBSERVER_BBSERVERLIST_RAW);
+  setoptval(&g.bbserversatlist, confoptions,
+        CONFOPT_BBSERVER_BBSERVERSATLIST);
+  setoptval(&g.bbserversatlist_raw, confoptions,
+        CONFOPT_BBSERVER_BBSERVERSATLIST_RAW);
 
   setoptval(&g.servername, confoptions, CONFOPT_SERVERNAME);
   setoptval(&g.serverport, confoptions, CONFOPT_SERVERPORT);
@@ -368,9 +456,7 @@ void print_confoptions(void){
   fprintf(stdout, "statsperiod " "%" PRIuMAX "\n",
 	(uintmax_t)g.nbspstats_period);
 
-  fprintf_str(stdout, fmt, "serverlist", g.serverlist);
-  fprintf_str(stdout, fmt, "activeserverlist", g.activeserverlist);
-  fprintf_str(stdout, fmt, "activeserverrawlist", g.activeserverlist_raw);
+  fprintf_str(stdout, fmt, "serverslistfile", g.serverslistfile);
   fprintf_str(stdout, fmt, "emwinstatusfile", g.emwinstatusfile);
   fprintf(stdout, "minconsecutivepackets %d\n", g.min_consecutive_packets);
   fprintf(stdout, "maxbadpacketcount %d\n", g.max_bad_packet_count);
@@ -394,8 +480,28 @@ void print_confoptions(void){
   fprintf_str(stdout, fmt, "stopscript", g.stopscript);
   fprintf_str(stdout, fmt, "scheduler", g.scheduler);
 
-  fprintf(stdout, "httpdenable %d\n", g.httpdenable); 
+  fprintf(stdout, "httpd_enable %d\n", g.httpd_enable); 
   fprintf_str(stdout, fmt, "httpd", g.httpd);
+
+  fprintf(stdout, "bbserver_enable %d\n", g.bbserver_enable); 
+  fprintf_str(stdout, fmt, "bbserver", g.bbserver);
+
+  fprintf_str(stdout, fmt, "bbserver_mserverlist", g.mserverlist);
+  fprintf_str(stdout, fmt, "bbserver_mserverlist_raw", g.mserverlist_raw);
+  fprintf_str(stdout, fmt, "bbserver_mserverpublist", g.mserverpublist);
+  fprintf_str(stdout, fmt, "bbserver_mserverpublist_raw",
+	g.mserverpublist_raw);
+  fprintf_str(stdout, fmt, "bbserver_mserverdirlist", g.mserverdirlist);
+  fprintf_str(stdout, fmt, "bbserver_mserverdirlist_raw",
+	g.mserverdirlist_raw);
+  fprintf_str(stdout, fmt, "bbserver_mserversatlist", g.mserversatlist);
+  fprintf_str(stdout, fmt, "bbserver_mserversatlist_raw",
+	g.mserversatlist_raw);
+  fprintf_str(stdout, fmt, "bbserver_bbserverlist", g.bbserverlist);
+  fprintf_str(stdout, fmt, "bbserver_bbserverlist_raw", g.bbserverlist_raw);
+  fprintf_str(stdout, fmt, "bbserver_bbserversatlist", g.bbserversatlist);
+  fprintf_str(stdout, fmt, "bbserver_bbserversatlist_raw",
+	g.bbserversatlist_raw);
 
   fprintf_str(stdout, fmt, "servername", g.servername);
   fprintf_str(stdout, fmt, "serverport", g.serverport);
@@ -450,9 +556,7 @@ int validate_configuration(void){
   VALIDATE_STR(g.statusfile, "statusfile");
   VALIDATE_PARAM_L(g.nbspstats_period, 0, "statsperiod");
 
-  VALIDATE_STR(g.serverlist, "serverlist");
-  VALIDATE_STR(g.activeserverlist, "activeserverlist");
-  VALIDATE_STR(g.activeserverlist_raw, "activeserverrawlist");
+  VALIDATE_STR(g.serverslistfile, "serverslistfile");
   VALIDATE_STR(g.emwinstatusfile, "emwinstatusfile");
   VALIDATE_PARAM_L(g.min_consecutive_packets, 0, "minconsecutivepackets");
   VALIDATE_PARAM_L(g.max_bad_packet_count, 0, "maxbadpacketcount");
@@ -476,8 +580,24 @@ int validate_configuration(void){
    */
   VALIDATE_STR(g.scheduler, "scheduler");
 
-  VALIDATE_PARAMETER(g.httpdenable, 0, 1, "httpdenable");
+  VALIDATE_PARAMETER(g.httpd_enable, 0, 1, "httpd_enable");
   VALIDATE_STR(g.httpd, "httpd");
+
+  VALIDATE_PARAMETER(g.bbserver_enable, 0, 1, "bbserver_enable");
+  VALIDATE_STR(g.bbserver, "bbserver");
+
+  VALIDATE_STR(g.mserverlist, "bbserver_mserverlist");
+  VALIDATE_STR(g.mserverlist_raw, "bbserver_mserverlist_raw");
+  VALIDATE_STR(g.mserverpublist, "bbserver_mserverpublist");
+  VALIDATE_STR(g.mserverpublist_raw, "bbserver_mserverpublist_raw");
+  VALIDATE_STR(g.mserverdirlist, "bbserver_mserverdirlist");
+  VALIDATE_STR(g.mserverdirlist_raw, "bbserver_mserverdirlist_raw");
+  VALIDATE_STR(g.mserversatlist, "bbserver_mserversatlist");
+  VALIDATE_STR(g.mserversatlist_raw, "bbserver_mserversatlist_raw");
+  VALIDATE_STR(g.bbserverlist, "bbserver_bbserverlist");
+  VALIDATE_STR(g.bbserverlist_raw, "bbserver_bbserverlist_raw");
+  VALIDATE_STR(g.bbserversatlist, "bbserver_bbserversatlist");
+  VALIDATE_STR(g.bbserversatlist_raw, "bbserver_bbserversatlist_raw");
 
   /*
    * g.servername can be NULL

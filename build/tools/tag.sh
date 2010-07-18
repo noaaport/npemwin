@@ -3,6 +3,8 @@
 . ../../VERSION
 
 project=${name}
+tag="tags/${name}-${version}"
+#
 masterhost="http://svn.1-loop.net"
 masterrepo="nbsprepo"
 #
@@ -14,16 +16,18 @@ tcllibs="tclmetar"
 srclibs="libconnth libqdb libtclconf"
 tclhttpd=${project}tclhttpd
 
-svn co $mastersite/$project/trunk $project
+cd ../../../
+svn copy $project $mastersite/$project/$tag
 cd $project
+
 for p in $tcllibs
 do
-  svn co $mastersite/$p/trunk $p
+  svn copy $p $mastersite/$p/$tag
 done
-svn co $mastersite/$tclhttpd/trunk tclhttpd
+svn copy tclhttpd $mastersite/$tclhttpd/$tag
 
 cd src
 for p in $srclibs
 do
-  svn co $mastersite/$p/trunk $p
+  svn copy $p $mastersite/$p/$tag
 done

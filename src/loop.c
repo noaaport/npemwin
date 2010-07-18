@@ -349,12 +349,12 @@ static void reload_servers_list(void){
   int status = 0;
 
   release_server_list();
-  status = get_server_list(g.serverlist);
+  status = get_server_list(g.serverslistfile);
   if(status == -1){
-    log_err2("Error reading", g.serverlist);
+    log_err2("Error reading", g.serverslistfile);
     exit(1);
   }else if(status == 1){
-    log_errx("Error reading %s.", g.serverlist);
+    log_errx("Error reading %s.", g.serverslistfile);
     exit(1);
   }else{
     log_info("Reread server list.");

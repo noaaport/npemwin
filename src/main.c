@@ -18,6 +18,7 @@
 #include "server.h"
 #include "emwin.h"
 #include "httpd.h"
+#include "bbreg.h"
 #include "conf.h"
 #include "init.h"
 #include "loop.h"
@@ -148,8 +149,14 @@ int main(int argc, char **argv){
   }
 
   if(status == 0){
-    if(g.httpdenable > 0){
+    if(g.httpd_enable > 0){
       status = spawn_httpd_server();
+    }
+  }
+
+  if(status == 0){
+    if(g.bbserver_enable > 0){
+      status = spawn_bbregistrar();
     }
   }
 

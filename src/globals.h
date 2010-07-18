@@ -34,9 +34,7 @@ struct npemwin_globals {
   char *pidfile;
   char *statusfile;	/* server's own statistics file */
   time_t nbspstats_period; /* report the server's statistics */
-  char *serverlist;	/* path to file that contains the list */
-  char *activeserverlist; /* server list received from the servers */
-  char *activeserverlist_raw;
+  char *serverslistfile; /* file that contains our bb master server(s) */
   char *emwinstatusfile;	/* emwin servers status file */
   /* mininum number of consecutive packets received to avoid a bad mark */
   int  min_consecutive_packets;
@@ -58,8 +56,23 @@ struct npemwin_globals {
   char *startscript;	/* just before becoming a daemon */
   char *stopscript;	/* just before exiting */
   char *scheduler;
-  int httpdenable;
+  int httpd_enable;
   char *httpd;		/* tclhttpd script */
+  int bbserver_enable;  /* advertise npemwind to NWS master host */
+  char *bbserver;	/* bbserver script (for the NWS master host) */
+  /* The various files used by the bbserver script */
+  char *mserverlist;	/* ServerList as received from the master */
+  char *mserverlist_raw;
+  char *mserverpublist;	/* PublicList received from the master */
+  char *mserverpublist_raw;
+  char *mserverdirlist;	/* DdirectList received from the master */
+  char *mserverdirlist_raw;
+  char *mserversatlist;	/* SatList received built by bbserver script */
+  char *mserversatlist_raw;
+  char *bbserverlist;  /* ServerList received from our bb servers */
+  char *bbserverlist_raw;
+  char *bbserversatlist;  /* SatList received from our bb servers */
+  char *bbserversatlist_raw;
   char *servername;	/* null => gethostname */
   char *serverport;	/* listening port */
   int  listen_backlog;
@@ -81,6 +94,7 @@ struct npemwin_globals {
   int  qrun_count;	/* number of times the que has been processed. */
   pid_t qrunner_pid;   /* pid of last qrunner executed */
   FILE *httpdfp;
+  FILE *bbserverfp;    /* the script that communicates with the host master */
   struct nbsp_stats_st nbspstats;
   int  server_fd;	/* listening socket for client connections */
   struct conn_table_st *ct;     /* libconnth table */

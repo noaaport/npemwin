@@ -69,10 +69,6 @@ set logdir /var/log/npemwin
 #
 # Each program is executed in the background so that no one blocks the others.
 #
-# Register with the NWS master every 6 minutes
-lappend schedule {
-  M/6:bbserver &
-}
 
 # Execute the hourly cleanup script (one minute after the hour)
 lappend schedule {

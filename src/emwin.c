@@ -880,13 +880,13 @@ int save_server_list(struct emwin_packet *ep){
   FILE *f;
   int status = 0;
 
-  if((f = fopen(g.activeserverlist_raw, "w")) == NULL)
+  if((f = fopen(g.bbserverlist_raw, "w")) == NULL)
     return(-1);
 
   fprintf(f, "%s", ep->rawdata);
   fclose(f);
 
-  status = write_server_list(ep->rawdata, g.activeserverlist);
+  status = write_server_list(ep->rawdata, g.bbserverlist);
 
   return(status);
 }
