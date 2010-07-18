@@ -83,15 +83,23 @@ proc open_connection {mhost mport retrysecs retrytimes} {
 	log_msg "Trying connection to $mhost@$mport";
 	set status [catch {
 	    set socket [socket $mhost $mport];
-	    log_msg "Established connection";
 	    fconfigure $socket -buffering line;
+	    log_msg "Established connection";
 	} errmsg];
 	if {$status != 0} {
+	    if {[info exists socket]} {
+		catch {close $socket};
+		unset socket;
+	    }
 	    log_msg $errmsg;
 	    after [expr $retrysecs * 1000];
 	} else {
 	    break;
 	}
+    }
+
+    if {[info exists socket] == 0} {
+	return -code error "Could open connection to $mhost@$mport";
     }
 
     return $socket;
@@ -113,6 +121,8 @@ if {[regexp {^A/} $bbserver(addrandport)]} {
 #
 # main
 #
+
+# Don't catch here; let the script terminate abnormally
 set socket [open_connection \
 		$bbserver(masterhost) $bbserver(masterport) \
 		$bbserver(retrysecs) $bbserver(retrytimes)];
@@ -137,6 +147,7 @@ set status [catch {
     puts $socket $bbserver_str;
     close $socket;
 } errmsg];
+
 if {$status != 0} {
     log_msg $errmsg;
 } else {
