@@ -9,6 +9,9 @@
 # also receive the "Server list" and it will produce a file for
 # each of the list types: ServerList, PublicList, DirectList
 # and SatList.
+#
+# NOTE: This script can be used only on the master host that sends the
+# three lists. See the note in the function "bbserver_read_master".
 
 ## The common defaults
 set defaultsfile "/usr/local/etc/npemwin/filters.conf";
@@ -128,6 +131,12 @@ proc bbserver_read_master {} {
 #
 # Each section is saved in its own files (raw and txt). In addition
 # a fourth file is generated for the SatList to pass it to the clients.
+#
+# NOTE:
+# Note that this function will hang forever if it is used on an old
+# master host because we will never get the four backslashes that we
+# are looking for here. With an old masterhost, the list contains
+# only the "ServerList|<hlist1>|" portion.
 
     global bbserver;
 
@@ -145,8 +154,13 @@ proc bbserver_read_master {} {
 	    log_msg $errmsg;
 	    bbserver_close_connection;
 	    return;
+	} elseif {$c eq ""} {
+	    # This is possible if the channel is opened in nonblocking mode
+	    log_msg "Unrecognized packet from master host.";
+	    bbserver_close_connection;
+	    return;
 	}
-	
+
 	append data $c;
 	if {$c eq "\\"} {
 	    incr slashcount;
@@ -257,7 +271,7 @@ proc bbserver_open_connection {} {
 	log_msg "Trying connection to $mhost@$mport";
 	set status [catch {
 	    set socket [socket $mhost $mport];
-	    fconfigure $socket -buffering none;
+	    fconfigure $socket -buffering none -blocking 0;
 	    log_msg "Established connection to $mhost@$mport";
 	} errmsg];
 	if {$status != 0} {
