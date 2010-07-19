@@ -156,8 +156,13 @@ proc bbserver_read_master {} {
 	    return;
 	} elseif {$c eq ""} {
 	    # This is possible if the channel is opened in nonblocking mode
-	    log_msg "Unrecognized packet from master host.";
-	    bbserver_close_connection;
+	    # log_msg "Unrecognized packet from master host.";
+	    # bbserver_close_connection;
+	    # return;
+	    log_msg "Received old server list";
+	    bbserver_save_serverlist_old $data;
+	    log_msg "Wrote old server list";
+	    bbserver_send_status_update;
 	    return;
 	}
 
@@ -226,6 +231,41 @@ proc bbserver_save_serverlist {data} {
     bbserver_write_serverlist $bbserver(mserverlist) $mserverlist;
 
     foreach type [list pub dir sat] {
+	set rawname \$mserver${type}list_raw;
+	set name \$mserver${type}list;
+
+	eval bbserver_write_serverlist $bbserver(mserver${type}list_raw) \
+	    $rawname;
+
+	eval bbserver_write_serverlist $bbserver(mserver${type}list) $name
+    }
+}
+
+proc bbserver_save_serverlist_old {data} {
+
+    global bbserver;
+
+    # Fix the ServerList part to have the "standard" start/end keys
+    regsub {ServerList\|} $data "/ServerList/" data1;
+    regsub {\|$} $data1 "\\ServerList\\" data;
+
+    set body "";
+    if {[regexp {/ServerList/(.*)\\ServerList\\} $data match body] == 0} {
+	set mserverlist "";
+    } else {
+	set mserverlist [string map {: \t | \n} $body];
+    }
+    set mserverlist_raw "/ServerList/${body}\\ServerList\\"
+
+    # The SatList - whatever that is
+    set body "";
+    set mserversatlist "";
+    set mserversatlist_raw "/SatList/${body}\\SatList\\"
+
+    bbserver_write_serverlist $bbserver(mserverlist_raw) $mserverlist_raw
+    bbserver_write_serverlist $bbserver(mserverlist) $mserverlist;
+
+    foreach type [list sat] {
 	set rawname \$mserver${type}list_raw;
 	set name \$mserver${type}list;
 
