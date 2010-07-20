@@ -37,8 +37,14 @@ static int bbserver_open(void){
     if(fprintf(g.bbserverfp, "%s\n", "init") < 0){
       (void)pclose(g.bbserverfp);
       g.bbserverfp = NULL;
-    }else
-      fflush(g.bbserverfp);
+    }
+  }
+
+  if(g.bbserverfp != NULL){
+    if(fflush(g.bbserverfp) != 0){
+      (void)pclose(g.bbserverfp);
+      g.bbserverfp = NULL;
+    }
   }
 
   if(g.bbserverfp == NULL){

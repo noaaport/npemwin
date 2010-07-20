@@ -4,14 +4,15 @@
 #
 
 # This script is designed to be opened as a pipe. Periodically
-# (e.g., every minute) it should be sent a "REPORT" command to
-# instruct it to send the status update to the master host. It will
+# (e.g., every minute) it can be be sent a "report" command to
+# instruct it to send the status update to the master host, but
+# it has an internal periodic event for that too. It will
 # also receive the "Server list" and it will produce a file for
 # each of the list types: ServerList, PublicList, DirectList
 # and SatList.
 #
-# NOTE: This script can be used only on the master host that sends the
-# three lists. See the note in the function "bbserver_read_master".
+# NOTE: This script is meant to be used on the master host that sends the
+# three lists. See the note in the function bbserver_read_master{}.
 
 ## The common defaults
 set defaultsfile "/usr/local/etc/npemwin/filters.conf";
@@ -44,7 +45,7 @@ set bbserver(masterport) 1001;
 # These definitions must be in sync with the corresponding ones in
 # npemwind.conf (defaults.h.in)
 #
-set bbserver(activefile) "/var/npemwin/stats/active";
+set bbserver(activefile) "/var/npemwin/stats/npemwind.active";
 #
 set bbserver(mserverlist) "/var/npemwin/stats/mserverlist.txt";
 set bbserver(mserverlist_raw) "/var/npemwin/stats/mserverlist.raw";
@@ -64,14 +65,35 @@ set bbserver(mserversatlist_raw) "/var/npemwin/stats/mserversatlist.raw";
 set bbserver(numclients_c) "N";
 # unset bbserver(socket);
 
-# The run-time configuration file
-if {[file exists $bbserver(conf)] == 1} {
-    source $bbserver(conf);
-}
+proc bbserver_configure {} {
 
-if {$bbserver(configured) == 0} {
-    log_msg "bbserver.conf unconfigured.";
-    return 1;
+    global bbserver;
+
+    # The run-time configuration file
+    if {[file exists $bbserver(conf)] == 1} {
+	source $bbserver(conf);
+    }
+
+    if {$bbserver(configured) == 0} {
+	log_msg "bbserver.conf unconfigured.";
+	return;
+    }
+
+    #
+    # Dynamic ip configuration
+    #
+    if {[regexp {^A/} $bbserver(addrandport)]} {
+	set result [bbserver_get_myip $bbserver(addrandport)];
+	if {$result == ""} {
+	    log_msg "Invalid setting of bbserver(addrandport).";
+	    set bbserver(configured) 0;
+	    return;
+	}
+	set bbserver(addrandport) $result;
+	unset result;
+    }
+
+    set bbserver(configured) 1;
 }
 
 proc bbserver_get_myip {bbstr} {
@@ -132,11 +154,9 @@ proc bbserver_read_master {} {
 # Each section is saved in its own files (raw and txt). In addition
 # a fourth file is generated for the SatList to pass it to the clients.
 #
-# NOTE:
-# Note that this function will hang forever if it is used on an old
-# master host because we will never get the four backslashes that we
-# are looking for here. With an old masterhost, the list contains
-# only the "ServerList|<hlist1>|" portion.
+# NOTE: The function is designed to be used with the new version of
+# the master host, but as a safety measure it tries to detect
+# the old transmission format (only the ServerList) and proceed appropriately.
 
     global bbserver;
 
@@ -145,6 +165,7 @@ proc bbserver_read_master {} {
 
     set data "";
     set slashcount 0;
+    set eagain 0;
     while {$slashcount < 4} {
 	set status [catch {
 	    set c [read $bbserver(socket) 1];
@@ -155,15 +176,20 @@ proc bbserver_read_master {} {
 	    bbserver_close_connection;
 	    return;
 	} elseif {$c eq ""} {
-	    # This is possible if the channel is opened in nonblocking mode
-	    # log_msg "Unrecognized packet from master host.";
-	    # bbserver_close_connection;
-	    # return;
-	    log_msg "Received old server list";
-	    bbserver_save_serverlist_old $data;
-	    log_msg "Wrote old server list";
-	    bbserver_send_status_update;
-	    return;
+	    # This is possible if the channel is opened in nonblocking mode.
+	    # Wait a little and retry until we reach the retry limit.
+	    if {$eagain == $bbserver(retrytimes)} {
+		# Assume that it is an old master host
+		log_msg "Received old server list";
+		bbserver_save_serverlist_old $data;
+		log_msg "Wrote old server list";
+		bbserver_send_status_update;
+		return;
+	    } else {
+		# Wait a little and loop again		
+		incr eagain;
+		after [expr $bbserver(retrysecs) * 1000];
+	    }
 	}
 
 	append data $c;
@@ -177,7 +203,7 @@ proc bbserver_read_master {} {
 }
 
 proc bbserver_read_stdin {line} {
-    
+
     if {$line eq "init"} {
 	log_msg "bbserver registration started.";
 	bbserver_send_status_update;
@@ -227,9 +253,11 @@ proc bbserver_save_serverlist {data} {
     set mserversatlist "";
     set mserversatlist_raw "/SatList/${body}\\SatList\\"
 
+    # Save the ServerList
     bbserver_write_serverlist $bbserver(mserverlist_raw) $mserverlist_raw
     bbserver_write_serverlist $bbserver(mserverlist) $mserverlist;
 
+    # Save the other lists
     foreach type [list pub dir sat] {
 	set rawname \$mserver${type}list_raw;
 	set name \$mserver${type}list;
@@ -351,6 +379,14 @@ proc bbserver_send_status_update {} {
 
     global bbserver;
 
+    if {$bbserver(configured) == 0} {
+	bbserver_configure;
+    }
+
+    if {$bbserver(configured) == 0} {
+	return;
+    }
+
     # Check that the connection is open, and try to open it if it is closed.
     if {[bbserver_open_connection] != 0} {
 	return;
@@ -386,39 +422,33 @@ proc bbserver_send_status_update {} {
     }
 }
 
-#
-# Dynamic ip configuration
-#
-if {[regexp {^A/} $bbserver(addrandport)]} {
-    set result [bbserver_get_myip $bbserver(addrandport)];
-    if {$result == ""} {
-	log_msg "Invalid setting of bbserver(addrandport).";
-	return 1;
-    }
-    set bbserver(addrandport) $result;
-    unset result;
-}
+proc bbserver_main_loop {} {
 
-#
-# main loop
-#
-bbserver_open_connection;
+    global bbserver;
+    global done;
 
-set done 0;
-while {$done == 0} {
-    fileevent stdin readable {set done 1}
-    after [expr $bbserver(report_period_minutes) * 60000] {set done 2};
-    vwait done;
-    if {$done == 1} {
-	if {[gets stdin line] >= 0} {
-	    set done 0;    # restart
-	    bbserver_read_stdin $line;
+    set done 0;
+    while {$done == 0} {
+	fileevent stdin readable {set done 1}
+	after [expr $bbserver(report_period_minutes) * 60000] {set done 2};
+	vwait done;
+	if {$done == 1} {
+	    if {[gets stdin line] >= 0} {
+		set done 0;    # restart
+		bbserver_read_stdin $line;
+	    }
+	} else {
+	    # timer expired
+	    set done 0;        # restart
+	    bbserver_send_status_update;
 	}
-    } else {
-	# timer expired
-	set done 0;        # restart
-	bbserver_send_status_update;
     }
 }
 
+#
+# main
+#
+bbserver_configure;
+bbserver_open_connection;
+bbserver_main_loop;
 bbserver_close_connection;

@@ -37,8 +37,14 @@ static int httpd_open(void){
     if(fprintf(g.httpdfp, "%s\n", "init") < 0){
       (void)pclose(g.httpdfp);
       g.httpdfp = NULL;
-    }else
-      fflush(g.httpdfp);
+    }
+  }
+
+  if(g.httpdfp != NULL){
+    if(fflush(g.httpdfp) != 0){
+      (void)pclose(g.httpdfp);
+      g.httpdfp = NULL;
+    }
   }
 
   if(g.httpdfp == NULL){
