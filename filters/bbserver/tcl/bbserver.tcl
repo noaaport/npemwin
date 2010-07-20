@@ -406,7 +406,8 @@ proc bbserver_send_status_update {} {
 			   $bbserver(privacy) \
 			   $bbserver(rate) \
 			   $bbserver(version) \
-			   $bbserver(location)];
+			   $bbserver(location) \
+			   $bbserver(serveradmin)];
 
     set bbserver_str [join $bbserver_list "|"];
     
