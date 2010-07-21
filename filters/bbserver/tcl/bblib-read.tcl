@@ -50,7 +50,7 @@ proc bbserver_read_master_p11 {} {
 # /DirectList/<hlist2>\DirectLIst\
 #
 # Each section is saved in its own files (raw and txt). In addition
-# a fourth file is generated for the SatList to pass it to the clients.
+# a fourth file is generated for the SatServers to pass it to the clients.
 #
 # NOTE: The function is designed to be used with the new 1.1 version of
 # the master host, but as a safety measure it tries to detect
@@ -122,7 +122,7 @@ proc bbserver_read_master_p12 {} {
 #
 #
 # Each section is saved in its own files (raw = xml and txt). In addition
-# a fourth file is generated for the SatList to pass it to the clients.
+# a fourth file is generated for the SatServers to pass it to the clients.
 
     global bbserver;
 

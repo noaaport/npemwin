@@ -61,6 +61,10 @@ set bbserver(mserverdirlist_raw) "/var/npemwin/stats/mserverdirlist.raw";
 set bbserver(mserversatlist) "/var/npemwin/stats/mserversatlist.txt";
 set bbserver(mserversatlist_raw) "/var/npemwin/stats/mserversatlist.raw";
 
+# These are used only the bbserver sctipt
+set bbserver(mserverpublist_xml) "/var/npemwin/stats/mserverpublist.xml";
+set bbserver(mserverdirlist_xml) "/var/npemwin/stats/mserverdirlist.xml";
+
 #
 # Variables
 #

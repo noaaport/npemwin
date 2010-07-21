@@ -36,10 +36,15 @@ proc bbserver_save_serverlist_p11 {data} {
     }
     set mserverdirlist_raw "/DirectList/${body}\\DirectList\\"
 
-    # The SatList - whatever that is
-    set body "";
-    set mserversatlist "";
-    set mserversatlist_raw "/SatList/${body}\\SatList\\"
+    # The SatServers - copied from the DirectList
+    set mserversatlist $mserverdirlist;
+    set mserversatlist_raw "/SatServers/${body}\\SatServers\\"
+
+    # If the ServerList is empty, copy the PublicList
+    if {$mserverlist eq ""} {
+	set mserverlist $mserverpublist;
+	set mserverlist_raw $mserverpublist_raw;
+    }
 
     # Save the ServerList
     bbserver_write_serverlist $bbserver(mserverlist_raw) $mserverlist_raw
@@ -73,10 +78,10 @@ proc bbserver_save_serverlist_p10 {data} {
     }
     set mserverlist_raw "/ServerList/${body}\\ServerList\\"
 
-    # The SatList - whatever that is
+    # The SatServers - whatever that is
     set body "";
     set mserversatlist "";
-    set mserversatlist_raw "/SatList/${body}\\SatList\\"
+    set mserversatlist_raw "/SatServers/${body}\\SatServers\\"
 
     bbserver_write_serverlist $bbserver(mserverlist_raw) $mserverlist_raw
     bbserver_write_serverlist $bbserver(mserverlist) $mserverlist;
@@ -100,16 +105,16 @@ proc bbserver_save_serverlist_p12 {data} {
 
     set body "";
     if {[regexp {<Public>(.*)</Public>} $data match body] == 0} {
-	set mserverpublist_raw "";
+	set mserverpublist_xml "";
     } else {
-	set mserverpublist_raw $match;
+	set mserverpublist_xml $match;
     }
 
     set body "";
     if {[regexp {<Direct>(.*)</Direct>} $data match body] == 0} {
-	set mserverdirlist_raw "";
+	set mserverdirlist_xml "";
     } else {
-	set mserverdirlist_raw $match;
+	set mserverdirlist_xml $match;
     }
 
     # This extracts the two lists in tabular form
@@ -133,28 +138,33 @@ proc bbserver_save_serverlist_p12 {data} {
 	
     }
 
-    set mserverpublist [join mlist(Public) "\n"];
-    set mserverdirlist [join mlist(Direct) "\n"];
+    set mserverpublist [join $mlist(Public) "\n"];
+    set mserverdirlist [join $mlist(Direct) "\n"];
 
-    # The SatList - whatever that is
-    set body "";
-    set mserversatlist "";
-    set mserversatlist_raw "<Sat>${body}</Sat>"
+    # Construct the bb style raw files
+    append mserverlist_raw "/ServerList/" \
+	[string map {\t :} [join $mlist(Public) "|"]] "\\ServerList\\";
+
+    append mserversatlist_raw "/SatServers/" \
+	[string map {\t :} [join $mlist(Direct) "+"]] "\\SatServers\\";
 
     # Save the lists
-    foreach type [list pub dir sat] {
-	set rawname \$mserver${type}list_raw;
+    foreach type [list pub dir] {
+	set xmlname \$mserver${type}list_xml;
 	set name \$mserver${type}list;
 
-	eval bbserver_write_serverlist $bbserver(mserver${type}list_raw) \
-	    $rawname;
+	eval bbserver_write_serverlist $bbserver(mserver${type}list_xml) \
+	    $xmlname;
 
 	eval bbserver_write_serverlist $bbserver(mserver${type}list) $name
     }
 
-    # Copy the public list as the master servers list
-    file copy $bbserver(mserverpublist_raw) $bbserver(mserverlist_raw);
-    file copy $bbserver(mserverpublist) $bbserver(mserverlist);
+    bbserver_write_serverlist $bbserver(mserverlist_raw) $mserverlist_raw;
+    bbserver_write_serverlist $bbserver(mserversatlist_raw) \
+	$mserversatlist_raw;
+
+    file rename -force $bbserver(mserverpublist) $bbserver(mserverlist);
+    file rename -force $bbserver(mserverdirlist) $bbserver(mserversatlist);
 }
 
 proc bbserver_write_serverlist {fpath data} {
