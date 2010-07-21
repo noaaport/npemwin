@@ -9,6 +9,12 @@
 
 TCLTARGET =	bbserver
 TCLSOURCES =	bbserver.tcl
+TCLLIBFILES =	bblib-config.tcl \
+		bblib-read.tcl \
+		bblib-save.tcl \
+		bblib-main.tcl
+TCLLIBTMP =	bblib.tmp
+
 SAMPLES =	bbserver.conf-sample
 
 TARGET =	${TCLTARGET} ${SAMPLES}
@@ -19,8 +25,12 @@ OSNAME =	@OSNAME@
 
 all: ${TARGET}
 
-${TCLTARGET}: ${TCLTARGET}.tcl
-	sed -e /%TCLSH%/s##${TCLSH}#  ${TCLTARGET}.tcl > ${TCLTARGET}
+${TCLTARGET}: ${TCLSOURCES} ${TCLLIBFILES}
+	cat ${TCLLIBFILES} > ${TCLLIBTMP}
+	sed -e /%TCLSH%/s##${TCLSH}#  \
+	-e '/@bblib@/r ${TCLLIBTMP}' -e '/@bblib@/d' \
+	${TCLSOURCES} > ${TCLTARGET}
+	rm -f ${TCLLIBTMP}
 
 bbserver.conf-sample: bbserver.conf
 	cp bbserver.conf bbserver.conf-sample

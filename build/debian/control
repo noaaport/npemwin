@@ -7,7 +7,7 @@ Standards-Version: 3.7.2
 
 Package: npemwin
 Architecture: any
-Depends: ${shlibs:Depends}, libwrap0, libdb4.6, tcl8.5, tcllib, gnuplot, unzip
+Depends: ${shlibs:Depends}, libwrap0, libdb4.6, tcl8.5, tcllib, tclxml, gnuplot, unzip
 Description: NOAAPort Emwin server
  Npemwin will connect to a list of EMWIN servers and save all
  files into a directory based on file type and WFO ID. Extensive
