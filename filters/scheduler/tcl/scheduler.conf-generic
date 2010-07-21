@@ -78,5 +78,5 @@ lappend schedule {
 
 # Log file rotation
 lappend schedule {
-  H01/1:logrotate $confdir/logrotate.conf &
+  H01/1:logrotate -s $logdir/logrotate.status $confdir/logrotate.conf &
 }
