@@ -2,4 +2,6 @@
 # $Id$
 #
 
-- Added permament archive to the metarfilter (in archive.conf).
+- Updated for P12 version of NWS master host
+- Added [-s] to logrotate in scheduler.conf
+
