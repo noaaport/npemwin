@@ -39,7 +39,7 @@ set bbserver(configured) 0;
 # Defaults
 set bbserver(retrysecs)  5;
 set bbserver(retrytimes) 6;
-set bbserver(report_period_minutes) 4;
+set bbserver(report_period_minutes) 1;
 #
 set bbserver(masterhost) "205.156.51.131";
 set bbserver(masterport) 1001;
