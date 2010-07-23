@@ -1,6 +1,6 @@
 #!/bin/sh
 
-requires="db47 tcl-8.5 tcllib tclxml gnuplot unzip"
+requires="db47 tcl-8.6 tcllib tclxml gnuplot unzip"
 conflict=
 
 # so that FreeBSD runs it only once 

@@ -11,7 +11,7 @@ package_build = 1
 rpmroot = /usr/src/redhat
 
 # empty variables will be filled by make
-Summary =  Noaaport Emwin server.
+Summary =  Emwin server
 Name = ${name}
 Version = ${version}
 Release = ${package_build}
