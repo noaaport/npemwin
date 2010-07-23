@@ -70,7 +70,9 @@ set bbserver(mserverdirlist_xml) "/var/npemwin/stats/mserverdirlist.xml";
 #
 set bbserver(numclients_c) "N";
 set bbserver(version_protocol) "";   # the Vnn-Pmm combination
-# unset bbserver(socket);
+if {[info exists bbserver(socket)]} {
+    unset bbserver(socket);
+}
 
 #
 # Functions
