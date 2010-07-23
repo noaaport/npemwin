@@ -1,8 +1,6 @@
 #!/bin/sh
 
-. ../../VERSION
-
-project=${name}
+project=npemwin
 masterhost="http://svn.1-loop.net"
 masterrepo="nbsprepo"
 #
