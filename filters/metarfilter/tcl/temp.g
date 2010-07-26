@@ -23,7 +23,7 @@ set gnuplot(script) {
   # set xtics 21600
   #
   # and ploting with "using 2:10" gives problems when the days in
-  # the data file warp from 31/30 back to 01.
+  # the data file wrap from 31/30 back to 01.
   # The solution is to compute the xtics in the script that calls
   # this template.
   set xtics $gplot(xtics)
