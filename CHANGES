@@ -4,4 +4,6 @@
 
 - Updated for P12 version of NWS master host
 - Added [-s] to logrotate in scheduler.conf
+- Revised nbspmtr plot scripts and tclhttpd metar functions to
+  plot the wind direction as well (suggested by Scott <ssshoema@gmail.com>).
 

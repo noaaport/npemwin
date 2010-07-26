@@ -2,11 +2,12 @@
 #
 # $Id$
 #
-# Usage: nbspmtrplot [-b basedir] [-d subdir] [-f <fmt>] [-g <fmtopt>] <station>
+# Usage: nbspmtrplot [-b basedir] [-d subdir] [-f <fmt>] [-g <fmtopt>] \
+#        <station>
 #
 # The tool will cd to the "basedir", create "subdir", and save
-# the three plots in that subdir, with the names "pre".<fmt>,
-# "temp".<fmt> and "wind".<fmt>. The <fmt> is whatever the tool
+# the four plots in that subdir, with the names "pre".<fmt>, "temp".<fmt>,
+# "wspeed".<fmt> and "wdir".<fmt>. The <fmt> is whatever the tool
 # nbspmtrplot uses as defined in metarfilter.conf file, or
 # what is passed here in the [-f] option.
 
@@ -43,9 +44,14 @@ if {$option(g) != ""} {
 }
 
 set status [catch {
-    eval exec npemwinmtrplot1 -p -o pre $fmtoption -d $station.dat $station;
-    eval exec npemwinmtrplot1 -t -o temp $fmtoption -i $station.dat $station;
-    eval exec npemwinmtrplot1 -w -o wind $fmtoption -k -i $station.dat $station;
+    eval exec npemwinmtrplot1 -p pre -o pre $fmtoption -d $station.dat \
+	$station;
+    eval exec npemwinmtrplot1 -p temp -o temp $fmtoption -i $station.dat \
+	$station;
+    eval exec npemwinmtrplot1 -p wspeed -o wspeed $fmtoption -i $station.dat \
+	$station;
+    eval exec npemwinmtrplot1 -p wdir -o wdir $fmtoption -k -i $station.dat \
+	$station;
 } errmsg];
 
 if {$status != 0} {

@@ -15,7 +15,7 @@ TOOLNAMES =	npemwinmtr npemwinmtrcsv npemwinmtrcsvd \
 		npemwinmtrplot npemwinmtrplot1 npemwinmtrplotdat
 SAMPLES =	metarfilter.conf-sample \
 		metarfilter-st.conf-sample metarfilter-icao.def-sample
-GPLOTSOURCES =	temp.g pre.g wind.g
+GPLOTSOURCES =	temp.g pre.g wspeed.g wdir.g
 GPLOTPDIR =	gnuplot
 GPLOTDIR =	${GPLOTPDIR}/metar
 GPLOTTARGET =	metarplot-templates.tgz
