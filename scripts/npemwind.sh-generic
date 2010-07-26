@@ -5,6 +5,7 @@
 # rc script for npemwind
 
 daemon=/usr/local/sbin/npemwind
+pidfile=/var/run/npemwin/npemwind.pid
 options=
 
 [ -x $daemon ] || exit 0
