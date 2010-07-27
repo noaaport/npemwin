@@ -14,7 +14,11 @@
 # NOTE: This script is meant to be used on the master host that sends the
 # three lists. See the note in the function bbserver_read_master{}.
 
-package require xsxp;	# in turn requires tclxml
+#
+# See xml.README
+### package require xsxp;	# in turn requires tclxml
+#
+package require textutil::split;
 
 ## The common defaults
 set defaultsfile "/usr/local/etc/npemwin/filters.conf";

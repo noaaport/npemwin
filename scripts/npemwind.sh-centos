@@ -28,6 +28,7 @@ case "$1" in
       i=`expr $i + 1`
       [ $i -eq 4 ] && { printf " %s" "."; i=0; }
     done
+    echo
     ;;
   *)
     echo "Usage: $0 {start|stop}"

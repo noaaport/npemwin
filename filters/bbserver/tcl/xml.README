@@ -1,0 +1,24 @@
+#
+# $Id$
+#
+
+Mon Jul 26 19:16:54 AST 2010 -
+
+The xsxp package requites tcl8.5 and tclxml. The problems are:
+
+1) xsxp is included in tcllib-1.11 (not in 1.10) - Debian has tcl-1.10
+
+2) In debian, tclxml has a bug in the sgmparser.tcl package: it provides 1.0
+   while pkgIndex refers to 1.11.
+
+3) In centos, there is tcl-8.5.
+
+Therefore, in Debian we can use xsxp if we patch manually a couple
+of things. In CentOS we have to install tcl-8.5 from somewhere else.
+
+As a workaround to this situation, we will temporarily not use the
+xsxp and tclxml packages. We will leave the requirements in the packages
+Makefiles but we will not actually not use them until:
+
+- Debian has tcl1-1.11 and  a correct sgmlparser.tcl in tclxml.
+- CentOS has tcl-8.5
