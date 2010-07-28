@@ -163,7 +163,8 @@ logger -t qrunner "qrunner script starting"
 # (e.g., due to corrupt file) it would be possible that this portion
 # is never executed.
 #
-for file in `$FIND ${q_dirname} ${in_dirname} ${tmp_dirname} -cmin +${max_elapsed_time}`
+for file in \
+  `$FIND ${q_dirname} ${in_dirname} ${tmp_dirname} -cmin +${max_elapsed_time}`
 do
       rm $file
 done 2>&1 | logger -t "qrunner"
@@ -263,7 +264,14 @@ do
 		mkdir -p ${out_dirname}/${subdir}
 
 	    fbasename=$name.$seqnumkey.$ext
-	    mv ${_flistdir}/${_f} ${out_dirname}/$subdir/$fbasename
+            if [ $ext != "txt" ]
+            then
+                mv ${_flistdir}/${_f} ${out_dirname}/$subdir/$fbasename
+            else
+	    	# Try to remove the control characters
+                tr -d '\r\001\003' < ${_flistdir}/${_f} > \
+                    ${out_dirname}/$subdir/$fbasename
+            fi
 	    [ $verbose -eq 1 ] && echo "created $fbasename"
 
 	    _duplicate=0
@@ -274,7 +282,8 @@ do
 		# md5sum is similar but not identical.
 		# md5key=`md5 -q ${out_dirname}/$subdir/$fbasename`
 		#
-		md5key=`openssl md5 ${out_dirname}/$subdir/$fbasename | cut -f 2 -d ' '`
+		md5key=`openssl md5 ${out_dirname}/$subdir/$fbasename | \
+			cut -f 2 -d ' '`
 		# The new fbasename is the same, with the md5 instead of seqnum
 		md5fbasename=$name.$md5key.$ext
 	    	if [ -e ${out_dirname}/$subdir/$md5fbasename ]
@@ -296,7 +305,8 @@ do
 
 	        # Add the entry to the postfilter queue file
 	        [ "$postfilter_enable" -eq 1 ] && \
-		    echo $name ${out_dirname}/$subdir/$fbasename >> $postfilterqfile
+		    echo $name ${out_dirname}/$subdir/$fbasename >> \
+			$postfilterqfile
 	    fi
 	done
 

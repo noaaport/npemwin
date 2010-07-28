@@ -1,5 +1,5 @@
-npemwin (2.0.p4.6-1) stable; urgency=low
+npemwin (2.0.p4.7-1) stable; urgency=low
 
   * Initial debian package release
 
- -- Jose F Nieves <nieves@ltp.upr.clu.edu>  Mon, 26 Jul 2010 21:36:02 -0400
+ -- Jose F Nieves <nieves@ltp.upr.clu.edu>  Wed, 28 Jul 2010 15:25:40 -0400
