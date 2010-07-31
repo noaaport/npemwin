@@ -1,0 +1,23 @@
+#
+# $Id$
+#
+# This is a bbserver.conf template for a server that has been registered
+# in the iEmwin pool. Copy this file and save it as "bbserver.conf" in the
+# "site" subdirectory of the npemwin configuration directory, and
+# set this to the numeric pool id assigned by iEmwin.Net
+#
+set bbserver(poolid) 999;
+
+# No other parameters need to be set, but if you want or need to do so,
+# check the main bbserver.conf file for guidelines.
+#
+set bbserver(addrandport) "A$bbserver(poolid).pool.iemwin.net:2211";
+set bbserver(maxclients) "M64";
+set bbserver(privacy) "SPU";	# or SPR for private
+#set bbserver(rate)    "DE9600"; # or DW for internet
+set bbserver(rate)    "DW";	# or "DE9600" or "DE19200"
+set bbserver(version) "V2.0";
+set bbserver(protocol) "P12";
+set bbserver(location) "LC-npemwin";
+set bbserver(serveradmin) "EM-$bbserver(poolid).pool@iemwin.net";
+set bbserver(configured) 1;

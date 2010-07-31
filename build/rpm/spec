@@ -135,6 +135,7 @@ make clean
 /usr/local/etc/npemwin/dist/startstop.rc-sample
 /usr/local/etc/npemwin/dist/start-cleanup.conf-sample
 /usr/local/etc/npemwin/dist/bbserver.conf-sample
+/usr/local/etc/npemwin/dist/bbserver-pool.conf-ex
 /usr/local/etc/npemwin/dist/logrotate.conf-sample
 /usr/local/etc/npemwin/dist/newsyslog.conf-sample
 /usr/local/etc/npemwin/dist/metarplot-templates.tgz

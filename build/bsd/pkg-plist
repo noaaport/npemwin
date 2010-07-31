@@ -107,6 +107,7 @@ etc/npemwin/dist/qrunner.conf-site-sample
 etc/npemwin/dist/hourly-cleanup.conf-sample
 etc/npemwin/dist/scheduler.conf-sample
 etc/npemwin/dist/bbserver.conf-sample
+etc/npemwin/dist/bbserver-pool.conf-ex
 etc/npemwin/dist/startstop.rc-sample
 etc/npemwin/dist/start-cleanup.conf-sample
 etc/npemwin/dist/logrotate.conf-sample

@@ -16,6 +16,7 @@ TCLLIBFILES =	bblib-config.tcl \
 TCLLIBTMP =	bblib.tmp
 
 SAMPLES =	bbserver.conf-sample
+EXAMPLES =	bbserver-pool.conf-ex
 
 TARGET =	${TCLTARGET} ${SAMPLES}
 
@@ -37,7 +38,7 @@ bbserver.conf-sample: bbserver.conf
 
 install: ${TARGET}
 	${INSTALL} -m 755 ${TCLTARGET} ${MYLIBEXECDIR}
-	${INSTALL} -m 644 ${SAMPLES} ${MYCONFDIR}
+	${INSTALL} -m 644 ${SAMPLES} ${EXAMPLES} ${MYCONFDIR}
 
 clean:
 	rm -f *~ ${TARGET} Makefile
