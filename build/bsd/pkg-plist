@@ -127,6 +127,7 @@ share/doc/npemwin/panfilter/npemwinudpread.tcl
 etc/npemwin/dist/httpd.conf-sample
 etc/npemwin/dist/export.conf-sample
 etc/npemwin/dist/export-da.def-sample
+etc/npemwin/dist/iemwin.conf-sample
 share/doc/npemwin/www.tgz
 libexec/npemwin/httpd
 libexec/npemwin/tclhttpd/httpd.init
@@ -186,3 +187,4 @@ libexec/npemwin/tclhttpd/npemwin/npemwinmetar.tcl
 libexec/npemwin/tclhttpd/npemwin/functionsmetar.tcl
 libexec/npemwin/tclhttpd/npemwin/npemwinget.tcl
 libexec/npemwin/tclhttpd/extensions/export.tcl
+libexec/npemwin/tclhttpd/extensions/iemwin.tcl

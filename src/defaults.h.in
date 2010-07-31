@@ -59,7 +59,7 @@
  */
 #define EMWIN_SERVERS_LIST_FILE	"%MYCONFDIR%/servers.conf"
 
-/* Where the status of servers is written */
+/* Where the status of those bb servers is written */
 #define EMWIN_SERVERS_STATUS_FILE	"/var/npemwin/stats/servers.status"
 
 /* mininum number of consecutive packets received to avoid a bad mark */
@@ -73,6 +73,8 @@
 
 /*
  * The server client connections and server threads statistics files.
+ * The "state" file is a log, while the "actuve" is similar but
+ * only has the current report.
  */
 #define SERVERSTATEFILE		"/var/npemwin/stats/npemwind.server"
 #define SERVERACTIVEFILE	"/var/npemwin/stats/npemwind.active"

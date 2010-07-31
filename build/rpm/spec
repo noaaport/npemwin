@@ -151,6 +151,7 @@ make clean
 /usr/local/etc/npemwin/dist/httpd.conf-sample
 /usr/local/etc/npemwin/dist/export.conf-sample
 /usr/local/etc/npemwin/dist/export-da.def-sample
+/usr/local/etc/npemwin/dist/iemwin.conf-sample
 /usr/local/share/doc/npemwin/www.tgz
 /usr/local/libexec/npemwin/httpd
 /usr/local/libexec/npemwin/tclhttpd/httpd.init
@@ -210,5 +211,6 @@ make clean
 /usr/local/libexec/npemwin/tclhttpd/npemwin/functionsmetar.tcl
 /usr/local/libexec/npemwin/tclhttpd/npemwin/npemwinget.tcl
 /usr/local/libexec/npemwin/tclhttpd/extensions/export.tcl
+/usr/local/libexec/npemwin/tclhttpd/extensions/iemwin.tcl
 
 %changelog

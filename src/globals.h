@@ -35,14 +35,14 @@ struct npemwin_globals {
   char *statusfile;	/* server's own statistics file */
   time_t nbspstats_period; /* report the server's statistics */
   char *serverslistfile; /* file that contains our bb master server(s) */
-  char *emwinstatusfile;	/* emwin servers status file */
+  char *emwinstatusfile;	/* status file of our b master(s) */
   /* mininum number of consecutive packets received to avoid a bad mark */
   int  min_consecutive_packets;
   /* max number of consecutive bad marks before switching to a new server */
   int  max_bad_packet_count;
   int  retrysleep;	 /* sleep secs before retrying the server list */
   char *serverstatefile;	/* server client connections (log) */
-  char *serveractivefile;	/* server active client connections */
+  char *serveractivefile;	/* server client connections (active) */
   char *serverthreadsfile;	/* server threads stats */
   int  connecttimeout_s; /* to server, in secs (the default is ~ 75 s) */
   int  readtimeout_s;	 /* reading a packet from server */

@@ -16,6 +16,7 @@ slave eval {
     set emwinstatusfile "/var/npemwin/stats/servers.status"
     set serveractivefile "/var/npemwin/stats/npemwind.active"
     set serverthreadsfile "/var/npemwin/stats/npemwind.sthreads"
+    set pidfile "/var/run/npemwin/npemwind.pid";
     set bbserver_mserverlist "/var/npemwin/stats/mserverlist.txt"
     set bbserver_bbserverlist "/var/npemwin/stats/bbserverlist.txt"
 
@@ -32,6 +33,7 @@ set npemwind(statusfile)	[slave eval {return $statusfile}]
 set npemwind(emwinstatusfile)	[slave eval {return $emwinstatusfile}]
 set npemwind(serveractivefile)	[slave eval {return $serveractivefile}]
 set npemwind(serverthreadsfile)	[slave eval {return $serverthreadsfile}]
+set npemwind(pidfile)		[slave eval {return $pidfile}]
 set npemwind(bbserver_mserverlist) [slave eval {return $bbserver_mserverlist}]
 set npemwind(bbserver_bbserverlist) \
 	[slave eval {return $bbserver_bbserverlist}]
