@@ -96,7 +96,7 @@ proc choose_plot_template {optionarray station} {
 	    set _tmpl [file join $d $subdir $templatename];
 	}
     }
-    if {${_tmpl} == ""} {
+    if {${_tmpl} eq ""} {
 	puts "$templatename not found.";
 	exit 1;
     }
@@ -169,10 +169,10 @@ if {[check_option_conflict option] != 0} {
     set gnuplot(template) [choose_plot_template option $station];
 }
 
-if {$option(i) != ""} {
+if {$option(i) ne ""} {
     set gplot(datafile) $option(i);
 } else {
-    if {$option(d) != ""} {
+    if {$option(d) ne ""} {
 	set gplot(datafile) $option(d);
 	if {$option(m) == 1} {
 	    file mkdir [file dirname $option(d)];
