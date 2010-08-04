@@ -146,7 +146,7 @@ static int switch_server(struct emwin_server *es){
   /*
    * The server is switched if its number of consecutive bad marks exceeeds the
    * limit (a server receives a bad mark when the number of consecutive
-   * packets is less the the minimum), or if the connection was refused.
+   * packets is less than the minimum), or if the connection was refused.
    */
   int r = 0;
 
