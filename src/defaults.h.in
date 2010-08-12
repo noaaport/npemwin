@@ -166,6 +166,9 @@
  * and the multicast ip (not used at this moment 10mar2008)
  *
  * 224.0.1.143	   EMWIN
+ *
+ * SERVER_NAME == NULL => uses gethostbyname in getadrinfo
+ * SERVER_NAME == "*"  => uses NULL in getadrinfo
  */
 #define SERVER_NAME		NULL
 #define SERVER_PORT		"2211"
