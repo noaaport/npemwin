@@ -9,6 +9,7 @@ key=$2
 # npemwin user/group, directories owned by user, and directories owned by root
 #
 user=noaaport
+home=/var/noaaport
 #
 userdirs="/var/run/npemwin
 /var/log/npemwin
@@ -64,7 +65,7 @@ then
     exit 1
 fi
 #
-pw useradd $user -g $user -q
+pw useradd $user -q -g $user -d $home
 status=$?
 if [ $status -ne 65 -a $status -ne 0 ]
 then

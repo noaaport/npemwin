@@ -4,6 +4,7 @@
 # npemwin user/group, directories owned by user, and directories owned by root
 #
 user=noaaport
+home=/var/noaaport
 #
 userdirs="/var/run/npemwin
 /var/log/npemwin
@@ -50,7 +51,7 @@ rootdirs="/usr/local/etc/npemwin/defaults
 /usr/local/libexec/npemwin/site
 /usr/local/libexec/npemwin/tclhttpd/site"
 
-useradd $user > /dev/null 2>&1
+useradd -d $home $user > /dev/null 2>&1
 status=$?
 if [ $status -ne 9 -a $status -ne 0 ]
 then
