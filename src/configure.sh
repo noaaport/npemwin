@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. configure.inc
+. ./configure.inc
 
 config_subdirs="libqdb libconnth libtclconf"
 

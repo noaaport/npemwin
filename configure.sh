@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. configure.inc
+. ./configure.inc
 
 config_dirs="conf doc filters scripts src tclhttpd tclmetar/dc/npemwin"
 
