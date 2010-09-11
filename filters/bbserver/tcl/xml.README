@@ -18,7 +18,7 @@ of things. In CentOS we have to install tcl-8.5 from somewhere else.
 
 As a workaround to this situation, we will temporarily not use the
 xsxp and tclxml packages. We will leave the requirements in the packages
-Makefiles but we will not actually not use them until:
+Makefiles but we will not actually use them until:
 
 - Debian has tcl1-1.11 and  a correct sgmlparser.tcl in tclxml.
 - CentOS has tcl-8.5
