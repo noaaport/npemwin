@@ -218,7 +218,7 @@ static int parse_args(int argc, char **argv){
 #endif
     default:
       status = 1;
-      errx(1, usage);
+      errx(1, "%s\n", usage);
       break;
     }
   }
