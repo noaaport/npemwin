@@ -2,7 +2,7 @@
 #
 # $Id$
 #
-. upload.conf
+. ./upload.conf
 
 cp ../../RELEASE_NOTES ../../UPGRADING ../../READMEs/*.README .
 upload_files="RELEASE_NOTES UPGRADING *.README"
