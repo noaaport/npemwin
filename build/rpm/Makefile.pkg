@@ -37,7 +37,9 @@ ${specfile}: pkginfo.mk postinstall Makefile
 	sed -e "/@POSTINSTALL@/r postinstall" \
 	    -e "/@POSTINSTALL@/d" \
 	    -e "/@POSTUNINSTALL@/r postuninstall" \
-	    -e "/@POSTUNINSTALL@/d" spec) > ${specfile}
+	    -e "/@POSTUNINSTALL@/d" \
+	    -e "/@PLIST@/r plist" \
+	    -e "/@PLIST@/d" spec) > ${specfile}
 
 install: build
 	rm -r -f pkg
