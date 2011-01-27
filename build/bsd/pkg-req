@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# tcl -
+# To install tcl, pkg_add must be invoked as "pkg_add -r tcl86", but to
+# check for the package, it must be in the form "tcl-8.6".
+# Similarly with tk.
+
+# gnuplot -
+# There is no standard package because the default requires pdflib.
+# We must build our own.
+
 requires="db47 tcl-8.6 tcllib gnuplot unzip"
 conflict=
 
@@ -19,6 +28,13 @@ do
 	exit_status=1
     fi
 done
+
+[ $exit_status -ne 0 ] && { echo "
+To install tcl-8.6, pkg_add must be invoked as pkg_add -r tcl86,
+the same with tk.
+
+There is no standard package for gnuplot because the default requires pdflib,
+which is not free. A suitable package is in the optional-packages directory.";}
 
 for p in $conflict
 do
