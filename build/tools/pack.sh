@@ -5,4 +5,7 @@
 name=npemwin
 
 cd ../../..
-tar czf ~/${name}.tgz --exclude=${name}/dev-notes ${name}
+tar -czf ~/${name}.tgz \
+    --exclude ${name}/dev-notes \
+    --exclude "*.svn*" \
+    ${name}
