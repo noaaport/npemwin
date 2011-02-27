@@ -9,7 +9,7 @@
 # There is no standard package because the default requires pdflib.
 # We must build our own.
 
-requires="db47 tcl-8.6 tcllib gnuplot unzip"
+requires="db48 tcl-8.6 tcllib gnuplot unzip"
 conflict=
 
 # so that FreeBSD runs it only once 

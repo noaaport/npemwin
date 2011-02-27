@@ -13,14 +13,14 @@ INSTALL=install
 SUFFIXRULES=".c.o:"
 
 # excude options to tar
-EXCLUDE="-W exclude="
+EXCLUDE="--exclude "
 
 TCL_INCDIR="-I /usr/local/include/tcl8.6"
 TCL_LIB="tcl86"
 TCLSH=/usr/local/bin/tclsh8.6
 
-DB_INCDIR="-I /usr/local/include/db47"
-DB_LIB="db-4.7"
+DB_INCDIR="-I /usr/local/include/db48"
+DB_LIB="db-4.8"
 
 # scripts dir
 SHELL="/bin/sh"
@@ -79,7 +79,7 @@ case $os in
 	   TCL_LIB="tcl8.5"
 	   TCLSH=/usr/bin/tclsh8.5
 	   DB_INCDIR=
-	   DB_LIB="db-4.6"
+	   DB_LIB="db-4.8"
     	fi
 	;;
     Darwin)
