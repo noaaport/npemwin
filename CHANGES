@@ -12,3 +12,8 @@
 - Added -r and -R options to the nbspmtrplot1 script.
 - Text files are filetered through tr in (qrunner) to delete cntrl chars.
 - Added option(s) to set servername to the wildcard address(es).
+
+2.1.2p3 -
+
+- Corrected setting of PATH in filters.conf (from configure.inc and Makefile)
+- Added KGGE (SC) to metar stations (icao and st files. Scott Shoemaker)
