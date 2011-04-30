@@ -66,22 +66,3 @@ set _localconfname [file join $gf(confdir) ${_confname}];
 if {[file exists ${_localconfname}]} {
     source ${_localconfname};
 }
-
-#
-# Only the last file found is used.
-#
-set _conffile "";
-foreach _d $gf(localconfdirs) {
-    set _localconfname [file join ${_d} ${_confname}];
-    if {[file exists ${_localconfname}]} {
-	set _conffile ${_localconfname};
-    }
-}
-if {${_conffile} != ""} {
-    source ${_conffile};
-}
-
-unset _d;
-unset _conffile;
-unset _confname;
-unset _localconfname;
