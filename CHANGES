@@ -17,3 +17,4 @@
 
 - Corrected setting of PATH in filters.conf (from configure.inc and Makefile)
 - Added KGGE (SC) to metar stations (icao and st files. Scott Shoemaker)
+- Added linespoints style (ls) keywords to gnuplot templates in metarfilter
