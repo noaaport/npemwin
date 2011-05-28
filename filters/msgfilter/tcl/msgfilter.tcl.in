@@ -35,6 +35,8 @@ set msgfilter(ugczones)  [file join $gf(confdir) "msgfilter-ugczones.def"];
 #
 set msgfilter(smtp,originator) "npemwin@localhost";
 set msgfilter(smtp,servers)    "localhost";
+set msgfilter(smtp,options) [list]; # for other options (if needed) such as
+                                    # -username <u> -password <p> ...
 #
 # The priority may be specified as a ``facility.level'' pair.
 # For example, ``local3.info'' logs the message as informational
@@ -115,7 +117,7 @@ proc process {prodname fpath} {
     filterlib_get_rcvars rc $prodname $fpath;
 
     set prod_code [string range $prodname 0 2];
-    set prod_body [::fileutil::cat $fpath];
+    set prod_body [::fileutil::cat -translation crlf $fpath];
     set ugczones [ugc_get_lines [split $prod_body "\n"]];
 
     # The $msgfilter(subscribers) variable is a list of "subscriber lists",
@@ -221,11 +223,12 @@ proc msgfilter_smtp_send_txt {recipients subject body} {
 
     set token [mime::initialize -canonical text/plain -string $body];
 
-    set result [smtp::sendmessage $token \
-		    -originator $msgfilter(smtp,originator) \
-		    -servers $msgfilter(smtp,servers) \
-		    -recipients [join $recipients ","] \
-		    -header [list Subject $subject]];
+    set cmd [list smtp::sendmessage $token \
+		-originator $msgfilter(smtp,originator) \
+		-servers $msgfilter(smtp,servers) \
+		-recipients [join $recipients ","] \
+		-header [list Subject $subject]];
+    set result [eval $cmd $msgfilter(smtp,options)];
 
     mime::finalize $token;
 
