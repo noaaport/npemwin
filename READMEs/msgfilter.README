@@ -66,7 +66,7 @@ For example, given
 
 lappend subscribers {
 	smtp://nieves@noaaport.net
-	(svs|tor)-txz14[5-9],svr-vaz014
+	(svs|tor)_txz14[5-9],svr_vaz014
 	<flags>
 }
 
@@ -97,8 +97,8 @@ The list can be kept in a separate flat file, in the format
 
 E.g.,
 
-smtp://nieves@noaaport.net (svs|tor)-txz14[5-9],svr-vaz014 F;
-smtp://<phonenumber>@tms.suncom.com (svs|tor)-txz14[5-9] S;
+smtp://nieves@noaaport.net (svs|tor)_txz14[5-9],svr_vaz014 F;
+smtp://<phonenumber>@tms.suncom.com (svs|tor)_txz14[5-9] S;
 
 If such a flat list is kept in the file
 
