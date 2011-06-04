@@ -18,3 +18,6 @@
 - Corrected setting of PATH in filters.conf (from configure.inc and Makefile)
 - Added KGGE (SC) to metar stations (icao and st files. Scott Shoemaker)
 - Added linespoints style (ls) keywords to gnuplot templates in metarfilter
+- Revised msgfilter: convert crlf -> nl, corrected REAME, added options
+  for smtp when needed. Revised specification to allow
+  <prod_regex><site_regexp> in addition to the old <prod_regex>_<zone_regexp>.
