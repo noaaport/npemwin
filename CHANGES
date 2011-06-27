@@ -21,3 +21,6 @@
 - Revised msgfilter: convert crlf -> nl, corrected REAME, added options
   for smtp when needed. Revised specification to allow
   <prod_regex><site_regexp> in addition to the old <prod_regex>_<zone_regexp>.
+
+2.1.2p4 -
+- Corrected output of /_iemwin/stats?format=csv
