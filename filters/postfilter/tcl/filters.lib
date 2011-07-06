@@ -90,6 +90,17 @@ proc filterlib_get_rcfiles {rcfname confdirs rcdir postrcfile} {
     return $_rcfiles;
 }
 
+proc filterlib_get_txtflag {body} {
+
+    if {[string length $body] == 0} {
+        return 0;
+    }
+
+    set txtflag [regexp {^[[:graph:][:space:]]+$} $body];
+
+    return $txtflag;
+}
+
 proc filterlib_get_rcvars {rc_name prodname fpath} {
 
     upvar $rc_name rc;
@@ -127,17 +138,15 @@ proc filterlib_get_rcvars {rc_name prodname fpath} {
     set rc(fsize) [file size $fpath];
     if {$rc(ftype) eq "txt"} {
 	set _parts [filterlib_get_parts $fpath $filterlib(bodypartsize)];
+        set rc(bodypart) [lindex ${_parts} 2];
+        set rc(txtflag) [filterlib_get_txtflag $rc(bodypart)];
 
 	# Check if the WMOHEADER is alnum after striping the blanks
 	set _HEADER [lindex ${_parts} 0];
-	if {[string is alnum [string map {" " ""} ${_HEADER}]]} {
-	    set rc(txtflag) 1;
+	if {[string is alnum [string map {" " ""} ${_HEADER}]]} {	    
 	    set rc(HEADER) ${_HEADER};
 	    set rc(AWIPS) [lindex ${_parts} 1];
 	    set rc(AWIPS1) [string range $rc(AWIPS) 0 2];
-	    set rc(bodypart) [lindex ${_parts} 2];
-	    unset _parts;
-
 	    set rc(header) [string tolower $rc(HEADER)];
 	    scan $rc(header) "%s %s %s" rc(header_wmoid) rc(header_station) \
 		    rc(header_time);
@@ -145,8 +154,12 @@ proc filterlib_get_rcvars {rc_name prodname fpath} {
 	    set rc(awips1) [string tolower $rc(AWIPS1)];
 	}
 	unset _HEADER;
+	unset _parts;
     }
-    if {$rc(txtflag) == 0} {
+
+    # If awips is blank because there was no text header, extract what
+    # can be extracted from the file name.
+    if {$rc(awips) eq ""} {
 	set rc(awips) [string range $rc(prodname) 0 5];
 	set rc(AWIPS) [string toupper $rc(awips)];
 	set rc(awips1) [string range $rc(prodname) 0 2];

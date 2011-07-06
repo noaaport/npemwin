@@ -25,5 +25,7 @@
 2.1.2p4 -
 - Corrected output of /_iemwin/stats?format=csv
 
-2.1.2p5 -
+2.1.2p6 -
 - Revised panfilter to send the meta data in lower case.
+- Revised how the txtflag is set, It used to be based on just whether the
+  header was text without looking at the body. Now it looks in the body.
