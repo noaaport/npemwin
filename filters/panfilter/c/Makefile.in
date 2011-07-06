@@ -39,7 +39,8 @@ npemwinudprecv: npemwinudprecv.o ${NPEMWINOBJECTS}
 	${CC} -o npemwinudprecv npemwinudprecv.o ${NPEMWINOBJECTS}
 
 npemwinudpread.tcl: npemwinudpread.tcl.in
-	sed -e /%TCLSH%/s##${TCLSH}# npemwinudpread.tcl.in  > npemwinudpread.tcl
+	sed -e /%TCLSH%/s##${TCLSH}# npemwinudpread.tcl.in  > \
+		npemwinudpread.tcl
 
 install:
 	${INSTALL} -m 755 ${PROGRAMS} ${BINDIR}
