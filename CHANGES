@@ -24,3 +24,6 @@
 
 2.1.2p4 -
 - Corrected output of /_iemwin/stats?format=csv
+
+2.1.2p5 -
+- Revised panfilter to send the meta data in lower case.

@@ -13,8 +13,8 @@ source ${_defaultsfile};
 
 ## The filter library
 if {[file exists $gf(filterlib)] == 0} {
-        puts "panfilter disabled: $gf(filterlib) not found.";
-        return 1;
+    puts "panfilter disabled: $gf(filterlib) not found.";
+    return 1;
 }
 source $gf(filterlib);
 
