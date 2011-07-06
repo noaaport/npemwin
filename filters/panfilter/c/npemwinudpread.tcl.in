@@ -36,7 +36,7 @@ proc read_message {f} {
 #   For text files
 #   puts [exec curl -s -S \
 #       "http://$remoteip:8016/_get/spool/$wmostation/$fbasename" \
-#       | tail -n +25 | tr -d {\r\001\003}];
+#       | tr -d {\r\001\003}];
 }
 
 set s [udp_open 5000];
