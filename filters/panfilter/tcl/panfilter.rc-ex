@@ -30,7 +30,7 @@ lappend action {
 #
 #
 lappend cond {
-  [regexp {URGENT} $rc(bodypart)] && ($rc(header_station) == "tjsj")
+  [regexp {URGENT} $rc(bodypart)] && ($rc(header_station) eq "tjsj")
 }
 lappend action {
   set udp(status) 0;
@@ -60,7 +60,7 @@ lappend action {
 # machine
 #
 lappend cond {
-  ($rc(header_station) == "tjsj")
+  ($rc(header_station) eq "tjsj")
 }
 lappend action {
   set udp(status) 0;
@@ -86,7 +86,7 @@ lappend action {
 }
 
 lappend cond {
-  ($rc(header_station) == "tjsj")
+  ($rc(header_station) eq "tjsj")
 }
 lappend action {
   set udp(status) 0;

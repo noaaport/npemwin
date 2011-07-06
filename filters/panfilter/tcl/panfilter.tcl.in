@@ -111,13 +111,13 @@ proc process {prodname fpath} {
     }
 
     if {$udp(status) == 0} {
-	panfilter_udp $rc(HEADER) $rc(AWIPS) $rc(fbasename) $udp(host);
+	panfilter_udp $rc(header) $rc(awips) $rc(fbasename) $udp(host);
     }
 }
 
-proc panfilter_udp {HEADER AWIPS fbasename udphost} {
+proc panfilter_udp {header awips fbasename udphost} {
 
-    set str [string trimleft [join [list $HEADER $AWIPS $fbasename]]];
+    set str [string trimleft [join [list $header $awips $fbasename]]];
 
     foreach _hostport $udphost {
 	set _hostport_parts [split ${_hostport} :];
