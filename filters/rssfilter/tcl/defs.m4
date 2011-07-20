@@ -11,7 +11,7 @@ define(m4send_rss,
 
 define(match_text_one,
 lappend cond {
-    ($rc(ftype) == "txt") && [regexp {$2} $1]
+    ($rc(ftype) eq "txt") && [regexp {$2} $1]
 }
 lappend action {
     set rc_status 0;
@@ -24,7 +24,7 @@ lappend action {
 
 define(match_text_two,
 lappend cond {
-    ($rc(ftype) == "txt") && [regexp {$2} $1] && [regexp {$4} $3]
+    ($rc(ftype) eq "txt") && [regexp {$2} $1] && [regexp {$4} $3]
 }
 lappend action {
     set rc_status 0;
@@ -37,7 +37,7 @@ lappend action {
 
 define(match_text_one_except,
 lappend cond {
-    ($rc(ftype) == "txt") && [regexp {$2} $1] && ![regexp {$4} $3]
+    ($rc(ftype) eq "txt") && [regexp {$2} $1] && ![regexp {$4} $3]
 }
 lappend action {
     set rc_status 0;

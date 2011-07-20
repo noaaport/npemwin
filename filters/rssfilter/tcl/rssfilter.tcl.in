@@ -6,15 +6,15 @@
 ## The common defaults
 set defaultsfile "/usr/local/etc/npemwin/filters.conf";
 if {[file exists $defaultsfile] == 0} {
-        puts "Filter disabled: $defaultsfile not found.";
-        return 1;
+    puts "Filter disabled: $defaultsfile not found.";
+    return 1;
 }
 source $defaultsfile;
 
 ## The filter library
 if {[file exists $gf(filterlib)] == 0} {
-        puts "Filter disabled: $gf(filterlib) not found.";
-        return 1;
+    puts "Filter disabled: $gf(filterlib) not found.";
+    return 1;
 }
 source $gf(filterlib);
 
