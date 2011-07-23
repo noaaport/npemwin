@@ -29,3 +29,4 @@
 - Revised panfilter to send the meta data in lower case.
 - Revised how the txtflag is set, It used to be based on just whether the
   header was text without looking at the body. Now it looks in the body.
+- Revised how rssfilter(hostport) is defined in rssfilter
