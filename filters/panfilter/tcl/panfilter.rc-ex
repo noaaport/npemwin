@@ -70,10 +70,13 @@ lappend action {
 }
 
 # In many cases one sets up only one rule for each type of file received.
-# The "break" statement above enforces that. But there are cases
-# in which it is necessary that the file is processed in two or more
-# rules. Then the "break" statement must be omitted and the udp(host)
-# must be set as follows. (In the example below the file will be sent to
+# The "break" statement above enforces that. But in other cases
+# (for example with many hosts) it is better to have one cond/action rule
+# for each host, and in that case it is necessary that the file is processed
+# in two or more rules. Then the "break" statement must be omitted and the
+# udp(host) must be set as follows.
+#
+# In the example below the file will be sent to
 # "caribe" and "tropical" because it is an sdus file, and to "diablo"
 # because it comes from TJSJ.
 #
