@@ -62,7 +62,7 @@ has the form
 	
 	<prod_code_regex>_<zone_code_regex>
 or
-	<prod_code_regex><size_code_regex>
+	<awips_code_regex>
 
 For example, given
 
@@ -76,7 +76,7 @@ then I would receive all svs and tor for TX zones 145 to 149, and also
 all SVR for VA zone 014. The comma separated list of product-zone
 combinations can be extended indefinitely.
 
-Another form is
+Instead of the prod_code and zone_code combiation, the other form is
 
 lappend subscribers {
 	smtp://nieves@noaaport.net
