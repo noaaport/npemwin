@@ -62,7 +62,9 @@ has the form
 	
 	<prod_code_regex>_<zone_code_regex>
 or
-	<awips_code_regex>
+	<prod_name_regex>
+
+(<prod_name> is typically of the form <awips><state>).
 
 For example, given
 
