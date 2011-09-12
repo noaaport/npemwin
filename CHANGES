@@ -32,3 +32,8 @@
 - Revised how rssfilter(hostport) is defined in rssfilter
 
 2.1.2r - released
+
+2.1.3p1
+-
+- Revised msgfilter because with the tcl mime-smtp package the sms to
+  mobile devices was not working correctly.
