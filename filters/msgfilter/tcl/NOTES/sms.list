@@ -1,6 +1,8 @@
 #
 # http://www.tech-recipes.com/rx/939/sms_email_cingular_nextel_sprint_tmobile_verizon_virgin
 #
+# http://en.wikipedia.org/wiki/List_of_SMS_gateways
+#
 T-Mobile: <phonenumber>@tmomail.net
 Virgin Mobile: <phonenumber>@vmobl.com
 Cingular: <phonenumber>@cingularme.com
