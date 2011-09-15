@@ -35,5 +35,6 @@
 
 2.1.3p1
 -
-- Revised msgfilter because with the tcl mime-smtp package the sms to
-  mobile devices was not working correctly.
+- Revised msgfilter to add appropriate headers to the message. Added
+  separate function to send sms messages using sendmail in case
+  tcllib based function does not work for some addresses
