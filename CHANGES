@@ -37,4 +37,5 @@
 -
 - Revised msgfilter to add appropriate headers to the message. Added
   separate function to send sms messages using sendmail in case
-  tcllib based function does not work for some addresses
+  tcllib based function does not work for some addresses. Added U flag
+  to send URL (e.g., to mobile devices).
