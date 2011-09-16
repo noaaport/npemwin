@@ -452,4 +452,12 @@ proc msgfilter_prod_summary {prod_code} {
 # Load the subscribers rules
 source $msgfilter(rc);
 
+# cd to the base data dir once and for all
+if {[file isdirectory $msgfilter(datadir)]} {
+    cd $msgfilter(datadir);
+} else {
+    log_msg "Filter disabled: $msgfilter(datadir) not found.";
+    return 1;
+}
+
 main;
