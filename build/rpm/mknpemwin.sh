@@ -1,20 +1,18 @@
 #!/bin/sh
 
-name=npemwin
+branchname=npemwin
 
 rpmroot=$HOME/rpmbuild
 
-tgzfile=${name}.tgz
-
-rm -rf $name
+tgzfile=${branchname}.tgz
+rm -rf $branchname
 tar -xzf $tgzfile
 
-. $name/VERSION
+. ./$branchname/VERSION
 
-rm -rf $name-${version}
-
-cp -r $name $name-${version}
-tar -czf $name-$version.tgz $name-$version
-cp $name-$version.tgz $rpmroot/SOURCES
-cd $name/build/rpm
+rm -rf ${name}-${version}
+cp -r $branchname ${name}-${version}
+tar -czf ${name}-${version}.tgz ${name}-${version}
+cp ${name}-${version}.tgz $rpmroot/SOURCES
+cd ${name}-${version}/build/rpm
 make package
