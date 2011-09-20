@@ -10,21 +10,25 @@ requires = $(shell cat rpm-requires)
 rpmrelease = $(shell cat rpm-release)
 rpmroot = ${HOME}/rpmbuild
 
-FLAVOR = $(shell ./flavor.sh)
-
+flavor = $(shell ./flavor.sh)
 arch =  $(shell uname -m)
-ifeq (${FLAVOR}, opensuse)
+dist = $(shell ./dist.sh)
+
+ifeq (${flavor}, opensuse)
   ifeq (${arch}, i386)
     arch = i586
   endif
 endif
 
+tgzfile = ${name}-${version}.tgz
+rpmfile = ${name}-${version}-${rpmrelease}${dist}.${arch}.rpm
+
 defauls: package
 
 spec: rpm-spec
-tgz: ${name}-${version}.tgz
+tgz: ${tgzfile}
 
-${name}-${version}.tgz:
+${tgzfile}:
 	cd ../../..;\
 	cp -r ${name} ${name}-${version};\
 	tar -czf ${name}-${version}.tgz ${name}-${version};\
@@ -44,10 +48,10 @@ rpm-spec: rpm-spec.in
 	-e "/@plist@/d" \
 	rpm-spec.in > rpm-spec
 
-package: rpm-spec ${name}-${version}.tgz
-	mv ${name}-${version}.tgz ${rpmroot}/SOURCES
+package: rpm-spec ${tgzfile}
+	mv ${tgzfile} ${rpmroot}/SOURCES
 	rpmbuild -bb rpm-spec
-	cp ${rpmroot}/RPMS/${arch}/${name}-${version}-*.rpm .
+	cp ${rpmroot}/RPMS/${arch}/${rpmfile} .
 
 clean:
-	rm -f rpm-spec ${name}-${version}.tgz ${name}-${version}-*.rpm *~
+	rm -f rpm-spec ${tgzfile} ${rpmfile}
