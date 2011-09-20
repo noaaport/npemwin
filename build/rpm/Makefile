@@ -23,7 +23,7 @@ endif
 tgzfile = ${name}-${version}.tgz
 rpmfile = ${name}-${version}-${rpmrelease}${dist}.${arch}.rpm
 
-defauls: package
+default: package
 
 spec: rpm-spec
 tgz: ${tgzfile}
@@ -40,9 +40,9 @@ rpm-spec: rpm-spec.in
 	-e "/@version@/s//${version}/" \
 	-e "/@rpmrelease@/s//${rpmrelease}/" \
 	-e "/@requires@/s//${requires}/" \
-	-e "/@postinstall@/r postinstall" \
+	-e "/@postinstall@/r rpm-postinstall" \
 	-e "/@postinstall@/d" \
-	-e "/@postuninstall@/r postuninstall" \
+	-e "/@postuninstall@/r rpm-postuninstall" \
 	-e "/@postuninstall@/d" \
 	-e "/@plist@/r rpm-plist" \
 	-e "/@plist@/d" \
@@ -54,4 +54,4 @@ package: rpm-spec ${tgzfile}
 	cp ${rpmroot}/RPMS/${arch}/${rpmfile} .
 
 clean:
-	rm -f rpm-spec ${tgzfile} ${rpmfile}
+	rm -f *~ rpm-spec ${tgzfile} ${rpmfile}
