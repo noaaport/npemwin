@@ -1,7 +1,6 @@
 #
 # $Id$
 #
-include ../../Makefile.inc
 include ../../VERSION
 
 # The defaults in spec.in are for SL, and the overrides are other
