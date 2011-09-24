@@ -1,0 +1,22 @@
+#
+# $Id$
+#
+
+lappend subscribers {
+  smtp://<number>@tmomail.net
+  {tcpa41pr,:0[regexp {ADVERTENCIA} $rc(bodypart)] && \
+	[regexp {tjsj} $rc(header_station)]}
+  U
+};
+
+lappend subscribers {
+  smtp://<number>@tmomail.net
+  {:0 [regexp {tjsj} $rc(header_station)]}
+  U
+};
+
+lappend subscribers {
+  smtp://<number>@tmomail.net
+  {:= gfs_161}
+  U
+};
