@@ -11,11 +11,11 @@ This is a quick guide to sending sms messages (alerts) to smartphones.
 2)  Two settings must appear in site/msgfilter.conf file:
 
       set msgfilter(smtp,originator) "nbsp@localhost";
-      set msgfilter(http,server) "http://www.opennoaaport.net:8015";
+      set msgfilter(http,server) "http://www.opennoaaport.net:8016";
 
     The first should be set to an email address that properly identifies
-    the sending site, and the second one to the correct url of the
-    site.
+    the sending site, and the second one to the correct npemwin base url
+    of the site.
 
     If the smtp server (e.g., sendmail) is setup in the same computer where
     nbsp is running, then that is all. Otherwise this setting
