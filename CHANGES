@@ -33,9 +33,10 @@
 
 2.1.2r - released
 
-2.1.3p1
+2.1.3
 -
 - Revised msgfilter to add appropriate headers to the message. Added
   separate function to send sms messages using sendmail in case
   tcllib based function does not work for some addresses. Added U flag
   to send URL (e.g., to mobile devices).
+- Add K4M9 to metarfilter (Jason Brooks)
