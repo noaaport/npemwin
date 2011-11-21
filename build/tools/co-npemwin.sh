@@ -2,33 +2,28 @@
 
 project=npemwin
 #
-#masterhost="http://svn.1-loop.net"
-masterhost="svn+ssh://jfnieves@svn.1-loop.net/home/jfnieves/svn"
+host="bzr+ssh://repo.1-loop.net"
 #
-masterrepo="nbsprepo"
+repo="home/repo/bzr/noaaport"
 tag=trunk
 #
-## mastersite="svn+ssh://diablo/home/svn"
-mastersite=${masterhost}/${masterrepo}
+site=${host}/${repo}
 
 # npemwintclhttpd receives special treatment
 tcllibs="tclmetar"
 srclibs="libconnth libqdb libtclconf"
 tclhttpd=${project}tclhttpd
 
-# Override tag with the cmd line argument (e.g., "nbsp-2.1.1r")
-[ $# -ne 0 ] && tag=tags/$1
-
-svn co $mastersite/$project/$tag $project
+bzr branch $site/$project/$tag $project
 cd $project
 for p in $tcllibs
 do
-  svn co $mastersite/$p/$tag $p
+  bzr branch $site/$p/$tag $p
 done
-svn co $mastersite/$tclhttpd/$tag tclhttpd
+bzr branch $site/$tclhttpd/$tag tclhttpd
 
 cd src
 for p in $srclibs
 do
-  svn co $mastersite/$p/$tag $p
+  bzr branch $site/$p/$tag $p
 done

@@ -1,11 +1,13 @@
 #!/bin/sh
 
 project=npemwin
-masterhost="http://svn.1-loop.net"
-masterrepo="nbsprepo"
 #
-## mastersite="svn+ssh://diablo/home/svn"
-mastersite=${masterhost}/${masterrepo}
+host="bzr+ssh://repo.1-loop.net"
+#
+repo="home/repo/bzr/noaaport"
+tag=trunk
+#
+site=${host}/${repo}
 
 # npemwintclhttpd receives special treatment
 tcllibs="tclmetar"
@@ -22,19 +24,20 @@ rm -r -f $tmpdir
 mkdir $tmpdir
 cd $tmpdir
 
-svn export $mastersite/$name/trunk ${name}-${version}
+bzr export ${name}-${version} $site/$name/$tag
 cd ${name}-${version}
 rm -r $exclude
+
 for p in $tcllibs
 do
-  svn export $mastersite/$p/trunk $p
+  bzr export $p $site/$p/$tag
 done
-svn export $mastersite/$tclhttpd/trunk tclhttpd
+bzr export tclhttpd $site/$tclhttpd/trunk
 
 cd src
 for p in $srclibs
 do
-  svn export $mastersite/$p/trunk $p
+  bzr export $p $site/$p/trunk
 done
 
 cd ../.. 
