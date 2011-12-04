@@ -1,0 +1,2 @@
+See the corresponding file in Nbsp source, for explanation of
+the various formats and the differences in the programs.

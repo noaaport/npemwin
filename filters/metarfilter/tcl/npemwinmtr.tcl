@@ -19,7 +19,7 @@ package require cmdline;
 set usage {npemwinmtr [-r] [-n number| -a] <collective>
 npemwinmtr [-r | -t | -d] [-n number| -a] <station>};
 
-set optlist {d r t {n.arg 1} a};
+set optlist {a d r t {n.arg 1}};
 set conflict_drt 0;
 set conflict_an 0;
 
