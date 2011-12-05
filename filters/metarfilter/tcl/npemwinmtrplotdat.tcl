@@ -3,22 +3,49 @@
 # $Id$
 #
 # Usage: nbspmtrplotdat [-o outputfile [-b basedir] [-d subdir]] \
-#			[-m marker] [-n numpoints] [-f datafile] <station>
+#			[-m marker] [-n numpoints] [-r] [-s separator] \
+#                       [-f datafile | station]
 #
 # Without options, the data is written to stdout. Otherwise, 
 # the tool will cd to the "basedir", create "subdir", and save
 # the data in <station>.<ext> or what is given in the [-o] option.
 # By default, the number of points included is defined by the
-# by the setting of the variable $metarfilter(plotnumpoints).
-# The number can be specified with [-n] option. The [-m] option specifies
+# value of the variable $metarfilter(plotnumpoints).
+# The number can be specified with [-n] option; if it is 0 or negative
+# then all points are included. The [-m] option specifies
 # a marker to use when the slp is missing. (See sanity_check() below.)
-
+# The data is separated by a space, or by the character(s) in the -s option.
+#
+# If a station name given in the argument then the data file is searched
+# in the "Metarweather" utility data directory. Otherwise a data file
+# can be given with the -f option, in the same format:
+#
+#    TJSJ 020056Z 00000KT 10SM SCT031 BKN110 2 7/20 A2997
+#    TJSJ 012356Z 07007KT 10SM SCT031 BKN110 2
+#
+# Without any argument, the program reads from stdin in that same format.
+#
+# The Metarweather files are assumed to be in reverse chronological order
+# while any other data file (via -f) is assumed  to be in the standard
+# chronological order. The -r option can be used to revert this interpretation
+# in both cases.
+#
 package require fileutil;
 package require cmdline;
+
 set usage {nbspmtrplotdat [-o outputfile [-b basedir] [-d subdir]]
-    [-n numpoints] [-f datafile] <station>};
-set optlist {{o.arg ""} {b.arg ""} {d.arg ""} {n.arg ""} {f.arg ""}
-    {m.arg "na"}};
+    [-n numpoints] [-f] [-r] [-s separator] <station|datafile>};
+
+set optlist {f r {b.arg ""} {d.arg ""} {m.arg "na"}
+    {n.arg ""} {o.arg ""} {s.arg ""}};
+
+proc err {s} {
+
+    global argv0;
+
+    puts "Error: $s";
+    exit 1;
+}
 
 proc sanity_check dataline {
 #
@@ -37,15 +64,15 @@ proc sanity_check dataline {
     return 0;
 }
 
-proc convert_list {origlist numpoints slp_missing_mark} {
+proc convert_list {origlist numpoints slp_missing_mark OFS revert_order} {
 #
 # The data file is split into lines, and the list of lines is passed
-# to this function. The original file has the lines in reverse
-# chronological order (metar file list) so here we rearrange that and
+# to this function. If the original file has the lines in reverse
+# chronological order (metarweather file list) here we rearrange that and
 # also eliminate lines that duplicate the data for a given hour.
 # The function returns the new list, with each field separated by a space
 # (for gnuplot). In addition to the original fields, two calculated
-# fields are includded at the end: pressure in mb, and relative humidity.
+# fields are included at the end: pressure in mb, and relative humidity.
 # Only the last $numpoints lines are included, unless it is 0 or negative.
 
     # Determine the field separator from the first line. If there are commas
@@ -73,9 +100,14 @@ proc convert_list {origlist numpoints slp_missing_mark} {
 	    lappend a [format "%.2f" [expr [lindex $a 7] * 33.8639]];
 	    lappend a [relative_humidity [lindex $a 5] [lindex $a 6]];
 
-	    set newlist [linsert $newlist 0 [join $a " "]];
+	    if {$revert_order == 1} {
+		set newlist [linsert $newlist 0 [join $a $OFS]];
+	    } else {
+		lappend newlist [join $a $OFS];
+	    }
 
 	    incr i;
+
 	    if {($numpoints > 0) && ($i == $numpoints)} {
 		break;
 	    }
@@ -143,8 +175,7 @@ proc relative_humidity {T D} {
 ## The common defaults
 set _defaultsfile "/usr/local/etc/npemwin/filters.conf";
 if {[file exists ${_defaultsfile}] == 0} {
-    puts "${_defaultsfile} not found.";
-    return 1;
+    err "${_defaultsfile} not found.";
 }
 source ${_defaultsfile};
 unset _defaultsfile;
@@ -153,31 +184,47 @@ unset _defaultsfile;
 # and therefore it is in a separate file that is read by both.
 set metar_init_file [file join $gf(filterdir) metarfilter.init];
 if {[file exists $metar_init_file] == 0} {
-    puts "$metar_init_file not found.";
-    return 1;
+    err "$metar_init_file not found.";
 }
 source $metar_init_file;
 unset metar_init_file;
 
 array set option [::cmdline::getoptions argv $optlist $usage];
 set argc [llength $argv];
-if {$argc != 1} {
-    puts $usage;
-    exit 1;
-} else {
-    set station [lindex $argv 0];
+
+set station "";
+set datafile "";
+
+if {$argc != 0} {
+    if {$option(f) == 0} {
+	set station [lindex $argv 0];
+    } else {
+	set datafile [lindex $argv 0];
+    }
 }
 
-if {$option(f) eq ""} {
+if {$station ne ""} {
     set dir [file join $metarfilter(datadir) $metarfilter(mwdir)];
     append fname $station $metarfilter(mwfext); 
     set datafile [exec find $dir -name $fname];
     if {$datafile eq ""} {
-	puts "$fname not found in $dir.";
-	exit 1;
+	err "$fname not found in $dir.";
+    }
+    set revert_order 1;
+    if {$option(r) == 1} {
+	set revert_order 0;
     }
 } else {
-    set datafile $option(f);
+    set revert_order 0;
+    if {$option(r) == 1} {
+	set revert_order 1;
+    }
+}
+
+if {$option(s) ne ""} {
+    set OFS $option(s);
+} else {
+    set OFS " ";
 }
 
 set numpoints $metarfilter(plotnumpoints);
@@ -185,12 +232,16 @@ if {$option(n) ne ""} {
     set numpoints $option(n);
 }
 
-set body [exec npemwinmtrd -t -d $datafile];
+if {$datafile ne ""} {
+    set body [exec nbspmtrd -t -d $datafile];
+} else {
+    set body [exec nbspmtrd -t -d];
+}
+
 set lineslist [split $body "\n"];
-set newlist [convert_list $lineslist $numpoints $option(m)];
+set newlist [convert_list $lineslist $numpoints $option(m) $OFS $revert_order];
 if {[llength $newlist] == 0} {
-    puts "No useful data in $datafile.";
-    exit 1;
+    err "No useful data in $datafile.";
 }
 set newbody [join $newlist "\n"];
 
@@ -219,6 +270,5 @@ set status [catch {
 } errmsg];
 
 if {$status != 0} {
-    puts $errmsg;
-    exit 1;
+    err $errmsg;
 }
