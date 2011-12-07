@@ -1,8 +1,9 @@
 npemwin (2.1.3r2-1) oneiric; urgency=low
 
   * Revised npemwinmtrplotdat 
+  * Added arcfilter 
 
- -- Jose F Nieves <nieves@msi>  Sun, 04 Dec 2011 20:16:15 -0400
+ -- Jose F Nieves <nieves@asa.uprrp.edu>  Wed, 07 Dec 2011 17:56:43 -0400
 
 npemwin (2.1.3r1-1) stable; urgency=low
 
