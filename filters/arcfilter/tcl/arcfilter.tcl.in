@@ -29,10 +29,6 @@ set arcfilter(postrc)  "";
 set arcfilter(datadir) $gf(archivedatadir);
 set arcfilter(invdir)  $gf(archiveinvdir);
 
-# Parameters
-set arcfilter(tarfext) ".tar";
-set arcfilter(invfext) ".inv";
-
 #
 # Variables
 #
@@ -53,7 +49,7 @@ if {[file exists $arcfilter(rc)] == 0} {
     return 1;
 }
 
-set npemwinfilter(rcfiles) [filterlib_get_rcfiles \
+set arcfilter(rcfiles) [filterlib_get_rcfiles \
     [file tail $arcfilter(rc)] \
     	$arcfilter(confdirs) $arcfilter(rcdir) $arcfilter(postrc)];
 

@@ -11,13 +11,27 @@
 #
 
 #
-# To archive all files from tjsj
+# To archive all files from all stations
+#
+lappend cond {
+  [regexp {.*} $rc(header_station)]
+}
+lappend action {
+  arcfilterlib_tar rc \
+	$rc(yyyy)/$rc(ymd)/$rc(ymd).$rc(header_station).tar \
+	$rc(yyyy)/$rc(ymd).inv;
+  break;
+}
+
+#
+# To archive all files from one station
 #
 lappend cond {
   [regexp {tjsj} $rc(header_station)]
 }
 lappend action {
-  arcfilterlib_tar rc $rc(header_station)/$rc(yyyy)/$rc(ym) \
-	$rc(ymd).$rc(header_station) $rc(ymd).$rc(header_station);
+  arcfilterlib_tar rc \
+	$rc(yyyy)/$rc(ymd)/$rc(ymd).$rc(header_station).tar \
+	$rc(yyyy)/$rc(ymd).inv;
   break;
 }
