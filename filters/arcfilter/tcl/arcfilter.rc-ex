@@ -18,8 +18,8 @@ lappend cond {
 }
 lappend action {
   arcfilterlib_tar rc \
-	$rc(yyyy)/$rc(ymd)/$rc(ymd).$rc(header_station).tar \
-	$rc(yyyy)/$rc(ymd).inv;
+	$rc(yyyy)/$rc(header_station)/$rc(ymd).$rc(header_station).tar \
+	$rc(yyyy)/$rc(header_station)/$rc(ymd).$rc(header_station).inv;
   break;
 }
 
@@ -31,7 +31,7 @@ lappend cond {
 }
 lappend action {
   arcfilterlib_tar rc \
-	$rc(yyyy)/$rc(ymd)/$rc(ymd).$rc(header_station).tar \
-	$rc(yyyy)/$rc(ymd).inv;
+	$rc(yyyy)/$rc(header_station)/$rc(ymd).$rc(header_station).tar \
+	$rc(yyyy)/$rc(header_station)/$rc(ymd).$rc(header_station).inv;
   break;
 }
