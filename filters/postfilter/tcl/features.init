@@ -19,10 +19,11 @@ set feature(panfilter)		0;
 set feature(nntpfilter)		0;
 set feature(npemwinfilter)	0;
 set feature(msgfilter)		0;
+set feature(arcfilter)		0;
 #
 set feature(stdfilter) 0;
 set _filterprefixes \
-	[list std da metar rss track gp ldm spool pan nntp npemwin msg];
+	[list std da metar rss track gp ldm spool pan nntp npemwin msg arc];
 
 # Read the local overrides
 set _confname [file tail $gf(featuresconf)];

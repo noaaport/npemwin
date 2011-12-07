@@ -45,6 +45,7 @@ libexec/npemwin/spoolfilter.init
 libexec/npemwin/msgfilter
 libexec/npemwin/trackfilter
 libexec/npemwin/trackfilter.init
+libexec/npemwin/arcfilter
 libexec/npemwin/filters.lib
 libexec/npemwin/pkgIndex.tcl
 libexec/npemwin/errx.tcl
@@ -102,6 +103,9 @@ etc/npemwin/dist/msgfilter-ugczones.def-sample
 etc/npemwin/dist/msgfilter.rc-ex
 etc/npemwin/dist/msgfilter-subscribers.txt-ex
 etc/npemwin/dist/trackfilter.conf-sample
+etc/npemwin/dist/arcfilter.conf-sample
+etc/npemwin/dist/arcfilter.rc-sample
+etc/npemwin/dist/arcfilter.rc-ex
 etc/npemwin/dist/qrunner.conf-sample
 etc/npemwin/dist/qrunner.conf-site-sample
 etc/npemwin/dist/hourly-cleanup.conf-sample

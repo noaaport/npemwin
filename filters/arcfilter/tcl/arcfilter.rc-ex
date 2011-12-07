@@ -1,0 +1,23 @@
+#
+# $Id$
+#
+
+#
+# - Examples
+#
+# These rc() variables are available from the filterlib (the times are based
+# on the product times (not arrival times)
+# ymd_hm, ymdhm, ymdh, ymd, ym, yyyy
+#
+
+#
+# To archive all files from tjsj
+#
+lappend cond {
+  [regexp {tjsj} $rc(header_station)]
+}
+lappend action {
+  arcfilterlib_tar rc $rc(header_station)/$rc(yyyy)/$rc(ym) \
+	$rc(ymd).$rc(header_station) $rc(ymd).$rc(header_station);
+  break;
+}

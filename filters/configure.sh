@@ -14,6 +14,7 @@ ldmfilter
 spoolfilter
 msgfilter
 trackfilter
+arcfilter
 bbserver
 scheduler"
 

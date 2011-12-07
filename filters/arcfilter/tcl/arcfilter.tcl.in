@@ -1,0 +1,126 @@
+#!%TCLSH%
+#
+# $Id$
+#
+
+## The common defaults
+set _defaultsfile "/usr/local/etc/npemwin/filters.conf";
+if {[file exists ${_defaultsfile}] == 0} {
+    puts "arcfilter disabled: ${_defaultsfile} not found.";
+    return 1;
+}
+source ${_defaultsfile};
+
+## The filter library
+if {[file exists $gf(filterlib)] == 0} {
+    puts "arcfilter disabled: $gf(filterlib) not found.";
+    return 1;
+}
+source $gf(filterlib);
+
+# default configuration
+set arcfilter(conf)	[file join $gf(confdir) "arcfilter.conf"];
+set arcfilter(rc)	[file join $gf(confdir) "arcfilter.rc"];
+set arcfilter(rcdir)	[file join $gf(confdir) "arc"];
+set arcfilter(lib)	[file join $gf(localfilterdir) "arcfilter.lib"];
+set arcfilter(confdirs) $gf(localconfdirs);
+set arcfilter(postrc)  "";
+#
+set arcfilter(datadir) $gf(archivedatadir);
+set arcfilter(invdir)  $gf(archiveinvdir);
+
+# Parameters
+set arcfilter(tarfext) ".tar";
+set arcfilter(invfext) ".inv";
+
+#
+# Variables
+#
+set arcfilter(rcfiles)		[list];
+set arcfilter(condition)	[list];
+set arcfilter(action)		[list];
+
+#
+# Read the optional configuration file.
+#
+if {[file exists $arcfilter(conf)] == 1} {
+    source $arcfilter(conf);
+}
+
+# The main rc file is required
+if {[file exists $arcfilter(rc)] == 0} {
+    log_msg "Filter disabled: $arcfilter(rc) not found.";
+    return 1;
+}
+
+set npemwinfilter(rcfiles) [filterlib_get_rcfiles \
+    [file tail $arcfilter(rc)] \
+    	$arcfilter(confdirs) $arcfilter(rcdir) $arcfilter(postrc)];
+
+# Load the rules sets
+source $arcfilter(rc);
+
+#
+# arcfilter library
+#
+@arclib@
+
+proc main {} {
+
+    global errorInfo;
+
+    while {[gets stdin line] >= 0} {
+	if {[regexp {^\s*$} $line]} {
+	    continue;
+	}
+	set args [split $line];
+	set argsc [llength $args];
+    	if {$argsc != 2} {
+            log_msg "Incorrect number of arguments: $args";
+	    continue;
+        }
+
+    	set prodname [lindex $args 0];
+    	set fpath [lindex $args 1];
+    
+        set status [catch {process $prodname $fpath} errmsg];
+	if {$status == 1} {
+	    log_msg "Error processing $prodname";
+	    log_msg $errmsg;
+	    log_msg $errorInfo;
+	}
+    }
+}
+
+proc process {prodname fpath} {
+
+    global arcfilter;
+
+    filterlib_get_rcvars rc $prodname $fpath;
+
+    set rc_status 1;
+
+    # Evaluate the condition/action pairs, from all sets.
+    set status [catch {
+	set i 0;		# counts the sets
+	foreach condlist $arcfilter(condition) {
+	    set actionlist [lindex $arcfilter(action) $i];
+	    set j 0;	# counts the rules with each set
+	    foreach c $condlist {
+		set a [lindex $actionlist $j];
+		if {[expr $c]} {
+		    eval $a;
+		}
+		incr j;
+	    }
+	    incr i;
+	}
+    } errmsg];
+
+    if {$status == 1} {
+	log_msg "Error processing $fpath";
+	log_msg $errmsg;
+    }
+}
+
+main

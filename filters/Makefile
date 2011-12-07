@@ -8,7 +8,7 @@
 
 SUBDIRS = postfilter nntpfilter rssfilter stdfilter npemwinfilter prefilter \
 	panfilter metarfilter gpfilter dafilter ldmfilter spoolfilter \
-	msgfilter trackfilter bbserver scheduler
+	msgfilter trackfilter arcfilter bbserver scheduler
 
 all:
 	for dir in ${SUBDIRS}; do \
