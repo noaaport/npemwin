@@ -103,7 +103,7 @@
 /usr/local/etc/npemwin/dist/trackfilter.conf-sample
 /usr/local/etc/npemwin/dist/arcfilter.conf-sample
 /usr/local/etc/npemwin/dist/arcfilter.rc-sample
-/usr/local/etc/npemwin/dist/arcfilter.conf-ex
+/usr/local/etc/npemwin/dist/arcfilter.rc-ex
 /usr/local/etc/npemwin/dist/qrunner.conf-sample
 /usr/local/etc/npemwin/dist/qrunner.conf-site-sample
 /usr/local/etc/npemwin/dist/hourly-cleanup.conf-sample

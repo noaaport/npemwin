@@ -43,6 +43,7 @@
 /usr/local/libexec/npemwin/msgfilter
 /usr/local/libexec/npemwin/trackfilter
 /usr/local/libexec/npemwin/trackfilter.init
+/usr/local/libexec/npemwin/arcfilter
 /usr/local/libexec/npemwin/filters.lib
 /usr/local/libexec/npemwin/pkgIndex.tcl
 /usr/local/libexec/npemwin/errx.tcl
@@ -100,6 +101,9 @@
 /usr/local/etc/npemwin/dist/msgfilter.rc-ex
 /usr/local/etc/npemwin/dist/msgfilter-subscribers.txt-ex
 /usr/local/etc/npemwin/dist/trackfilter.conf-sample
+/usr/local/etc/npemwin/dist/arcfilter.conf-sample
+/usr/local/etc/npemwin/dist/arcfilter.rc-sample
+/usr/local/etc/npemwin/dist/arcfilter.rc-ex
 /usr/local/etc/npemwin/dist/qrunner.conf-sample
 /usr/local/etc/npemwin/dist/qrunner.conf-site-sample
 /usr/local/etc/npemwin/dist/hourly-cleanup.conf-sample
