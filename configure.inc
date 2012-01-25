@@ -19,8 +19,8 @@ TCL_INCDIR="-I /usr/local/include/tcl8.6"
 TCL_LIB="tcl86"
 TCLSH=/usr/local/bin/tclsh8.6
 
-DB_INCDIR="-I /usr/local/include/db48"
-DB_LIB="db-4.8"
+DB_INCDIR="-I /usr/local/include/db5"
+DB_LIB="db-5"
 
 # scripts dir
 SHELL="/bin/sh"
