@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# tcl -
+# To install tcl, pkg_add must be invoked as "pkg_add -r tcl86", but to
+# check for the package, it must be in the form "tcl-8.6".
+# Similarly with tk.
+
+# gnuplot -
+# There is no standard package because the default requires pdflib.
+# We must build our own.
+
+requires="db5 tcl-8.6:tcl86 tcllib unzip"
+conflict=
+
+# so that FreeBSD runs it only once 
+name=$1
+key=$2
+[ "$key" = "DEINSTALL" ] && exit 0
+
+exit_status=0
+for p in $conflict
+do
+    result=`pkg_info -I ${p}* 2> /dev/null`
+    status=$?
+    if [ $status -eq 0 ]
+    then
+	echo "$p conflict"
+	exit_status=1
+    fi
+done
+
+for p in $requires
+do
+  pkg=`echo $p | cut -f 1 -d :`
+  port=`echo $p | cut -f 2 -d :`
+  result=`pkg_info -I ${pkg}* 2> /dev/null`
+  status=$?
+  if [ $status -ne 0 ]
+  then
+      if [ -n "$port" ]
+      then
+	  echo "$port not found"
+      else
+	  echo "$pkg not found"
+      fi
+      exit_status=1
+  fi
+done
+
+exit $exit_status

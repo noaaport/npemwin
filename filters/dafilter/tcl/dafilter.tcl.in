@@ -125,6 +125,7 @@ proc process {prodname fpath} {
     # The default is the wmotime, or the arrival time if there is no header.
     set ymd_hm $rc(ymd_hm);
     set ymdhm $rc(ymdhm);
+    set ymd_h $rc(ymd_h);
     set ymdh $rc(ymdh);
     set ymd $rc(ymd);
     set ym $rc(ym);

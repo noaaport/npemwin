@@ -45,3 +45,11 @@
 - Cosmetic correction of optlist in npemwinmtr
 - Revised npemwinmtrplotdat
 - Added arcfilter
+
+2.1.3.r3
+- Revised tclhttp to support bytes ranges as in the nbsp version
+  to support the new GR warnings apps.
+- Revised dafilter to support the new GR warnings apps.
+- The functionsmetar.tcl in the tclhttp was revised so that if
+  gnuplot does not exist and the plots cannot be created, the output
+  page still has the link to the data part (it used to return a blank page).

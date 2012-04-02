@@ -127,6 +127,7 @@ proc filterlib_get_rcvars {rc_name prodname fpath} {
     set rc(seconds) "";
     set rc(ymd_hm) "";
     set rc(ymdhm) "";
+    set rc(ymd_h) "";
     set rc(ymdh) "";
     set rc(ymd) "";
     set rc(ym) "";
@@ -172,6 +173,7 @@ proc filterlib_get_rcvars {rc_name prodname fpath} {
 
     set rc(ymd_hm) [clock format $rc(seconds) -gmt true -format "%Y%m%d_%H%M"];
     set rc(ymdhm) [clock format $rc(seconds) -gmt true -format "%Y%m%d%H%M"];
+    set rc(ymd_h) [clock format $rc(seconds) -gmt true -format "%Y%m%d_%H"];
     set rc(ymdh) [clock format $rc(seconds) -gmt true -format "%Y%m%d%H"];
     set rc(ymd) [clock format $rc(seconds) -gmt true -format "%Y%m%d"];
     set rc(ym) [clock format $rc(seconds) -gmt true -format "%Y%m"];
