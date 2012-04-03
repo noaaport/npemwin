@@ -19,7 +19,7 @@ The web server files are in
 
 	/var/npemwin/www
 
-and the web serevr configuration file is httpd.conf in the npemwin
+and the web server configuration file is httpd.conf in the npemwin
 configuration directory.
 
 The server is started and stoped automatically from within npemwin.
