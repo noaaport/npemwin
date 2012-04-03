@@ -9,7 +9,7 @@
 # There is no standard package because the default requires pdflib.
 # We must build our own.
 
-requires="db5 tcl-8.6:tcl86 tcllib gnuplot unzip"
+requires="db5 tcl-8.6:tcl86 tcllib unzip"
 conflict=
 
 # so that FreeBSD runs it only once 

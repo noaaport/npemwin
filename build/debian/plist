@@ -125,6 +125,7 @@
 /usr/local/share/doc/npemwin/panfilter/npemwinudpread.pl
 /usr/local/share/doc/npemwin/panfilter/npemwinudpread.tcl
 /usr/local/etc/npemwin/dist/httpd.conf-sample
+/usr/local/etc/npemwin/dist/httpd-vhost.conf-ex
 /usr/local/etc/npemwin/dist/export.conf-sample
 /usr/local/etc/npemwin/dist/export-da.def-sample
 /usr/local/etc/npemwin/dist/iemwin.conf-sample

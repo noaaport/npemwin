@@ -129,6 +129,7 @@ share/doc/npemwin/panfilter/npemwinudpread.tcl
 @comment @dirrm share/doc/npemwin/prefilter
 @comment @dirrm share/doc/npemwin
 etc/npemwin/dist/httpd.conf-sample
+etc/npemwin/dist/httpd-vhost.conf-ex
 etc/npemwin/dist/export.conf-sample
 etc/npemwin/dist/export-da.def-sample
 etc/npemwin/dist/iemwin.conf-sample

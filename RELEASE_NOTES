@@ -4,7 +4,7 @@
 
 - Sat Jan 15 14:35:21 AST 2011
 
-This is the 2nd release of the 2.2 branch of the
+This is the 1st release of the 2.2 branch of the
 NOAAPort Emwin server (npemwin). Packages, sources and documentation
 are available from
 
@@ -13,7 +13,20 @@ are available from
 Packages for other operating systems or distributions not found there
 can be created upon request.
 
-As of version 2.0.r2 (this release), npemwind runs as user noaaport,
+The web server has been updated to support the "bytes ranges" http
+header and virtual hosts. The first is now required by the GR warnings
+applications, while the second makes it possible to support urls
+like
+
+        warnings.<domain>:8016
+
+instead of
+
+        <domain>:8015/digatmos/warnings
+
+Previous notes -
+
+As of version 2.0.r2 npemwind runs as user noaaport,
 and therefore the directories where the daemon writes must be owned
 by that user:
 

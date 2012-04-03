@@ -53,3 +53,6 @@
 - The functionsmetar.tcl in the tclhttp was revised so that if
   gnuplot does not exist and the plots cannot be created, the output
   page still has the link to the data part (it used to return a blank page).
+
+2.2.1.p1
+- Added support for virtual hosts
