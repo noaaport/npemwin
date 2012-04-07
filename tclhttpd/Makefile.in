@@ -1,0 +1,128 @@
+#
+# $Id$
+#
+@include@ @q@../Makefile.inc@q@
+@include@ @q@Makefile.inc@q@
+
+DIRS = extensions
+
+TCLSH =         @TCLSH@
+INSTALL =       @INSTALL@
+
+TCLTARGET = bin/httpd
+TCLSOURCE = bin/httpd.tcl.in
+BINFILES = bin/httpd.init bin/httpdthread.tcl
+
+CONFFILE = etc/httpd.conf
+SAMPLECONFFILE = etc/httpd.conf-sample
+EXAMPLECONFFILE = etc/httpd-vhost.conf-ex
+
+WWWTGZFILE = www.tgz
+WWWHTDOCSDIR = htdocs
+WWWHTDOCSSUBDIRS = pub
+WWWEMPTYSUBDIRS = auth
+WWWDIRS = ${WWWHTDOCSDIR} ${WWWEMPTYSUBDIRS}
+WWWWORKDIR = work
+
+#
+# The library files are defined below
+#
+
+all: ${TCLTARGET} ${SAMPLECONFFILE} ${WWWTGZFILE}
+	for dir in ${DIRS}; do \
+	(cd $$dir; ${MAKE}) \
+	done
+
+${TCLTARGET}: ${TCLSOURCE} 
+	sed -e /%TCLSH%/s##${TCLSH}# ${TCLSOURCE} > ${TCLTARGET}
+
+${WWWTGZFILE}: ${WWWTGZFILE}-force
+
+${WWWTGZFILE}-force:
+	install -d ${WWWWORKDIR}/${WWWHTDOCSDIR}
+	install -d ${WWWWORKDIR}/${WWWEMPTYSUBDIRS}
+#	cp -R ${WWWHTDOCSSUBDIRS} ${WWWWORKDIR}/${WWWHTDOCSDIR}
+	tar -c @EXCLUDE@'*.svn*' -C ${WWWHTDOCSDIR} -f - ${WWWHTDOCSSUBDIRS} \
+		| tar -x -C ${WWWWORKDIR}/${WWWHTDOCSDIR} -f -
+	cd ${WWWWORKDIR}; \
+		tar -c @EXCLUDE@'*.svn*' -z -f ../${WWWTGZFILE} ${WWWDIRS}
+
+${SAMPLECONFFILE}: ${CONFFILE}
+	cp ${CONFFILE} ${SAMPLECONFFILE}
+
+install:
+	${INSTALL} -m 0755 ${TCLTARGET} ${MYLIBEXECDIR}
+	${INSTALL} -m 0644 ${BINFILES} ${MYLIBDIR}
+	${INSTALL} -m 0644 ${SAMPLECONFFILE} ${MYCONFDIR}
+	${INSTALL} -m 0644 ${EXAMPLECONFFILE} ${MYCONFDIR}
+	${INSTALL} -m 0644 ${WWWTGZFILE} ${MYDOCDIR}
+	${INSTALL} -m 0644 ${DISTLIBFILES} ${MYDISTLIBDIR}
+	${INSTALL} -m 0644 ${NPEMWINLIBFILES} ${MYNPEMWINLIBDIR}
+	for dir in ${DIRS}; do \
+	(cd $$dir; ${MAKE} install) \
+	done
+
+clean:
+	for dir in ${DIRS}; do \
+	(cd $$dir; ${MAKE} clean) \
+	done
+	rm -f *~ Makefile ${TCLTARGET} ${SAMPLECONFFILE} ${WWWTGZFILE}
+	rm -fr ${WWWWORKDIR}
+
+DISTLIBFILES = \
+lib/dist/admin.tcl \
+lib/dist/auth.tcl \
+lib/dist/cgi.tcl \
+lib/dist/compat.tcl \
+lib/dist/config.tcl \
+lib/dist/cookie.tcl \
+lib/dist/counter.tcl \
+lib/dist/debug.tcl \
+lib/dist/digest.tcl \
+lib/dist/direct.tcl \
+lib/dist/dirlist.tcl \
+lib/dist/doc.tcl \
+lib/dist/doc_error.tcl \
+lib/dist/doctools.tcl \
+lib/dist/fallback.tcl \
+lib/dist/httpd.tcl \
+lib/dist/imagemap.tcl \
+lib/dist/include.tcl \
+lib/dist/log.tcl \
+lib/dist/logstd.tcl \
+lib/dist/mail.tcl \
+lib/dist/maptcl.tcl \
+lib/dist/maptk.tcl \
+lib/dist/mime.types \
+lib/dist/mtype.tcl \
+lib/dist/open.tcl \
+lib/dist/passcheck.tcl \
+lib/dist/passgen.tcl \
+lib/dist/pkgIndex.tcl \
+lib/dist/prodebug.tcl \
+lib/dist/redirect.tcl \
+lib/dist/safecgio.tcl \
+lib/dist/session.tcl \
+lib/dist/srvui.tcl \
+lib/dist/status.tcl \
+lib/dist/stdin.tcl \
+lib/dist/subst.tcl \
+lib/dist/tclcrypt.tcl \
+lib/dist/template.tcl \
+lib/dist/MakeIndex \
+lib/dist/upload.tcl \
+lib/dist/url.tcl \
+lib/dist/utils.tcl \
+lib/dist/version.tcl \
+lib/dist/thread.tcl \
+lib/dist/license.terms
+
+NPEMWINLIBFILES = \
+lib/npemwin/functions.tcl \
+lib/npemwin/npemwin.tcl \
+lib/npemwin/npemwin_stats.awk \
+lib/npemwin/override.tcl \
+lib/npemwin/extensions.tcl \
+lib/npemwin/npemwinmetar.tcl \
+lib/npemwin/functionsmetar.tcl \
+lib/npemwin/npemwinget.tcl

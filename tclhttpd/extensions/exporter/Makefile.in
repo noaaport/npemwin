@@ -1,0 +1,32 @@
+#
+# $Id$
+#
+@include@ @q@../../../Makefile.inc@q@
+@include@ @q@../../Makefile.inc@q@
+
+M4SOURCES =	defs-da.m4 export_file-da.m4 export_pipe-da.m4
+M4TARGET =	export-da.def
+SAMPLES =	export.conf-sample export-da.def-sample
+TCLFILE =	export.tcl
+
+INSTALL =       @INSTALL@
+
+TARGET = ${M4TARGET} ${SAMPLES}
+
+all: ${TARGET}
+
+${M4TARGET}: ${M4SOURCES}
+	m4 ${M4SOURCES} > ${M4TARGET}
+
+export.conf-sample: export.conf
+	cp export.conf export.conf-sample
+
+export-da.def-sample: export-da.def
+	cp export-da.def export-da.def-sample
+
+install:
+	${INSTALL} -m 0644 ${TCLFILE} ${MYEXTLIBDIR}
+	${INSTALL} -m 0644 ${SAMPLES} ${MYCONFDIR}
+
+clean:
+	rm -f *~ ${TARGET} Makefile

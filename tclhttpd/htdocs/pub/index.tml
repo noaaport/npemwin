@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>Npemwin@[exec hostname -s]</title>
+
+<meta name="description" content="Software suite (npemwin) for processing the
+contents of the Noaaport and Emwin data stream">
+<meta http-equiv="Refresh" content="60">
+</head>
+
+<frameset rows="100,*">
+  <frame src="header.html">
+  <frameset cols="25%,*">
+    <frame src="menu.html">
+    <frame src="npemwin/stats" name="mainwindow">
+  </frameset>
+</frameset>
+
+</html>
