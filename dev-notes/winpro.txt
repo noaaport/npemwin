@@ -1,0 +1,35 @@
+<p>The EMWIN datastream consists of NWS weather products and other data files.
+Each product or file, whether ASCII text or binary data, is divided into 1 KB
+packets and sent as a series of async 8-bit bytes, N parity. For example, most
+current EMWIN <a href="http://www.weather.gov/emwin/winrad.htm">Radio</a>
+broadcasts are receivable, when demodulated, as async 1200,8,N,1 while the <a href="http://www.weather.gov/emwin/winsat.htm">Satellite</a> broadcasts are
+async 9600,8,N,1. </p>
+
+<p>Each product or file is sent as one or more packets, which are numbered 1..N
+within the given product. Because the data is packetized, a particular product
+can be gracefully interrupted by a high priority warning or alert product and
+then resume. Note: the broadcast is receive-only -- hence the receiver has no
+means of notifying the transmitter of any block errors or of requesting
+retransmission of individual blocks. Instead each product is usually
+transmitted at least twice, to "fill in" any blocks received in
+error. </p>
+
+<p>Each packet of data contains 1116 bytes, in the following fields: </p>
+
+1. 6 bytes of ASCII 0 (null) to clear the receiver buffer.
+2. "/PF" followed by an 8-character filename, a period, and a 3- character
+   filetype.
+3. "/PN" followed by the block number -- the number of this block (1..N)
+   within this file.
+4. "/PT" followed by the total number of blocks (N) being sent for this file.
+5. "/CS" followed by a checksum number -- the sum of all bytes in the 1024-byte
+   data portion of this packet, as a 16-bit unsigned decimal.
+6. "/FD" followed by the date/time stamp of this file --
+   in the format of: MM/DD/YY HH:MM:SS AM, without space padding.
+7. ASCII 32 (SP) fill -- to pad the total bytes in fields 2..8 to a full line
+   of 80 bytes.
+8. ASCII 13 (CR) and ASCII 10 (LF) to enhance readability.
+9. the data, as a 1024-byte block; if the remaining data of the product is
+   less than 1024 bytes, this block is null-filled so that each packet's data
+   block is always 1024 bytes long.
+10. 6 bytes of ASCII 0 (nullNUL) to clear the receiver buffer.

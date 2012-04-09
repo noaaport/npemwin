@@ -1,0 +1,36 @@
+Date:    Fri, 21 Jul 2006 16:01:05 -0400
+To:      Jose F Nieves <nieves@ltp.upr.clu.edu>
+From:    Richard Zimmerman <ke4rit@knbpower.com>
+Subject: npemwin - Debian release
+
+Build on Debian Testing (Tech)
+Linux Galactica 2.6.15-1-686-smp #2 SMP Mon Mar 6 15:34:50 UTC 2006 i686 
+GNU/Linux
+YMMV as they say...
+
+Ok, detailed instructions:??? <grin>
+first, download the FC5.rpm:
+     wget 
+http://www.noaaport.net/software/npemwin-1.2/packages/linux-fedora-core/fc5/i386/npemwin-1.2p2-3.i386.rpm
+
+Build the debian package:
+     alien -c -d npemwin-1.2p2-3.i386.rpm
+     <<Which by the way creates a DIFFERENT filename[NOTE file attachment]>>
+Install the Debian .deb file:
+     dpkg -i npemwin_1.2p2-4_i386.deb
+
+Set user.group as needed per instructions in 
+/usr/local/etc/npemwin/npemwind.conf
+     chown -R emwin.emwin /var/npemwin
+     chmod -R 0755 /var/npemwin
+     chown emwin.emwin /var/run/npemwin
+
+Edit other config files as needed!!!!!
+
+/etc/init.d/npemwind start
+
+Goose
+
+P.S. I suppose if people want a stable / unstable versions I could go 
+ahead and setup a multi-boot system to handle that. If demand warrants 
+it then I'll do it for ya.
