@@ -1,8 +1,9 @@
-npemwin (2.2.1p1-1) oneiric; urgency=low
+npemwin (2.2.1p2-1) oneiric; urgency=low
 
   * Revised  virtual host support in tclhttpd
+  * Added ability to set noaaport user supplementary groups
 
- -- Jose F Nieves <nieves@ltp.uprrp.edu>  Tue, 03 Apr 2012 13:03:49 -0400
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Thu, 05 Apr 2012 14:37:32 -0400
 
 npemwin (2.1.3r3-1) oneiric; urgency=low
 
