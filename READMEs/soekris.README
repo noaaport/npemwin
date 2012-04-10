@@ -1,0 +1,88 @@
+Date:    Mon, 09 Apr 2012 10:53:17 MST
+To:      Jose F Nieves <nieves@ltp.uprrp.edu>
+From:    Craig Fincher <cfincher14@yahoo.com>
+Subject: Npemwin on Soekris net5501
+
+
+INSTALLING NPEMWIN ON A SOEKRIS NET5501
+=======================================
+
+The Soekris net5501 is a small form-factor computer based on a 586
+class processor.  Its low power requirements, fanless operation and
+wide operating temperature of zero to 60 C make it a great system to
+run Npemwin.
+
+The model used in this deployment is a net5501-70.  It has a 500 Mhz AMD
+Geode LX CPU, 512 Mbyte DDR-SDRAM and four Ethernet ports.  The system
+uses comBIOS for full headless operation over a serial port.  Although the
+net5501 is fully capable of booting embedded OS distributions from its
+compact flash interface, this deployment also includes the optional SATA
+drive mounting kit and a 64GB SATA SSD.  The SSD permits using a regular
+OS distribution without quickly experiencing the write limits of compact
+flash media.
+
+Since the net5501 is based on a 32-bit processor, FreeBSD 9.0 i386 and
+the FreeBSD 9.0 i386 Npemwin package were used for this installation.
+
+
+- Connecting to the Soekris
+
+Because the Soekris computer is DTE, one must use use a null modem serial
+cable to connect to it from another computer.
+
+The default baud rate on the Soekris is 19,200 while FreeBSD is 9600.
+For convenience and to simplify operation, change the Soekris to 9600
+using the comBIOS console:  CTRL-P on boot and then the following from
+the Command Line Interface
+
+set ConSpeed 9600 reboot
+
+
+- Installing and Preparing the Operating System
+
+The net5501 supports booting
+from its single SATA interface, a Compact Flash Card or using PXE.
+It cannot boot from its USB interface.  This makes OS installation a
+little challenging.  Without a taking the time to deploy a PXE server,
+one can take a shortcut by temporarily mounting the SSD in regular PC
+to complete the OS installation there.  Use the generic kernel.
+
+Before removing the SSD and mounting it in the Soekris, make the
+following changes:
+
+Edit /etc/ttys
+ * Change the ttyu0 entry from dialup to vt100 and from off to on
+
+Add the following lines to /boot/loader.conf (Create /boot/loader.conf
+if necessary) :
+
+comconsole_speed="9600" console="comconsole"
+
+
+- Special Consideration for Network Interface Configuration
+
+If the network card in your installation PC is something other than 'VIA Rhine,
+Rhine II':
+
+Modify /etc/rc.conf to specify ifconfig_vr0
+
+- Npemwin installation
+
+With the SSD installed in the Soekris, download the FreeBSD 9.0 Npemwin
+i386 package from noaaport.net and complete the installation as normal.
+
+- Performance Observations
+
+A sample of the top command shows load averages:  0.67,  0.71,  0.63.
+This seems typical.  When the programs that run under tclsh8.6 fire up
+periodically, as one might expect, they take advantage of all of the
+processing power of the 500Mhz Geode CPU.  For example, CPU: 68.9% user,
+0.0% nice, 31.1% system,  0.0% interrupt,  0.0% idle
+
+
+- Final Thoughts
+
+You many also want to try compiling a kernel optimized for the Soekris
+box as outlined in this message from the Soekris mailing list:
+
+  http://lists.soekris.com/pipermail/soekris-tech/2007-June/012325.html
