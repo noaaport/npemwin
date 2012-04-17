@@ -1,6 +1,12 @@
 #!%TCLSH%
 #
 # $Id$
+#
+# In the case of deb and rpm packages, the version string output here
+# does not include the arch portion (this is also the convemtion sued
+# in nbspupdate). In the rpm's, we also cut the ".el<n>" portion. 
+#
+# The version string output here includes the package build number.
 
 set pkgname "npemwin";
 
@@ -14,6 +20,8 @@ if {[file executable "/usr/sbin/pkg_info"]} {
 } elseif {[file executable "/bin/rpm"]} {
     set output [exec rpm -qa | grep "${pkgname}-"];
     regexp ${pkgname}-(.+) $output match version;
+    # Cut the arch and "el<n>"
+    set version [file rootname [file rootname $version]];
 } else {
     set version "unknown";
 }
