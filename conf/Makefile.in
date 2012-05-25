@@ -22,7 +22,7 @@ SAMPLES =	servers.conf-sample \
 		logrotate.conf-sample \
 		newsyslog.conf-sample
 
-READMES =	README SCRIPTING
+READMES =	README
 
 INITS =		npemwind.init
 

@@ -2,7 +2,7 @@
 # $Id$
 #
 
-(See also the file SCRIPTING in the /usr/local/share/doc/npemwin directory.)
+(See also the file scripting.README)
 
 The stdfilter and nntpfilter are meant to be used for implementing
 certain features of the system. They can be called the system filters.
