@@ -1,3 +1,9 @@
+npemwin (2.2.1p3-1) oneiric; urgency=low
+
+  * Revised (and corrected) npemwinmtrplotdat
+
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Thu, 20 Sep 2012 09:27:33 -0400
+
 npemwin (2.2.1p2-1) oneiric; urgency=low
 
   * Revised  virtual host support in tclhttpd

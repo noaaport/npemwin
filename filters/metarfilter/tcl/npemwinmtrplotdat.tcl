@@ -2,7 +2,7 @@
 #
 # $Id$
 #
-# Usage: nbspmtrplotdat [-o outputfile [-b basedir] [-d subdir]] \
+# Usage: npemwinmtrplotdat [-o outputfile [-b basedir] [-d subdir]] \
 #			[-m marker] [-n numpoints] [-r] [-s separator] \
 #                       [-f datafile | station]
 #
@@ -33,7 +33,7 @@
 package require fileutil;
 package require cmdline;
 
-set usage {nbspmtrplotdat [-o outputfile [-b basedir] [-d subdir]]
+set usage {npemwinmtrplotdat [-o outputfile [-b basedir] [-d subdir]]
     [-n numpoints] [-f] [-r] [-s separator] <station|datafile>};
 
 set optlist {f r {b.arg ""} {d.arg ""} {m.arg "na"}
@@ -233,9 +233,9 @@ if {$option(n) ne ""} {
 }
 
 if {$datafile ne ""} {
-    set body [exec nbspmtrd -t -d $datafile];
+    set body [exec npemwinmtrd -t -d $datafile];
 } else {
-    set body [exec nbspmtrd -t -d];
+    set body [exec npemwinmtrd -t -d];
 }
 
 set lineslist [split $body "\n"];

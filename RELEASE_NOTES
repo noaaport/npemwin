@@ -139,7 +139,7 @@ o It is scriptable. For each file received, a script (or any program)
   or actually any number of them, will be invoked to process the
   files received. The built-in facilty can be bypassed altogether
   and replaced by your own.
-  (see the file SCRIPTING and npemwinfilter.README).
+  (see the file scripting.README and npemwinfilter.README).
 
 o It keeps a complete inventory of every file received by the minute
   for the last 24 hours. The catalog files and the data files themselves

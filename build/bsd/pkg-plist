@@ -54,7 +54,6 @@ libexec/npemwin/archive.init
 libexec/npemwin/tclmetar/metar.tcl
 libexec/npemwin/tclmetar/pkgIndex.tcl
 etc/npemwin/dist/README
-etc/npemwin/dist/SCRIPTING
 etc/npemwin/dist/npemwind.conf-sample
 etc/npemwin/dist/servers.conf-sample
 etc/npemwin/dist/features.conf-sample
