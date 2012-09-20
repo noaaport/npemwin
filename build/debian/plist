@@ -52,7 +52,6 @@
 /usr/local/libexec/npemwin/tclmetar/metar.tcl
 /usr/local/libexec/npemwin/tclmetar/pkgIndex.tcl
 /usr/local/etc/npemwin/dist/README
-/usr/local/etc/npemwin/dist/SCRIPTING
 /usr/local/etc/npemwin/dist/npemwind.conf-sample
 /usr/local/etc/npemwin/dist/servers.conf-sample
 /usr/local/etc/npemwin/dist/features.conf-sample

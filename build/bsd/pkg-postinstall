@@ -103,7 +103,7 @@ do
   name=${file%%"-sample"}
   cp $file ../$name
 done
-cp README SCRIPTING ..
+cp README ..
 
 for file in *-defaults
 do
