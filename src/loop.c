@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2004 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+ * Copyright (c) 2004-2012 Jose F. Nieves <nieves@ltp.uprrp.edu>
  *
  * See LICENSE
  *
@@ -112,31 +112,40 @@ static int process_packets(struct emwin_server *emserver){
   struct emwin_packet ep;
   int server_fd = emserver->fd;
 
-  if(server_type_serial_device(emserver))
+  if(server_type_wx14(emserver))
+    status = get_emwin_packet_wx14(server_fd, &ep);
+  else if(server_type_serial_device(emserver))
     status = get_emwin_packet_serial(server_fd, &ep);
   else
-    status = get_emwin_packet_network(server_fd, &ep);
+    status = get_emwin_packet_bb(server_fd, &ep);
 
   update_emwin_server_stats(status);
   if(write_emwin_server_stats(g.emwinstatusfile) != 0)
     log_err2("Error writing status file", g.emwinstatusfile);
 
-  if(status == -1)
-    log_err2("Error reading packet from", emserver->ip);
-  else if(status == -2)
-    log_errx("Timedout trying to get packet from %s.", emserver->ip);
-  else if(status == -3)
-     log_info("Connection closed by %s.", emserver->ip);
-  else if(status == 1)
-    log_errx("Short read from %s.", emserver->ip);
-  else if(status == 2)
-    log_errx("Error in header format or unrecognized packet type.");
-  else if(status == 3)
-    log_errx("Checksum error.");
-  else if(status == 4)
-    log_errx("Check file name error: %s", ep.header.filename);
-  else if(status != 0)
-    log_errx("Cannot process packet: unknown error from get_emwin_packet()");
+  if(server_type_wx14(emserver)){
+    if(status == -1)
+      log_err2("Error reading packet from WX14 device:", emserver->ip);
+    else if(status != 0)
+      log_errx("Error [%d] reading packet from WX14 device:", emserver->ip);
+  } else {
+    if(status == -1)
+      log_err2("Error reading packet from", emserver->ip);
+    else if(status == -2)
+      log_errx("Timedout trying to get packet from %s.", emserver->ip);
+    else if(status == -3)
+      log_info("Connection closed by %s.", emserver->ip);
+    else if(status == 1)
+      log_errx("Short read from %s.", emserver->ip);
+    else if(status == 2)
+      log_errx("Error in header format or unrecognized packet type.");
+    else if(status == 3)
+      log_errx("Checksum error.");
+    else if(status == 4)
+      log_errx("Check file name error: %s", ep.header.filename);
+    else if(status != 0)
+      log_errx("Cannot process packet: unknown error from get_emwin_packet()");
+  }
 
   if(status != 0)    
     return(status);

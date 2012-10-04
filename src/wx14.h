@@ -15,6 +15,8 @@
 				   * while reading */
 
 #define WX14_ERROR_EMWIN_BUF 7    /* emwin packet buffer size too small */
+#define WX14_ERROR_EMWIN_FILL_PACKET 8  /* error from fill_packet_struct_wc14
+					 * function */
 
 int wx14_read_emwin_packet(int fd, unsigned int secs, int retry,
 			   void *buf, size_t *size);

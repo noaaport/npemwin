@@ -77,9 +77,11 @@ struct emwin_qfiles_st {
 int init_emwin_qfiles(void);
 void destroy_emwin_qfiles(void);
 
-int open_emwin_server_network(char *ip_or_host_str, char *port, int *gai_code);
+int open_emwin_server_network(int type, char *ip_or_host_str, char *port,
+			      int *gai_code);
 int open_emwin_server_serial(char *device, char *settings_str);
-int get_emwin_packet_network(int f, struct emwin_packet *ep);
+int get_emwin_packet_bb(int f, struct emwin_packet *ep);
+int get_emwin_packet_wx14(int f, struct emwin_packet *ep);
 int get_emwin_packet_serial(int f, struct emwin_packet *ep);
 int save_emwin_packet(struct emwin_packet *ep);
 int save_server_list(struct emwin_packet *ep);
