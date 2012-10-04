@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2004-2006 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+ * Copyright (c) 2004-2012 Jose F. Nieves <nieves@ltp.uprrp.edu>
  *
  * See LICENSE
  *
@@ -36,12 +36,15 @@ int putc_unlocked(int c, FILE *stream);
 #include "globals.h"
 #include "ser.h"
 #include "bb.h"
+#include "wx14.h"
 #include "emwin.h"
 #include "defaults.h"
 
 static int emwin_sync_serial(int fd);
-static int fill_packet_struct_network(struct emwin_packet *ep, 
+static int fill_packet_struct_bb(struct emwin_packet *ep,
 				      char *bbdata, int datasize);
+static int fill_packet_struct_wx14(struct emwin_packet *ep,
+				      char *data, int datasize);
 static int fill_packet_struct_serial(struct emwin_packet *ep, 
 				     char *serialdata, int datasize);
 static int checksum(struct emwin_packet *ep);
@@ -56,8 +59,11 @@ static int read_qinfo(char *qfilename, struct emwin_file_qinfo *qinfo);
 static int write_qinfo(char *qfilename, struct emwin_file_qinfo *qinfo,
 		       mode_t mode);
 
-int open_emwin_server_network(char *ipstr, char *port, int *gai_code){
+int open_emwin_server_network(int type, char *ipstr, char *port,
+			      int *gai_code){
   /*
+   * The "type" argument is the wx14 or a bb server.
+   *
    * There can be cases in which the connection is opened,
    * but the server closes before anything has been read (e.g., 
    * it happens if the server uses libwrap).
@@ -68,7 +74,7 @@ int open_emwin_server_network(char *ipstr, char *port, int *gai_code){
    * fd
    * -1 (system error)
    * -2 Some other connection error, timed out trying to get packet,
-   *    or some other error from get_emwin_packet_network().
+   *    or some other error from get_emwin_packet_xxx().
    */
   int status = 0;
   int fd = -1;
@@ -89,7 +95,11 @@ int open_emwin_server_network(char *ipstr, char *port, int *gai_code){
   if(fd == -1)
     return(-1);
 
-  status = get_emwin_packet_network(fd, &ep);
+  if(type == EMWIN_SERVER_TYPE_WX14)
+     status = get_emwin_packet_wx14(fd, &ep);
+  else
+     status = get_emwin_packet_bb(fd, &ep);
+
   if(status != 0){
     close(fd);
     fd = -1;
@@ -124,7 +134,7 @@ int open_emwin_server_serial(char *device, char *settings_str){
   return(fd);
 }
 
-int get_emwin_packet_network(int f, struct emwin_packet *ep){
+static int get_emwin_packet_bb(int f, struct emwin_packet *ep){
 
   int status = 0;
   size_t size;
@@ -167,12 +177,26 @@ int get_emwin_packet_network(int f, struct emwin_packet *ep){
    * These functions return error codes >= 2.
    */
   if(ep->bbtype == BB_PACKET_TYPE_DATA){
-     status = fill_packet_struct_network(ep, bbdata, bbdata_size);
+     status = fill_packet_struct_bb(ep, bbdata, bbdata_size);
   } else if(ep->bbtype == BB_PACKET_TYPE_SRVLIST){
     status = try_serverlist(ep, bbdata, bbdata_size);
   }
 
   return(status);
+}
+
+static int get_emwin_packet_wx14(int f, struct emwin_packet *ep){
+
+  int status = 0;
+  char data[EMWIN_PACKET_SIZE];
+  size_t size = EMWIN_PACKET_SIZE;
+
+  assert(g.readtimeout_s >= 0);
+  status = wx14_read_emwin_packet(f, g.readtimeout_s, 0, data, &size);
+  if(status == 0)
+    status = fill_packet_struct_wx14(ep, data, (int)size);
+
+  return(status)
 }
 
 int get_emwin_packet_serial(int f, struct emwin_packet *ep){
@@ -274,7 +298,7 @@ static int emwin_sync_serial(int fd){
   return(0);
 }
 
-static int fill_packet_struct_network(struct emwin_packet *ep, 
+static int fill_packet_struct_bb(struct emwin_packet *ep, 
 				      char *bbdata, int datasize){
   /*
    * The width of the string fields in fmt depend on what is defined
@@ -505,6 +529,18 @@ static int fill_packet_struct_serial(struct emwin_packet *ep,
   update_stats_frames(0);
 
   return(0);
+}
+
+static int fill_packet_struct_wx14(struct emwin_packet *ep, 
+				      char *data, int size){
+  int status = 0;
+
+  /* Handle it like the serial port data packet */
+  status = fill_packet_struct_serial(ep, data, size);
+  if(status != 0)
+    status = WX14_ERROR_EMWIN_FILL_PACKET;
+
+  return(status);
 }
 
 int save_emwin_packet(struct emwin_packet *ep){
