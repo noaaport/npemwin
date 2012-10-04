@@ -74,7 +74,7 @@ int loop(void){
     }
     status = 1;
   }else if(es->fd == -2){
-    if(server_is_device(es))
+    if(server_type_serial_device(es))
       log_errx("Cannot configure or synchronize %s:%s", es->ip, es->port);
     else
       log_errx("Could not get packet from %s", es->ip);
@@ -112,7 +112,7 @@ static int process_packets(struct emwin_server *emserver){
   struct emwin_packet ep;
   int server_fd = emserver->fd;
 
-  if(server_is_device(emserver))
+  if(server_type_serial_device(emserver))
     status = get_emwin_packet_serial(server_fd, &ep);
   else
     status = get_emwin_packet_network(server_fd, &ep);

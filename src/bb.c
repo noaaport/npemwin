@@ -40,7 +40,7 @@ void bb_send_clientid(struct emwin_server *es){
   int size;
   int n;
 
-  if(server_is_device(es))
+  if(server_type_bbserver(es) == 0)
     return;
 
   /*

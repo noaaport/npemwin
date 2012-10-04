@@ -26,8 +26,13 @@ struct emwin_server_stats_st {
   int    filename_errors;
   int    unknown_errors;
 };
-  
+
+#define EMWIN_SERVER_TYPE_BB 1		/* Network bb server */
+#define EMWIN_SERVER_TYPE_SERIAL 2	/* wx12 etc */
+#define EMWIN_SERVER_TYPE_WX14	3	/* network wx14 */
+
 struct emwin_server {
+  int type;		/* one of the above */
   char *ip;		/* ip or hostname */
   char *port;
   int   fd;
@@ -42,6 +47,8 @@ struct emwin_server *get_next_server(void);
 void update_emwin_server_stats(int status);
 int write_emwin_server_stats(char *file);
 void release_server_list(void);
-int server_is_device(struct emwin_server *server);
+int server_type_bbserver(struct emwin_server *server);
+int server_type_serial_device(struct emwin_server *server);
+int server_type_wx14_device(struct emwin_server *server);
 
 #endif

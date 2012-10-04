@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2004-2006 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+ * Copyright (c) 2004-2012 Jose F. Nieves <nieves@ltp.uprrp.edu>
  *
  * See LICENSE
  *
@@ -114,7 +114,7 @@ struct emwin_server *get_next_server(void){
     }
   }    
 
-  if(server_is_device(es))
+  if(server_type_serial_device(es))
     es->fd = open_emwin_server_serial(es->ip, es->port);
   else
     es->fd = open_emwin_server_network(es->ip, es->port, &es->gai_code);
@@ -253,16 +253,28 @@ int get_server_list(char *fname){
 static int read_next_server(struct emwin_server *server){
 
   size_t size;
+  char *argv0;
 
   if(tsvargc() != 2)
     return(1);
 
-  size = strlen(tsvargv(0)) + 1;
+  argv0 = tsvargv(0);
+
+  if(argv0[0] == '/')
+    server->type = EMWIN_SERVER_TYPE_SERIAL;
+  else if(argv0[0] == '@'){
+    server->type = EMWIN_SERVER_TYPE_WX14;
+    ++argv0;
+  } else {
+    server->type = EMWIN_SERVER_TYPE_BB;
+  }
+
+  size = strlen(argv0) + 1;
   server->ip = malloc(size);
   if(server->ip == NULL)
     return(-1);
 
-  strncpy(server->ip, tsvargv(0), size);
+  strncpy(server->ip, argv0, size);
 
   size = strlen(tsvargv(1)) + 1;
   server->port = malloc(size);
@@ -289,7 +301,7 @@ static void init_server(struct emwin_server *es){
 static void close_server(struct emwin_server *es){
 
   if(es->fd != -1){
-    if(server_is_device(es))
+    if(server_type_serial_device(es))
       ser_close_port(es->fd);
     else
       close(es->fd);
@@ -423,14 +435,34 @@ int write_emwin_server_stats(char *file){
   return(status);
 }
 
-int server_is_device(struct emwin_server *server){
+int server_type_bbserver(struct emwin_server *server){
+
+  if(server->type == EMWIN_SERVER_TYPE_BB)
+    return(1);
+
+  return(0);
+}
+
+int server_type_serial_device(struct emwin_server *server){
   /*
    * An entry that starts with a "/" character in the serverslist file
    * is assumed to be the name of a serial device. The corresponding
    * "port" entry is then the serial settings string (e.g., 9600,n,8,1).
    */
-  
-  if(server->ip[0] == '/')
+
+  if(server->type == EMWIN_SERVER_TYPE_SERIAL)
+    return(1);
+
+  return(0);
+}
+
+int server_type_wx14_device(struct emwin_server *server){
+  /*
+   * An entry that starts with the "@" character in the serverslist file
+   * is assumed to be the name of a wx14 device.
+   */
+
+  if(server->type == EMWIN_SERVER_TYPE_WX14)
     return(1);
 
   return(0);
@@ -450,7 +482,7 @@ int main(void){
 
   for(i = 0; i <= 29; ++i){
     es = get_next_server();
-    fprintf(stdout, "%s -- %hu\n", es->ip, es->port);
+    fprintf(stdout, "%s -- %s\n", es->ip, es->port);
   }
 
   return 0;

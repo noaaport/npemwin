@@ -14,21 +14,24 @@ SOURCES =	main.c access.c appdata.c \
 		httpd.c init.c loop.c pid.c per.c \
 		pw.c readn.c servers.c serverm.c serverc.c signal.c solaris.c \
 		seqnum.c ser.c stats.c strsplit.c tsv.c util.c tclevalfile.c \
-		v2.c
+		v2.c \
+		wx14_private.c wx14.c
 
 OBJECTS =	main.o access.o appdata.o \
 		bb.o bbreg.o conf.o emwin.o err.o exec.o file.o \
 		httpd.o init.o loop.o pid.o per.o \
 		pw.o readn.o servers.o serverm.o serverc.o signal.o solaris.o \
 		seqnum.o ser.o stats.o strsplit.o tsv.o util.o tclevalfile.o \
-		v2.o
+		v2.o \
+		wx14_private.o wx14.o
 
 HEADERS =	access.h appdata.h \
 		bb.h bbreg.h conf.h const.h defaults.h globals.h emwin.h \
 		exec.h file.h httpd.h init.h loop.h pid.h per.h \
 		pw.h readn.h servers.h server.h server_priv.h \
 		seqnum.h signal.h ser.h stats.h strsplit.h tsv.h util.h \
-		tclevalfile.h
+		tclevalfile.h \
+		wx14_private.h wx14.h
 
 ALLOBJECTS =	${OBJECTS} ${INOBJECTS}
 
@@ -86,4 +89,3 @@ clean:
 	for dir in ${SUBDIRS}; do \
 	(cd $$dir; ${MAKE} clean) \
 	done
-

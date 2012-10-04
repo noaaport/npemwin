@@ -57,3 +57,6 @@
 2.2.1.p2
 - Added support for virtual hosts
 - Added ability to set the noaaport user supplementary groups
+
+2.3.1p1
+- Added support for the WX14 device
