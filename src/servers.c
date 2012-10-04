@@ -116,8 +116,14 @@ struct emwin_server *get_next_server(void){
 
   if(server_type_serial_device(es))
     es->fd = open_emwin_server_serial(es->ip, es->port);
-  else
-    es->fd = open_emwin_server_network(es->ip, es->port, &es->gai_code);
+  else{
+    if(server_type_wx14_device(es))
+      es->fd = open_emwin_server_network(EMWIN_SERVER_TYPE_WX14,
+					 es->ip, es->port, &es->gai_code);
+    else
+      es->fd = open_emwin_server_network(EMWIN_SERVER_TYPE_BB,
+					 es->ip, es->port, &es->gai_code);
+  }
 
   if(es->fd < 0){
     ++es->stats.bad_packet_count;

@@ -112,7 +112,7 @@ static int process_packets(struct emwin_server *emserver){
   struct emwin_packet ep;
   int server_fd = emserver->fd;
 
-  if(server_type_wx14(emserver))
+  if(server_type_wx14_device(emserver))
     status = get_emwin_packet_wx14(server_fd, &ep);
   else if(server_type_serial_device(emserver))
     status = get_emwin_packet_serial(server_fd, &ep);
@@ -123,7 +123,7 @@ static int process_packets(struct emwin_server *emserver){
   if(write_emwin_server_stats(g.emwinstatusfile) != 0)
     log_err2("Error writing status file", g.emwinstatusfile);
 
-  if(server_type_wx14(emserver)){
+  if(server_type_wx14_device(emserver)){
     if(status == -1)
       log_err2("Error reading packet from WX14 device:", emserver->ip);
     else if(status != 0)

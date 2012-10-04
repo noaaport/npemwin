@@ -134,7 +134,7 @@ int open_emwin_server_serial(char *device, char *settings_str){
   return(fd);
 }
 
-static int get_emwin_packet_bb(int f, struct emwin_packet *ep){
+int get_emwin_packet_bb(int f, struct emwin_packet *ep){
 
   int status = 0;
   size_t size;
@@ -185,7 +185,7 @@ static int get_emwin_packet_bb(int f, struct emwin_packet *ep){
   return(status);
 }
 
-static int get_emwin_packet_wx14(int f, struct emwin_packet *ep){
+int get_emwin_packet_wx14(int f, struct emwin_packet *ep){
 
   int status = 0;
   char data[EMWIN_PACKET_SIZE];
@@ -196,7 +196,7 @@ static int get_emwin_packet_wx14(int f, struct emwin_packet *ep){
   if(status == 0)
     status = fill_packet_struct_wx14(ep, data, (int)size);
 
-  return(status)
+  return(status);
 }
 
 int get_emwin_packet_serial(int f, struct emwin_packet *ep){
