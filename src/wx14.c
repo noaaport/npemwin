@@ -10,7 +10,7 @@ int wx14_read_emwin_packet(int fd, unsigned int secs, int retry,
   /*
    * buf must have been allocated with the size given by *size.
    * Since the wx14 data size (dataN) is a 2-byte int, in principle
-   * buf should be of size UINT16_MAX. In practice it is just the
+   * buf should be of size UINT16_MAX. In practice it can be just the
    * emwin packet size (in the case in which the cmd_type is an emwin
    * packet message).
    */

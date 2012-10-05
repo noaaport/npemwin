@@ -89,6 +89,20 @@ static int wx14_read_msg_header(int fd, unsigned int secs, int retry,
     wx14msg->dataN = (wx14msg->message[2] << 8) + wx14msg->message[3];
   }
 
+  /*
+   * The documentation states that dataN includes the 5th byte (that
+   * comes after the length bytes 2,3. In other words, it gives the
+   * the size as N+1 bytes, including the 5th byte.
+   *
+   * That is not correct. The data port contains two packets: the
+   * emwin packets (0xb) and the signal status (0x1b). For the
+   * emwin packets, the documentation is correct. For the signal status,
+   * the dataN actually contains the "true" N bytes of the data portion
+   * of the packet, after the 5th byte.
+   */
+  if(wx14msg->cmd_type == WX14_MSG_EMWIN_PACKET)
+    --wx14msg->dataN;
+
   return(status);
 }
 
