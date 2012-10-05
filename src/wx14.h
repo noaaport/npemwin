@@ -18,7 +18,12 @@
 #define WX14_ERROR_EMWIN_FILL_PACKET 8  /* error from fill_packet_struct_wc14
 					 * function */
 
+int wx14_read_data_packet(int fd, unsigned int secs, int retry,
+			  void *buf, size_t *size, int *type);
 int wx14_read_emwin_packet(int fd, unsigned int secs, int retry,
 			   void *buf, size_t *size);
+
+int wx14_is_emwin_packet(int type);
+int wx14_is_signalstatus_packet(int type);
 
 #endif

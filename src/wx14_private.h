@@ -14,7 +14,7 @@
  *
  * 0 => 0xbb
  * 1 => 0xd2
- * 2,3 => N + 1
+ * 2,3 => N + 1  (but see note in wx14_private.c)
  * 4 => command type
  * 5-?? => N-byte data.
  */
@@ -38,10 +38,10 @@
 #define WX14_CMD_SET_FRONT_END 0x21
 
 struct wx14_msg_st {
-  unsigned char message[WX14_MESSAGE_MAXSIZE];
   int cmd_type;
   size_t dataN;	/* size of data that starts at message[5] */
   void *data;	/* data = &message[5] */
+  unsigned char message[WX14_MESSAGE_MAXSIZE];
 };
 
 int wx14_read_msg(int fd, unsigned int secs, int retry,

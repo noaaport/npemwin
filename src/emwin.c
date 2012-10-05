@@ -188,13 +188,22 @@ int get_emwin_packet_bb(int f, struct emwin_packet *ep){
 int get_emwin_packet_wx14(int f, struct emwin_packet *ep){
 
   int status = 0;
-  char data[EMWIN_PACKET_SIZE];
   size_t size = EMWIN_PACKET_SIZE;
+  char data[EMWIN_PACKET_SIZE];
+
+  ep->bbtype = BB_PACKET_TYPE_UNKNOWN;
 
   assert(g.readtimeout_s >= 0);
+
+  /*
+   * This function discards any status signal packets received
+   */
   status = wx14_read_emwin_packet(f, g.readtimeout_s, 0, data, &size);
-  if(status == 0)
+    
+  if(status == 0){
+    ep->bbtype = BB_PACKET_TYPE_DATA;
     status = fill_packet_struct_wx14(ep, data, (int)size);
+  }
 
   return(status);
 }
@@ -223,11 +232,11 @@ int get_emwin_packet_serial(int f, struct emwin_packet *ep){
       status = 1;	/* short read (timedout or disconnect) while reading */
   }
 
-  ep->bbtype = BB_PACKET_TYPE_DATA;
-
-  if(status == 0)
+  if(status == 0){
+    ep->bbtype = BB_PACKET_TYPE_DATA;
      status = fill_packet_struct_serial(ep, serialdata, (int)datasize);
-    
+  }
+
   return(status);
 }
 
