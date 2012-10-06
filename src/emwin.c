@@ -244,8 +244,9 @@ static int emwin_sync_serial(int fd){
   /*
    * In the case of the serial port the synhronization is harder.
    * We look for the set of four characters '\0'/PF. If we find it,
-   * we assume it is the start of the header, and read the next
-   * (1116 - 5 - 4) characters to read up to the end of the packet.
+   * we assume it is the start of the header (past the first five of
+   * the six initial '\0') and read the remaining (1116 - 5 - 4)
+   * characters to read up to the end of the packet.
    * That packet is just discarded, and let the program continue from there.
    */
   int stage = -1;
