@@ -15,7 +15,7 @@ SOURCES =	main.c access.c appdata.c \
 		pw.c readn.c servers.c serverm.c serverc.c signal.c solaris.c \
 		seqnum.c ser.c stats.c strsplit.c tsv.c util.c tclevalfile.c \
 		v2.c \
-		wx14_private.c wx14.c
+		wx14_private.c wx14.c wx14_emwin.c
 
 OBJECTS =	main.o access.o appdata.o \
 		bb.o bbreg.o conf.o emwin.o err.o exec.o file.o \
@@ -23,7 +23,7 @@ OBJECTS =	main.o access.o appdata.o \
 		pw.o readn.o servers.o serverm.o serverc.o signal.o solaris.o \
 		seqnum.o ser.o stats.o strsplit.o tsv.o util.o tclevalfile.o \
 		v2.o \
-		wx14_private.o wx14.o
+		wx14_private.o wx14.o wx14_emwin.o
 
 HEADERS =	access.h appdata.h \
 		bb.h bbreg.h conf.h const.h defaults.h globals.h emwin.h \

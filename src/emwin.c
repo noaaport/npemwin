@@ -96,7 +96,8 @@ int open_emwin_server_network(int type, char *ipstr, char *port,
     return(-1);
 
   if(type == EMWIN_SERVER_TYPE_WX14)
-     status = get_emwin_packet_wx14(fd, &ep);
+     status = wx14_init_emwin_block(fd, g.readtimeout_s, g.readtimeout_retry,
+				    &g.wx14msg);
   else
      status = get_emwin_packet_bb(fd, &ep);
 
@@ -198,12 +199,15 @@ int get_emwin_packet_wx14(int f, struct emwin_packet *ep){
   /*
    * This function discards any status signal packets received
    */
-  status = wx14_read_emwin_packet(f, g.readtimeout_s, 0, data, &size);
-    
+  status = wx14_read_emwin_block(f, g.readtimeout_s, 0, &g.wx14msg);
+
   if(status == 0){
     ep->bbtype = BB_PACKET_TYPE_DATA;
-    status = fill_packet_struct_wx14(ep, data, (int)size);
+    status = wx14_memcpy_emwin_block(data, &size, &g.wx14msg);
   }
+
+  if(status == 0)
+      status = fill_packet_struct_wx14(ep, data, (int)size);
 
   return(status);
 }

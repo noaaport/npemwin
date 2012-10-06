@@ -54,5 +54,8 @@ int wx14_init_emwin_block(int fd, unsigned int secs, int retry,
 			  struct wx14_msg_st *wx14msg);
 int wx14_read_emwin_block(int fd, unsigned int secs, int retry,
 			  struct wx14_msg_st *wx14msg);
+void *wx14_get_emwin_block(struct wx14_msg_st *wx14msg);
+int wx14_memcpy_emwin_block(void *buf, size_t *size,
+			    struct wx14_msg_st *wx14msg);
 
 #endif

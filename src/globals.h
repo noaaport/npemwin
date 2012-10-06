@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include "stats.h"
+#include "wx14.h"	/* wx14msg struct */
 
 struct npemwin_globals {
   char *defconfigfile;	/* the default */
@@ -99,6 +100,7 @@ struct npemwin_globals {
   int  server_fd;	/* listening socket for client connections */
   struct conn_table_st *ct;     /* libconnth table */
   struct emwin_qfiles_st *qfiles;
+  struct wx14_msg_st wx14msg;
   int  f_lock;
   int  f_debug;
   int  f_ndaemon;	/* do not become daemon */

@@ -53,6 +53,23 @@ int wx14_read_emwin_block(int fd, unsigned int secs, int retry,
 
   return(status);
 }
+
+void *wx14_get_emwin_block(struct wx14_msg_st *wx14msg){
+
+  return(wx14msg->emwin_block);
+}
+
+int wx14_memcpy_emwin_block(void *buf, size_t *size,
+			    struct wx14_msg_st *wx14msg){
+
+  if(*size < wx14msg->dataN)
+    return(WX14_ERROR_EMWIN_BUF);
+
+  *size = wx14msg->dataN;
+  memcpy(buf, wx14msg->data, wx14msg->dataN);
+
+  return(0);
+}
   
 /*
  * private to this file
@@ -69,8 +86,8 @@ static void start_emwin_block(struct wx14_msg_st *wx14msg){
   memset(wx14msg->emwin_block_part, 0, EMWIN_BLOCK_SIZE);
   wx14msg->emwin_block_part_size = 6;
 
-  /* if there is a partial message, ad it */
-  if(index < wx14msg->dataN){
+  /* if there is a partial message, add it */
+  if((index > 0) && ((size_t)index < wx14msg->dataN)){
     n = wx14msg->dataN - index;
     memcpy(&wx14msg->emwin_block_part[6], &data[index], n);
     wx14msg->emwin_block_part_size += n;
@@ -79,7 +96,6 @@ static void start_emwin_block(struct wx14_msg_st *wx14msg){
 
 static void end_emwin_block(struct wx14_msg_st *wx14msg){
 
-  int status = 0;
   int index = wx14msg->emwin_block_index;
   size_t n, start;
   
@@ -105,7 +121,6 @@ static void end_emwin_block(struct wx14_msg_st *wx14msg){
   start_emwin_block(wx14msg);
 }
 
-#include <stdio.h>
 static void append_emwin_block(struct wx14_msg_st *wx14msg){
 
   size_t start = wx14msg->emwin_block_part_size;
@@ -114,10 +129,6 @@ static void append_emwin_block(struct wx14_msg_st *wx14msg){
   assert(wx14msg->emwin_block_part_size + wx14msg->dataN <=
 	 EMWIN_BLOCK_SIZE);
   */
-  if(wx14msg->emwin_block_part_size + wx14msg->dataN >=
-     EMWIN_BLOCK_SIZE)
-    fprintf(stdout, "%d %d %x\n", wx14msg->emwin_block_part_size,
-	    wx14msg->dataN, wx14msg->msg_type);
 
   memcpy(&wx14msg->emwin_block_part[start], wx14msg->data, wx14msg->dataN);
   wx14msg->emwin_block_part_size += wx14msg->dataN;
@@ -129,9 +140,10 @@ static int find_emwin_block_start(struct wx14_msg_st *wx14msg){
   int found = 0;
   int index = 0;
   unsigned char *data = wx14msg->data;
-  size_t size = wx14msg->dataN;
+  int size;
 
-  /* assert(size <= INTMAX); */
+  /* assert(wx14msg->dataN <= INTMAX); */
+  size = (int)wx14msg->dataN;
 
   for(i = 0; i < size - 2; ++i){
     if((data[0] == '/') &&
@@ -152,7 +164,6 @@ static int find_emwin_block_start(struct wx14_msg_st *wx14msg){
 
 static int find_emwin_block_end(struct wx14_msg_st *wx14msg){
 
-  unsigned char *data = wx14msg->data;
   size_t n;
 
   if(wx14msg->emwin_block_part_size + wx14msg->dataN < EMWIN_BLOCK_SIZE)
