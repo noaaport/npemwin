@@ -2,8 +2,8 @@
  * $Id$
  */
 #include "readn.h"
-#include "wx14_private.h"
 #include "wx14.h"
+#include "wx14_private.h"
 
 static int wx14_readn(int fd, unsigned int secs, int retry,
 		      void* buf, size_t size);
@@ -27,19 +27,55 @@ int wx14_read_msg(int fd, unsigned int secs, int retry,
   return(status);
 }
 
-void *wx14_msg_data(struct wx14_msg_st *wx14msg){
+void *wx14_get_msg_data(struct wx14_msg_st *wx14msg){
 
   return(wx14msg->data);
 }
 
-int wx14_msg_data_size(struct wx14_msg_st *wx14msg){
+int wx14_get_msg_datasize(struct wx14_msg_st *wx14msg){
 
   return(wx14msg->dataN);
 }
 
-int wx14_msg_cmdtype(struct wx14_msg_st *wx14msg){
+int wx14_get_msg_msgtype(struct wx14_msg_st *wx14msg){
 
-  return(wx14msg->cmd_type);
+  return(wx14msg->msg_type);
+}
+
+int wx14_read1_data_msg(int fd, unsigned int secs, int retry,
+			struct wx14_msg_st *wx14msg){
+
+  int status = 0;
+
+  status = wx14_read_msg(fd, secs, retry, wx14msg);
+  if(status != 0)
+    return(status);
+
+  /*
+   * Verify that it is an emwin or signal status msg
+   */
+  if((wx14msg->msg_type != WX14_MSG_EMWIN) &&
+     (wx14msg->msg_type != WX14_MSG_SIGNAL_STATUS))
+    return(WX14_ERROR_UNEXPECTED_MSGTYPE);
+
+  return(status);
+}
+
+int wx14_read1_data_msg_emwin(int fd, unsigned int secs, int retry,
+			      struct wx14_msg_st *wx14msg){
+  /*
+   * Keep reading packets, ignoring any status signal message(s),
+   * until an emwin packet is received.
+   */
+  int status = 0;
+
+  while(status == 0){
+    status = wx14_read1_data_msg(fd, secs, retry, wx14msg);
+    if((status != 0) || (wx14msg->msg_type == WX14_MSG_EMWIN))
+      break;
+  }
+
+  return(status);
 }
 
 /*
@@ -85,7 +121,7 @@ static int wx14_read_msg_header(int fd, unsigned int secs, int retry,
   }
 
   if(status == 0){
-    wx14msg->cmd_type = wx14msg->message[4];
+    wx14msg->msg_type = wx14msg->message[4];
     wx14msg->dataN = (wx14msg->message[2] << 8) + wx14msg->message[3];
   }
 
@@ -100,7 +136,7 @@ static int wx14_read_msg_header(int fd, unsigned int secs, int retry,
    * the dataN actually contains the "true" N bytes of the data portion
    * of the packet, after the 5th byte.
    */
-  if(wx14msg->cmd_type == WX14_MSG_EMWIN_PACKET)
+  if(wx14msg->msg_type == WX14_MSG_EMWIN)
     --wx14msg->dataN;
 
   return(status);
