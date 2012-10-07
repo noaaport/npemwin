@@ -127,7 +127,8 @@ static int process_packets(struct emwin_server *emserver){
     if(status == -1)
       log_err2("Error reading packet from WX14 device:", emserver->ip);
     else if(status != 0)
-      log_errx("Error [%d] reading packet from WX14 device:", emserver->ip);
+      log_errx("Error [%d] reading packet from WX14 device:",
+	       status, emserver->ip);
   } else {
     if(status == -1)
       log_err2("Error reading packet from", emserver->ip);
