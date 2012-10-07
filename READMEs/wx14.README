@@ -2,7 +2,7 @@
 # $Id$
 #
 
-In order to have npemwin read from a serial device, the appropriate line
+In order to have npemwin read from the wx14 device, the appropriate line
 must appear in the file
 
 	servers.conf
@@ -21,10 +21,13 @@ procedure is to create the file
 
 	set serverslist     "/usr/local/etc/npemwin/site/servers.conf"
 
-and then in that same "site" subdirectory create the file "servers.conf"
+Then in that same "site" subdirectory create the file "servers.conf"
 with the line such as
 
-	 /dev/cuau0  9600,n,8,1
+     	 @wx14.fincher.net 7002
+or
+	 @67.216.244.152 7002
 
+(substitute 7002 for the appropriate ethernet data port of the wx14 device)
 optionally followed by the network servers if desired. In this way the
 "site" edits will not overrriden when the npemwin package is re-installed.
