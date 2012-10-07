@@ -1,11 +1,3 @@
-What's New
-==========
-
-Starting with version 2.3.1, Npemwin supports reading from the
-WX14 device ethernet data port. The *servers.conf* file
-in the Npemwin configuration directory has the instructions
-for enabling that configuration.
-
 Overview
 ========
 
@@ -45,3 +37,14 @@ or the master host.
 It has a built-in web server for monitoring the internal state of
 the server as well as displaying the files received using any web
 browser.
+
+What's New
+==========
+
+Sun Oct  7 18:34:46 AST 2012
+----------------------------
+
+Starting with version **2.3.1**, Npemwin supports reading from the
+WX14 device ethernet data port. The *servers.conf* file
+in the Npemwin configuration directory has the instructions
+for enabling that configuration.
