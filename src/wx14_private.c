@@ -64,8 +64,9 @@ int wx14_read1_data_msg(int fd, unsigned int secs, int retry,
 int wx14_read1_data_msg_emwin(int fd, unsigned int secs, int retry,
 			      struct wx14_msg_st *wx14msg){
   /*
-   * Keep reading packets, ignoring any status signal message(s),
-   * until an emwin packet is received.
+   * Keep reading packets until an emwin packet is received,
+   * and process any status signal message(s) that arrive
+   * while waiting for the emwin msg.
    */
   int status = 0;
 
@@ -73,6 +74,8 @@ int wx14_read1_data_msg_emwin(int fd, unsigned int secs, int retry,
     status = wx14_read1_data_msg(fd, secs, retry, wx14msg);
     if((status != 0) || (wx14msg->msg_type == WX14_MSG_EMWIN))
       break;
+    else if(wx14msg->msg_type == WX14_MSG_SIGNAL_STATUS)
+      wx14_signalstatus_process(wx14msg);
   }
 
   return(status);

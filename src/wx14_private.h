@@ -38,6 +38,8 @@
 #define WX14_MSG_RESET 0x1f
 #define WX14_MSG_SET_FRONT_END 0x21
 
+/* wx14_private.c */
+
 /* Read a wx14 "message" */
 int wx14_read_msg(int fd, unsigned int secs, int retry,
 		  struct wx14_msg_st *wx14msg);
@@ -50,5 +52,8 @@ int wx14_read1_data_msg(int fd, unsigned int secs, int retry,
 			struct wx14_msg_st *wx14msg);
 int wx14_read1_data_msg_emwin(int fd, unsigned int secs, int retry,
 			      struct wx14_msg_st *wx14msg);
+
+/* wx14_ss.c */
+void wx14_signalstatus_process(struct wx14_msg_st *wx14msg);
 
 #endif

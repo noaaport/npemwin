@@ -4,6 +4,8 @@
 #ifndef WX14_H
 #define WX14_H
 
+#include <time.h>
+
 /* non-os errors */
 #define WX14_ERROR_INVALID_HEADER 1    /* error in bytes 0,1 */
 #define WX14_ERROR_INVALID_MSGTYPE 2   /* unrecognized command type */
@@ -28,7 +30,24 @@
 #endif
 #define WX14_MESSAGE_MAXSIZE (WX14_HEADER_SIZE + EMWIN_BLOCK_SIZE)
 
+struct wx14_signalstatus_st {
+  int f_freq;
+  int f_viterbi;
+  int f_frame;
+  int f_mode;
+  int level;
+  int data_quality;
+  int gain;
+  int signal_quality;
+  int loss_frame;
+  int freq_error;
+  /* internal variables */
+  time_t unixseconds;
+  time_t unixseconds_lastlog;
+};
+
 struct wx14_msg_st {
+  unsigned char message[WX14_MESSAGE_MAXSIZE];
   int msg_type;
   size_t dataN;	/* size of data that starts at message[5] */
   void *data;	/* data = &message[5] */
@@ -37,7 +56,7 @@ struct wx14_msg_st {
   size_t emwin_block_size;
   unsigned char emwin_block_part[EMWIN_BLOCK_SIZE + 6];
   size_t emwin_block_part_size;
-  unsigned char message[WX14_MESSAGE_MAXSIZE];
+  struct wx14_signalstatus_st wx14ss;
 };
 
 /* wx14.c  (lower level functions) */
@@ -57,5 +76,9 @@ int wx14_read_emwin_block(int fd, unsigned int secs, int retry,
 void *wx14_get_emwin_block(struct wx14_msg_st *wx14msg);
 int wx14_memcpy_emwin_block(void *buf, size_t *size,
 			    struct wx14_msg_st *wx14msg);
+
+/* wx14_ss.c */
+int wx14_signalstatus_write(char *file, struct wx14_msg_st *wx14msg);
+int wx14_signalstatus_log(char *file, struct wx14_msg_st *wx14msg);
 
 #endif
