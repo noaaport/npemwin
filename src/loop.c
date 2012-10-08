@@ -129,6 +129,13 @@ static int process_packets(struct emwin_server *emserver){
     else if(status != 0)
       log_errx("Error [%d] reading packet from WX14 device:",
 	       status, emserver->ip);
+    else {
+      if(wx14_signalstatus_write(g.wx14_signal_statusfile, &g.wx14msg) != 0)
+	log_err2("Error writing wx14 file", g.wx14_signal_statusfile);
+
+      if(wx14_signalstatus_log(g.wx14_signal_logfile, &g.wx14msg) != 0)
+	log_err2("Error writing wx14 file", g.wx14_signal_logfile);
+    }
   } else {
     if(status == -1)
       log_err2("Error reading packet from", emserver->ip);

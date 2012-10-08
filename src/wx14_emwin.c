@@ -19,8 +19,6 @@ int wx14_init_emwin_block(int fd, unsigned int secs, int retry,
 			  struct wx14_msg_st *wx14msg){
   int status = 0;
 
-  wx14msg->emwin_block_index = 0;
-
   /* XXX */
   while(1){
     status = wx14_read1_data_msg_emwin(fd, secs, retry, wx14msg);

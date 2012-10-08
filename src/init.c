@@ -62,6 +62,10 @@ void init_globals(void){
   g.statusfile = SERVERSTATUSFILE;
   g.nbspstats_period = NBSP_STATS_PERIOD;
 
+  g.wx14_signal_statusfile = WX14_SIGNAL_STATUSFILE;
+  g.wx14_signal_logfile = WX14_SIGNAL_LOGFILE;
+  g.wx14_signal_logperiod = WX14_SIGNAL_LOGPERIOD;
+
   g.serverslistfile = EMWIN_SERVERS_LIST_FILE;
   g.emwinstatusfile = EMWIN_SERVERS_STATUS_FILE;
   g.min_consecutive_packets = MIN_CONSECUTIVE_PACKETS;

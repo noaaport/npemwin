@@ -95,10 +95,11 @@ int open_emwin_server_network(int type, char *ipstr, char *port,
   if(fd == -1)
     return(-1);
 
-  if(type == EMWIN_SERVER_TYPE_WX14)
-     status = wx14_init_emwin_block(fd, g.readtimeout_s, g.readtimeout_retry,
-				    &g.wx14msg);
-  else
+  if(type == EMWIN_SERVER_TYPE_WX14){
+    wx14_init(&g.wx14msg);
+    status = wx14_init_emwin_block(fd, g.readtimeout_s, g.readtimeout_retry,
+				   &g.wx14msg);
+  } else
      status = get_emwin_packet_bb(fd, &ep);
 
   if(status != 0){
@@ -196,9 +197,6 @@ int get_emwin_packet_wx14(int f, struct emwin_packet *ep){
 
   assert(g.readtimeout_s >= 0);
 
-  /*
-   * This function discards any status signal packets received
-   */
   status = wx14_read_emwin_block(f, g.readtimeout_s, 0, &g.wx14msg);
 
   if(status == 0){

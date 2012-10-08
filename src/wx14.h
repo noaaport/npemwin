@@ -68,6 +68,9 @@ int wx14_read_data_msg_emwin(int fd, unsigned int secs, int retry,
 int wx14_is_emwin_msg(struct wx14_msg_st *wx14msg);
 int wx14_is_signalstatus_msg(struct wx14_msg_st *wx14msg);
 
+/* wx14_init.c */
+void wx14_init(struct wx14_msg_st *wx14msg);
+
 /* wx14_emwin.c */
 int wx14_init_emwin_block(int fd, unsigned int secs, int retry,
 			  struct wx14_msg_st *wx14msg);
@@ -80,5 +83,7 @@ int wx14_memcpy_emwin_block(void *buf, size_t *size,
 /* wx14_ss.c */
 int wx14_signalstatus_write(char *file, struct wx14_msg_st *wx14msg);
 int wx14_signalstatus_log(char *file, struct wx14_msg_st *wx14msg);
-
+int wx14_signalstatus_fprintf(char *file,
+			      struct wx14_msg_st *wx14msg,
+			      const char *mode);
 #endif
