@@ -61,7 +61,6 @@
 /* wx14 device status */
 #define WX14_SIGNAL_STATUSFILE	"/var/npemwin/stats/wx14signal.status"
 #define WX14_SIGNAL_LOGFILE	"/var/npemwin/stats/wx14signal.log"
-#define WX14_SIGNAL_LOGPERIOD	60
 
 /*
  * npemwin connects to the bb servers listed in the specified file.

@@ -37,7 +37,6 @@ struct npemwin_globals {
   time_t nbspstats_period; /* report the server's statistics */
   char *wx14_signal_statusfile;  /* wx14 last signal status */
   char *wx14_signal_logfile;     /* wx14 log (append) signal status */
-  time_t wx14_signal_logperiod;
   char *serverslistfile; /* file that contains our bb master server(s) */
   char *emwinstatusfile;	/* status file of our b master(s) */
   /* mininum number of consecutive packets received to avoid a bad mark */

@@ -62,9 +62,6 @@
 #define CONFOPT_WX14_SIGNAL_LOGFILE	@counter@
 #define DEFVAL_WX14_SIGNAL_LOGFILE	WX14_SIGNAL_LOGFILE
 
-#define CONFOPT_WX14_SIGNAL_LOGPERIOD	@counter@
-#define DEFVAL_WX14_SIGNAL_LOGPERIOD	WX14_SIGNAL_LOGPERIOD
-
 #define CONFOPT_SERVERSLISTFILE		@counter@
 #define DEFVAL_SERVERSLISTFILE		EMWIN_SERVERS_LIST_FILE
 
@@ -230,8 +227,6 @@ static struct confoption_st confoptions[] = {
   	NULL, 0},
   {"wx14_signal_logfile", CONFOPT_WX14_SIGNAL_LOGFILE, TCL_LINK_STRING,
   	NULL, 0},
-  {"wx14_signal_logperiod", CONFOPT_WX14_SIGNAL_LOGPERIOD, TCL_LINK_INT, NULL,
-	DEFVAL_WX14_SIGNAL_LOGPERIOD},
   {"serverslistfile", CONFOPT_SERVERSLISTFILE, TCL_LINK_STRING, NULL, 0},
   {"emwinstatusfile", CONFOPT_EMWINSTATUSFILE, TCL_LINK_STRING, NULL, 0},
   {"minconsecutivepackets", CONFOPT_MINCONSECUTIVEPACKETS, TCL_LINK_INT, NULL,
@@ -369,8 +364,6 @@ int configure(void){
   	    CONFOPT_WX14_SIGNAL_STATUSFILE);
   setoptval(&g.wx14_signal_logfile, confoptions,
   	    CONFOPT_WX14_SIGNAL_LOGFILE);
-  setoptval(&g.wx14_signal_logperiod, confoptions,
-  	    CONFOPT_WX14_SIGNAL_LOGPERIOD);
 
   setoptval(&g.serverslistfile, confoptions, CONFOPT_SERVERSLISTFILE);
   setoptval(&g.emwinstatusfile, confoptions, CONFOPT_EMWINSTATUSFILE);
@@ -480,8 +473,6 @@ void print_confoptions(void){
 
   fprintf_str(stdout, fmt, "wx14_signal_statusfile", g.wx14_signal_statusfile);
   fprintf_str(stdout, fmt, "wx14_signal_logfile", g.wx14_signal_logfile);
-  fprintf(stdout, "wx14_signal_period " "%" PRIuMAX "\n",
-	(uintmax_t)g.wx14_signal_logperiod);
 
   fprintf_str(stdout, fmt, "serverslistfile", g.serverslistfile);
   fprintf_str(stdout, fmt, "emwinstatusfile", g.emwinstatusfile);
@@ -585,7 +576,6 @@ int validate_configuration(void){
 
   VALIDATE_STR(g.wx14_signal_statusfile, "wx14_signal_statusfile");
   VALIDATE_STR(g.wx14_signal_logfile, "wx14_signal_logfile");
-  VALIDATE_PARAM_L(g.wx14_signal_logperiod, 0, "wx14_signal_logperiod");
 
   VALIDATE_STR(g.serverslistfile, "serverslistfile");
   VALIDATE_STR(g.emwinstatusfile, "emwinstatusfile");
