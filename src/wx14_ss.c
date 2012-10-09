@@ -103,7 +103,7 @@ void wx14_signalstatus_process(struct wx14_msg_st *wx14msg){
    *     bit3 - frame (receiving frame information)
    *     bit4 - mode (1 = normal; 0 = alignment)
    * byte6 = level
-   * byte7,8 = data quality
+   * byte7,8 = data quality (little endian, based on our tests)
    * byte9 = gain
    * byte10 = signal quality
    * byte11 = loss frame
@@ -122,7 +122,10 @@ void wx14_signalstatus_process(struct wx14_msg_st *wx14msg){
   ++data;
   wx14msg->wx14ss.level = data[0];
   ++data;
-  wx14msg->wx14ss.data_quality = (data[0] << 8) + data[1];
+  /*
+   * This is comming little endian (based on our tests)
+   */
+  wx14msg->wx14ss.data_quality = (data[1] << 8) + data[0];
   ++data; ++data;
   wx14msg->wx14ss.gain = data[0];
   ++data;

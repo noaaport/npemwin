@@ -123,6 +123,10 @@ static int wx14_read_msg_header(int fd, unsigned int secs, int retry,
     }
   }
 
+  /*
+   * The length field (dataN) comes big endian (based on our tests
+   * and confirmed by manufacturer)
+   */
   if(status == 0){
     wx14msg->msg_type = wx14msg->message[4];
     wx14msg->dataN = (wx14msg->message[2] << 8) + wx14msg->message[3];

@@ -134,6 +134,7 @@ void init_globals(void){
   g.server_fd = -1;
   g.ct = NULL;
   g.qfiles = NULL;
+  /* wx14_init() is called in emwin.c */
   g.f_lock = 0;
   g.f_debug = 0;
   g.f_ndaemon = 0;
