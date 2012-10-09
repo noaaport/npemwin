@@ -31,3 +31,14 @@ or
 (substitute 7002 for the appropriate ethernet data port of the wx14 device)
 optionally followed by the network servers if desired. In this way the
 "site" edits will not overrriden when the npemwin package is re-installed.
+
+Two status files will be produced,
+
+        /var/npemwin/stats/wx14signal.status
+and
+        /var/npemwin/stats/wx14signal.log
+
+The "status" file has only one record, the latest, written as soon
+as Npemwin detects a signal status package coming.  The same
+record is appended to the log file. It is rotated everyday as with
+the other files in that same directory.
