@@ -58,5 +58,6 @@
 - Added support for virtual hosts
 - Added ability to set the noaaport user supplementary groups
 
-2.3.1p1
+2.3.1p2
 - Added support for the WX14 device
+- Revised tclmetar decoder to handle the issue with TSNO

@@ -17,8 +17,12 @@
 				   * while reading */
 
 #define WX14_ERROR_EMWIN_BUF 7    /* emwin packet buffer size too small */
-#define WX14_ERROR_EMWIN_FILL_PACKET 8  /* error from fill_packet_struct_wc14
+#define WX14_ERROR_EMWIN_FILL_PACKET 8  /* error from fill_packet_struct_wx14
 					 * function */
+#define WX14_ERROR_EMWIN_INCOMPLETEBLOCK 9   /* the start of a block was
+					      * received before the current
+					      * one ended. */
+
 
 #define WX14_HEADER_SIZE 5
 /*
