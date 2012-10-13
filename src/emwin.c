@@ -205,7 +205,7 @@ int get_emwin_packet_wx14(int f, struct emwin_packet *ep){
   }
 
   if(status == 0)
-      status = fill_packet_struct_wx14(ep, data, (int)size);
+    status = fill_packet_struct_wx14(ep, data, (int)size);
 
   return(status);
 }
