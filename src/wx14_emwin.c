@@ -5,10 +5,7 @@
 #include "wx14.h"
 #include "wx14_private.h"
 
-static void init_emwin_block(struct wx14_msg_st *wx14msg);
-#if 0
 static void start_emwin_block(struct wx14_msg_st *wx14msg);
-#endif
 static void end_emwin_block(struct wx14_msg_st *wx14msg);
 static void append_emwin_block(struct wx14_msg_st *wx14msg);
 static int find_emwin_block_start(struct wx14_msg_st *wx14msg);
@@ -19,16 +16,21 @@ static int find_emwin_block_end(struct wx14_msg_st *wx14msg);
  */
 int wx14_init_emwin_block(int fd, unsigned int secs, int retry,
 			  struct wx14_msg_st *wx14msg){
+  /*
+   * This function keeps reading wx14 messages until it detects one
+   * that has the start of an emwin block.
+   */
   int status = 0;
 
-  /* XXX */
+  wx14msg->emwin_block_index = 0;
+
   while(1){
     status = wx14_read1_data_msg_emwin(fd, secs, retry, wx14msg);
     if(status != 0)
       break;
 
     if(find_emwin_block_start(wx14msg)){
-      init_emwin_block(wx14msg);
+      start_emwin_block(wx14msg);
       break;
     }
   }
@@ -43,20 +45,24 @@ int wx14_read_emwin_block(int fd, unsigned int secs, int retry,
   while(1){
     status = wx14_read1_data_msg_emwin(fd, secs, retry, wx14msg);
     if(status != 0){
-      end_emwin_block(wx14msg);
       break;
     }
 
     if(find_emwin_block_end(wx14msg)){
       end_emwin_block(wx14msg);
+      if(find_emwin_block_start(wx14msg))
+	start_emwin_block(wx14msg);
+      else {
+	status = wx14_init_emwin_block(fd, secs, retry, wx14msg);
+      }
       break;
     } else if(find_emwin_block_start(wx14msg)) {
       /*
        * The start of a block has been received before completing
-       * the current block. Initialize the new block, but return an error
-       * to inform the main loop not to process the emwin block.
+       * the current block. We could try to call "start_emwin_block()"
+       * here and continue, but that would not report the error to
+       * the application.
        */
-      init_emwin_block(wx14msg);
       status = WX14_ERROR_EMWIN_INCOMPLETEBLOCK;
       break;
     } else
@@ -86,7 +92,7 @@ int wx14_memcpy_emwin_block(void *buf, size_t *size,
 /*
  * private to this file
  */
-static void init_emwin_block(struct wx14_msg_st *wx14msg){
+static void start_emwin_block(struct wx14_msg_st *wx14msg){
   /*
    * Call after find_emwin_block_start().
    *
@@ -102,31 +108,6 @@ static void init_emwin_block(struct wx14_msg_st *wx14msg){
   memcpy(&wx14msg->emwin_block_part[6], &data[index], n);
   wx14msg->emwin_block_part_size = n + 6;
 }
-
-#if 0
-static void start_emwin_block(struct wx14_msg_st *wx14msg){
-  /*
-   * This function should be called to start a new block _after_
-   * detecting the end of a block; that is, it is meant to be used
-   * by the function end_emwin_block().
-   */
-  int index = wx14msg->emwin_block_index;
-  unsigned char *data = wx14msg->data;
-  size_t n;
-
-  memset(wx14msg->emwin_block_part, 0, EMWIN_BLOCK_SIZE);
-  wx14msg->emwin_block_part_size = 0;
-
-  /*
-   * If there is a partial message, add it. 
-   */
-  if((index > 0) && ((size_t)index < wx14msg->dataN)){
-    n = wx14msg->dataN - index;
-    memcpy(wx14msg->emwin_block_part, &data[index], n);
-    wx14msg->emwin_block_part_size = n;
-  }
-}
-#endif
 
 static void end_emwin_block(struct wx14_msg_st *wx14msg){
 
@@ -153,9 +134,7 @@ static void end_emwin_block(struct wx14_msg_st *wx14msg){
   wx14msg->emwin_block_size = wx14msg->emwin_block_part_size;
 
   if(find_emwin_block_start(wx14msg))    
-    init_emwin_block(wx14msg);
-  else
-    wx14msg->emwin_block_index = 0;
+    start_emwin_block(wx14msg);
 }
 
 static void append_emwin_block(struct wx14_msg_st *wx14msg){
@@ -172,7 +151,15 @@ static void append_emwin_block(struct wx14_msg_st *wx14msg){
 }
 
 static int find_emwin_block_start(struct wx14_msg_st *wx14msg){
-
+  /*
+   * A new block is signaled by
+   *
+   * /PF
+   *
+   * or
+   *
+   * 000000/
+   */
   int i;
   int found = 0;
   int index = 0;
@@ -193,9 +180,32 @@ static int find_emwin_block_start(struct wx14_msg_st *wx14msg){
     ++data;
   }
 
+  if(found){
+    wx14msg->emwin_block_index = index;
+    return(found);
+  }
+
+  found = 0;
+  index = 6;
+  data = wx14msg->data;
+  for(i = 0; i < size - 6; ++i){
+    if((data[0] == '\0') &&
+       (data[1] == '\0') &&
+       (data[2] == '\0') &&
+       (data[3] == '\0') &&
+       (data[4] == '\0') &&
+       (data[5] == '\0') &&
+       (data[6] == '/')){
+      found = 1;
+      break;
+    }
+    ++index;
+    ++data;
+  }
+
   if(found)
     wx14msg->emwin_block_index = index;
-    
+
   return(found);
 }
 
