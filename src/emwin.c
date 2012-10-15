@@ -40,6 +40,7 @@ int putc_unlocked(int c, FILE *stream);
 #include "emwin.h"
 #include "defaults.h"
 
+static int emwin_sync_device(int fd);
 static int emwin_sync_serial(int fd);
 static int emwin_sync_wx14_msg(int fd);
 static int emwin_sync_wx14_raw(int fd);
@@ -249,7 +250,7 @@ int get_emwin_packet_serial(int f, struct emwin_packet *ep){
   return(status);
 }
 
-static int emwin_sync_serial(int fd){
+static int emwin_sync_device(int fd){
   /*
    * In the case of the serial port the synhronization is harder.
    * We look for the set of four characters '\0'/PF. If we find it,
@@ -317,13 +318,42 @@ static int emwin_sync_serial(int fd){
   return(0);
 }
 
+static int emwin_sync_serial(int fd){
+  /*
+   * After synczing, try to get a packet and "decode" it. If
+   * get_emwin_packet_serial() returns ok, or a read error (status <= 1),
+   * then exit. Otherwise (which means fill_packet returnes a format error),
+   * resync and repeat.
+   */
+  struct emwin_packet ep;
+  int status = 0;
+  int i = 0;
+
+  status = emwin_sync_device(fd);
+
+  /*
+   * Reuse "g.readtimeout_retry" here
+   */
+  while((i <= g.readtimeout_retry) && (status == 0)){
+    status = get_emwin_packet_serial(fd, &ep);
+    if(status < 2)
+      break;
+    else
+      status = emwin_sync_device(fd);
+    
+    ++i;
+  }
+
+  return(status);
+}
+
 static int emwin_sync_wx14_msg(int fd){
   /*
    * The strategy here is the same as in the function
    *
-   * emwin_sync_wx14_raw()
+   * emwin_sync_serial()
    *
-   * below.
+   * above
    */
   struct emwin_packet ep;
   int status = 0;
@@ -354,17 +384,18 @@ static int emwin_sync_wx14_msg(int fd){
 
 static int emwin_sync_wx14_raw(int fd){
   /*
-   * After synczing, try to get a packet and "decode" it. If
-   * get_emwin_packet_wx14_raw() returns ok, or a read error (status <= 1),
-   * then exit. Otherwise (which means fill_packet returnes a format error),
-   * resync and repeat.
+   * The strategy here is the same as in the function
+   *
+   * emwin_sync_serial()
+   *
+   * above
    */
   struct emwin_packet ep;
   int status = 0;
   int i = 0;
 
   wx14_init(&g.wx14msg);
-  status = emwin_sync_serial(fd);
+  status = emwin_sync_device(fd);
 
   /*
    * Reuse "g.readtimeout_retry" here
@@ -374,7 +405,7 @@ static int emwin_sync_wx14_raw(int fd){
     if(status < 2)
       break;
     else
-      status = emwin_sync_serial(fd);
+      status = emwin_sync_device(fd);
     
     ++i;
   }
