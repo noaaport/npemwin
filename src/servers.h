@@ -29,7 +29,8 @@ struct emwin_server_stats_st {
 
 #define EMWIN_SERVER_TYPE_BB 1		/* Network bb server */
 #define EMWIN_SERVER_TYPE_SERIAL 2	/* wx12 etc */
-#define EMWIN_SERVER_TYPE_WX14	3	/* network wx14 */
+#define EMWIN_SERVER_TYPE_WX14_MSG 3	/* network wx14 - msg port  */
+#define EMWIN_SERVER_TYPE_WX14_RAW 4	/* network wx14 - raw data port */
 
 struct emwin_server {
   int type;		/* one of the above */
@@ -49,6 +50,7 @@ int write_emwin_server_stats(char *file);
 void release_server_list(void);
 int server_type_bbserver(struct emwin_server *server);
 int server_type_serial_device(struct emwin_server *server);
-int server_type_wx14_device(struct emwin_server *server);
+int server_type_wx14_msg_device(struct emwin_server *server);
+int server_type_wx14_raw_device(struct emwin_server *server);
 
 #endif

@@ -117,8 +117,8 @@ struct emwin_server *get_next_server(void){
   if(server_type_serial_device(es))
     es->fd = open_emwin_server_serial(es->ip, es->port);
   else{
-    if(server_type_wx14_device(es))
-      es->fd = open_emwin_server_network(EMWIN_SERVER_TYPE_WX14,
+    if(server_type_wx14_msg_device(es) || server_type_wx14_raw_device(es))
+      es->fd = open_emwin_server_network(es->type,
 					 es->ip, es->port, &es->gai_code);
     else
       es->fd = open_emwin_server_network(EMWIN_SERVER_TYPE_BB,
@@ -268,8 +268,11 @@ static int read_next_server(struct emwin_server *server){
 
   if(argv0[0] == '/')
     server->type = EMWIN_SERVER_TYPE_SERIAL;
-  else if(argv0[0] == '@'){
-    server->type = EMWIN_SERVER_TYPE_WX14;
+  else if((argv0[0] == '@') && (argv0[1] == '@')){
+    server->type = EMWIN_SERVER_TYPE_WX14_RAW;
+    ++argv0; ++argv0;
+  } else if(argv0[0] == '@'){
+    server->type = EMWIN_SERVER_TYPE_WX14_MSG;
     ++argv0;
   } else {
     server->type = EMWIN_SERVER_TYPE_BB;
@@ -462,13 +465,25 @@ int server_type_serial_device(struct emwin_server *server){
   return(0);
 }
 
-int server_type_wx14_device(struct emwin_server *server){
+int server_type_wx14_msg_device(struct emwin_server *server){
   /*
    * An entry that starts with the "@" character in the serverslist file
-   * is assumed to be the name of a wx14 device.
+   * is assumed to be the name of a wx14 device (message port).
    */
 
-  if(server->type == EMWIN_SERVER_TYPE_WX14)
+  if(server->type == EMWIN_SERVER_TYPE_WX14_MSG)
+    return(1);
+
+  return(0);
+}
+
+int server_type_wx14_raw_device(struct emwin_server *server){
+  /*
+   * An entry that starts with two "@@" characters in the serverslist file
+   * is assumed to be the name of a wx14 device (raw data port).
+   */
+
+  if(server->type == EMWIN_SERVER_TYPE_WX14_RAW)
     return(1);
 
   return(0);

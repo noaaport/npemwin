@@ -41,10 +41,11 @@ int putc_unlocked(int c, FILE *stream);
 #include "defaults.h"
 
 static int emwin_sync_serial(int fd);
+static int emwin_sync_wx14_raw(int fd);
 static int fill_packet_struct_bb(struct emwin_packet *ep,
-				      char *bbdata, int datasize);
+				 char *bbdata, int datasize);
 static int fill_packet_struct_wx14(struct emwin_packet *ep,
-				      char *data, int datasize);
+				   char *data, int datasize);
 static int fill_packet_struct_serial(struct emwin_packet *ep, 
 				     char *serialdata, int datasize);
 static int checksum(struct emwin_packet *ep);
@@ -95,10 +96,13 @@ int open_emwin_server_network(int type, char *ipstr, char *port,
   if(fd == -1)
     return(-1);
 
-  if(type == EMWIN_SERVER_TYPE_WX14){
+  if(type == EMWIN_SERVER_TYPE_WX14_MSG){
     wx14_init(&g.wx14msg);
     status = wx14_init_emwin_block(fd, g.readtimeout_s, g.readtimeout_retry,
 				   &g.wx14msg);
+  } else if(type == EMWIN_SERVER_TYPE_WX14_RAW){
+    wx14_init(&g.wx14msg);
+    status = emwin_sync_wx14_raw(fd);
   } else
      status = get_emwin_packet_bb(fd, &ep);
 
@@ -187,7 +191,7 @@ int get_emwin_packet_bb(int f, struct emwin_packet *ep){
   return(status);
 }
 
-int get_emwin_packet_wx14(int f, struct emwin_packet *ep){
+int get_emwin_packet_wx14_msg(int f, struct emwin_packet *ep){
 
   int status = 0;
   size_t size = EMWIN_PACKET_SIZE;
@@ -208,6 +212,11 @@ int get_emwin_packet_wx14(int f, struct emwin_packet *ep){
     status = fill_packet_struct_wx14(ep, data, (int)size);
 
   return(status);
+}
+
+int get_emwin_packet_wx14_raw(int f, struct emwin_packet *ep){
+
+  return(get_emwin_packet_serial(f, ep));
 }
 
 int get_emwin_packet_serial(int f, struct emwin_packet *ep){
@@ -308,6 +317,11 @@ static int emwin_sync_serial(int fd){
     return(-1);
 
   return(0);
+}
+
+static int emwin_sync_wx14_raw(int fd){
+
+  return(emwin_sync_serial(fd));
 }
 
 static int fill_packet_struct_bb(struct emwin_packet *ep, 

@@ -112,8 +112,10 @@ static int process_packets(struct emwin_server *emserver){
   struct emwin_packet ep;
   int server_fd = emserver->fd;
 
-  if(server_type_wx14_device(emserver))
-    status = get_emwin_packet_wx14(server_fd, &ep);
+  if(server_type_wx14_msg_device(emserver))
+    status = get_emwin_packet_wx14_msg(server_fd, &ep);
+  else if(server_type_wx14_raw_device(emserver))
+    status = get_emwin_packet_wx14_raw(server_fd, &ep);
   else if(server_type_serial_device(emserver))
     status = get_emwin_packet_serial(server_fd, &ep);
   else
@@ -123,11 +125,11 @@ static int process_packets(struct emwin_server *emserver){
   if(write_emwin_server_stats(g.emwinstatusfile) != 0)
     log_err2("Error writing status file", g.emwinstatusfile);
 
-  if(server_type_wx14_device(emserver)){
+  if(server_type_wx14_msg_device(emserver)){
     if(status == -1)
-      log_err2("Error reading packet from WX14 device:", emserver->ip);
+      log_err2("Error reading packet from WX14 msg device:", emserver->ip);
     else if(status != 0)
-      log_errx("Error [%d] reading packet from WX14 device:",
+      log_errx("Error [%d] reading packet from WX14 msg device:",
 	       status, emserver->ip);
     else {
       if(wx14_signalstatus_write(g.wx14_signal_statusfile, &g.wx14msg) != 0)
@@ -137,6 +139,12 @@ static int process_packets(struct emwin_server *emserver){
 	log_err2("Error writing wx14 file", g.wx14_signal_logfile);
     }
   } else {
+    /*
+     * This applies to both the wx14 raw device and a serial device
+     *
+     *    server_type_wx14_raw_device(emserver)
+     *    server_type_serial_device(emserver)
+     */
     if(status == -1)
       log_err2("Error reading packet from", emserver->ip);
     else if(status == -2)
