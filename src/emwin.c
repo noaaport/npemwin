@@ -41,6 +41,7 @@ int putc_unlocked(int c, FILE *stream);
 #include "defaults.h"
 
 static int emwin_sync_serial(int fd);
+static int emwin_sync_wx14_msg(int fd);
 static int emwin_sync_wx14_raw(int fd);
 static int fill_packet_struct_bb(struct emwin_packet *ep,
 				 char *bbdata, int datasize);
@@ -97,11 +98,8 @@ int open_emwin_server_network(int type, char *ipstr, char *port,
     return(-1);
 
   if(type == EMWIN_SERVER_TYPE_WX14_MSG){
-    wx14_init(&g.wx14msg);
-    status = wx14_init_emwin_block(fd, g.readtimeout_s, g.readtimeout_retry,
-				   &g.wx14msg);
+    status = emwin_sync_wx14_msg(fd);
   } else if(type == EMWIN_SERVER_TYPE_WX14_RAW){
-    wx14_init(&g.wx14msg);
     status = emwin_sync_wx14_raw(fd);
   } else
      status = get_emwin_packet_bb(fd, &ep);
@@ -319,9 +317,69 @@ static int emwin_sync_serial(int fd){
   return(0);
 }
 
-static int emwin_sync_wx14_raw(int fd){
+static int emwin_sync_wx14_msg(int fd){
+  /*
+   * The strategy here is the same as in the function
+   *
+   * emwin_sync_wx14_raw()
+   *
+   * below.
+   */
+  struct emwin_packet ep;
+  int status = 0;
+  int i = 0;
 
-  return(emwin_sync_serial(fd));
+  wx14_init(&g.wx14msg);
+  status = wx14_init_emwin_block(fd, g.readtimeout_s, g.readtimeout_retry,
+				 &g.wx14msg);
+
+  /*
+   * Reuse "g.readtimeout_retry" here
+   */
+  while((i <= g.readtimeout_retry) && (status == 0)){
+    status = get_emwin_packet_wx14_msg(fd, &ep);
+    if(status != WX14_ERROR_EMWIN_FILL_PACKET)
+      break;
+    else {
+      wx14_init(&g.wx14msg);
+      status = wx14_init_emwin_block(fd, g.readtimeout_s, g.readtimeout_retry,
+				     &g.wx14msg);
+    }
+
+    ++i;
+  }
+
+  return(status);
+}
+
+static int emwin_sync_wx14_raw(int fd){
+  /*
+   * After synczing, try to get a packet and "decode" it. If
+   * get_emwin_packet_wx14_raw() returns ok, or a read error (status <= 1),
+   * then exit. Otherwise (which means fill_packet returnes a format error),
+   * resync and repeat.
+   */
+  struct emwin_packet ep;
+  int status = 0;
+  int i = 0;
+
+  wx14_init(&g.wx14msg);
+  status = emwin_sync_serial(fd);
+
+  /*
+   * Reuse "g.readtimeout_retry" here
+   */
+  while((i <= g.readtimeout_retry) && (status == 0)){
+    status = get_emwin_packet_wx14_raw(fd, &ep);
+    if(status < 2)
+      break;
+    else
+      status = emwin_sync_serial(fd);
+    
+    ++i;
+  }
+
+  return(status);
 }
 
 static int fill_packet_struct_bb(struct emwin_packet *ep, 
@@ -450,7 +508,7 @@ static int fill_packet_struct_bb(struct emwin_packet *ep,
 }
 
 static int fill_packet_struct_serial(struct emwin_packet *ep, 
-				      char *serialdata, int datasize){
+				     char *serialdata, int datasize){
   int i;
   char *fmt = "/PF%12s /PN %d /PT %d /CS %d /FD%22c";
   char *b;
