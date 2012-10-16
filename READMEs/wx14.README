@@ -21,18 +21,28 @@ procedure is to create the file
 
 	set serverslist     "/usr/local/etc/npemwin/site/servers.conf"
 
-Then in that same "site" subdirectory create the file "servers.conf"
-with the line such as
+Then in that same "site" subdirectory create the file "servers.conf",
+with entries such as
 
-     	 @wx14.fincher.net 7002
+     @wx14.fincher.net 7002
 or
-	 @67.216.244.152 7002
+     @136.145.84.22    7002
 
-(substitute 7002 for the appropriate ethernet data port of the wx14 device)
-optionally followed by the network servers if desired. In this way the
-"site" edits will not overrriden when the npemwin package is re-installed.
+If the ip (first column) starts with one ampersand ('@') as above,
+then it is asumed that the port (7002) is the wx14 message
+format port. Alternatively, if the ip column contains two ('@@') ampersands,
+for example
 
-Two status files will be produced,
+     @@wx14.fincher.net 7003
+or
+     @@136.145.84.22    7003
+
+then it is assumed that port 7003 is the emwin raw data port.
+In any case, substitute 7002 (or 7003) for the appropriate ethernet port
+of the wx14 device.
+
+When the wx14 message format port is used ('@' address form),
+two status files will be produced,
 
         /var/npemwin/stats/wx14signal.status
 and
