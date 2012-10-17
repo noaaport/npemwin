@@ -1,54 +1,66 @@
-#
-# $Id$
-#
+Setting up reading from a WX14 ethernet device
 
-In order to have npemwin read from the wx14 device, the appropriate line
-must appear in the file
+The WX14 has two ethernet ports. One of the ports transmits
+different kinds of //messages//, identified by a header.
+Some of those //messages// contain emwin
+data and others contain, for example, signal status information.
+The port transmits pure raw emwin data continously.
+We will refer to these ports as the **message port** and the **data  port**,
+respectively.
 
-	servers.conf
+Npemwin can use either one of those ports. In order to have Npemwin read
+from either port of the wx14 device, the appropriate line must appear
+in the file
+
+* servers.conf
 
 A commented example is given in the default file. If the other lines
 are commented, then npemwin will read exclusively from the device.
 Otherwise, it will try the servers listed there when reading from
 the device fails beyond a certain threshold.
 
-Although the default "servers.conf" can be edited directly, the recommended
+Although the default //servers.conf// can be edited directly, the recommended
 procedure is to create the file
 
-	site/npemwind.conf
+* site/npemwind.conf
 
 (within the main configuration directory) with the line
 
-	set serverslist     "/usr/local/etc/npemwin/site/servers.conf"
+  set serverslist     "/usr/local/etc/npemwin/site/servers.conf"
 
-Then in that same "site" subdirectory create the file "servers.conf",
-with entries such as
+Then in that same //site// subdirectory create the file //servers.conf//
+with appropriate entries as follows.
 
-     @wx14.fincher.net 7002
+To read from the //message// port,
+
+  @wx14.fincher.net 7002
+
 or
-     @136.145.84.22    7002
+
+  @136.145.84.22    7002
 
 If the ip (first column) starts with one ampersand ('@') as above,
-then it is asumed that the port (7002) is the wx14 message
-format port. Alternatively, if the ip column contains two ('@@') ampersands,
+then it is asumed that the port (7002) is the //wx14 message//
+port. Alternatively, if the ip column contains two ('@@') ampersands,
 for example
 
-     @@wx14.fincher.net 7003
-or
-     @@136.145.84.22    7003
+  @@wx14.fincher.net 7003
 
-then it is assumed that port 7003 is the emwin raw data port.
+or
+
+  @@136.145.84.22    7003
+
+then it is assumed that port 7003 is the raw emwin //data port//.
 In any case, substitute 7002 (or 7003) for the appropriate ethernet port
 of the wx14 device.
 
-When the wx14 message format port is used ('@' address form),
+When the wx14 //message port// is used ('@' address form),
 two status files will be produced,
 
-        /var/npemwin/stats/wx14signal.status
-and
-        /var/npemwin/stats/wx14signal.log
+* /var/npemwin/stats/wx14signal.status
+* /var/npemwin/stats/wx14signal.log
 
-The "status" file has only one record, the latest, written as soon
+The //status// file has only one record, the latest, written as soon
 as Npemwin detects a signal status package coming.  The same
-record is appended to the log file. It is rotated everyday as with
-the other files in that same directory.
+record is appended to the //log// file. The //log// file is rotated
+everyday as with the other files in that same directory.
