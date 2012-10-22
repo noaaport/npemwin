@@ -1,12 +1,16 @@
 #
 # $Id$
+# $Format:Commit: %H$
+# $Format:Author: <%aE> %aD$
 #
 
 - Sun Oct  7 18:26:14 AST 2012
 
 This is the 1st release of the 2.3 branch of the
-NOAAPort Emwin server (npemwin). Packages, sources and documentation
-are available from
+
+     NOAAPort Emwin server (Npemwin)
+
+Packages, sources and documentation are available from
 
     http://www.noaaport.net
 
@@ -14,8 +18,8 @@ Packages for other operating systems or distributions not found there
 can be created upon request.
 
 In this version Npemwin suppports the WX14 device. Instructions for
-enabling this mode are given in the file wx14.README and the
-servers.conf that is installed by the package in the Npemwin
+enabling this mode are given in the file wx14.README, in the bitbucket wiki
+and the servers.conf that is installed by the package in the Npemwin
 configuration directory.
 
 Since version 2.2 the web server supports the "bytes ranges" http
