@@ -1,9 +1,8 @@
-npemwin (2.3.1p5-1) oneiric; urgency=low
+npemwin (2.3.1r-1) oneiric; urgency=low
 
   * Added support for the WX14 device
 
- -- Jose F Nieves <nieves@ltp.uprrp.edu>  Thu, 04 Oct 2012 15:21:02 -0400
-
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Thu, 25 Oct 2012 15:21:02 -0400
 
 npemwin (2.2.1p3-1) oneiric; urgency=low
 
