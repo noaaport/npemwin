@@ -57,7 +57,7 @@ static int grow_server_table(void){
     /*
      * Initialize the new elements.
      */
-    for(i = es_list.allocated; i <= allocated - 1; ++i){
+    for(i = es_list.allocated; i < allocated; ++i){
       init_server(&e[i]);
     }
     es_list.server = e;
@@ -345,7 +345,7 @@ void release_server_list(void){
   if(es_list.server == NULL)
     return;
 
-  for(i = 0; i <= es_list.allocated - 1; ++i){
+  for(i = 0; i < es_list.allocated; ++i){
     if(es_list.server[i].fd != -1)
       close(es_list.server[i].fd);
 

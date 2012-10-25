@@ -525,7 +525,7 @@ static int fill_packet_struct_bb(struct emwin_packet *ep,
 
     b = &(ep->data[0]);
     i = 0;
-    while((*b != '\0') && (i <= ep->data_size - 1)){
+    while((*b != '\0') && (i < ep->data_size)){
       ++i;
       ++b;
     }
@@ -568,7 +568,7 @@ static int fill_packet_struct_serial(struct emwin_packet *ep,
    * Get rid of the initial and final 6 NULL's that are always present.
    */
   datasize -= EMWIN_NULLPAD_SIZE * 2;
-  for(i = 0; i <= datasize - 1; ++i){
+  for(i = 0; i < datasize; ++i){
     ep->rawdata[i] = serialdata[i + EMWIN_NULLPAD_SIZE];
   }
   ep->rawdata_size = datasize;
@@ -633,7 +633,7 @@ static int fill_packet_struct_serial(struct emwin_packet *ep,
 
     b = &(ep->data[0]);
     i = 0;
-    while((*b != '\0') && (i <= ep->data_size - 1)){
+    while((*b != '\0') && (i < ep->data_size)){
       ++i;
       ++b;
     }
@@ -912,7 +912,7 @@ static int checksum(struct emwin_packet *ep){
   int i;
 
   b = (u_char*)&(ep->data[0]);
-  for(i = 0; i <= ep->data_size - 1; ++i){
+  for(i = 0; i < ep->data_size; ++i){
     c += *b;
     ++b;
   }
@@ -934,7 +934,7 @@ static int checkfilename(struct emwin_packet *ep){
   int i;
   int namelen = strlen(ep->header.filename);
 
-  for(i = 0; i <= EMWIN_FNAME_LEN - 1; ++i){
+  for(i = 0; i < EMWIN_FNAME_LEN; ++i){
     c = ep->header.filename[i];
     if(isalnum(c) == 0){
       status = 1;
@@ -948,7 +948,7 @@ static int checkfilename(struct emwin_packet *ep){
   }
 
   if(status == 0){
-    for(i = EMWIN_FNAME_LEN + 1; i <= namelen - 1; ++i){
+    for(i = EMWIN_FNAME_LEN + 1; i < namelen; ++i){
       c = ep->header.filename[i];
       if(isalnum(c) == 0){
 	status = 1;
@@ -958,7 +958,7 @@ static int checkfilename(struct emwin_packet *ep){
   }
 
   if(status == 0){
-    for(i = 0; i <= namelen - 1; ++i){
+    for(i = 0; i < namelen; ++i){
       c = ep->header.filename[i];
       ep->header.filename[i] = tolower(c);
     }

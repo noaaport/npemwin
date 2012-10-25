@@ -291,7 +291,7 @@ int main(void){
 
   while( (line = tsvgetline(fp)) != NULL){
     n = tsvargc();
-    for(i = 0; i <= n - 1; ++i){
+    for(i = 0; i < n; ++i){
       field = tsvargv(i);
       fprintf(stdout,"%s--",field);
     }
