@@ -29,7 +29,7 @@
 ##  again.  See the artcutoff parameter in inn.conf; it should match this
 ##  parameter (/remember/ uses 11 days instead of 10 in order to take into
 ##  account articles whose posting date is one day into the future).
-/remember/:11
+# /remember/:11 (orig)
 
 ##  Keep for 1-15 days, allow Expires: headers to work.  This entry uses
 ##  the syntax appropriate when groupbaseexpiry is true in inn.conf.  Times
@@ -42,4 +42,5 @@
 #0:1:15:never
 
 # local
+/remember/:1
 *:A:1:2:2

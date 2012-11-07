@@ -22,13 +22,14 @@
 ##  make this 28, 30, etc, but it's probably safe to reduce it to 7 in most
 ##  cases if you want to keep your history file smaller.
 # /remember/:10 (orig)
-/remember/:2
 
 ##  Keep for 1-10 days, allow Expires headers to work.  This entry uses
 ##  the syntax appropriate when groupbaseexpiry is true in inn.conf.
 # *:A:1:10:never (orig)
-*:A:1:2:2
 
 ##  Keep for 1-10 days, allow Expires headers to work.  This is an entry
 ##  based on storage class, used when groupbaseexpiry is false.
 #0:1:10:never
+
+# local
+*:A:1:2:2
