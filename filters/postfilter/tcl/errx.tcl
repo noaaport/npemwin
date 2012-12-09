@@ -13,7 +13,7 @@ namespace eval npemwin::syslog {
     set syslog(usesyslog) 0;
 }
 
-proc ::npemwin::errx::warn s {
+proc npemwin::errx::warn s {
 
     global argv0;
 
@@ -21,12 +21,12 @@ proc ::npemwin::errx::warn s {
     puts stderr "$name: $s";
 }
 
-proc ::npemwin::errx::errc s {
+proc npemwin::errx::errc s {
 
     warn $s;
 }
 
-proc ::npemwin::errx::err s {
+proc npemwin::errx::err s {
 
     warn $s;
     exit 1;
@@ -35,14 +35,14 @@ proc ::npemwin::errx::err s {
 #
 # syslog
 #
-proc ::npemwin::syslog::usesyslog {{flag 1}} {
+proc npemwin::syslog::usesyslog {{flag 1}} {
 
     variable syslog;
 
     set syslog(usesyslog) $flag;
 }
 
-proc ::npemwin::syslog::_log_msg s {
+proc npemwin::syslog::_log_msg s {
 
     global argv0;
 
@@ -50,7 +50,7 @@ proc ::npemwin::syslog::_log_msg s {
     exec logger -t $name -- $s;
 }
 
-proc ::npemwin::syslog::msg s {
+proc npemwin::syslog::msg s {
 
     variable syslog;
 
@@ -61,7 +61,7 @@ proc ::npemwin::syslog::msg s {
     }
 }
 
-proc ::npemwin::syslog::warn s {
+proc npemwin::syslog::warn s {
 
     variable syslog;
 
@@ -72,7 +72,7 @@ proc ::npemwin::syslog::warn s {
     }
 }
 
-proc ::npemwin::syslog::errc s {
+proc npemwin::syslog::errc s {
 
     variable syslog;
 
@@ -83,7 +83,7 @@ proc ::npemwin::syslog::errc s {
     }
 }
 
-proc ::npemwin::syslog::err s {
+proc npemwin::syslog::err s {
 
     variable syslog;
 
@@ -98,7 +98,7 @@ proc ::npemwin::syslog::err s {
 #
 # Log to a file
 #
-proc ::npemwin::filelog::msg {logfile s} {
+proc npemwin::filelog::msg {logfile s} {
 
     global argv0;
 
