@@ -11,7 +11,7 @@ rpmrelease = $(shell cat rpm-release)
 rpmroot = ${HOME}/rpmbuild
 
 flavor = $(shell ./flavor.sh)
-arch =  $(shell uname -m)
+arch =  $(shell uname -i)
 dist = $(shell ./dist.sh)
 
 ifeq (${flavor}, opensuse)
