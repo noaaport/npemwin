@@ -1,0 +1,39 @@
+#
+# $Id$
+#
+
+#
+# List of rc variables defined by the filters.lib that can be used
+# in the filters rc files.
+#
+
+rc(prodname)
+rc(fpath)
+rc(fbasename)
+rc(fseqnumber)
+rc(ftype)
+rc(fsize)
+rc(bodypart)
+rc(HEADER)
+rc(header)
+rc(header_wmoid)
+rc(header_station)
+rc(header_time)
+rc(AWIPS)
+rc(awips)
+rc(AWIPS1)
+rc(awips1)
+rc(txtflag)
+rc(seconds)
+rc(ymdhm)
+rc(yyyy)
+rc(m)
+rc(d)
+rc(H)
+rc(M)
+rc(ymd)
+rc(hm)
+rc(ymd_hm)
+rc(ymd_h)
+rc(ymdh)
+rc(ym)

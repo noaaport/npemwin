@@ -31,7 +31,8 @@
 #       they are evaluated for each file received.
 # 
 # At the time the rules are evaluated, the following variables are visible
-# and can be used in this script:
+# and can be used in this script (the complete list is in the file
+# "rcvars.README"):
 #
 #	rc(prodname)
 #	rc(fpath)
@@ -49,7 +50,6 @@
 #	rc(awips)
 #	rc(AWIPS1)
 #	rc(awips1)
-#
 #
 # For example, a file that has been saved as
 #
