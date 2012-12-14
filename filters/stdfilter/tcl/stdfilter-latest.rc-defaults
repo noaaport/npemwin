@@ -19,10 +19,11 @@
 
 lappend cond {1}
 lappend action {
-if {$rc(ftype) == "txt"} {
+if {$rc(ftype) eq "txt"} {
     set _destsubdir [list [file join $rc(ftype) "all" $rc(header_station)]];
     if {[regexp {URGENT} $rc(bodypart)]} {
-	lappend _destsubdir [file join $rc(ftype) "urgent" $rc(header_station)];
+	lappend _destsubdir \
+	[file join $rc(ftype) "urgent" $rc(header_station)];
     }
     if {[regexp {EAS ACTIVATION} $rc(bodypart)]} {
 	lappend _destsubdir [file join $rc(ftype) "eas" $rc(header_station)];
@@ -31,13 +32,16 @@ if {$rc(ftype) == "txt"} {
 	lappend _destsubdir [file join $rc(ftype) "adm" $rc(header_station)];
     }
     if {[regexp {^a} $rc(header_wmoid)]} {
-	lappend _destsubdir [file join $rc(ftype) "summary" $rc(header_station)];
+	lappend _destsubdir \
+		[file join $rc(ftype) "summary" $rc(header_station)];
     }
     if {[regexp {^f} $rc(header_wmoid)]} {
-	lappend _destsubdir [file join $rc(ftype) "forecast" $rc(header_station)];
+	lappend _destsubdir \
+		[file join $rc(ftype) "forecast" $rc(header_station)];
     }
     if {[regexp {^w} $rc(header_wmoid)]} {
-	lappend _destsubdir [file join $rc(ftype) "warnings" $rc(header_station)];
+	lappend _destsubdir \
+		[file join $rc(ftype) "warnings" $rc(header_station)];
     }
     if {[regexp {^[crstu]} $rc(header_wmoid)]} {
 	lappend _destsubdir [file join $rc(ftype) "data" $rc(header_station)];

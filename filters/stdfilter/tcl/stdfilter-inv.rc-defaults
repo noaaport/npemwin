@@ -40,7 +40,9 @@ lappend action {
       set _mode "a";
   }
 
-  set _f [open "$stdfilter(invdir)/${_invfrootname}$stdfilter(invfext)" ${_mode} 0644];
-  puts ${_f} [format "%d %s %s %s" ${_now} $rc(prodname) ${_header} $rc(fbasename)];
+  set _f [open \
+      "$stdfilter(invdir)/${_invfrootname}$stdfilter(invfext)" ${_mode} 0644];
+  puts ${_f} [format "%d %s %s %s" \
+       ${_now} $rc(prodname) ${_header} $rc(fbasename)];
   close ${_f};
 }
