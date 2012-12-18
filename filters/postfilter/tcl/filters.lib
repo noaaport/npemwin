@@ -431,7 +431,7 @@ proc filterlib_file_pipe {inputfile seq cmd_line argv} {
 # These functions come from the nbsputil package
 # 
 
-proc filterlib_pread {args} {
+proc filterlib_pread {cmd args} {
 #
 # A substitute for
 #
@@ -440,8 +440,7 @@ proc filterlib_pread {args} {
 # when the output from <program> is binary data that we don't want exec
 # to modify it.
 #
-    set cmd "|";
-    append cmd [join $args " "];
+    set cmd [concat "|${cmd}" $args];
 
     set content "";
     set status [catch {
@@ -461,10 +460,9 @@ proc filterlib_pread {args} {
     return $content;
 }
 
-proc filterlib_pwrite_block {data args} {
+proc filterlib_pwrite_block {data cmd args} {
 
-    set cmd "|";
-    append cmd [join $args " "];
+    set cmd [concat "|${cmd}" $args];
 
     set status [catch {
         set F [open $cmd w];
@@ -481,10 +479,9 @@ proc filterlib_pwrite_block {data args} {
     }
 }
 
-proc filterlib_pwrite_nonblock {data args} {
+proc filterlib_pwrite_nonblock {data cmd args} {
 
-    set cmd "|";
-    append cmd [join $args " "];
+    set cmd [concat "|${cmd}" $args];
 
     set status [catch {
         set F [open $cmd w];
