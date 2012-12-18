@@ -1,9 +1,9 @@
 npemwin (2.3.2p1-1) oneiric; urgency=low
 
   * Added option to save the txt files in the digatmos dir with crlf
-    translation.
+    translation
 
- -- Jose F Nieves <nieves@ltp.uprrp.edu>  Mon Dec 17 21:46:38 AST 2012
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Tue, 18 Dec 2012 00:56:35 -0400
  
 npemwin (2.3.1r-1) oneiric; urgency=low
 
