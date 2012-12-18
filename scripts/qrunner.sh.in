@@ -62,6 +62,15 @@ UNZIP=%UNZIP%
 ### end defaults
 
 #
+# Non-configurable
+#
+# Whether to translate the crlf \r\n sequence in txt files and save them in
+# native unix format with just the lf \n. The default setting is to do the
+# translation here, so that all the txt files are saved in unix format.
+#
+translate_crlf=1
+
+#
 # functions
 #
 
@@ -265,12 +274,17 @@ do
 
 	    fbasename=$name.$seqnumkey.$ext
             if [ $ext != "txt" ]
-            then
+	    then
                 mv ${_flistdir}/${_f} ${out_dirname}/$subdir/$fbasename
-            else
-	    	# Try to remove the control characters
-                tr -d '\r\001\003' < ${_flistdir}/${_f} > \
-                    ${out_dirname}/$subdir/$fbasename
+	    else
+		if [ $translate_crlf -eq 1 ]
+                then
+                    tr -d '\r\001\003' < ${_flistdir}/${_f} > \
+                        ${out_dirname}/$subdir/$fbasename
+		else
+		    tr -d '\001\003' < ${_flistdir}/${_f} > \
+                        ${out_dirname}/$subdir/$fbasename
+		fi
             fi
 	    [ $verbose -eq 1 ] && echo "created $fbasename"
 

@@ -35,6 +35,8 @@ set dafilter(rcdir)	[file join $gf(confdir) "rc.d/da"];
 set dafilter(confdirs)  $gf(localconfdirs);
 set dafilter(postrc)	"";
 set dafilter(datadir)	[file join $gf(datadir) "digatmos"];
+#
+set dafilter(enable_crlf) 0;  # 1 => end lines with crlf
 
 # The default optional configuration file for this filter.
 #
@@ -163,6 +165,10 @@ proc filter_file {rc_array seq fpath savedir savename args} {
     upvar $rc_array rc;
     global dafilter;
 
+    if {$dafilter(enable_crlf) == 1} {
+	lappend args "-r";
+    }
+
     if {$dafilter(archive_enable) != 2} {
         filter_file_normal $seq $fpath $savedir $savename $args;
     }
@@ -173,9 +179,9 @@ proc filter_file {rc_array seq fpath savedir savename args} {
     }
 }
 
-proc filter_file_normal {seq fpath savedir savename args} {
+proc filter_file_normal {seq fpath savedir savename argv} {
 #
-# If "args" is -a, the output file is opened in "append" mode,
+# If "argv" is -a, the output file is opened in "append" mode,
 # otherwise in "write" mode (i.e., it is assumed to be "w").
 #
     global dafilter;
@@ -186,7 +192,7 @@ proc filter_file_normal {seq fpath savedir savename args} {
     file mkdir $savedir;
 
     set status [catch {
-	filterlib_file_save $seq $fpath $savedir $savename $args;
+	filterlib_file_save $seq $fpath $savedir $savename $argv;
     } errmsg];
 
     cd $currdir;
@@ -196,7 +202,7 @@ proc filter_file_normal {seq fpath savedir savename args} {
     }
 }
 
-proc filter_file_archive {rc_array seq fpath savedir savename args} {
+proc filter_file_archive {rc_array seq fpath savedir savename argv} {
 
     upvar $rc_array rc;
     global dafilter;
@@ -208,7 +214,7 @@ proc filter_file_archive {rc_array seq fpath savedir savename args} {
 
     set status [catch {
         file mkdir $archive_savedir;
-	filterlib_file_save $seq $fpath $archive_savedir $savename $args;
+	filterlib_file_save $seq $fpath $archive_savedir $savename $argv;
     } errmsg];
 
     cd $currdir;

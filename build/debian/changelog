@@ -1,3 +1,10 @@
+npemwin (2.3.2p1-1) oneiric; urgency=low
+
+  * Added option to save the txt files in the digatmos dir with crlf
+    translation.
+
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Mon Dec 17 21:46:38 AST 2012
+ 
 npemwin (2.3.1r-1) oneiric; urgency=low
 
   * Added support for the WX14 device

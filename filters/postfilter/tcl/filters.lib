@@ -193,9 +193,21 @@ proc filterlib_get_rcvars {rc_name prodname fpath} {
 
 proc filterlib_stripcr {body} {
 
+    set r "";
     set lines [split $body "\n"];
     foreach l $lines {
         append r [string trimright $l] "\n";
+    }
+
+    return $r;
+}
+
+proc filterlib_addcr {body} {
+
+    set r "";
+    set lines [split $body "\n"];
+    foreach l $lines {
+        append r [string trimright $l] "\r\n";
     }
 
     return $r;
@@ -286,11 +298,12 @@ proc filterlib_file_cat {file} {
 #
 # Procedures to mimick the functionality of nbspfile.
 #
-proc filterlib_file_save {seq inputfile outputdir outputfile args} {
+proc filterlib_file_save {seq inputfile outputdir outputfile argv} {
     #
-    # The args are flags:
+    # The argv are flags:
     #
     # [-a] => append
+    # [-r] => ensure each line ends with \r\n
     # [-t] => do not add gmpk header and trailer
     #
 
@@ -301,13 +314,18 @@ proc filterlib_file_save {seq inputfile outputdir outputfile args} {
 
     # Get the flags
     set f_append 0;
+    set f_addcr 0;
     set f_nogmpk_header 0;
-    foreach flag $args {
+    foreach flag $argv {
         switch -- $flag {
             "-a" {
                 set f_append 1;
             }
             
+	    "-r" {
+	    	 set f_addcr 1;
+	    }
+
             "-t" {
 		set f_nogmpk_header 1;
             }
@@ -334,7 +352,11 @@ proc filterlib_file_save {seq inputfile outputdir outputfile args} {
 	    puts -nonewline $fout [format $gmpk_header_fmt [expr $seq % 1000]];
 	}
 
-        puts -nonewline $fout [read $fin];
+	if {$f_addcr == 0} {
+            puts -nonewline $fout [read $fin];
+	} else {
+	    puts -nonewline $fout [filterlib_addcr [read $fin]];
+	}
 
 	if {$f_nogmpk_header == 0} {
 	    puts -nonewline $fout $gmpk_trailer_str;
@@ -353,9 +375,9 @@ proc filterlib_file_save {seq inputfile outputdir outputfile args} {
     }
 }
 
-proc filterlib_file_pipe {inputfile seq cmd_line args} {
+proc filterlib_file_pipe {inputfile seq cmd_line argv} {
     #
-    # The args are flags:
+    # The argv are flags:
     #
     # [-g] => add gmpk header and trailer
     #
@@ -368,7 +390,7 @@ proc filterlib_file_pipe {inputfile seq cmd_line args} {
 
     # Get the flags
     set f_addgmpk_header 0;
-    foreach flag $args {
+    foreach flag $argv {
         switch -- $flag {
             "-g" {
                 set f_addgmpk_header 1;
@@ -418,11 +440,12 @@ proc filterlib_pread {args} {
 # when the output from <program> is binary data that we don't want exec
 # to modify it.
 #
-    set s [join $args " "];
+    set cmd "|";
+    append cmd [join $args " "];
 
     set content "";
     set status [catch {
-	set F [open "|$s" r];
+	set F [open $cmd r];
 	fconfigure $F -encoding binary -translation binary
 	set content [read $F];
     } errmsg];
@@ -440,9 +463,11 @@ proc filterlib_pread {args} {
 
 proc filterlib_pwrite_block {data args} {
 
-    set s [join $args " "];
+    set cmd "|";
+    append cmd [join $args " "];
+
     set status [catch {
-        set F [open "|$s" w];
+        set F [open $cmd w];
         fconfigure $F -buffering none -encoding binary -translation binary;
 	puts $F $data;
     } errmsg];
@@ -458,9 +483,11 @@ proc filterlib_pwrite_block {data args} {
 
 proc filterlib_pwrite_nonblock {data args} {
 
-    set s [join $args " "];
+    set cmd "|";
+    append cmd [join $args " "];
+
     set status [catch {
-        set F [open "|$s" w];
+        set F [open $cmd w];
         fconfigure $F -buffering none -encoding binary -translation binary;
 	puts $F $data;
         fconfigure $F -blocking 0;

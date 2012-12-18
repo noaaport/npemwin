@@ -55,6 +55,14 @@ set _currdir [pwd];
 cd $stdfilter(latestdir);
 foreach _subdir ${_destsubdir} {
     file mkdir ${_subdir};
+    #
+    # The "latest" files are saved in native unix format, with (\n) ending,
+    # and with any extra control characters removed. We should assume that the
+    # qrunner has done the proper thing before importing the file.
+    # Othrwise we have to 
+    # exec
+    #   tr -d {\r\001\003} < $rc(fpath) > [file join ${_subdir} ${_destname}];
+    #
     file copy -force $rc(fpath) [file join ${_subdir} ${_destname}];
 }
 cd ${_currdir};
