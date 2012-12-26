@@ -1,4 +1,4 @@
-Date:    Mon, 09 Apr 2012 10:53:17 MST
+Date:    Tue, 25 Dec 2012 22:00:00 CST
 To:      Jose F Nieves <nieves@ltp.uprrp.edu>
 From:    Craig Fincher <cfincher14@yahoo.com>
 Subject: Npemwin on Soekris net5501
@@ -58,7 +58,6 @@ if necessary) :
 
 comconsole_speed="9600" console="comconsole"
 
-
 - Special Consideration for Network Interface Configuration
 
 If the network card in your installation PC is something other than 'VIA Rhine,
@@ -79,10 +78,38 @@ periodically, as one might expect, they take advantage of all of the
 processing power of the 500Mhz Geode CPU.  For example, CPU: 68.9% user,
 0.0% nice, 31.1% system,  0.0% interrupt,  0.0% idle
 
+- Storage Notes
+
+The Soekris net5501 is capable of booting via a compact flash card, an
+internal 2.5 inch hard drive or PXE.  One can even install the OS 
+on a compact flash card and use the installed 2.5 inch drive as the 
+primary storage volume for npemwin.  Instead, consider a simple 
+installation with the OS, application and data on a 2.5 inch SSD.
+Otherwise the performance of the system will generally track to the 
+slower performance characteristics of the compact flash card instead 
+of the faster 2.5 inch SSD.
+
+When selecting an SSD for the net5501, consider an SLC SSD drive instead
+of one of the more common MLC-based drives available.  In short, 
+SLC-based drives typically exhibit higher performance and longer 
+life--at a higher cost, though.  For background:
+http://en.wikipedia.org/wiki/Multi-level_cell#Single-level_cell
+The Intel 313 series is worth investigating.  
 
 - Final Thoughts
 
-You many also want to try compiling a kernel optimized for the Soekris
-box as outlined in this message from the Soekris mailing list:
+To achieve the best performance on the net5501 with FreeBSD, one should
+compile and use a customized kernel.  Add
 
-  http://lists.soekris.com/pipermail/soekris-tech/2007-June/012325.html
+options CPU_SOEKRIS
+options CPU_GEODE
+
+to the kernel configuration file.  For more specific guidance,
+visit the Soekris Wiki:
+
+  http://wiki.soekris.info/Installing_FreeBSD#net5501
+
+For additional information, the FreeBSD Handbook has a very helpful section
+entitled "Building and Installing a Custom Kernel" :
+
+  http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/kernelconfig-building.html

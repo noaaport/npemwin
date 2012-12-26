@@ -36,7 +36,7 @@ set dafilter(confdirs)  $gf(localconfdirs);
 set dafilter(postrc)	"";
 set dafilter(datadir)	[file join $gf(datadir) "digatmos"];
 #
-set dafilter(enable_crlf) 0;  # 1 => end lines with crlf
+set dafilter(enable_crlf) 1;  # 1 => end lines with crlf
 
 # The default optional configuration file for this filter.
 #
