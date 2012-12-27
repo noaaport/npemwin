@@ -19,7 +19,7 @@ EXAMPLECONFFILE = etc/httpd-vhost.conf-ex
 
 WWWTGZFILE = www.tgz
 WWWHTDOCSDIR = htdocs
-WWWHTDOCSSUBDIRS = pub
+WWWHTDOCSSUBDIRS = htdocs/pub
 WWWEMPTYSUBDIRS = auth
 WWWDIRS = ${WWWHTDOCSDIR} ${WWWEMPTYSUBDIRS}
 WWWWORKDIR = work
@@ -39,13 +39,12 @@ ${TCLTARGET}: ${TCLSOURCE}
 ${WWWTGZFILE}: ${WWWTGZFILE}-force
 
 ${WWWTGZFILE}-force:
+	rm -rf ${WWWWORKDIR}
+	cd ${WWWHTDOCSDIR}; ${MAKE}
 	install -d ${WWWWORKDIR}/${WWWHTDOCSDIR}
 	install -d ${WWWWORKDIR}/${WWWEMPTYSUBDIRS}
-#	cp -R ${WWWHTDOCSSUBDIRS} ${WWWWORKDIR}/${WWWHTDOCSDIR}
-	tar -c @EXCLUDE@'*.svn*' -C ${WWWHTDOCSDIR} -f - ${WWWHTDOCSSUBDIRS} \
-		| tar -x -C ${WWWWORKDIR}/${WWWHTDOCSDIR} -f -
-	cd ${WWWWORKDIR}; \
-		tar -c @EXCLUDE@'*.svn*' -z -f ../${WWWTGZFILE} ${WWWDIRS}
+	cp -r ${WWWHTDOCSSUBDIRS} ${WWWWORKDIR}/${WWWHTDOCSDIR}
+	cd ${WWWWORKDIR}; tar -c -z -f ../${WWWTGZFILE} ${WWWDIRS}
 
 ${SAMPLECONFFILE}: ${CONFFILE}
 	cp ${CONFFILE} ${SAMPLECONFFILE}
@@ -118,11 +117,11 @@ lib/dist/thread.tcl \
 lib/dist/license.terms
 
 NPEMWINLIBFILES = \
-lib/npemwin/functions.tcl \
-lib/npemwin/npemwin.tcl \
-lib/npemwin/npemwin_stats.awk \
-lib/npemwin/override.tcl \
 lib/npemwin/extensions.tcl \
-lib/npemwin/npemwinmetar.tcl \
-lib/npemwin/functionsmetar.tcl \
-lib/npemwin/npemwinget.tcl
+lib/npemwin/functions_metar.tcl \
+lib/npemwin/functions_status.tcl \
+lib/npemwin/npemwin_get.tcl \
+lib/npemwin/npemwin_metar.tcl \
+lib/npemwin/npemwin_status.tcl \
+lib/npemwin/npemwin_stats.awk \
+lib/npemwin/override.tcl

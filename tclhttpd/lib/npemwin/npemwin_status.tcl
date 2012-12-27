@@ -1,9 +1,9 @@
 #
 # $Id$
 #
-Direct_Url /npemwin npemwin
+Direct_Url /npemwin/status npemwin/status
 
-proc npemwin/stats {} {
+proc npemwin/status/stats {} {
 #
 # Daily Statistics summary of products and frames received and missed
 # and minute summary for the last ten minutes.
@@ -23,7 +23,7 @@ proc npemwin/stats {} {
     return $result
 }
 
-proc npemwin/connections {} {
+proc npemwin/status/connections {} {
 #
 # Active connections
 #
@@ -38,7 +38,7 @@ proc npemwin/connections {} {
     return [npemwin_connections $npemwin_active_file]
 }
 
-proc npemwin/serverlist {} {
+proc npemwin/status/serverlist {} {
 #
 # Active servers
 #
@@ -53,7 +53,7 @@ proc npemwin/serverlist {} {
     return [npemwin_serverlist $npemwin_serverlist_file]
 }
 
-proc npemwin/printconf {} {
+proc npemwin/status/printconf {} {
 #
 # Print current npemwind configuration.
 #
@@ -65,7 +65,7 @@ proc npemwin/printconf {} {
     return $result;
 }
 
-proc npemwin/received_last_minute {} {
+proc npemwin/status/received_last_minute {} {
 #
 # List of products received in the last minute.
 #
@@ -84,7 +84,7 @@ proc npemwin/received_last_minute {} {
     return [npemwin_received $npemwin_received_file]
 }
 
-proc npemwin/received_minute {hhmm} {
+proc npemwin/status/received_minute {hhmm} {
 #
 # List of products received in a given minute.
 #
@@ -100,7 +100,7 @@ proc npemwin/received_minute {hhmm} {
     return [npemwin_received $npemwin_received_file]
 }
 
-proc npemwin/received_past_hour {} {
+proc npemwin/status/received_past_hour {} {
 #
 # List of products received in the past hour
 #
@@ -111,7 +111,7 @@ proc npemwin/received_past_hour {} {
     return [npemwin_received_hour $hh]
 }
 
-proc npemwin/received_last_hour {} {
+proc npemwin/status/received_last_hour {} {
 #
 # List of products received within the last hour
 #
@@ -122,7 +122,7 @@ proc npemwin/received_last_hour {} {
     return [npemwin_received_hour $hh $mm]
 }
 
-proc npemwin/received_last_24hours {} {
+proc npemwin/status/received_last_24hours {} {
 #
 # List of products received in the last 24 hours.
 #
@@ -149,7 +149,7 @@ proc npemwin/received_last_24hours {} {
     return $result;
 }
 
-proc npemwin/received_by_station {station ftype} {
+proc npemwin/status/received_by_station {station ftype} {
 
      global Config;
 
@@ -157,12 +157,12 @@ proc npemwin/received_by_station {station ftype} {
 		$station $ftype $Config(npemwinfilesdir)];
 }
 
-proc npemwin/station_catalog_txt {} {
+proc npemwin/status/station_catalog_txt {} {
 
     return [npemwin_station_catalog_txt];
 }
 
-proc npemwin/received_by_station_rss {station ftype} {
+proc npemwin/status/received_by_station_rss {station ftype} {
 
      global Config;
 

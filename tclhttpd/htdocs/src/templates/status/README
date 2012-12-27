@@ -1,0 +1,5 @@
+These scripts must be called with a query string:
+
+    received_minute.tml?hhmm=<hhmm>
+    received_by_station?station=<station>&ftype=<ftype>
+    received_by_station_rss?station=<station>&ftype=<ftype>

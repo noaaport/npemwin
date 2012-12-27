@@ -1,0 +1,19 @@
+[Doc_Dynamic]
+
+<html>
+<head>
+  <title>Npemwin</title>
+  <link rel="stylesheet" href="css/npemwin.css" type="text/css"/>
+</head>
+
+<body>
+@header@
+@topmenu@
+
+<div id="main">
+@leftmenu@
+@body@
+</div>
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 #
 # $Id$
 #
-Direct_Url /npemwinmetar npemwinmetar
+Direct_Url /npemwin/metar npemwin/metar
 
 # Read the Metar ICAO definitions. This loads the array metarfilter(icao,...)
 # in the global context, but it is used only by the functions in this file.
@@ -14,7 +14,7 @@ if {[file exists $Config(npemwinmetaricaodef)]} {
     unset metarfilter;
 }
 
-proc npemwinmetar/display {} {
+proc npemwin/metar/display {} {
 
     global Config;
 
@@ -24,7 +24,7 @@ proc npemwinmetar/display {} {
     return $result;
 }
 
-proc npemwinmetar/station {station} {
+proc npemwin/metar/station {station} {
 
     global Config;
 
@@ -49,8 +49,8 @@ proc npemwinmetar/station {station} {
     }
     set result "<h3>Metar Observations for ${_loc}</h3>\n";
 
-    append result \
-    [display_metarplots $Config(docRoot) $Config(npemwinmetarplothtdir) $station];
+    append result [display_metarplots $Config(docRoot) \
+		       $Config(npemwinmetarplothtdir) $station];
 
     append result "<table border>\n";
     append result [format $fmt "type" ""];
@@ -81,7 +81,7 @@ proc npemwinmetar/station {station} {
     return $result
 }
 
-proc npemwinmetar/collective {collective} {
+proc npemwin/metar/collective {collective} {
 
     set fmt [proc_fmtrow 2];
 
@@ -115,7 +115,7 @@ proc npemwinmetar/collective {collective} {
     return $result
 }
 
-proc npemwinmetar/report {obstation obtype obdata} {
+proc npemwin/metar/report {obstation obtype obdata} {
 #
 # npemwinmtrd is the tcl decoder that uses the tclmetar library. The command
 # executed is
@@ -136,7 +136,7 @@ proc npemwinmetar/report {obstation obtype obdata} {
     return $result;
 }
 
-proc npemwinmetar/plotdata {station} {
+proc npemwin/metar/plotdata {station} {
 #
 # npemwinmtrplotdat is the metarfilter tool that extracts the data from the
 # MetarWeather files and decodes them by calling npemwinmtrd.
