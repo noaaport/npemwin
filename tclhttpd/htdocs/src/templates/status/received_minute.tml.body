@@ -2,7 +2,7 @@
 <div id="mainright">
   [
     set hhmm [::ncgi::value "hhmm"]
-    npemwin/status/received_minute $hhmm]
+    npemwin/status/received_minute $hhmm
   ]
 </div>
 

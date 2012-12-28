@@ -3,7 +3,7 @@
   [
     set station [::ncgi::value "station"]
     set ftype [::ncgi::value "ftype"]
-    npemwin/status/received_by_station_rss $station $ftype]
+    npemwin/status/received_by_station_rss $station $ftype
   ]
 </div>
 
