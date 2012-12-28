@@ -2,8 +2,8 @@
 
 <html>
 <head>
-  <title>Npemwin</title>
-  <link rel="stylesheet" href="css/npemwin.css" type="text/css"/>
+  <title>Npemwin@[exec hostname -s]</title>
+  <link rel="stylesheet" href="/css/npemwin.css" type="text/css"/>
 </head>
 
 <body>
@@ -11,6 +11,7 @@
 @topmenu@
 
 <div id="main">
+@leftmenu@
 @body@
 </div>
 

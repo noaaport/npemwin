@@ -43,7 +43,7 @@ do
 	-e "/@topmenu@/d" \
 	-e "/@leftmenu@/r ${include_dir}/leftmenu.html" \
 	-e "/@leftmenu@/d" \
-	-e "/@body@/r ${p}.tml.body" \
+	-e "/@body@/r ${templates_dir}/status/${p}.tml.body" \
 	-e "/@body@/d" \
 	${templates_dir}/status/main.tml.in > ${status_dir}/${p}.tml
 done
@@ -56,7 +56,7 @@ do
 	-e "/@topmenu@/d" \
 	-e "/@leftmenu@/r ${include_dir}/leftmenu.html" \
 	-e "/@leftmenu@/d" \
-	-e "/@body@/r ${p}.tml.body" \
+	-e "/@body@/r ${templates_dir}/metar/${p}.tml.body" \
 	-e "/@body@/d" \
 	${templates_dir}/metar/main.tml.in > ${metar_dir}/${p}.tml
 done
@@ -69,7 +69,7 @@ do
 	-e "/@topmenu@/d" \
 	-e "/@leftmenu@/r ${include_dir}/leftmenu.html" \
 	-e "/@leftmenu@/d" \
-	-e "/@body@/r ${p}.tml.body" \
+	-e "/@body@/r ${templates_dir}/index/${p}.tml.body" \
 	-e "/@body@/d" \
 	${templates_dir}/index/main.tml.in > ${index_dir}/${p}.tml
 done

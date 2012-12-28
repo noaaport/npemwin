@@ -1,7 +1,10 @@
 #
 # $Id$
 #
-Direct_Url /npemwin/status npemwin/status
+
+#
+## Direct_Url /npemwin/status npemwin/status
+#
 
 proc npemwin/status/stats {} {
 #
