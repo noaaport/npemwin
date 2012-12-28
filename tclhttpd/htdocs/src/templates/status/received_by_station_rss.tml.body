@@ -1,5 +1,9 @@
 
 <div id="mainright">
-  [npemwin/status/received_by_station_rss $station $ftype]
+  [
+    set station [::ncgi::value "station"]
+    set ftype [::ncgi::value "ftype"]
+    npemwin/status/received_by_station_rss $station $ftype]
+  ]
 </div>
 
