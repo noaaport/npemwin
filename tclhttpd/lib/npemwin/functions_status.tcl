@@ -217,7 +217,7 @@ proc npemwin_received_hour {hh {mm 59}} {
     set result "<h3>Products received at $hh</h3>\n"; 
     foreach file $flist {
 	set hhmm [file rootname $file];
-	set href "<a href=\"received_minute?hhmm=$hhmm\">$hhmm</a>\n";
+	set href "<a href=\"/npemwin/status/received_minute.tml?hhmm=$hhmm\">$hhmm</a>\n";
 	append result $href;
     }
 
@@ -232,7 +232,7 @@ proc npemwin_received_by_station {station ftype basedir} {
 
     set result "<h1>\n";
     append result \
-	"<a href=\"/npemwin/status/received_by_station_rss?station=$station\">";
+	"<a href=\"/npemwin/status/received_by_station_rss.tml?station=$station\">";
     append result \
 	"<img src=\"/images/16px-Feed-icon.svg.png\" border=0></a>\n";
     append result [string toupper $station] "\n</h1>";
@@ -293,10 +293,10 @@ proc npemwin_station_catalog_txt {} {
 	    }
 	    if {$state_name ne ""} {
 		lappend href($state_name) \
-		    "<a href=\"/npemwin/status/received_by_station?station=$station&ftype=txt\">$station</a>";
+		    "<a href=\"/npemwin/status/received_by_station.tml?station=$station&ftype=txt\">$station</a>";
 	    } else {
 		lappend href_other \
-		    "<a href=\"/npemwin/status/received_by_station?station=$station&ftype=txt\">$station</a>";
+		    "<a href=\"/npemwin/status/received_by_station.tml?station=$station&ftype=txt\">$station</a>";
 	    }
 	}
     }
