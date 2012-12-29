@@ -1,7 +1,0 @@
-These scripts must be called with a query string:
-
-  display
-  station?station=<station>
-  collective?collective=<collective>
-  report?obstation=<obstation>&obtype=<obtype>&obdata=<obdata>
-  plotdata?station=<station>
