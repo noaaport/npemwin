@@ -103,7 +103,7 @@ proc npemwin/status/received_minute {hhmm} {
     return [npemwin_received $npemwin_received_file]
 }
 
-proc npemwin/status/received_past_hour {} {
+proc npemwin/status/received_past_hour {received_minute_tml} {
 #
 # List of products received in the past hour
 #
@@ -111,10 +111,10 @@ proc npemwin/status/received_past_hour {} {
     set t [expr $now - 3600]
     set hh [clock format $t -format "%H" -gmt true]
 
-    return [npemwin_received_hour $hh]
+    return [npemwin_received_hour $received_minute_tml $hh]
 }
 
-proc npemwin/status/received_last_hour {} {
+proc npemwin/status/received_last_hour {received_minute_tml} {
 #
 # List of products received within the last hour
 #
@@ -122,10 +122,10 @@ proc npemwin/status/received_last_hour {} {
     set hh [clock format $now -format "%H" -gmt true]
     set mm [clock format $now -format "%M" -gmt true]
 
-    return [npemwin_received_hour $hh $mm]
+    return [npemwin_received_hour $received_minute_tml $hh $mm]
 }
 
-proc npemwin/status/received_last_24hours {} {
+proc npemwin/status/received_last_24hours {received_minute_tml} {
 #
 # List of products received in the last 24 hours.
 #
@@ -145,7 +145,7 @@ proc npemwin/status/received_last_24hours {} {
 	if {$hh eq $hh_now} {
 	    set done 1;
 	} else {
-	    append result [npemwin_received_hour $hh]
+	    append result [npemwin_received_hour $received_minute_tml $hh]
 	}
     }
 

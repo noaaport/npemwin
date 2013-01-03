@@ -1,5 +1,5 @@
 
 <div id="mainright">
-  [npemwin/status/received_last_24hours]
+  [npemwin/status/received_last_24hours "/npemwin/status/received_minute.tml"]
 </div>
 

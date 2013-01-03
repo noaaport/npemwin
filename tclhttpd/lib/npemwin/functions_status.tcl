@@ -185,7 +185,7 @@ proc npemwin_received {file} {
     return $result
 }
 
-proc npemwin_received_hour {hh {mm 59}} {
+proc npemwin_received_hour {received_minute_tml hh {mm 59}} {
 #
 # The mm argument, if given, determines the maximum minute to include. It is
 # used when the function is called for the current hour.
@@ -217,7 +217,9 @@ proc npemwin_received_hour {hh {mm 59}} {
     set result "<h3>Products received at $hh</h3>\n"; 
     foreach file $flist {
 	set hhmm [file rootname $file];
-	set href "<a href=\"/npemwin/status/received_minute.tml?hhmm=$hhmm\">$hhmm</a>\n";
+	# set href "<a href=\"/npemwin/status/received_minute.tml?hhmm=$hhmm\">$hhmm</a>\n";
+	set href \
+	    "<a href=\"${received_minute_tml}?hhmm=${hhmm}\">${hhmm}</a>\n";
 	append result $href;
     }
 
