@@ -1,0 +1,38 @@
+[Doc_Dynamic]
+
+<html>
+<head>
+  <title>Npemwin@[exec hostname -s]</title>
+  <link rel="stylesheet" href="/m/css/m.npemwin.css" type="text/css"/>
+</head>
+
+<body bgcolor="lightgray">
+
+<b class="menu">Npemwin Http Server</b><br/>
+<button
+type="button"
+onclick='window.location="/m/m.index.tml"'>
+Home
+</button>
+<br/>
+<br/>
+<br/>
+
+[
+  set val [::ncgi::value "products"];
+  if {$val eq "lastminute"} {
+    return [npemwin/status/received_last_minute]
+  } elseif {$val eq "lasthour"} {
+    return [npemwin/status/received_last_hour \
+    	   "/m/m.received_minute.tml"]
+  } elseif {$val eq "pasthour"} {
+    return [npemwin/status/received_past_hour \
+    	   "/m/m.received_minute.tml"]
+  } elseif {$val eq "last24hours"} {
+    return [npemwin/status/received_last_24hours \
+    	   "/m/m.received_minute.tml"]
+  }
+]
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+[Doc_Dynamic]
+
+<html>
+<head>
+  <title>Npemwin@[exec hostname -s]</title>
+  <link rel="stylesheet" href="/m/css/m.npemwin.css" type="text/css"/>
+</head>
+
+<body bgcolor="lightgray">
+
+<b class="menu">Npemwin Http Server</b><br/>
+<button
+type="button"
+onclick='window.location="/m/m.index.tml"'>
+Home
+</button>
+<br/>
+<br/>
+<br/>
+
+[
+  set val [::ncgi::value "server"];
+  if {$val eq "statistics"} {
+    return [npemwin/status/stats]
+  } elseif {$val eq "clients"} {
+    return [npemwin/status/connections]
+  } elseif {$val eq "servers"} {
+    return [npemwin/status/serverlist]
+  } elseif {$val eq "webserver"} {
+    return {<script type="text/javascript">
+    window.location.href="/status/"
+    </script>}
+  }
+]
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+[Doc_Dynamic]
+
+<html>
+<head>
+  <title>Npemwin@[exec hostname -s]</title>
+  <link rel="stylesheet" href="/m/css/m.npemwin.css" type="text/css"/>
+</head>
+
+<body bgcolor="lightgray">
+
+<b class="menu">Npemwin Http Server</b><br/>
+<button
+type="button"
+onclick='window.location="/m/m.index.tml"'>
+Home
+</button>
+<br/>
+<br/>
+<br/>
+
+<form method="post" action="/m/m.action_server.tml">
+<b class="menu">Server</b>
+<br/>
+<input type="submit" name="action" value="View">
+<select name="server">
+<option value="statistics" selected>Statistics</option>
+<option value="clients">Clients</option>
+<option value="servers">Servers</option>
+<option value="webserver">Web Server</option>
+</select>
+</form>
+
+<b class="menu">Products</b><br/>
+<form method="post" action="/m/m.action_products.tml">
+<input type="submit" name="action" value="View">
+<select name="products">
+<option value="lastminute" selected>Last Minute</option>
+<option value="lasthour">Last hour</option>
+<option value="pasthour">Past hour</option>
+<option value="last24hours">Last 24 hours</option>
+</select>
+</form>
+
+<b class="menu">Data</b><br/>
+<form method="post" action="/m/m.action_data.tml">
+<input type="submit" name="action" value="View">
+<select name="data">
+<option value="text" selected>Text</option>
+<option value="gif">GIF</option>
+<option value="jpg">JPG</option>
+<option value="digatmos">Digatmos</option>
+<option value="metar">Metar</option>
+<option value="gempak">Gempak</option>
+</select>
+</form>
+
+<br/>
+<b class="menu">About</b><br/>
+
+<button
+type="button"
+onclick='window.location="http://www.noaaport.net/"'>
+Noaaport.Net
+</button>
+
+<button
+type="button"
+onclick='window.location="http://www.iemwin.net/"'>
+iEmwin
+</button>
+<br/>
+
+</body>
+</html>

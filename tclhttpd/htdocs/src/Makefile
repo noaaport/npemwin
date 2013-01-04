@@ -2,7 +2,8 @@ BUILDDIR =	pub
 
 CSSDIR	=	css
 IMGDIR =	images
-SUBDIRS =	${CSSDIR} ${IMGDIR}
+MOBILEDIR =	m
+SUBDIRS =	${CSSDIR} ${IMGDIR} ${MOBILEDIR}
 
 all:
 	./mk-tml.sh ${BUILDDIR}

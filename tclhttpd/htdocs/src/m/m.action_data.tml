@@ -1,0 +1,51 @@
+[Doc_Dynamic]
+
+<html>
+<head>
+  <title>Npemwin@[exec hostname -s]</title>
+  <link rel="stylesheet" href="/m/css/m.npemwin.css" type="text/css"/>
+</head>
+
+<body bgcolor="lightgray">
+
+<b class="menu">Npemwin Http Server</b><br/>
+<button
+type="button"
+onclick='window.location="/m/m.index.tml"'>
+Home
+</button>
+<br/>
+<br/>
+<br/>
+
+[
+  set val [::ncgi::value "data"];
+  if {$val eq "text"} {
+    return {<script type="text/javascript">
+    window.location.href="/latest/txt/"
+    </script>}
+ } elseif {$val eq "gif"} {
+    return {<script type="text/javascript">
+    window.location.href="/latest/gif/"
+    </script>}
+ } elseif {$val eq "jpg"} {
+    return {<script type="text/javascript">
+    window.location.href="/latest/jpg/"
+    </script>}
+  } elseif {$val eq "digatmos"} {
+    return {<script type="text/javascript">
+    window.location.href="/digatmos/"
+    </script>}
+  } elseif {$val eq "metar"} {
+    return {<script type="text/javascript">
+    window.location.href="/npemwin/metar/display"
+    </script>}
+  } elseif {$val eq "gempak"} {
+    return {<script type="text/javascript">
+    window.location.href="/gempak/"
+    </script>}
+  }
+]
+
+</body>
+</html>
