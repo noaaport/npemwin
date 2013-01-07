@@ -1,0 +1,95 @@
+[Doc_Dynamic]
+
+<html>
+<head>
+  <title>Npemwin@[exec hostname -s]</title>
+  <link rel="stylesheet" href="/m/css/m.npemwin.css" type="text/css"/>
+</head>
+
+<body bgcolor="lightgray">
+
+<b class="menu">Npemwin Http Server</b><br/>
+<button
+type="button"
+onclick='window.location="/m/m.index.tml"'>
+Home
+</button>
+<br/>
+<br/>
+<br/>
+
+<b class="menu">Metar</b><br/>
+<form method="post" action="/m/m.action_metar.tml">
+<input type="submit" name="action" value="View">
+<select name="collective">
+
+<option value="Alabama">Alabama</option>
+<option value="Alaska">Alaska</option>
+<option value="Alberta">Alberta</option>
+<option value="Arizona">Arizona</option>
+<option value="Arkansas">Arkansas</option>
+<option value="British_Columbia">British_Columbia</option>
+<option value="California">California</option>
+<option value="Colorado">Colorado</option>
+<option value="Connecticut">Connecticut</option>
+<option value="Delaware">Delaware</option>
+<option value="Florida">Florida</option>
+<option value="Georgia">Georgia</option>
+<option value="Guam">Guam</option>
+<option value="Hawaii">Hawaii</option>
+<option value="Idaho">Idaho</option>
+<option value="Illinois">Illinois</option>
+<option value="Indiana">Indiana</option>
+<option value="Iowa">Iowa</option>
+<option value="Kansas">Kansas</option>
+<option value="Kentucky">Kentucky</option>
+<option value="Louisiana">Louisiana</option>
+<option value="Maine">Maine</option>
+<option value="Manitoba">Manitoba</option>
+<option value="Maryland">Maryland</option>
+<option value="Massachusetts">Massachusetts</option>
+<option value="Michigan">Michigan</option>
+<option value="Minnesota">Minnesota</option>
+<option value="Mississippi">Mississippi</option>
+<option value="Missouri">Missouri</option>
+<option value="Montana">Montana</option>
+<option value="Nebraska">Nebraska</option>
+<option value="Nevada">Nevada</option>
+<option value="New_Brunswick">New_Brunswick</option>
+<option value="New_Foundland">New_Foundland</option>
+<option value="New_Hampshire">New_Hampshire</option>
+<option value="New_Jersey">New_Jersey</option>
+<option value="New_Mexico">New_Mexico</option>
+<option value="New_York">New_York</option>
+<option value="North_Carolina">North_Carolina</option>
+<option value="North_Dakota">North_Dakota</option>
+<option value="Northwest_Territories">Northwest_Territories</option>
+<option value="Nova_Scotia">Nova_Scotia</option>
+<option value="Nunavut">Nunavut</option>
+<option value="Ohio">Ohio</option>
+<option value="Oklahoma">Oklahoma</option>
+<option value="Ontario">Ontario</option>
+<option value="Oregon">Oregon</option>
+<option value="Pennsylvania">Pennsylvania</option>
+<option value="Prince_Edward_Island">Prince_Edward_Island</option>
+<option value="Puerto_Rico-Virgin_Islands">Puerto_Rico-Virgin_Islands</option>
+<option value="Quebec">Quebec</option>
+<option value="Rhode_Island">Rhode_Island</option>
+<option value="Saskatchewan">Saskatchewan</option>
+<option value="South_Carolina">South_Carolina</option>
+<option value="South_Dakota">South_Dakota</option>
+<option value="Tennessee">Tennessee</option>
+<option value="Texas">Texas</option>
+<option value="Utah">Utah</option>
+<option value="Vermont">Vermont</option>
+<option value="Virginia">Virginia</option>
+<option value="Washington">Washington</option>
+<option value="West_Virginia">West_Virginia</option>
+<option value="Wisconsin">Wisconsin</option>
+<option value="Wyoming">Wyoming</option>
+<option value="Yukon">Yukon</option>
+</select>
+</form>
+
+</body>
+</html>
