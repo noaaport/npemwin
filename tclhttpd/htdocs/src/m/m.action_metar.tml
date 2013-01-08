@@ -1,0 +1,32 @@
+[Doc_Dynamic]
+
+<html>
+<head>
+  <title>Npemwin@[exec hostname -s]</title>
+  <link rel="stylesheet" href="/m/css/m.npemwin.css" type="text/css"/>
+</head>
+
+<body bgcolor="lightgray">
+
+<b class="menu">Npemwin Http Server</b><br/>
+<button
+type="button"
+onclick='window.location="/m/m.index.tml"'>
+Home
+</button>
+<br/>
+<br/>
+<br/>
+
+[
+  set val [::ncgi::value "collective"];
+
+  set r {<script type="text/javascript">
+  window.location.href="/npemwin/metar/collective?collective=$val"
+  </script>}
+
+  return [subst $r];
+]
+
+</body>
+</html>

@@ -45,11 +45,11 @@ Home
 <form method="post" action="/m/m.action_data.tml">
 <input type="submit" name="action" value="View">
 <select name="data">
-<option value="text" selected>Text</option>
+<option value="metar">Metar</option>
+<option value="text">Text</option>
 <option value="gif">GIF</option>
 <option value="jpg">JPG</option>
 <option value="digatmos">Digatmos</option>
-<option value="metar">Metar</option>
 <option value="gempak">Gempak</option>
 </select>
 </form>
