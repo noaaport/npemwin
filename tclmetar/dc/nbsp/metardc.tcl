@@ -1,4 +1,4 @@
-#!%TCLSH%
+#!/usr/bin/tclsh
 #
 # $Id$
 #
@@ -6,7 +6,7 @@
 #
 # See LICENSE
 #
-# Usage: metardc [-c | -d] [-h <tag> [-m] | [-t [-k]]] [-l location]
+# Usage: metardc [-c | -d] [-h [-m] | [-t [-k]]] [-H <tag>] [-l location]
 #               [-o outputfile] [-s recseparator] [-e obdata | inputfile];
 #
 # The input must consist of just pure data, assumed to have been
@@ -17,7 +17,7 @@
 # unless [-d] is given which indicates that the line is just the data portion
 # (so that the type is not unknown). The output is either
 # the full report, or with [-t] just the parameter values; in the latter
-# case, [-k] will give the wind speed in knots instead of mph. If [-h <tag>]
+# case, [-k] will give the wind speed in knots instead of mph. If [-h]
 # is given instead of [-t] the report is an html table, and the station
 # information is put in a title between <tag>,</tag> tags. If in addition [-m]
 # is given, then it is html formated but not in a table. The output
@@ -28,21 +28,20 @@
 # header of the report (only in the html version).
 
 package require cmdline;
-lappend auto_path %TCLMETAR_INSTALLDIR%;
-package require metar;
+#lappend auto_path %TCLMETAR_INSTALLDIR%;
+#package require metar;
+source "metar.tcl";
 
-set usage {Usage: metardc [-c | -d] [-h <tag> [-m] | [-t [-k]]] [-l location]
-    [-o outputfile] [-s recseparator] [-e obdata | inputfile]};
+set usage {Usage: metardc [-c | -d] [-h [-m] | [-t [-k]]] [-H <tag>]
+    [-l location] [-o outputfile] [-s recseparator] [-e obdata | inputfile]};
 
-set optlist {c d k m t {e.arg ""} {h.arg ""} {l.arg ""}
-{o.arg ""} {s.arg ""}};
+set optlist {c d h k m t {e.arg ""} {H.arg "h3"} {l.arg ""}
+    {o.arg ""} {s.arg ""}};
 
 set conflict_cd 0;
 set conflict_e 0;
 set conflict_ht 0;
-set conflict_mt 0;
 set inputfile "";
-set default_option_h "h3";
 
 proc print_report {fout line} {
 
@@ -175,7 +174,7 @@ proc print_report_html {fout line} {
     if {$option(l) ne ""} {
 	append _header " at " $option(l);
     }
-    append result "<$option(h)>" ${_header} "</$option(h)>\n";
+    append result "<$option(H)>" ${_header} "</$option(H)>\n";
 
     if {$option(m) == 0} {
 	append result "<table border>\n";
@@ -265,7 +264,7 @@ proc process_line {fout line} {
 
     if {$option(t) == 1} {
 	print_tabular $fout $line;
-    } elseif {$option(h) ne ""} {
+    } elseif {$option(h) != 0} {
 	print_report_html $fout $line;
     } else {
 	print_report $fout $line;
@@ -277,6 +276,10 @@ proc process_line {fout line} {
 #
 array set option [::cmdline::getoptions argv $optlist $usage];
 set argc [llength $argv];
+
+if {$option(m) != 0} {
+    set option(h) 1;
+}
 
 # Check for conflicting options
 if {$argc == 1} {
@@ -295,24 +298,15 @@ if {$option(d) != 0} {
     incr conflict_cd;
 }
 
-if {$option(h) ne ""} {
+if {$option(h) != 0} {
     incr conflict_ht;
-}
-
-if {$option(m) != 0} {
-    incr conflict_mt;
-    if {$option(h) eq ""} {
-	set option(h) $default_option_h;
-    }
 }
 
 if {$option(t) != 0} {
     incr conflict_ht;
-    incr conflict_mt;
 }
 
-if {($conflict_cd > 1) || ($conflict_e > 1) || ($conflict_ht > 1) || \
-	($conflict_mt > 1)} {
+if {($conflict_cd > 1) || ($conflict_e > 1) || ($conflict_ht > 1)} {
     puts $usage;
     exit 1;
 }
