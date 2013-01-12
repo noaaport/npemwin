@@ -49,8 +49,6 @@ Home
 <option value="text">Text</option>
 <option value="gif">GIF</option>
 <option value="jpg">JPG</option>
-<option value="digatmos">Digatmos</option>
-<option value="gempak">Gempak</option>
 </select>
 </form>
 
