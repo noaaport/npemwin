@@ -1,0 +1,40 @@
+[Doc_Dynamic]
+
+<html>
+<head>
+  <title>Npemwin@[exec hostname -s]</title>
+  <link rel="stylesheet" href="/m/css/m.npemwin.css" type="text/css"/>
+</head>
+
+<body bgcolor="lightgray">
+
+<b class="menu">Npemwin Http Server</b><br/>
+<button
+type="button"
+onclick='window.location="/m/m.index.tml"'>
+Home
+</button>
+<br/>
+<br/>
+<br/>
+
+<b class="menu">Metar</b><br/>
+<form method="post" action="/m/m.action_metar_collective.tml">
+<input type="submit" name="action" value="View">
+<select name="collective">
+
+[
+  set cllist [lsort [glob -directory $Config(npemwinmetarcldir) \
+    -tails -nocomplain "*"]];
+  foreach c $cllist {
+    append r "<option value=\"$c\">$c</option>\n";
+  }
+  
+  return $r;
+]
+
+</select>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+[Doc_Dynamic]
+
+<html>
+<head>
+  <title>Npemwin@[exec hostname -s]</title>
+  <link rel="stylesheet" href="/m/css/m.npemwin.css" type="text/css"/>
+</head>
+
+<body bgcolor="lightgray">
+
+<b class="menu">Npemwin Http Server</b><br/>
+<button
+type="button"
+onclick='window.location="/m/m.index.tml"'>
+Home
+</button>
+<br/>
+<br/>
+<br/>
+
+[
+  set record [::ncgi::value "record"];
+
+  array set a [proc_metar_stringtoarray $record];
+  set obstation [string tolower $a(1)];
+  set obtype $a(9);
+  set obdata $a(10);
+
+# npemwinmtrd is the tcl decoder that uses the tclmetar library. The command
+# executed is
+#               npemwintrd -h -m -e $data -l $location
+
+  append data $obtype " " $obdata;
+  set _opts [list "-h" "-m" "-e" $data];
+
+  if {[info exists Config(npemwinmetar,icao,$obstation)]} {
+    lappend _opts "-l" $Config(npemwinmetar,icao,$obstation);
+  }
+
+  return [eval exec npemwinmtrd ${_opts}];
+]
+
+</body>
+</html>

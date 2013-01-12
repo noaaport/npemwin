@@ -38,7 +38,7 @@ Home
     </script>}
   } elseif {$val eq "metar"} {
     return {<script type="text/javascript">
-    window.location.href="/m/m.form_metar.tml"
+    window.location.href="/m/m.form_metar_collective.tml"
     </script>}
   } elseif {$val eq "gempak"} {
     return {<script type="text/javascript">

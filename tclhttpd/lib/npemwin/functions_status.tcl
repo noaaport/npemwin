@@ -47,7 +47,7 @@ proc proc_stringtoarray {str} {
     return [array get a]
 }
 
-proc file_hasdata file {
+proc file_hasdata {file} {
 
     if {[file exists $file] && ([file size $file] != 0)} {
 	return 1;
@@ -56,7 +56,7 @@ proc file_hasdata file {
     return 0;
 }
 
-proc npemwin_status file {
+proc npemwin_status {file} {
 
     set fmt [proc_fmtrow 6]
 
@@ -82,7 +82,7 @@ proc npemwin_status file {
     return $result
 }
 
-proc npemwin_connections file {
+proc npemwin_connections {file} {
 
     set fmt [proc_fmtrow 4]
 
@@ -114,7 +114,7 @@ proc npemwin_connections file {
     return $result
 }
 
-proc npemwin_serverlist file {
+proc npemwin_serverlist {file} {
 
     set fmt [proc_fmtrow 2]
 

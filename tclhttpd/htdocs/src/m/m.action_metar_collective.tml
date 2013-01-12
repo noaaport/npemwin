@@ -22,7 +22,7 @@ Home
   set val [::ncgi::value "collective"];
 
   set r {<script type="text/javascript">
-  window.location.href="/npemwin/metar/collective?collective=$val"
+  window.location.href="/m/m.form_metar_station.tml?collective=$val"
   </script>}
 
   return [subst $r];
