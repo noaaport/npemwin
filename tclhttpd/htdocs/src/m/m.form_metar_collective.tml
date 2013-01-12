@@ -18,23 +18,32 @@ Home
 <br/>
 <br/>
 
-<b class="menu">Metar</b><br/>
-<form method="post" action="/m/m.action_metar_collective.tml">
-<input type="submit" name="action" value="View">
-<select name="collective">
-
 [
   set cllist [lsort [glob -directory $Config(npemwinmetarcldir) \
     -tails -nocomplain "*"]];
+
+  if {[llength $cllist] == 0} {
+    return "No collectives found.";
+  } else {
+    set r {
+      <b class="menu">Metar</b><br/>
+      <form method="post" action="/m/m.action_metar_collective.tml">
+      <input type="submit" name="action" value="View">
+      <select name="collective">
+    }
+  }
+ 
   foreach c $cllist {
     append r "<option value=\"$c\">$c</option>\n";
   }
-  
+
+  append r {
+    </select>
+    </form>
+  }
+
   return $r;
 ]
-
-</select>
-</form>
 
 </body>
 </html>

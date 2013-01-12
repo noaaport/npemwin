@@ -19,7 +19,6 @@ Home
 <br/>
 
 [
-
     set collective [::ncgi::value "collective"];
 
     set status [catch {
@@ -31,18 +30,16 @@ Home
     }
 
     if {[llength $reclist] == 0} {
-	set result "No reports for $collective.";
-	return $result;
+	return "No reports for $collective.";
     }
-]
 
-<b class="menu">Metar</b><br/>
-<form method="post" action="/m/m.action_metar_station.tml">
-<input type="submit" name="action" value="View">
-<select name="record">
+    set r {
+      <b class="menu">Metar</b><br/>
+      <form method="post" action="/m/m.action_metar_station.tml">
+      <input type="submit" name="action" value="View">
+      <select name="record">
+    }
 
-[
-    set r "";
     foreach record $reclist {
 	array set a [proc_metar_stringtoarray $record];
 	set obstation [string tolower $a(1)];
@@ -52,11 +49,13 @@ Home
         append r "<option value=\"$enc_record\">$obstation</option>\n";
     }
 
+    append r {
+      </select>
+      </form>
+    }
+
     return $r;
 ]
-
-</select>
-</form>
 
 </body>
 </html>
