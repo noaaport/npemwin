@@ -45,9 +45,9 @@ proc npemwin/metar/station {station} {
 
     set _loc [string toupper $station];
     if {[info exists Config(npemwinmetar,icao,$station)]} {
-        append _loc " at " $Config(npemwinmetar,icao,$station);
+        append _loc " " $Config(npemwinmetar,icao,$station);
     }
-    set result "<h3>Metar Observations for ${_loc}</h3>\n";
+    set result "<h3>Metar Observations ${_loc}</h3>\n";
 
     append result [display_metarplots $Config(docRoot) \
 		       $Config(npemwinmetarplothtdir) $station];
