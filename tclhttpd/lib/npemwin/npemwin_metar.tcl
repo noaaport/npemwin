@@ -127,7 +127,7 @@ proc npemwin/metar/report {obstation obtype obdata} {
 
     set _opts [list "-h" "-e" $data];
 
-   if {[info exists Config(npemwinmetar,icao,$obstation)]} {
+    if {[info exists Config(npemwinmetar,icao,$obstation)]} {
         lappend _opts "-l" $Config(npemwinmetar,icao,$obstation);
     }
 

@@ -21,6 +21,7 @@ Home
 [
   set record [::ncgi::value "record"];
 
+  # array set a [proc_metar_stringtoarray [Url_Decode $record]];
   array set a [proc_metar_stringtoarray $record];
   set obstation [string tolower $a(1)];
   set obtype $a(9);

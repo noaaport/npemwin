@@ -45,8 +45,8 @@ Home
 	set obstation [string tolower $a(1)];
 	set obtype $a(9);
 	set obdata $a(10);
-	set enc_record [Url_Encode $record];
-        append r "<option value=\"$enc_record\">$obstation</option>\n";
+	#set enc_record [Url_Encode $record];
+        append r "<option value=\"$record\">$obstation</option>\n";
     }
 
     append r {
