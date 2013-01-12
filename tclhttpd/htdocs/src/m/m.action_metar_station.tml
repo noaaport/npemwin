@@ -31,6 +31,7 @@ Home
 # executed is
 #               npemwintrd -h -m -e $data -l $location
 
+  set data "";
   append data $obtype " " $obdata;
   set _opts [list "-h" "-m" "-e" $data];
 
