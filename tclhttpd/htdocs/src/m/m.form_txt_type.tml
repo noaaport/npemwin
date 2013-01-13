@@ -19,7 +19,7 @@ Home
 <br/>
 
 [
-  set val [::ncgi::value "txtdir"];
+  set val [::ncgi::value "dir"];
   set dir [file join $Config(docRoot) $val];
   set txtlist [lsort [glob -directory $dir -nocomplain "*"]];
 

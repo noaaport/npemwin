@@ -27,15 +27,15 @@ Home
     </script>}
   } elseif {$val eq "text"} {
     return {<script type="text/javascript">
-    window.location.href="/latest/txt/"
+    window.location.href="/m/m.form_txt_type.tml?dir=latest/txt"
     </script>}
   } elseif {$val eq "gif"} {
     return {<script type="text/javascript">
-    window.location.href="/latest/gif/"
+    window.location.href="/m/m.form_img_file.tml?dir=latest/gif"
     </script>}
   } elseif {$val eq "jpg"} {
     return {<script type="text/javascript">
-    window.location.href="/latest/jpg/"
+    window.location.href="/m/m.form_img_file.tml?dir=latest/jpg"
     </script>}
   } elseif {$val eq "digatmos"} {
     return {<script type="text/javascript">
