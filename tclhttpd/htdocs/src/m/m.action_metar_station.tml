@@ -11,7 +11,7 @@
 <b class="menu">Npemwin Http Server</b><br/>
 <button
 type="button"
-onclick='window.location="/m/m.index.tml"'>
+onclick='window.location="/m/"'>
 Home
 </button>
 <br/>
