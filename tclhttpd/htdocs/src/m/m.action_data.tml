@@ -20,25 +20,26 @@ Home
 
 [
   set val [::ncgi::value "data"];
-  if {$val eq "text"} {
+
+  if {$val eq "metar"} {
+    return {<script type="text/javascript">
+    window.location.href="/m/m.form_metar_collective.tml"
+    </script>}
+  } elseif {$val eq "text"} {
     return {<script type="text/javascript">
     window.location.href="/latest/txt/"
     </script>}
- } elseif {$val eq "gif"} {
+  } elseif {$val eq "gif"} {
     return {<script type="text/javascript">
     window.location.href="/latest/gif/"
     </script>}
- } elseif {$val eq "jpg"} {
+  } elseif {$val eq "jpg"} {
     return {<script type="text/javascript">
     window.location.href="/latest/jpg/"
     </script>}
   } elseif {$val eq "digatmos"} {
     return {<script type="text/javascript">
     window.location.href="/digatmos/"
-    </script>}
-  } elseif {$val eq "metar"} {
-    return {<script type="text/javascript">
-    window.location.href="/m/m.form_metar_collective.tml"
     </script>}
   } elseif {$val eq "gempak"} {
     return {<script type="text/javascript">

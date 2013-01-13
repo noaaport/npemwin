@@ -1,0 +1,51 @@
+[Doc_Dynamic]
+
+<html>
+<head>
+  <title>Npemwin@[exec hostname -s]</title>
+  <link rel="stylesheet" href="/m/css/m.npemwin.css" type="text/css"/>
+</head>
+
+<body bgcolor="lightgray">
+
+<b class="menu">Npemwin Http Server</b><br/>
+<button
+type="button"
+onclick='window.location="/m/"'>
+Home
+</button>
+<br/>
+<br/>
+<br/>
+
+[
+  set val [::ncgi::value "dir"];
+  set filelist [lsort [glob -directory $val -nocomplain "*"]];
+  set station [file tail $val];
+
+  if {[llength $txtlist] == 0} {
+    return "No files found.";
+  } else {
+    set r {
+      <b class="menu">Latest</b><br/>
+      <form method="post" action="/m/m.action_txt_file.tml">
+      <input type="submit" name="action" value="View">
+      <select name="fpath">
+    }
+  }
+ 
+  foreach c $filelist {
+    set name [file rootname [file tail $c]];
+    append r "<option value=\"$c\">$name</option>\n";
+  }
+
+  append r {
+    </select>
+    </form>
+  }
+
+  return $r;
+]
+
+</body>
+</html>

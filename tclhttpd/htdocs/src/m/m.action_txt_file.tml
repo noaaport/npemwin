@@ -1,0 +1,29 @@
+[Doc_Dynamic]
+
+<html>
+<head>
+  <title>Npemwin@[exec hostname -s]</title>
+  <link rel="stylesheet" href="/m/css/m.npemwin.css" type="text/css"/>
+</head>
+
+<body bgcolor="lightgray">
+
+<b class="menu">Npemwin Http Server</b><br/>
+<button
+type="button"
+onclick='window.location="/m/"'>
+Home
+</button>
+<br/>
+<br/>
+<br/>
+
+<pre>
+[
+  set val [::ncgi::value "fpath"];
+  return [::fileutil::cat $val];
+]
+</pre>
+
+</body>
+</html>
