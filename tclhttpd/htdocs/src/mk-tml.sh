@@ -20,6 +20,21 @@ status_pages="connections \
     station_catalog_txt \
     stats"
 
+m_pages="m.index \
+    m.action_data \
+    m.action_metar_collective \
+    m.action_metar_station \
+    m.action_products \
+    m.action_server \
+    m.action_txt_file \
+    m.action_txt_station \
+    m.action_txt_type \
+    m.form_metar_collective \
+    m.form_metar_station \
+    m.form_txt_file \
+    m.form_txt_station \
+    m.form_txt_type"
+
 #
 # main
 #
@@ -28,9 +43,10 @@ build_dir=$1
 
 index_dir=${build_dir}
 status_dir=${build_dir}/npemwin/status
+m_dir="${build_dir}/m"
 
 rm -rf ${build_dir}
-mkdir -p ${index_dir} ${status_dir}
+mkdir -p ${index_dir} ${status_dir} ${m_dir}
 
 for p in $index_pages
 do
@@ -56,4 +72,11 @@ do
 	-e "/@body@/r ${templates_dir}/status/${p}.tml.body" \
 	-e "/@body@/d" \
 	${templates_dir}/status/main.tml.in > ${status_dir}/${p}.tml
+done
+
+for p in $m_pages
+do
+    sed -e "/@body@/r ${templates_dir}/m/${p}.tml.body" \
+	-e "/@body@/d" \
+	${templates_dir}/m/m.main.tml.in > ${m_dir}/${p}.tml
 done

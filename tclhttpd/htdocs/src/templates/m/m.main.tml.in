@@ -3,10 +3,10 @@
 <html>
 <head>
   <title>Npemwin@[exec hostname -s]</title>
-  <link rel="stylesheet" href="/m/css/m.npemwin.css" type="text/css"/>
+  <link rel="stylesheet" href="/css/m.npemwin.css" type="text/css"/>
 </head>
 
-<body bgcolor="lightgray">
+<body>
 
 <b class="menu">Npemwin Http Server</b><br/>
 <button
@@ -18,12 +18,7 @@ Home
 <br/>
 <br/>
 
-<pre>
-[
-  set val [::ncgi::value "fpath"];
-  return [::fileutil::cat $val];
-]
-</pre>
+@body@
 
 </body>
 </html>
