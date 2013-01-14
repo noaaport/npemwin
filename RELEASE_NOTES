@@ -4,9 +4,9 @@
 # $Format:Author: <%aE> %aD$
 #
 
-- Sun Oct  7 18:26:14 AST 2012
+- Mon Jan 14 16:16:10 AST 2013
 
-This is the 1st release of the 2.3 branch of the
+This is the 1st release of the 2.4 branch of the
 
      NOAAPort Emwin server (Npemwin)
 
@@ -17,7 +17,11 @@ Packages, sources and documentation are available from
 Packages for other operating systems or distributions not found there
 can be created upon request.
 
-In this version Npemwin suppports the WX14 device. Instructions for
+In this version Npemwin has a "mobile" web interface for better display
+in mobile devices, e.g., smartphones and tablets. It can be accessed
+from the top-left corner of the main web page.
+
+Since version 2.3 Npemwin suppports the WX14 device. Instructions for
 enabling this mode are given in the file wx14.README, in the bitbucket wiki
 and the servers.conf that is installed by the package in the Npemwin
 configuration directory.

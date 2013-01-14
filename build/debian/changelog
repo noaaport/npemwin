@@ -1,9 +1,9 @@
-npemwin (2.4.1p7-1) oneiric; urgency=low
+npemwin (2.4.1r-1) oneiric; urgency=low
 
   * Converted from frames to css the built-in web server pages.
   * Added "mobile" version.
 
- -- Jose F Nieves <nieves@ltp.uprrp.edu>  Fri, 11 Jan 2013 21:42:10 -0400
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Mon, 14 Jan 2013 16:15:32 -0400
  
 npemwin (2.3.2p1-1) oneiric; urgency=low
 
