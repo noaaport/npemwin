@@ -4,7 +4,7 @@ Overview
 **Npemwin** is an emwin server. It was designed to get its feed from a
 an *Nbsp* *Noaaport* server, but it can also be configured to get
 the data from a standard byteblaster emwin server, a list of them,
-from an emwin serial device (WX12/13) or from the newer WX14 device.
+from an emwin serial device (WX12/13/14) or from the newer WX14 device.
 In any case, it will turn serve standard *byte-blaster emwin* clients
 in the usual way.
 
