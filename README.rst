@@ -37,8 +37,8 @@ What's New
 Wed Jan 16 19:03:06 AST 2013
 ----------------------------
 
-Npemwin now has a *mobile* web interface for better display
-in mobile devices, e.g., smartphones and tablets. It can be accessed
+Starting with version **2.4.1** Npemwin has a *mobile* web interface for better
+display in mobile devices, e.g., smartphones and tablets. It can be accessed
 from the top-left corner of the main web page.
 
 Sun Oct  7 18:34:46 AST 2012
