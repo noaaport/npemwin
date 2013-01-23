@@ -28,7 +28,10 @@ set nntpfilter(rcdir)	[file join $gf(confdir) "rc.d" "nntp"];
 set nntpfilter(confdirs)  $gf(localconfdirs)
 set nntpfilter(postrc)   "";
 set nntpfilter(nntpsendbin) "npemwin-nntpsend";
-set nntpfilter(groupprefix)	"emwin";	# or "npemwin"
+set nntpfilter(groupprefix) "emwin";	# or "npemwin"
+#
+set nntpfilter(txt_subject) {$rc(prodname)-$rc(header_time)};
+set nntpfilter(img_subject) {$rc(prodname)};
 #
 # variables
 #
