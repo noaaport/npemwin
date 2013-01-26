@@ -4,14 +4,20 @@ dnl
 
 define(m4stop, break;)dnl
 
+dnl
+dnl define(m4set_text_subject,
+dnl    set rc_nntp_subject "";
+dnl    append rc_nntp_subject $rc(header_station) "_" \
+dnl	$rc(header_wmoid) "_" $rc(header_time) "_" $rc(prodname);
+dnl )
+dnl
+
 define(m4set_text_subject,
-    set rc_nntp_subject "";
-    append rc_nntp_subject $rc(header_station) "_" \
-	$rc(header_wmoid) "_" $rc(header_time) "_" $rc(prodname);
+    set rc_nntp_subject [subst $nntpfilter(txt_subject)];
 )dnl
 
 define(m4set_img_subject,
-    set rc_nntp_subject $rc(prodname);
+    set rc_nntp_subject [subst $nntpfilter(img_subject)];
 )dnl
 
 define(m4send_nntp,
