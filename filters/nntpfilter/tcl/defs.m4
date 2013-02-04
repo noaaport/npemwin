@@ -21,7 +21,7 @@ define(m4set_img_subject,
 )dnl
 
 define(m4send_nntp,
-    send_nntp $fpath $rc_nntp_subgroup $rc_nntp_subject $rc_nntp_encode;
+    send_nntp $rc(fpath) $rc_nntp_subgroup $rc_nntp_subject $rc_nntp_encode;
 )dnl
 
 define(match_text_one,

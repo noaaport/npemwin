@@ -30,7 +30,7 @@ case $os in
 	LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread -lnsl -lresolv"
 	[ $flavor = debian ] && \
 		LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread"
-	# For CentOS and Debian use the local db-4.6 until they upgrade
+	# For CentOS and Debian use the local db if we have it
 	[ $flavor = centos ] && LIBDIRS="$COMMON_LIBDIRS -L /usr/local/lib"
 	[ $flavor = debian ] && LIBDIRS="$COMMON_LIBDIRS -L /usr/local/lib"
 	;;
