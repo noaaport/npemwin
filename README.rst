@@ -29,8 +29,10 @@ It has a built-in web server for monitoring the internal state of
 the server as well as displaying the files received using any web
 browser.
 
-Binary packages are available from the **noaaport.net** web site,
-and the *Downloads* section in **bitbucket**.
+Binary packages are available from
+
+  * http://www.noaaport.net
+  * http://bb.noaaport.net/npemwin/downloads
 
 What's New
 ==========
@@ -45,8 +47,7 @@ has been revised. More information in
 
   * http://emwin.mobi
   * http://www.iemwin.net
-
-and the **npemwin-nntp** repository.
+  * http://bb.noaaport.net/npemwin-nntp
 
 Sun Oct  7 18:34:46 AST 2012
 ----------------------------
