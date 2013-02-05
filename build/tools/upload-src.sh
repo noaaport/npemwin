@@ -14,6 +14,5 @@ open -u $uploaduser $uploadhost;
 cd $uploadbasedir;
 mkdir -p $srcdir;
 cd $srcdir;
-mrm ${name}-*.tgz
 put $filename
 quit"
