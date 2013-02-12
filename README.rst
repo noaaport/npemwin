@@ -29,17 +29,25 @@ It has a built-in web server for monitoring the internal state of
 the server as well as displaying the files received using any web
 browser.
 
-Binary packages are available from the **noaaport.net** web site.
+Binary packages are available from
+
+  * http://www.noaaport.net
+  * http://bb.noaaport.net/npemwin/downloads
 
 What's New
 ==========
 
-Wed Jan 16 19:03:06 AST 2013
+Tue Feb  5 13:46:46 AST 2013
 ----------------------------
 
 Starting with version **2.4.1** Npemwin has a *mobile* web interface for better
 display in mobile devices, e.g., smartphones and tablets. It can be accessed
-from the top-left corner of the main web page.
+from the top-left corner of the main web page. In addition the *NNTP*
+has been revised. More information in
+
+  * http://emwin.mobi
+  * http://www.iemwin.net
+  * http://bb.noaaport.net/npemwin-nntp
 
 Sun Oct  7 18:34:46 AST 2012
 ----------------------------
