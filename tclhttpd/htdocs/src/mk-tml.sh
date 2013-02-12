@@ -33,7 +33,8 @@ m_pages="m.index \
     m.form_metar_station \
     m.form_txt_file \
     m.form_txt_station \
-    m.form_txt_type"
+    m.form_txt_type \
+    m.received_minute"
 
 #
 # main
