@@ -58,7 +58,9 @@ void init_globals(void){
   g.lockdir = EMWIN_LOCK_DIR;
   g.tmpdir = EMWIN_TMP_DIR;
   g.qfilesdir = EMWIN_QFILES_DIR;
-  g.pidfile = SERVERPIDFILE;
+  g.spoolfile_mode = EMWIN_SPOOLFILE_MODE;
+  g.pidfile = EMWIN_PIDFILE;
+  g.pidfile_mode = EMWIN_PIDFILE_MODE;
   g.statusfile = SERVERSTATUSFILE;
   g.nbspstats_period = NBSP_STATS_PERIOD;
 
@@ -175,7 +177,7 @@ int init_lock(void){
    */
   int status = 0;
 
-  if(create_pidfile(g.pidfile) != 0){
+  if(create_pidfile(g.pidfile, g.pidfile_mode) != 0){
     status = 1;
     log_err2("Could not create", g.pidfile);
   }else

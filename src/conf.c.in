@@ -47,8 +47,14 @@
 #define CONFOPT_QFILESDIR		@counter@
 #define DEFVAL_QFILESDIR		EMWIN_QFILES_DIR
 
+#define CONFOPT_SPOOLFILEMODE		@counter@
+#define DEFVAL_SPOOLFILEMODE		EMWIN_SPOOLFILE_MODE
+
 #define CONFOPT_PIDFILE			@counter@
 #define DEFVAL_PIDFILE			EMWIN_PIDFILE
+
+#define CONFOPT_PIDFILEMODE		@counter@
+#define DEFVAL_PIDFILEMODE		EMWIN_PIDFILE_MODE
 
 #define CONFOPT_STATUSFILE		@counter@
 #define DEFVAL_STATUSFILE		SERVERSTATUSFILE
@@ -219,7 +225,11 @@ static struct confoption_st confoptions[] = {
   {"lockdir", CONFOPT_LOCKDIR, TCL_LINK_STRING, NULL, 0},
   {"tmpdir", CONFOPT_TMPDIR, TCL_LINK_STRING, NULL, 0},
   {"qfilesdir", CONFOPT_QFILESDIR, TCL_LINK_STRING, NULL, 0},
+  {"spoolfilemode", CONFOPT_SPOOLFILEMODE, TCL_LINK_INT, NULL,
+	DEFVAL_SPOOLFILEMODE},
   {"pidfile", CONFOPT_PIDFILE, TCL_LINK_STRING, NULL, 0},
+  {"pidfilemode", CONFOPT_PIDFILEMODE, TCL_LINK_INT, NULL,
+	DEFVAL_PIDFILEMODE},
   {"statusfile", CONFOPT_STATUSFILE, TCL_LINK_STRING, NULL, 0},
   {"statsperiod", CONFOPT_NBSPSTATSPERIOD, TCL_LINK_INT, NULL,
 	DEFVAL_NBSPSTATSPERIOD},
@@ -356,7 +366,9 @@ int configure(void){
   setoptval(&g.lockdir, confoptions, CONFOPT_LOCKDIR);
   setoptval(&g.tmpdir, confoptions, CONFOPT_TMPDIR);
   setoptval(&g.qfilesdir, confoptions, CONFOPT_QFILESDIR);
+  setoptval(&g.spoolfile_mode, confoptions, CONFOPT_SPOOLFILEMODE);
   setoptval(&g.pidfile, confoptions, CONFOPT_PIDFILE);
+  setoptval(&g.pidfile_mode, confoptions, CONFOPT_PIDFILEMODE);
   setoptval(&g.statusfile, confoptions, CONFOPT_STATUSFILE);
   setoptval(&g.nbspstats_period, confoptions, CONFOPT_NBSPSTATSPERIOD);
 
@@ -466,7 +478,9 @@ void print_confoptions(void){
   fprintf_str(stdout, fmt, "lockdir", g.lockdir);
   fprintf_str(stdout, fmt, "tmpdir", g.tmpdir);
   fprintf_str(stdout, fmt, "qfilesdir", g.qfilesdir);
+  fprintf(stdout, "spoolfilemode %o\n", g.spoolfile_mode);
   fprintf_str(stdout, fmt, "pidfile", g.pidfile);
+  fprintf(stdout, "pidfilemode %o\n", g.pidfile_mode);
   fprintf_str(stdout, fmt, "statusfile", g.statusfile);
   fprintf(stdout, "statsperiod " "%" PRIuMAX "\n",
 	(uintmax_t)g.nbspstats_period);
@@ -556,8 +570,7 @@ int validate_configuration(void){
   /*
    * For these, their type restricts their value.
    *
-   * VALIDATE_PARAMETER(g.umask, 0, USHRT_MAX, "umask");
-   * VALIDATE_PARAMETER(g.dbfile_mode, 0, USHRT_MAX, "dbfilemode");
+   * mode_t umask, pidfile_mode, spoolfile_mode
    */
 
   /*

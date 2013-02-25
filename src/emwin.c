@@ -673,7 +673,7 @@ int save_emwin_packet(struct emwin_packet *ep){
   int status = 0;
   int f = -1;
   int n;
-  mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+  mode_t mode = g.spoolfile_mode;
   time_t stamp;
   struct emwin_file_qinfo efqinfo;
   FILE *fq = NULL;

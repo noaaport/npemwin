@@ -32,7 +32,9 @@ struct npemwin_globals {
   char *lockdir;	/* subdirectory of the spooldir */
   char *tmpdir;		/* subdirectory of the spooldir */
   char *qfilesdir;	/* subdirectory of the spooldir */
+  mode_t spoolfile_mode; /* default mode of the files in those dirs */
   char *pidfile;
+  mode_t pidfile_mode;
   char *statusfile;	/* server's own statistics file */
   time_t nbspstats_period; /* report the server's statistics */
   char *wx14_signal_statusfile;  /* wx14 last signal status */

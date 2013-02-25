@@ -50,9 +50,11 @@
 #define EMWIN_LOCK_DIR		"lock"
 #define EMWIN_TMP_DIR		"tmp"
 #define EMWIN_QFILES_DIR	"qfiles"
+#define EMWIN_SPOOLFILE_MODE	0666
 
 /* pid file */
-#define SERVERPIDFILE		"/var/run/npemwin/npemwind.pid"
+#define EMWIN_PIDFILE		"/var/run/npemwin/npemwind.pid"
+#define EMWIN_PIDFILE_MODE	0666
 
 /* statistics file and how often to report it (in seconds) */
 #define SERVERSTATUSFILE	"/var/npemwin/stats/npemwind.status"

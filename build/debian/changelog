@@ -1,3 +1,10 @@
+npemwin (2.4.5r-1) oneiric; urgency=low
+
+  * Added runtime variables for setting file mode of the pidfile
+    and the spool files.
+
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Sun, 24 Feb 2013 21:25:54 -0400
+
 npemwin (2.4.4r-1) oneiric; urgency=low
 
   * Corrected (m.received_minute.tml was missing)
