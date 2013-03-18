@@ -23,9 +23,9 @@ void nbspstats_init(void){
   
 static void init_counters(void){
 
+  g.nbspstats.frames_received = 0;
   g.nbspstats.frames_processed = 0;
   g.nbspstats.frames_bad = 0;
-  g.nbspstats.frames_received = 0;
   g.nbspstats.frames_data_size = 0;
 };
 

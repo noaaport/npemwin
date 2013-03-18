@@ -21,7 +21,11 @@ set iemwin(active_clients_file) $Config(npemwinserveractivefile);
 set iemwin(npemwind_pidfile) $Config(npemwinpidfile);
 
 # Non-configurable
-set iemwin(data_format) 1;
+#
+# 1 => original (up to npemwin-2.4.5r)
+# 2 => includes the frames stats (npemwin_status keyword) (npemwin-2.4.6r)
+#
+set iemwin(data_format) 2;
 
 # The local overrides
 set _iemwinconf [file join $iemwin(confdir) $iemwin(conf)];
