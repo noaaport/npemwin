@@ -16,6 +16,7 @@ set iemwin(confdir) $Config(confdir);
 set iemwin(localconfdirs) $Config(localconfdirs);
 #
 set iemwin(upstream_master_file) $Config(npemwinemwinstatusfile);
+set iemwin(npemwin_status_file) $Config(npemwinstatusfile);
 set iemwin(active_clients_file) $Config(npemwinserveractivefile);
 set iemwin(npemwind_pidfile) $Config(npemwinpidfile);
 
@@ -59,6 +60,7 @@ proc iemwin_output_stats {format} {
     global iemwin;
 
     foreach f [list upstream_master_file \
+		   npemwin_status_file \
 		   active_clients_file \
 		   npemwind_pidfile] {
 
@@ -70,6 +72,7 @@ proc iemwin_output_stats {format} {
     set data_format $iemwin(data_format);
     set start_time [file mtime $iemwin(npemwind_pidfile)];
     set upstream_master [iemwin_get_upstream_master];
+    set npemwin_status [exec tail -n 1 $iemwin(npemwin_status_file)];
 
     set _client_data_list \
 	[iemwin_output_stats_connections $iemwin(active_clients_file)];
@@ -81,6 +84,7 @@ proc iemwin_output_stats {format} {
 		     data_format \
 		     start_time \
 		     upstream_master \
+		     npemwin_status \
 		     num_clients \
 		     client_table] {
 	if {$format eq "csv"} {
@@ -113,7 +117,7 @@ proc iemwin_output_xml_end {type} {
 #
 proc iemwin_output_stats_connections {file} {
 #
-# This function returns a tcl list, in which element is the data
+# This function returns a tcl list, in which each element is the data
 # for each connected client. The code is copied from npemwin_connections{}
 # in functions.tcl in the main lib.
 # The data for each client is: "ip" "type" "queue" "time"
