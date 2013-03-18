@@ -1,3 +1,10 @@
+npemwin (2.4.6r-1) oneiric; urgency=low
+
+  * Added npemwin status (frames and bytes data) to the iemwin web query 
+
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Mon, 18 Mar 2013 14:41:10 -0400
+
+
 npemwin (2.4.5r-1) oneiric; urgency=low
 
   * Added runtime variables for setting file mode of the pidfile
