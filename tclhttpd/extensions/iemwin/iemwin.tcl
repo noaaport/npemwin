@@ -25,7 +25,8 @@ set iemwin(npemwind_pidfile) $Config(npemwinpidfile);
 # 1 => original (up to npemwin-2.4.5r)
 # 2 => includes the frames stats (npemwin_status keyword) (npemwin-2.4.6r)
 #
-set iemwin(data_format) 2;
+set iemwin(data_type) "npemwin/_iemwin/stats";  # <app><url>
+set iemwin(data_format) 2;                      # version number
 
 # The local overrides
 set _iemwinconf [file join $iemwin(confdir) $iemwin(conf)];
@@ -73,6 +74,7 @@ proc iemwin_output_stats {format} {
 	}
     }
 
+    set data_type $iemwin(data_type);
     set data_format $iemwin(data_format);
     set start_time [file mtime $iemwin(npemwind_pidfile)];
     set upstream_master [iemwin_get_upstream_master];
@@ -85,6 +87,7 @@ proc iemwin_output_stats {format} {
 
     set r "";
     foreach key [list \
+		     data_type \
 		     data_format \
 		     start_time \
 		     upstream_master \
