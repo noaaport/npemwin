@@ -1,8 +1,11 @@
 npemwin (2.4.6r-1) oneiric; urgency=low
 
   * Added npemwin status (frames and bytes data) to the iemwin web query 
+  * Implemented the script npemwinstatcounters to retrieve the
+    stats data from the npemwin stats files. It is now used to
+    implemenet the iemwin web query api.
 
- -- Jose F Nieves <nieves@ltp.uprrp.edu>  Mon, 18 Mar 2013 14:41:10 -0400
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Wed, 20 Mar 2013 22:22:15 -0400
 
 
 npemwin (2.4.5r-1) oneiric; urgency=low

@@ -20,6 +20,8 @@ slave eval {
     set bbserver_mserverlist "/var/npemwin/stats/mserverlist.txt"
     set bbserver_bbserverlist "/var/npemwin/stats/bbserverlist.txt"
 
+    set statsperiod	60
+
     # The optional configuration file
     set _conf "/usr/local/etc/npemwin/npemwind.conf";
     if {[file exists ${_conf}]} {
@@ -37,5 +39,6 @@ set npemwind(pidfile)		[slave eval {return $pidfile}]
 set npemwind(bbserver_mserverlist) [slave eval {return $bbserver_mserverlist}]
 set npemwind(bbserver_bbserverlist) \
 	[slave eval {return $bbserver_bbserverlist}]
+set npemwind(statsperiod)       [slave eval {return $statsperiod}]
 
 interp delete slave;

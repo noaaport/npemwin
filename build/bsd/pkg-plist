@@ -14,6 +14,7 @@ bin/npemwinbatch
 bin/npemwincleanup
 bin/npemwinversion
 bin/npemwinctl
+bin/npemwinstatcounters
 bin/npemwin-nntpsend
 bin/npemwin-rsscreate
 bin/npemwintrackdata

@@ -61,3 +61,9 @@
 2.3.1p2
 - Added support for the WX14 device
 - Revised tclmetar decoder to handle the issue with TSNO
+
+2.4.6r
+- Implemented the script npemwinstatcounters to retrieve the
+  stats data from the npemwin stats files. It is now used to
+  implement the iemwin web query api. It includes the
+  npemwin status (frames and bytes data).

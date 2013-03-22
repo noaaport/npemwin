@@ -20,7 +20,7 @@ SAMPLES =	qrunner.conf-sample qrunner.conf-site-sample \
 		hourly-cleanup.conf-sample \
 		start-cleanup.conf-sample startstop.rc-sample
 LIBTOOLS =	qrunner startstop
-BINTOOLS =	npemwincleanup npemwinversion npemwinctl
+BINTOOLS =	npemwincleanup npemwinversion npemwinctl npemwinstatcounters
 LIBFILES =      npemwind-start.tcl npemwind-stop.tcl
 DOCS =		filter.sh-sample npemwind.sh-sample
 EXTRA_DOCS =	${RCCONF}
@@ -44,6 +44,10 @@ npemwinctl: npemwinctl.tcl
 	sed -e /%TCLSH%/s##${TCLSH}# \
 	-e /%RCFPATH%/s##${RCFPATH}# \
 	npemwinctl.tcl > npemwinctl
+
+npemwinstatcounters: npemwinstatcounters.tcl
+	sed -e /%TCLSH%/s##${TCLSH}# npemwinstatcounters.tcl > \
+	npemwinstatcounters
 
 filter.sh-sample: filter.sh.in
 	sed -e "/%SHELL%/s##${SHELL}#" filter.sh.in > filter.sh-sample
