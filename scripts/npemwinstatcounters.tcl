@@ -76,6 +76,21 @@ proc _get_upstream_stats {file} {
     return $server;
 }
 
+proc proc_stringtoarray {str} {
+
+    set strlist [split $str]
+    set n [llength $strlist]
+    set i 0
+    while {$i < $n} {
+	set j [expr $i + 1]
+	set a($j) [lindex $strlist $i]
+	set i $j
+    }
+    set a(0) $str
+
+    return [array get a]
+}
+
 ## The common defaults
 set _defaultsfile "/usr/local/etc/npemwin/filters.conf";
 if {[file exists ${_defaultsfile}] == 0} {

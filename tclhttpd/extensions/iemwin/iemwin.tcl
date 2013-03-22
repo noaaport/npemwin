@@ -68,7 +68,7 @@ proc iemwin_output_stats {format} {
     set r "";
     foreach k [list data_type] {
 	if {$format eq "std"} {
-	    append r "$k = $iemwin($k)\n";
+	    append r "$k=$iemwin($k)\n";
 	} elseif {$format eq "csv"} {
 	    append r "$iemwin($k),";
 	} elseif {$format eq "csvk"} {
