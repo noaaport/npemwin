@@ -198,8 +198,8 @@ if {[file exists $activefile]} {
 set values [concat $values \
 		$status_values \
 		$estatus_values \
-		$num_clients \
-		$client_table];
+		$num_clients];
+lappend values $client_table;
 
 if {$fmt eq "stdh"} {
     puts {#
