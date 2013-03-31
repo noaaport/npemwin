@@ -36,13 +36,15 @@ proc err {s} {
 #
 # auxiliary functions
 #
-proc _output_stats_connections {file} {
+proc _output_stats_connections {file fmt} {
 #
 # This function returns a tcl list, in which each element is the data
 # for each connected client. The code is copied from npemwin_connections{}
 # in functions.tcl in the tclhttpd main lib.
-# The data for each client is: "ip" "type" "queue" "time"
+# The data for each client is: nameorip protocol queue_size connecttime
 #
+    set klist [list nameorip protocol queue_size connect_time];
+
     set r [list];
     set f [open $file r];
     while {[gets $f finfo] > 0} {
@@ -51,10 +53,16 @@ proc _output_stats_connections {file} {
             continue;
         }
 
-        array set a [proc_stringtoarray [string trimleft $finfo]];
-        set client_data [format "%s %s %s %s" $a(1) $a(2) $a(3) $a(4)];
-	lappend r $client_data;
-
+	set vlist [split [string trimleft $finfo]];
+	set client_data [list];
+	foreach k $klist v $vlist {
+	    if {$fmt eq "csv"} {
+	      lappend client_data ${v};
+	    } else {
+	      lappend client_data "${k}:${v}";
+	    }
+        }
+	lappend r [join $client_data " "];
     }
     close $f;
 
@@ -77,7 +85,9 @@ proc _get_upstream_stats {file} {
 }
 
 proc proc_stringtoarray {str} {
-
+#
+# Not used
+#
     set strlist [split $str]
     set n [llength $strlist]
     set i 0
@@ -190,9 +200,13 @@ if {[file exists $emwinstatusfile]} {
 
 # The client table
 if {[file exists $activefile]} {
-    set _client_data_list [_output_stats_connections $activefile];
+    set _client_data_list [_output_stats_connections $activefile $fmt];
     set num_clients [llength ${_client_data_list}];
-    set client_table [join ${_client_data_list} "|"];
+    if {$fmt eq "xml"} {
+        set client_table [join ${_client_data_list} "\n"];
+    } else {
+        set client_table [join ${_client_data_list} "|"];
+    }
 }
 
 set values [concat $values \
