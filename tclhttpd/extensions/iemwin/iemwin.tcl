@@ -7,7 +7,7 @@
 #
 # where <command> is
 #
-# /_iemwin/stats[?format=stdh|std|xml|csv|csvk]
+# /_iemwin/stats[?format=std|yaml|xml|csv|csvk]
 #
 Direct_Url /_iemwin _iemwin;
 

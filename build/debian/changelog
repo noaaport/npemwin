@@ -1,3 +1,9 @@
+npemwin (2.4.7r-1) oneiric; urgency=low
+
+  * Added yaml format to npemwinstatcounters outptut
+
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Sun, 31 Mar 2013 19:08:16 -0400
+
 npemwin (2.4.6r-1) oneiric; urgency=low
 
   * Added npemwin status (frames and bytes data) to the iemwin web query 
@@ -6,7 +12,6 @@ npemwin (2.4.6r-1) oneiric; urgency=low
     implemenet the iemwin web query api.
 
  -- Jose F Nieves <nieves@ltp.uprrp.edu>  Wed, 20 Mar 2013 22:22:15 -0400
-
 
 npemwin (2.4.5r-1) oneiric; urgency=low
 

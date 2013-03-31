@@ -13,8 +13,8 @@
 #   <emwinstatusfile> = servers.status
 #   <statusfile>  = npemwind.status
 #
-# The last line is written to stdout; the order of the columns is given below.
-# The <fmt> can be: std (default), stdh, xml, csv, csvk
+# The <fmt> can be: std (default), yaml, xml, csv, csvk
+#
 # The motivation for the existence of this tool is to use it for extracting
 # and feeding the data to rrdtool or similar programs
 # (it is used by the _iemwin extension in the web interface).
@@ -41,7 +41,10 @@ proc _output_stats_connections {file fmt} {
 # This function returns a tcl list, in which each element is the data
 # for each connected client. The code is copied from npemwin_connections{}
 # in functions.tcl in the tclhttpd main lib.
-# The data for each client is: nameorip protocol queue_size connecttime
+# The data for each client is of the form: k1:v1 k2:v2 k3:v3 k4:v4
+# for all the formats except csv, which does not have the keywords;
+# for yaml it has the indentation markers.
+# The keywords are: nameorip protocol queue_size connect_time
 #
     set klist [list nameorip protocol queue_size connect_time];
 
@@ -58,11 +61,21 @@ proc _output_stats_connections {file fmt} {
 	foreach k $klist v $vlist {
 	    if {$fmt eq "csv"} {
 	      lappend client_data ${v};
+	    } elseif {$fmt eq "yaml"} {
+	      if {$k eq "nameorip"} {
+	        lappend client_data "  - ${k}:${v}";
+	      } else {
+	        lappend client_data "    ${k}:${v}";
+              }	
 	    } else {
 	      lappend client_data "${k}:${v}";
 	    }
         }
-	lappend r [join $client_data " "];
+	if {$fmt eq "yaml"} {
+            lappend r [join $client_data "\n"];
+	} else {
+            lappend r [join $client_data " "];
+	}
     }
     close $f;
 
@@ -202,7 +215,7 @@ if {[file exists $emwinstatusfile]} {
 if {[file exists $activefile]} {
     set _client_data_list [_output_stats_connections $activefile $fmt];
     set num_clients [llength ${_client_data_list}];
-    if {$fmt eq "xml"} {
+    if {($fmt eq "xml") || ($fmt eq "yaml")} {
         set client_table [join ${_client_data_list} "\n"];
     } else {
         set client_table [join ${_client_data_list} "|"];
@@ -215,16 +228,17 @@ set values [concat $values \
 		$num_clients];
 lappend values $client_table;
 
-if {$fmt eq "stdh"} {
+if {$fmt eq "yaml"} {
     puts {#
 # npemwin counters in the last period (ending at "stats_time" in unix seconds).
-#
-DATA_START};
-
+#};
     foreach k $keywords v $values {
-	puts "$k=$v";
+        if {$k eq "client_table"} {
+	    puts "${k}:\n${v}";
+	} else {
+	    puts "${k}:${v}";
+        }
     }
-    puts "DATA_END";
 } elseif {$fmt eq "std"} {
     foreach k $keywords v $values {
 	puts "$k=$v";
