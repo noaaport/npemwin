@@ -66,12 +66,11 @@ case $os in
 	SUFFIXRULES="%.o: %.c"
 	EXCLUDE="--exclude "
 
-      	# opensuse/fedora
 	TCL_INCDIR=
 	TCL_LIB="tcl8.5"
 	TCLSH=/usr/bin/tclsh8.5
 	DB_INCDIR=
-	DB_LIB="db-4.8"
+	DB_LIB="db-5.1"
 
 	if [ $flavor = centos ]
 	then
