@@ -67,3 +67,6 @@
   stats data from the npemwin stats files. It is now used to
   implement the iemwin web query api. It includes the
   npemwin status (frames and bytes data).
+
+2.4.7r
+- Updated metarfilter for gnuplot-4.6
