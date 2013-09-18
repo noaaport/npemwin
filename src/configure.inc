@@ -8,7 +8,7 @@ COMMON_LIBS="-lconn -lqdb -lwrap -lz"
 
 # defaults (FreeBSD)
 INCDIRS="$TCL_INCDIR $DB_INCDIR"
-LIBDIRS="$COMMON_LIBDIRS -L /usr/local/lib"
+LIBDIRS="$COMMON_LIBDIRS $LOCAL_LIBDIR"
 LIBS="$COMMON_LIBS -lutil -l${TCL_LIB} -l${DB_LIB} -lpthread"
 
 case $os in
@@ -28,18 +28,18 @@ case $os in
 	;;
     Linux)       
 	LIBDIRS="$COMMON_LIBDIRS"
-	LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread -lnsl -lresolv"
+	LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread -lrt"
 	[ $flavor = debian ] && \
 		LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread"
 	#
-	# If we need to use local libs (e.g., bdb) use
-	# [ $flavor = centos ] && LIBDIRS="$COMMON_LIBDIRS -L/usr/local/lib"
-	#
+	# For CentOS use the local db if we have it
+	[ $flavor = centos ] && \
+	  	  LIBDIRS="$COMMON_LIBDIRS $LOCAL_LIBDIR"
 	;;
     Darwin)
 	INCDIRS="$DB_INCDIR" 
 	COMMON_LIBDIRS="-L./libconnth -L./libqdb"
-	LIBDIRS="$COMMON_LIBDIRS -L/usr/local/lib"
+	LIBDIRS="$COMMON_LIBDIRS $LOCAL_LIBDIR"
 	LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread"
 	;;	    
 esac

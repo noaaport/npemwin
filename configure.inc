@@ -22,6 +22,9 @@ TCLSH=/usr/local/bin/tclsh8.6
 DB_INCDIR="-I /usr/local/include/db5"
 DB_LIB="db-5"
 
+LOCAL_LIBDIR="-L /usr/local/lib"
+LOCAL_INCDIR="-I /usr/local/include"
+
 # scripts dir
 SHELL="/bin/sh"
 FIND=find
