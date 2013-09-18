@@ -7,7 +7,7 @@ Standards-Version: 3.7.2
 
 Package: npemwin
 Architecture: any
-Depends: ${shlibs:Depends}, libwrap0, libdb4.8, tcl8.5, tcllib, gnuplot-nox,
+Depends: ${shlibs:Depends}, libwrap0, libdb5.1, tcl8.5, tcllib, gnuplot-nox,
  unzip
 Description: Emwin server
  Npemwin will connect to a list of EMWIN servers and save all
