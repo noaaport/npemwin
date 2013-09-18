@@ -23,16 +23,18 @@ case $os in
 	CC=gcc
 	INCDIRS="-I /opt/sfw/include -I /usr/sfw/include"
 	LIBDIRS="$COMMON_LIBDIRS -L /opt/sfw/lib -L /usr/sfw/lib"
-	LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread -lsocket -lnsl -lresolv"
+	LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} \
+			   -lpthread -lsocket -lnsl -lresolv"
 	;;
     Linux)       
 	LIBDIRS="$COMMON_LIBDIRS"
 	LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread -lnsl -lresolv"
 	[ $flavor = debian ] && \
 		LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread"
-	# For CentOS and Debian use the local db if we have it
-	[ $flavor = centos ] && LIBDIRS="$COMMON_LIBDIRS -L /usr/local/lib"
-	[ $flavor = debian ] && LIBDIRS="$COMMON_LIBDIRS -L /usr/local/lib"
+	#
+	# If we need to use local libs (e.g., bdb) use
+	# [ $flavor = centos ] && LIBDIRS="$COMMON_LIBDIRS -L/usr/local/lib"
+	#
 	;;
     Darwin)
 	INCDIRS="$DB_INCDIR" 
