@@ -1,3 +1,9 @@
+npemwin (2.4.8r-2) oneiric; urgency=low
+
+  * Changed the requirement from db-4.8 to db-5.1 in the debian control file
+
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Thu, 19 Sep 2013 18:52:02 -0400
+
 npemwin (2.4.8r-1) oneiric; urgency=low
 
   * Updated metarfilter for gnuplot-4.6
