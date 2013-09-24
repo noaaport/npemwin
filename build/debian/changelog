@@ -1,3 +1,11 @@
+npemwin (2.4.8r+ubuntu1204.1-2) oneiric; urgency=low
+
+  * Created branch for Ubuntu-12.04 which uses gnuplot-4.4 instead of 4.6
+  * The color spec in metarfilter (plotfmtoptions) were reverted to
+    the old (pre 4.6) format.
+
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Mon, 23 Sep 2013 21:53:33 -0400
+
 npemwin (2.4.8r-2) oneiric; urgency=low
 
   * Changed the requirement from db-4.8 to db-5.1 in the debian control file
