@@ -1,0 +1,14 @@
+usr/local/etc/npemwin/dist
+usr/local/etc/rc.d
+usr/local/sbin
+usr/local/bin
+usr/local/libexec/npemwin
+usr/local/libexec/npemwin/tclhttpd
+usr/local/libexec/npemwin/tclhttpd/dist
+usr/local/libexec/npemwin/tclhttpd/npemwin
+usr/local/libexec/npemwin/tclhttpd/extensions
+usr/local/libexec/npemwin/tclmetar
+usr/local/share/doc/npemwin
+usr/local/share/doc/npemwin/prefilter
+usr/local/share/doc/npemwin/panfilter
+usr/local/man/man1
