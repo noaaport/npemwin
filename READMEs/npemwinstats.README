@@ -1,0 +1,34 @@
+#
+# $Id$
+#
+
+Executing from a terminal
+
+  npemwinstatcounters [-f <fmt>] [-a <activefile>]
+                      [-e <emwinstatusfile>] [-s <statusfile>]
+
+will output the npemwin counters in the last minute (ending at "unix_seconds").
+
+The default files are (in "/var/npemwin/stats"):
+
+  <activefile>  = npemwind.active
+  <emwinstatusfile> = servers.status
+  <statusfile>  = npemwind.status
+
+The counters data for the last minute is written to stdout. The <fmt> can be:
+
+	std, xml, yaml, csv, csvk
+
+(csvk is like csv but inluding the keywords in addition to the values).
+The "std" format is used if nothing is specified.
+
+The same data can be retrieved remotely from the url
+
+	http://<npemwin_server_name_or_ip>:8016/_iemwin/stats?format=xxx
+
+where is one of the formats above. The phrase "?format=xxx" can be omitted
+and in that case it defaults to "csvk".
+
+The motivation for the existence of these tools is to use them for extracting
+and feeding the data to rrdtool or similar programs.
+-
