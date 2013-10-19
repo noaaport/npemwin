@@ -13,7 +13,7 @@
     <b class="menu">Latest</b><br/>
     <form method="post" action="/m/m.action_img_file.tml">
     <input type="submit" name="action" value="View">
-    <select name="urlpath">
+    <select name="url">
   }
  
   foreach c $filelist {

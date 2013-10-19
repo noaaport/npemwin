@@ -1,0 +1,6 @@
+
+[
+  set url [::ncgi::value "url"];
+  return "<img src=\"${url}\">";
+]
+
