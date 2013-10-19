@@ -3,15 +3,15 @@
   set val [::ncgi::value "dir"];
   set stationlist [lsort [glob -directory $val -nocomplain "*"]];
 
-  if {[llength $txtlist] == 0} {
-    return "No files found.";
-  } else {
-    set r {
-      <b class="menu">Station</b><br/>
-      <form method="post" action="/m/m.action_txt_station.tml">
-      <input type="submit" name="action" value="View">
-      <select name="stationdir">
-    }
+  if {[llength $stationlist] == 0} {
+    return "No stations found.";
+  }
+
+  set r {
+    <b class="menu">Station</b><br/>
+    <form method="post" action="/m/m.action_txt_station.tml">
+    <input type="submit" name="action" value="View">
+    <select name="stationdir">
   }
 
   foreach c $stationlist {

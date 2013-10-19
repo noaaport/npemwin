@@ -1,0 +1,32 @@
+
+[
+  set imgdir [::ncgi::value "dir"];
+  set dir [file join $Config(docRoot) $imgdir];
+  set filelist [lsort [glob -directory $dir -tails -nocomplain "*"]];
+  # set fmt [file tail $imgdir];
+
+  if {[llength $filelist] == 0} {
+    return "No files found.";
+  }
+
+  set r {
+    <b class="menu">Latest</b><br/>
+    <form method="post" action="/m/m.action_img_file.tml">
+    <input type="submit" name="action" value="View">
+    <select name="urlpath">
+  }
+ 
+  foreach c $filelist {
+    set name [file rootname [file tail $c]];
+    set url [file join "/" $imgdir $c];
+    append r "<option value=\"${url}\">${name}</option>\n";
+  }
+
+  append r {
+    </select>
+    </form>
+  }
+
+  return $r;
+]
+

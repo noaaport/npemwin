@@ -2,17 +2,17 @@
 [
   set val [::ncgi::value "dir"];
   set filelist [lsort [glob -directory $val -nocomplain "*"]];
-  set station [file tail $val];
+  # set station [file tail $val];
 
-  if {[llength $txtlist] == 0} {
+  if {[llength $filelist] == 0} {
     return "No files found.";
-  } else {
-    set r {
-      <b class="menu">Latest</b><br/>
-      <form method="post" action="/m/m.action_txt_file.tml">
-      <input type="submit" name="action" value="View">
-      <select name="fpath">
-    }
+  }
+
+  set r {
+    <b class="menu">Latest</b><br/>
+    <form method="post" action="/m/m.action_txt_file.tml">
+    <input type="submit" name="action" value="View">
+    <select name="fpath">
   }
  
   foreach c $filelist {

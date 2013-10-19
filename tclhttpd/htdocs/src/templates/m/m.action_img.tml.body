@@ -1,0 +1,8 @@
+
+<pre>
+[
+  set val [::ncgi::value "fpath"];
+  return [::fileutil::cat $val];
+]
+</pre>
+
