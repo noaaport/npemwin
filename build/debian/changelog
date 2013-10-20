@@ -1,3 +1,9 @@
+npemwin (2.4.8r+ubuntu1204.2-1) oneiric; urgency=low
+
+  * Added display of images in mobile version
+
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Sat, 19 Oct 2013 22:10:34 -0400
+
 npemwin (2.4.8r+ubuntu1204.1-2) oneiric; urgency=low
 
   * Created branch for Ubuntu-12.04 which uses gnuplot-4.4 instead of 4.6
