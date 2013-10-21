@@ -74,6 +74,9 @@ case $os in
 	DB_INCDIR=
 	DB_LIB="db-5.1"
 
+	LOCAL_LIBDIR=
+	LOCAL_INCDIR=
+
 	if [ $flavor = centos ]
 	then
 	   TCL_INCDIR=
@@ -88,7 +91,6 @@ case $os in
 	   TCLSH=/usr/bin/tclsh8.5
 	   DB_INCDIR=
 	   DB_LIB="db-5.1"
-	   [ $ubuntu != "0" ] && DB_LIB="db-5.1"
     	fi
 	;;
     Darwin)
