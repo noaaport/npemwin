@@ -1,3 +1,9 @@
+npemwin (2.4.10p1-1) oneiric; urgency=low
+
+  * Added ability to insert termination code in npemwinfilter
+
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Wed, 30 Oct 2013 21:23:03 -0400
+
 npemwin (2.4.9r-1) oneiric; urgency=low
 
   * Added display of images in mobile version
