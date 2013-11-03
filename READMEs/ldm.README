@@ -16,6 +16,10 @@ variable has the correct path to the pqinsert program.
 	chgrp noaaport ldm.pq
 	chmod 664 ldm.pq
 
-   NOTE: An easier solution is install ldm as user "noaaport:noaaport".
+   Another option is to add in the ``npemwind.conf'' file
+
+        set group "noaaport,ldm"
+
+   and another one is to install ldm as user "noaaport:noaaport".
 
 4) Start ldm, then start npemwin, in that order.
