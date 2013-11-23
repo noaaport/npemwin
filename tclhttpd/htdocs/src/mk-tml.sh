@@ -29,11 +29,13 @@ m_pages="m.index \
     m.action_txt_file \
     m.action_txt_station \
     m.action_txt_type \
+    m.action_img_file \
     m.form_metar_collective \
     m.form_metar_station \
     m.form_txt_file \
     m.form_txt_station \
     m.form_txt_type \
+    m.form_img_file \
     m.received_minute"
 
 #

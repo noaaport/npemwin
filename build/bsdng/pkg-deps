@@ -1,0 +1,5 @@
+  tcl86: {origin: lang/tcl86, version: 8.6}
+  tcllib: {origin: devel/tcllib, version: 1.15}
+  db5: {origin: databases/db5, version: 5.3}
+  gnuplot-nox: {origin: math/gnuplot-nox, version: 4.6}
+  unzip: {origin: archivers/unzip, version: 6}

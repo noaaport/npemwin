@@ -1,0 +1,131 @@
+#
+# npemwin user/group, directories owned by user, and directories owned by root
+#
+user=noaaport
+home=/var/noaaport
+#
+userdirs="/var/run/npemwin
+/var/log/npemwin
+/var/log/npemwin/www
+/var/npemwin
+/var/npemwin/stats
+/var/npemwin/spool
+/var/npemwin/spool/data
+/var/npemwin/spool/lock
+/var/npemwin/spool/tmp
+/var/npemwin/spool/qfiles
+/var/npemwin/files
+/var/npemwin/inv
+/var/npemwin/rss
+/var/npemwin/data
+/var/npemwin/data/digatmos
+/var/npemwin/data/latest
+/var/npemwin/data/metar
+/var/npemwin/data/msg
+/var/npemwin/data/gempak
+/var/npemwin/data/track
+/var/npemwin/archive
+/var/npemwin/archive/data
+/var/npemwin/archive/data/digatmos
+/var/npemwin/archive/data/metar
+/var/npemwin/archive/data/spool
+/var/npemwin/archive/inv
+/var/npemwin/archive/inv/digatmos
+/var/npemwin/www
+/var/npemwin/tmp"
+#
+rootdirs="/usr/local/etc/npemwin/defaults
+/usr/local/etc/npemwin/site
+/usr/local/etc/npemwin/rc.d
+/usr/local/etc/npemwin/rc.d/std
+/usr/local/etc/npemwin/rc.d/metar
+/usr/local/etc/npemwin/rc.d/da
+/usr/local/etc/npemwin/rc.d/gp
+/usr/local/etc/npemwin/rc.d/ldm
+/usr/local/etc/npemwin/rc.d/nntp
+/usr/local/etc/npemwin/rc.d/rss
+/usr/local/etc/npemwin/rc.d/npemwin
+/usr/local/etc/npemwin/rc.d/pan
+/usr/local/etc/npemwin/rc.d/msg
+/usr/local/libexec/npemwin/site
+/usr/local/libexec/npemwin/tclhttpd/site"
+
+# user/group
+pw groupadd $user -q
+status=$?
+if [ $status -ne 65 -a $status -ne 0 ]
+then
+    echo "Could not create group: $user"
+    exit 1
+fi
+#
+pw useradd $user -q -g $user -d $home
+status=$?
+if [ $status -ne 65 -a $status -ne 0 ]
+then
+    echo "Could not create user: $user"
+    exit 1
+fi
+
+# See note at the end of the file for usage of [-e] instead of [!-e]
+for d in $userdirs
+do
+  [ -e $d ] || install -d -m 755 -o $user -g $user $d
+done
+
+for d in $rootdirs
+do
+  [ -e $d ] || install -d -m 755 $d
+done
+
+#
+# install optional files from doc directory
+#
+docdir=/usr/local/share/doc/npemwin
+confdir=/usr/local/etc/npemwin
+rcdir=/usr/local/etc/rc.d
+
+install -m 0755 $docdir/npemwind.sh-sample $rcdir/npemwind
+
+#
+# configure default
+#
+cd $confdir/dist
+for file in *.conf-sample *.rc-sample *.def-sample
+do
+  name=${file%%"-sample"}
+  cp $file ../$name
+done
+cp README ..
+
+for file in *-defaults
+do
+  name=${file%%"-defaults"}
+  cp $file ../defaults/$name
+done
+
+for file in *-templates.tgz
+do
+  tar -C ../defaults -xzf $file
+done
+
+#
+# www and tclhttpd
+#
+cp /usr/local/share/doc/npemwin/www.tgz /var/npemwin/www
+cd /var/npemwin/www
+tar -xzf www.tgz
+rm www.tgz
+chown -R $user:$user *
+cd htdocs/pub
+#
+# Note: If we reverse the test [ ! -e ...] && ....
+# the statement will return 1 if rst exists and pkg_add will
+# think that the script is returning an error.
+#
+[ -e "digatmos" ] || ln -s /var/npemwin/data/digatmos digatmos
+[ -e "latest" ] || ln -s /var/npemwin/data/latest latest
+[ -e "msg" ] || ln -s /var/npemwin/data/msg msg
+[ -e "gempak" ] || ln -s /var/npemwin/data/gempak gempak
+[ -e "track" ] || ln -s /var/npemwin/data/track track
+[ -d "metarplot" ] || install -d -m 755 -o $user -g $user metarplot

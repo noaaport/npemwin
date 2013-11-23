@@ -27,14 +27,19 @@ case $os in
 			   -lpthread -lsocket -lnsl -lresolv"
 	;;
     Linux)       
-	LIBDIRS="$COMMON_LIBDIRS"
 	LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread -lrt"
 	[ $flavor = debian ] && \
 		LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread"
 	#
-	# For CentOS use the local db if we have it
-	[ $flavor = centos ] && \
-	  	  LIBDIRS="$COMMON_LIBDIRS $LOCAL_LIBDIR"
+	# If we have to use a local db:
+	#
+	## if [ $flavor = centos ]
+	## then
+	##     _BDBDIR="/usr/local/BerkeleyDB.5.1"
+	##     INCDIRS="$TCL_INCDIR -I ${_BDBDIR}/include"
+	##     LIBDIRS="$COMMON_LIBDIRS -L ${_BDBDIR}/lib"
+	## fi
+	##
 	;;
     Darwin)
 	INCDIRS="$DB_INCDIR" 
