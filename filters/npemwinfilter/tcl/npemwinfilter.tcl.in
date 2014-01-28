@@ -21,6 +21,8 @@ source $gf(filterlib);
 # default configuration file and rc script
 set npemwinfilter(conf)    [file join $gf(confdir) "npemwinfilter.conf"];
 set npemwinfilter(rc)      [file join $gf(confdir) "npemwinfilter.rc"];
+set npemwinfilter(ri)      [file join $gf(confdir) "npemwinfilter.ri"];
+set npemwinfilter(rq)      [file join $gf(confdir) "npemwinfilter.rq"];
 set npemwinfilter(rcdir)   [file join $gf(confdir) "rc.d" "npemwin"];
 set npemwinfilter(lib)     [file join $gf(localfilterdir) "npemwinfilter.lib"];
 set npemwinfilter(confdirs) $gf(localconfdirs)
@@ -109,4 +111,63 @@ proc process {prodname fpath} {
     }
 }
 
-main
+proc init_quit {ext} {
+
+    global npemwinfilter;
+
+    # Read any initialization or termination code from the files:
+    #
+    # npemwinfilter.${ext}
+    # defaults/npemwinfilter.${ext}
+    # site/npemwinfilter.${ext}
+    # rc.d/npemwin/*.${ext}
+    #
+    
+    if {[file exists $npemwinfilter(${ext})] == 1} {
+	source $npemwinfilter(${ext});
+    }
+
+    #
+    # defaults and site
+    #
+    set _qname [file tail $npemwinfilter(${ext})]
+    foreach _d $npemwinfilter(confdirs) {
+	set _localqname ${_d}/${_qname}
+	if {[file exists ${_localqname}] == 1} {
+	    source ${_localqname};
+	}
+    }
+    unset _d;
+    unset _qname;
+    unset _localqname;
+
+    #
+    # rc.d/npemwin
+    #
+    if {[file isdirectory $npemwinfilter(rcdir)] == 1} {
+       set _q "";
+	foreach _q \
+	   [glob -nocomplain -directory $npemwinfilter(rcdir) *.${ext}] {
+	    if {[file exists ${_q}] == 1} {
+		source ${_q};
+	    }
+	}
+	unset _q;
+    }
+}
+
+# Read any initialization code in the "ri" files
+set status [catch {init_quit "ri"} errmsg];
+if {$status != 0} {
+    log_msg $errmsg;
+    return 1;
+}
+
+main;
+
+# Read any termination code in the "rq" files
+set status [catch {init_quit "rq"} errmsg];
+if {$status != 0} {
+    log_msg $errmsg;
+    return 1;
+}

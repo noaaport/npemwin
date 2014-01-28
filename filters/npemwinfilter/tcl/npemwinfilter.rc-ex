@@ -100,6 +100,21 @@
 # introduced in the rc files.
 
 #
+# - Initialization and Termination -
+#
+
+# Before (after) entering the processing loop, the filter can read
+# initialization (termination) code from the files nbspfilter.ri
+# (nbspfilter.rq) that can be located in various directories within
+# the main configuration directory:
+#
+# npemwinfilter.${ext}
+# defaults/npemwinfilter.${ext}
+# site/npemwinfilter.${ext}
+# rc.d/npemwin/*.${ext}
+#
+
+#
 # - Examples
 #
 
