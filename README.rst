@@ -37,13 +37,20 @@ Binary packages are available from
 What's New
 ==========
 
+Fri Oct 25 08:34:29 AST 2013
+---------------------------
+
+An android application **EmwinMobi** is available for beta testing
+from
+
+  * ftp://www.noaaport.net/software
+
 Tue Feb  5 13:46:46 AST 2013
 ----------------------------
 
 Starting with version **2.4.1** Npemwin has a *mobile* web interface for better
-display in mobile devices, e.g., smartphones and tablets. It can be accessed
-from the top-left corner of the main web page. In addition the *NNTP*
-has been revised. More information in
+display in mobile devices, e.g., smartphones and tablets,
+and a revised NNTP interface. More information in
 
   * http://emwin.mobi
   * http://www.iemwin.net

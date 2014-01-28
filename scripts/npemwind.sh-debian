@@ -40,7 +40,7 @@ fi
 
 case "$1" in
   start)
-        # In Ubuntu /var/run/<subdir> must be recreated
+        # If /var/run is a tmpfs, /var/run/<subdir> must be recreated
         [ ! -d $RUNDIR ] && install -d -m 755 -o $OWNER -g $GROUP $RUNDIR
 
 	echo -n "Starting $DESC:"

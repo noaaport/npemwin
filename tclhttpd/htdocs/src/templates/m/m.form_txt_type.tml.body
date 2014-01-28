@@ -6,13 +6,13 @@
 
   if {[llength $txtlist] == 0} {
     return "No files found.";
-  } else {
-    set r {
-      <b class="menu">Text</b><br/>
-      <form method="post" action="/m/m.action_txt_type.tml">
-      <input type="submit" name="action" value="View">
-      <select name="typedir">
-    }
+  }
+
+  set r {
+    <b class="menu">Text</b><br/>
+    <form method="post" action="/m/m.action_txt_type.tml">
+    <input type="submit" name="action" value="View">
+    <select name="typedir">
   }
  
   foreach c $txtlist {

@@ -22,8 +22,8 @@ TCLSH=/usr/local/bin/tclsh8.6
 DB_INCDIR="-I /usr/local/include/db5"
 DB_LIB="db-5"
 
-LOCAL_LIBDIR="-L /usr/local/lib"
 LOCAL_INCDIR="-I /usr/local/include"
+LOCAL_LIBDIR="-L /usr/local/lib"
 
 # scripts dir
 SHELL="/bin/sh"
@@ -73,6 +73,8 @@ case $os in
 	TCLSH=/usr/bin/tclsh8.5
 	DB_INCDIR=
 	DB_LIB="db-5.1"
+	LOCAL_INCDIR=
+	LOCAL_LIBDIR=
 
 	if [ $flavor = centos ]
 	then

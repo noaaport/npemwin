@@ -10,7 +10,7 @@
 # r = release
 name=npemwin
 branch=2.4
-releasenumber=8
-releaselevel=r
-update="+sl64.1"
+releasenumber=10
+releaselevel=p
+update="1+sl64.1"
 version=${branch}.${releasenumber}${releaselevel}${update}

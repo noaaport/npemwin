@@ -131,6 +131,7 @@ proc init_quit {ext} {
     # defaults and site
     #
     set _qname [file tail $npemwinfilter(${ext})]
+
     foreach _d $npemwinfilter(confdirs) {
 	set _localqname ${_d}/${_qname}
 	if {[file exists ${_localqname}] == 1} {
@@ -167,6 +168,14 @@ main;
 
 # Read any termination code in the "rq" files
 set status [catch {init_quit "rq"} errmsg];
+if {$status != 0} {
+    log_msg $errmsg;
+    return 1;
+
+main;
+
+# Read any termination code in the "rq" files
+set status [catch {quit} errmsg];
 if {$status != 0} {
     log_msg $errmsg;
     return 1;
