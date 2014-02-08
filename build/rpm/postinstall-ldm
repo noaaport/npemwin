@@ -57,7 +57,7 @@ cp filters.conf-site-sample site/filters.conf
 cp stdfilter.rc-ldm-sample  rc.d/std/ldm.rc
 
 cat <<__EOF__
-
+-
 The configuration files are installed in /usr/local/etc/npemwin.
 
 The installation process should have created various directories
@@ -84,5 +84,4 @@ It is advisable to use a cron job to keep the incoming files
 directory from growing without limit; a sample script has been
 installed in /etc/cron.hourly.
 -
-
 __EOF__
