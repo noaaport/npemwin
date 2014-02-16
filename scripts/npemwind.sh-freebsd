@@ -15,6 +15,6 @@ name=npemwind
 command=/usr/local/sbin/${name}
 [ -z "$npemwind_enable" ] && npemwind_enable=0
 
-rcvar=`set_rcvar`
+rcvar=npemwind_enable
 load_rc_config $name
 run_rc_command "$1"
