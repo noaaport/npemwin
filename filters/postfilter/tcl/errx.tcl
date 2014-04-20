@@ -42,19 +42,38 @@ proc npemwin::syslog::usesyslog {{flag 1}} {
     set syslog(usesyslog) $flag;
 }
 
+proc npemwin::syslog::_usesyslog_set {} {
+
+    variable syslog;
+
+    set r 0;
+    if {$syslog(usesyslog) == 1} {
+	set r 1;
+    } elseif {[file pathtype $syslog(usesyslog)] eq "absolute"} {
+	set r 1;
+    }
+
+    return $r;
+}
+
 proc npemwin::syslog::_log_msg s {
 
     global argv0;
+    variable syslog;
 
-    set name [file tail $argv0];
-    exec logger -t $name -- $s;
+    if {$syslog(usesyslog) == 1} {
+	set name [file tail $argv0];
+	exec logger -t $name -- $s;
+    } elseif {[file pathtype $syslog(usesyslog)] eq "absolute"} {
+	::npemwin::filelog::msg $syslog(usesyslog) $s;
+    }
 }
 
 proc npemwin::syslog::msg s {
 
     variable syslog;
 
-    if {$syslog(usesyslog) == 1} {
+    if {[_usesyslog_set] == 1} {
 	_log_msg $s;
     } else {
 	puts $s;
@@ -65,7 +84,7 @@ proc npemwin::syslog::warn s {
 
     variable syslog;
 
-    if {$syslog(usesyslog) == 1} {
+    if {[_usesyslog_set] == 1} {
 	_log_msg "Warning: $s";
     } else {
 	::npemwin::errx::warn $s;
@@ -76,7 +95,7 @@ proc npemwin::syslog::errc s {
 
     variable syslog;
 
-    if {$syslog(usesyslog) == 1} {
+    if {[_usesyslog_set] == 1} {
 	_log_msg "Error: $s";
     } else {
 	::npemwin::errx::errc $s;
@@ -87,7 +106,7 @@ proc npemwin::syslog::err s {
 
     variable syslog;
 
-    if {$syslog(usesyslog) == 1} {
+    if {[_usesyslog_set] == 1} {
 	_log_msg "Error: $s";
 	exit 1;
     } else {
