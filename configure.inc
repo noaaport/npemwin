@@ -90,7 +90,14 @@ case $os in
 	   TCLSH=/usr/bin/tclsh8.5
 	   DB_INCDIR=
 	   DB_LIB="db-5.1"
-	   [ $ubuntu != "0" ] && DB_LIB="db-5.1"
+	   if [ $ubuntu = "14.04" ]
+	   then
+ 	   	TCL_INCDIR="-I /usr/include/tcl8.6"
+	   	TCL_LIB="tcl8.6"
+	   	TCLSH=/usr/bin/tclsh8.6
+	   	DB_INCDIR=
+	   	DB_LIB="db-5.3"
+	   fi
     	fi
 	;;
     Darwin)
