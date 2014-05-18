@@ -1,4 +1,4 @@
-npemwin (2.4.10p1+ubuntu1204.1-1) oneiric; urgency=low
+npemwin (2.4.10r+ubuntu1204.1-1) oneiric; urgency=low
 
   * Added ability to insert termination code in npemwinfilter
 
