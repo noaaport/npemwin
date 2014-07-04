@@ -51,7 +51,17 @@ rootdirs="/usr/local/etc/npemwin/defaults
 /usr/local/etc/npemwin/rc.d/msg
 /usr/local/libexec/npemwin/site
 /usr/local/libexec/npemwin/tclhttpd/site"
+#
+# target directories for optional files
+#
+docdir=/usr/local/share/doc/npemwin
+confdir=/usr/local/etc/npemwin
+rcdir=/etc/init.d
+defaultdir=/etc/default
 
+#
+# noaaport user
+#
 useradd -d $home $user > /dev/null 2>&1
 status=$?
 if [ $status -ne 9 -a $status -ne 0 ]
@@ -73,11 +83,10 @@ done
 #
 # install optional files from doc directory
 #
-docdir=/usr/local/share/doc/npemwin
-confdir=/usr/local/etc/npemwin
-rcdir=/etc/init.d
-
 install -m 0755 $docdir/npemwind.sh-sample $rcdir/npemwind
+[ -f $defaultdir/npemwind ] || \
+    install -m 0644 $docdir/npemwind.sh.conf-debian $defaultdir/npemwind
+
 if [ -n "`which chkconfig`" ]
 then
 	chkconfig --add npemwind
@@ -129,6 +138,9 @@ cd htdocs/pub
 [ -e "track" ] || ln -s /var/npemwin/data/track track
 [ -d "metarplot" ] || install -d -m 755 -o $user -g $user metarplot
 
+#
+# Display message
+#
 cat <<__EOF__
 -
 The configuration files are installed in /usr/local/etc/npemwin.
