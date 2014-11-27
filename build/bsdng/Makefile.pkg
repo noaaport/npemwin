@@ -28,7 +28,7 @@ build: ../../Makefile
 	cd ../..; ${MAKE}
 
 install: build
-	rm -rf pkg
+	rm -rf ${pkg_metadir}
 	install -d ${pkg_root}
 	cd ${pkg_root}; install -d `cat ../../pkg-dirlist`
 	cd ../..; ${MAKE} PKGBUILDDIR=`pwd`/${pkgng_builddir}/${pkg_root} \
