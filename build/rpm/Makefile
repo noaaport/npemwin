@@ -6,12 +6,12 @@ include ../../VERSION
 # The defaults in spec.in are for SL, and the overrides are other
 # flavors are below.
 #
-requires = $(shell cat rpm-requires)
-rpmrelease = $(shell cat rpm-release)
-rpmroot = ${HOME}/rpmbuild
+requires = $(shell grep -v "^\#" rpm-requires)
+rpmrelease = $(shell grep -v "^\#" rpm-release)
+rpmroot = ${HOME}/docs/devel/rpmbuild
 
 flavor = $(shell ./flavor.sh)
-arch =  $(shell uname -i)
+arch =  $(shell uname -m)
 dist = $(shell ./dist.sh)
 
 ifeq (${flavor}, opensuse)
@@ -22,6 +22,7 @@ endif
 
 tgzfile = ${name}-${version}.tgz
 rpmfile = ${name}-${version}-${rpmrelease}${dist}.${arch}.rpm
+rpmfile_client = ${nameclient}-${version}-${rpmrelease}${dist}.${arch}.rpm
 
 default: package
 
