@@ -1,11 +1,11 @@
 name: @name@
 version: @version@_@pkgbuild@
-origin: misc/@name@
-categories: misc
+origin: local/@name@
+categories: [local]
 arch: @abi@
 www: http://www.noaaport.net
 maintainer: nieves@1-loop.net
-licenses: ISC
+licenses: [ISC]
 comment: Emwin server
 prefix: /usr/local
 @deps@
