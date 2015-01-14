@@ -187,7 +187,7 @@ foreach _d $scheduler(confdirs) {
 	set conffile ${_f};
     }
 }
-if {$conffile == ""} {
+if {$conffile eq ""} {
     log_msg "$scheduler(rc) not found.";
     return 1;
 }
@@ -200,9 +200,9 @@ source $conffile;
 # It must be done in this order so that the verification of the time
 # specification is valid. (Otherwise a program's time spec is not checked
 # until after other programs have finished and insted of "now".
+
 set program_list [list];
 foreach entry $schedule {
-
     set parts [split $entry :];
     if {[llength $parts] != 2} {
 	log_msg "Error: Invalid specification: $entry";	
