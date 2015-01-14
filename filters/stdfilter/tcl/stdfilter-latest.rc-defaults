@@ -67,8 +67,8 @@ foreach _subdir ${_destsubdir} {
 }
 cd ${_currdir};
 
+unset -nocomplain _subdir;
 unset _destsubdir;
 unset _destname;
 unset _currdir;
-unset _subdir;
 }
