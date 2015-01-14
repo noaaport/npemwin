@@ -30,4 +30,3 @@
 # If 0, then no threads are ever used.
 #
 ### set Config(threads)		0
-
