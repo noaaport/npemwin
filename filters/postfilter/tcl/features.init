@@ -37,9 +37,9 @@ foreach _d $gf(localconfdirs) {
         source ${_localconfname};
     }
 }
+unset -nocomplain _d;
+unset -nocomplain _localconfname;
 unset _confname;
-unset _d;
-unset _localconfname;
 
 # If any of the std rules are enabled, enable the stdfilter
 foreach k [array names feature] {
@@ -56,5 +56,5 @@ foreach k ${_filterprefixes} {
 	lappend gf(filterlist)  [file join $gf(filterdir) "${k}filter"];
     }
 }
-unset k;
+unset -nocomplain k;
 unset _filterprefixes;
