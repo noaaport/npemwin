@@ -33,11 +33,11 @@ set msgfilter(ugczones)  [file join $gf(confdir) "msgfilter-ugczones.def"];
 #
 # Configuration variables
 #
-set msgfilter(smtp,originator) "npemwin@localhost";
+set msgfilter(smtp,originator) "noaaport@[info hostname]";
 set msgfilter(smtp,servers)    "localhost";
 set msgfilter(smtp,options) [list]; # for other options (if needed) such as
                                     # -username <u> -password <p> ...
-set msgfilter(http,server) "http://3.pool.iemwin.net:8016";
+set msgfilter(http,server) "http://[info hostname]:8015";
 #
 set msgfilter(datadir)  [file join $gf(datadir) "msg"];
 set msgfilter(wwwdir)  "msg";       # relative to the http root
