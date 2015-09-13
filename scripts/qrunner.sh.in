@@ -173,7 +173,8 @@ logger -t qrunner "qrunner script starting"
 # is never executed.
 #
 for file in \
-  `$FIND ${q_dirname} ${in_dirname} ${tmp_dirname} -cmin +${max_elapsed_time}`
+  `$FIND ${q_dirname} ${in_dirname} ${tmp_dirname} \
+    -type f -cmin +${max_elapsed_time}`
 do
       rm $file
 done 2>&1 | logger -t "qrunner"
