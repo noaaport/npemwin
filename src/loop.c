@@ -44,6 +44,7 @@ static int get_send_bbclientid_flag(void);
 static void reload_servers_list(void);
 
 static int process_packets(struct emwin_server *emserver);
+static void log_errx_header(void *rawdata);
 static void exec_qrunner(void);
 static int exec_filter(char *filename);
 
@@ -140,7 +141,8 @@ static int process_packets(struct emwin_server *emserver){
     }
   } else {
     /*
-     * This applies to both the wx14 raw device and a serial device
+     * This applies to both the wx14 raw device and a serial device,
+     * and the internet "device".
      *
      *    server_type_wx14_raw_device(emserver)
      *    server_type_serial_device(emserver)
@@ -153,9 +155,13 @@ static int process_packets(struct emwin_server *emserver){
       log_info("Connection closed by %s.", emserver->ip);
     else if(status == 1)
       log_errx("Short read from %s.", emserver->ip);
-    else if(status == 2)
-      log_errx("Error in header format or unrecognized packet type.");
-    else if(status == 3)
+    else if(status == 2){
+      if(ep.bbtype == BB_PACKET_TYPE_UNKNOWN)
+	log_errx("Unrecognized packet type. First byte: %c",
+		 ep.bbdata[0] ^ 0xff);
+      else if(ep.bbtype == BB_PACKET_TYPE_DATA)
+	log_errx_header(ep.rawdata);
+    } else if(status == 3)
       log_errx("Checksum error.");
     else if(status == 4)
       log_errx("Check file name error: %s", ep.header.filename);
@@ -215,6 +221,16 @@ static int process_packets(struct emwin_server *emserver){
     ++g.packet_count;
 
   return(status);
+}
+
+void log_errx_header(void *rawdata){
+
+  char header[EMWIN_HEADER_SIZE + 1];
+  
+  memcpy(header, rawdata, EMWIN_HEADER_SIZE);
+  header[EMWIN_HEADER_SIZE] = '\0';
+
+  log_errx("Error in header: %s", header);
 }
 
 void runq(void){
