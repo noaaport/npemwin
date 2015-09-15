@@ -172,6 +172,8 @@ int get_emwin_packet_bb(int f, struct emwin_packet *ep){
 			     g.readtimeout_retry);
     bbdata_size = size + sizeof(char);
   } else {
+    /* Let the caller know the character read */
+    ep->bbdata[0] = bbdata[0];
     return(2);
   }
 
@@ -244,7 +246,7 @@ int get_emwin_packet_serial(int f, struct emwin_packet *ep){
 
   if(status == 0){
     ep->bbtype = BB_PACKET_TYPE_DATA;
-     status = fill_packet_struct_serial(ep, serialdata, (int)datasize);
+    status = fill_packet_struct_serial(ep, serialdata, (int)datasize);
   }
 
   return(status);
