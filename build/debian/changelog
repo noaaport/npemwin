@@ -1,3 +1,13 @@
+npemwin (2.4.11r-1) oneiric; urgency=low
+
+  * Added -type -f to qrunner FIND command to list only the leftover
+    files in the various directories and omit the directories themselves
+
+  * When a malformed header is detected the error message now prints
+    the header.
+
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Tue, 15 Sep 2015 16:45:54 -0400
+
 npemwin (2.4.10r-1) oneiric; urgency=low
 
   * Added ability to insert termination code in npemwinfilter
