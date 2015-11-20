@@ -682,7 +682,7 @@ int save_emwin_packet(struct emwin_packet *ep){
 
   n = snprintf(g.qfiles->q_filename, g.qfiles->qfn_size, "%s/%s/%s.t",
 		 g.spooldir, g.qfilesdir, ep->header.filename);
-  assert(n == g.qfiles->qfn_size - 1);
+  assert(n <= g.qfiles->qfn_size - 1);
 
   /*
    * If this is not the first block, we try to open the 
@@ -719,7 +719,7 @@ int save_emwin_packet(struct emwin_packet *ep){
 
   n = snprintf(g.qfiles->tmp_filename, g.qfiles->tmpfn_size, "%s/%s/%s.t",
 	       g.spooldir, g.tmpdir, ep->header.filename);
-  assert(n == g.qfiles->tmpfn_size - 1);
+  assert(n <= g.qfiles->tmpfn_size - 1);
 
   /*
    * write the data to the tmp file
@@ -752,14 +752,14 @@ int save_emwin_packet(struct emwin_packet *ep){
     goto End;
 
   /*
-   * If this is last block, then write the qrunner q file,
+   * If this is the last block, then write the qrunner q file,
    * reusing the tmp file, and delete the temporary qfile.
    */
   if(ep->header.blockno == ep->header.numblocks){
     unlink(g.qfiles->q_filename);
     n = snprintf(g.qfiles->q_filename, g.qfiles->qfn_size, "%s/%s/%s.q",
 		 g.spooldir, g.qfilesdir, ep->header.filename);
-    assert(n == g.qfiles->qfn_size - 1);
+    assert(n <= g.qfiles->qfn_size - 1);
 
     stamp = time(NULL);
     if((fq = fopen(g.qfiles->tmp_filename, "w")) == NULL){
