@@ -1,3 +1,10 @@
+npemwin (2.4.12r-1) oneiric; urgency=low
+
+  * Revised checkfilename() (and is_text_file()) in emwin.c so that 
+    now the root of filenames can be less than 8 chars. 
+
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Thu, 19 Nov 2015 23:24:09 -0400
+
 npemwin (2.4.11r-1) oneiric; urgency=low
 
   * Added -type -f to qrunner FIND command to list only the leftover
