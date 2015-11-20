@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2004-2006 Jose F. Nieves <nieves@ltp.upr.clu.edu>
+ * Copyright (c) 2004-2016 Jose F. Nieves <nieves@ltp.uprrp..edu>
  *
  * See LICENSE
  *
@@ -15,9 +15,8 @@
 #define EMWIN_HEADER_SIZE	80
 #define EMWIN_DATABLOCK_SIZE	1024
 #define EMWIN_NULLPAD_SIZE	6
-#define EMWIN_FNAME_LEN		8	/* without the extension */
-#define EMWIN_TOTAL_FNAME_SIZE	12	/* 8 + period + ext */
-#define EMWIN_TOTAL_FNAME_LEN	13	/* 8 + period + ext + NULL */
+#define EMWIN_TOTAL_FNAME_SIZE	12	/* 8 + period + ext(3) */
+#define EMWIN_TOTAL_FNAME_LEN	13	/* 8 + period + ext(3) + NULL */
 #define EMWIN_TIMESTAMP_SIZE	22
 #define EMWIN_TIMESTAMP_LEN	23	/* 22 + NULL */
 #define SEQNUM_LEN		(SEQNUM_SIZE + 1)

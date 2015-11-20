@@ -930,13 +930,30 @@ static int checksum(struct emwin_packet *ep){
 }
 
 static int checkfilename(struct emwin_packet *ep){
-
+  /*
+   * This function was revised (19Nov2015), since around this date some
+   * packets were being transmitted with a header in which the root
+   * of the file name is less than 8 characters.
+   * 
+   * Date:    Thu, 19 Nov 2015 10:20:11 -0600
+   * To:      "'Jose F Nieves'" <nieves@ltp.uprrp.edu>
+   * From:    "Danny Lloyd" <danny@weathermessage.com>
+   *
+   * The spec on the NWS site says "/PF" followed by an 8-character filename,
+   * a period, and a 3- character filetype.
+   *
+   * That is misleading - the 8 character file name can vary from 1 to 8
+   * characters --- then followed by a period and 3 character file type.
+   */
   int status = 0;
   int c;
   int i;
   int namelen = strlen(ep->header.filename);
+  int rootnamelen;
+  
+  rootnamelen = namelen - 4;
 
-  for(i = 0; i < EMWIN_FNAME_LEN; ++i){
+  for(i = 0; i < rootnamelen; ++i){
     c = ep->header.filename[i];
     if(isalnum(c) == 0){
       status = 1;
@@ -945,12 +962,12 @@ static int checkfilename(struct emwin_packet *ep){
   }
 
   if(status == 0){
-    if(ep->header.filename[EMWIN_FNAME_LEN] != '.')
+    if(ep->header.filename[rootnamelen] != '.')
       status = 1;
   }
 
   if(status == 0){
-    for(i = EMWIN_FNAME_LEN + 1; i < namelen; ++i){
+    for(i = rootnamelen + 1; i < namelen; ++i){
       c = ep->header.filename[i];
       if(isalnum(c) == 0){
 	status = 1;
@@ -970,8 +987,15 @@ static int checkfilename(struct emwin_packet *ep){
 }
 
 static int is_text_file(char *filename){
+  /*
+   * Revised 19Nov2015 as in checkfilename() above
+   */
+  int namelen = strlen(filename);
+  char *extension;
 
-  if((filename[9] == 't') || (filename[9] == 'T'))
+  extension = &filename[namelen - 3];
+
+  if((strcmp(extension, "txt") == 0) || (strcmp(extension, "TXT") == 0))
     return(1);
 
   return(0);
