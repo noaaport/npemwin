@@ -1,5 +1,5 @@
-db4
-db4-utils
+libdb
+libdb-utils
 tcp_wrappers
 tcl
 tcllib
