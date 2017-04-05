@@ -32,7 +32,6 @@ browser.
 Binary packages are available from
 
   * http://www.noaaport.net
-  * http://bb.noaaport.net/npemwin/downloads
 
 What's New
 ==========
