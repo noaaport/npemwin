@@ -50,8 +50,7 @@ iEmwin
 
 <button
 type="button"
-onclick='window.location="http://emwin.mobi/"'>
+onclick='window.location="http://m.iemwin.net/"'>
 mEmwin
 </button>
 <br/>
-
