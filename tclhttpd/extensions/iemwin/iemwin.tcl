@@ -63,8 +63,7 @@ proc iemwin_output_stats {format} {
     }
 
     # Prepend the data_type and any other metadata before the data
-    # output by npemwinstatcounters (unless the requested format is "stdh"
-    # which contains the header from npemwinstatcounters).
+    # output by npemwinstatcounters.
     set r "";
     foreach k [list data_type] {
 	if {$format eq "std"} {
