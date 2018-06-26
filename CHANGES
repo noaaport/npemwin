@@ -70,3 +70,9 @@
 
 2.4.7r
 - Updated metarfilter for gnuplot-4.6
+
+2.4.13p1
+- Added nbspfilter to insert the files in an nbspd process.
+  To support this, modified "proc filterlib_get_rcvars" in filters.lib
+  to check that the awips extracted from the second line meets
+  several criteria, such as alpha-numeric, not larger than 6 characters.

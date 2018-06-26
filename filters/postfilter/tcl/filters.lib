@@ -38,11 +38,16 @@ proc filterlib_get_parts {fpath bodypartsize} {
     set status [catch {
         set f [open $fpath r];
         fconfigure $f -translation binary -encoding binary;
-	gets $f line1
-	gets $f line2	
-        set body [read $f $bodypartsize];
-        set header [string range $line1 0 17]
-        scan $line2 "%s" awips
+	gets $f line1;
+	gets $f line2;	
+        append body $line1 $line2 [read $f $bodypartsize];
+        set header [string range $line1 0 17];
+	scan $line2 "%s" awips;
+	if {([regexp {^[[:alnum:]]+$} $awips] == 0) || \
+	   ([string length $awips] > 6)} {
+	   set awips "";
+	}
+
     } errmsg];
 
     if {[info exists f]} {

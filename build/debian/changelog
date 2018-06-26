@@ -1,7 +1,16 @@
+npemwin (2.4.14p1-1) oneiric; urgency=low
+
+  * Added nbspfilter to insert the files in an nbspd process.
+    To support this, modified "proc filterlib_get_rcvars" in filters.lib
+    to check that the awips extracted from the second line meets
+    several criteria, such as alpha-numeric, not larger than 6 characters.
+
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Mon, 25 Jun 2018 20:01:39 -0400
+
 npemwin (2.4.12r-1) oneiric; urgency=low
 
-  * Revised checkfilename() (and is_text_file()) in emwin.c so that 
-    now the root of filenames can be less than 8 chars. 
+  * Revised checkfilename() (and is_text_file()) in emwin.c so that
+    now the root of filenames can be less than 8 chars.
 
  -- Jose F Nieves <nieves@ltp.uprrp.edu>  Thu, 19 Nov 2015 23:24:09 -0400
 
