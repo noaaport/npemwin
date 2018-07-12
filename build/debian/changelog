@@ -1,4 +1,4 @@
-npemwin (2.4.14p1-1) oneiric; urgency=low
+npemwin (2.4.13p1-1) oneiric; urgency=low
 
   * Added nbspfilter to insert the files in an nbspd process.
     To support this, modified "proc filterlib_get_rcvars" in filters.lib
