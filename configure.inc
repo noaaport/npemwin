@@ -93,7 +93,7 @@ case $os in
 	   TCLSH=/usr/bin/tclsh8.5
 	   DB_INCDIR=
 	   DB_LIB="db-5.1"
-	   if [ $debian = "8" -o $debian = "9" ]
+	   if [ $debian = "10" -o $debian = "11" ]
 	   then
 		TCL_INCDIR="-I /usr/include/tcl8.6"
 	   	TCL_LIB="tcl8.6"

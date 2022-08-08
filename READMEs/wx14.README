@@ -4,7 +4,7 @@ The WX14 has two ethernet ports. One of the ports transmits
 different kinds of //messages//, identified by a header.
 Some of those //messages// contain emwin
 data and others contain, for example, signal status information.
-The port transmits pure raw emwin data continously.
+The other port transmits pure raw emwin data continously.
 We will refer to these ports as the **message port** and the **data  port**,
 respectively.
 

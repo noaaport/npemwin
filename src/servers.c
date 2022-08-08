@@ -489,6 +489,19 @@ int server_type_wx14_raw_device(struct emwin_server *server){
   return(0);
 }
 
+int server_type_infeed(struct emwin_server *server){
+  /*
+   * An entry that starts with two "//" characters in the serverslist file
+   * is assumed to be the path to a fifo file . The corresponding
+   * "port" entry is then the creation mode string (e.g., 0664).
+   */
+
+  if(server->type == EMWIN_SERVER_TYPE_INFEED)
+    return(1);
+
+  return(0);
+}
+
 /**
 int main(void){
 
