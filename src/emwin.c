@@ -44,7 +44,6 @@ static int emwin_sync_device(int fd);
 static int emwin_sync_serial(int fd);
 static int emwin_sync_wx14_msg(int fd);
 static int emwin_sync_wx14_raw(int fd);
-static int emwin_sync_infeed(int fd);
 static int fill_packet_struct_bb(struct emwin_packet *ep,
 				 char *bbdata, int datasize);
 static int fill_packet_struct_wx14(struct emwin_packet *ep,
