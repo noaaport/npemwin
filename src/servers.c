@@ -113,10 +113,12 @@ struct emwin_server *get_next_server(void){
       es->stats.consecutive_packets = 0;
     }
   }    
-
+    
   if(server_type_serial_device(es))
     es->fd = open_emwin_server_serial(es->ip, es->port);
-  else{
+  else if(server_type_infeed(es))
+    es->fd = open_emwin_server_infeed(es->ip, es->port);
+  else {
     if(server_type_wx14_msg_device(es) || server_type_wx14_raw_device(es))
       es->fd = open_emwin_server_network(es->type,
 					 es->ip, es->port, &es->gai_code);

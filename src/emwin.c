@@ -44,6 +44,7 @@ static int emwin_sync_device(int fd);
 static int emwin_sync_serial(int fd);
 static int emwin_sync_wx14_msg(int fd);
 static int emwin_sync_wx14_raw(int fd);
+static int emwin_sync_infeed(int fd);
 static int fill_packet_struct_bb(struct emwin_packet *ep,
 				 char *bbdata, int datasize);
 static int fill_packet_struct_wx14(struct emwin_packet *ep,
@@ -135,6 +136,20 @@ int open_emwin_server_serial(char *device, char *settings_str){
     close(fd);
     fd = -2;	/* Same as ser_open() non-system error */
   }
+
+  return(fd);
+}
+
+int open_emwin_server_infeed(char *fpath, char *mode_str){
+  /*
+   * Returns:
+   * fd
+   * -1 system error
+   * -2 error from infeed_open_fifo (invalid mode_str)
+   */
+  int fd;
+
+  fd = infeed_open_fifo(fpath, mode_str);
 
   return(fd);
 }

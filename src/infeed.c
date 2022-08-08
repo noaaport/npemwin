@@ -16,15 +16,16 @@
 int infeed_open_fifo(char *fpath, char *mode_str) {
   /*
    * Returns:
+   * fd
    * -1 => system error
-   *  1 => mode_str does not represent an octal number
+   * -2 => mode_str does not represent an octal number
    */
   mode_t mode;
   int fd = -1;
   int status = 0;
 
   if(sscanf(mode_str, "%o", &mode) != 1)
-    return(1);
+    return(-2);
   
   (void)unlink(fpath);
   status = mkfifo(fpath, mode);
