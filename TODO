@@ -1,0 +1,53 @@
+Un nuevo file "servers2.c"
+
+void error_open_emwin_server(es);
+void error_close_emwin_server(es);
+
+que llaman a log_err.
+
+ - En el caso de close tal y como esta ahora en close_server().
+ - En el caso de open, como esta en loop.
+
+En ese mismo file, mover
+
+void release_server_list(void);
+struct emwin_server *get_next_server(void);
+
+#include "err.h"
+#include "emwin.h"
+
+void struct emwin_server *get_next_server(void){
+
+  /* rename the current get_next_server to _get ... */
+  es = _get_next_server();
+
+  if(es == NULL){
+    log_errx("No servers available.");
+  } else if(es->fd < 0) {
+    error_open_emwin_server(es);
+  }
+
+  return(es);
+}
+    
+void error_open_emwin_server(es){
+
+  if(es->fd == -1){
+    if(es->gai_code != 0){
+      log_errx("Cannot open connection to %s. %s", es->ip,
+	       gai_strerror(es->gai_code));
+    } else {
+      log_err2("Cannot open connection to", es->ip);
+    }
+  } else if(es->fd == -2){
+    if(server_type_serial_device(es))
+      log_errx("Cannot configure or synchronize %s:%s", es->ip, es->port);
+    else
+      log_errx("Could not get packet from %s", es->ip);
+  }
+}
+
+void error_close_emwin_server(es){
+
+    log_err2("Error closing %s: ", es->ip);
+}
