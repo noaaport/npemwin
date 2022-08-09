@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2004-2012 Jose F. Nieves <nieves@ltp.uprrp.edu>
+ * Copyright (c) 2004-2022 Jose F. Nieves <nieves@ltp.uprrp.edu>
  *
  * See LICENSE
  *
@@ -17,6 +17,7 @@
 #include "util.h"
 #include "emwin.h"
 #include "ser.h"
+#include "infeed.h"
 #include "servers.h"
 
 #define EMWIN_SERVERS_TABLE_GROW	5
@@ -118,20 +119,18 @@ struct emwin_server *get_next_server(void){
     es->fd = open_emwin_server_serial(es->ip, es->port);
   else if(server_type_infeed(es))
     es->fd = open_emwin_server_infeed(es->ip, es->port);
-  else {
-    if(server_type_wx14_msg_device(es) || server_type_wx14_raw_device(es))
+  else if(server_type_wx14_msg_device(es) || server_type_wx14_raw_device(es))
       es->fd = open_emwin_server_network(es->type,
 					 es->ip, es->port, &es->gai_code);
-    else
-      es->fd = open_emwin_server_network(EMWIN_SERVER_TYPE_BB,
+  else
+    es->fd = open_emwin_server_network(EMWIN_SERVER_TYPE_BB,
 					 es->ip, es->port, &es->gai_code);
-  }
 
   if(es->fd < 0){
     ++es->stats.bad_packet_count;
     es->stats.error = -1;
     ++es_list.refused_connections;
-  }else{
+  } else {
     es_list.refused_connections = 0;	/* reset counter */
     ++es->stats.connections;
     es->f_up = 1;
@@ -215,7 +214,7 @@ int get_server_list(char *fname){
 
       break;
 
-    }else if((tsvargc() != 0) && (tsvargv(0)[0] != '#')){
+    } else if((tsvargc() != 0) && (tsvargv(0)[0] != '#')){
       /*
        * The if() above, first checks that the line is non-blank,
        * and then that it does not start with a '#'. Do not invert
@@ -268,14 +267,21 @@ static int read_next_server(struct emwin_server *server){
 
   argv0 = tsvargv(0);
 
-  if(argv0[0] == '/')
-    server->type = EMWIN_SERVER_TYPE_SERIAL;
-  else if((argv0[0] == '@') && (argv0[1] == '@')){
-    server->type = EMWIN_SERVER_TYPE_WX14_RAW;
-    ++argv0; ++argv0;
+  if(argv0[0] == '/') {
+    if(argv0[1] == '/') {
+	server->type = EMWIN_SERVER_TYPE_INFEED;
+	++argv0;
+    } else {
+      server->type = EMWIN_SERVER_TYPE_SERIAL;
+    }
   } else if(argv0[0] == '@'){
-    server->type = EMWIN_SERVER_TYPE_WX14_MSG;
-    ++argv0;
+      if(argv0[1] == '@'){
+	server->type = EMWIN_SERVER_TYPE_WX14_RAW;
+	++argv0; ++argv0;
+      } else {
+	server->type = EMWIN_SERVER_TYPE_WX14_MSG;
+	++argv0;
+      }
   } else {
     server->type = EMWIN_SERVER_TYPE_BB;
   }
@@ -310,10 +316,15 @@ static void init_server(struct emwin_server *es){
 }
 
 static void close_server(struct emwin_server *es){
-
+  /*
+   * We are ignoring the possible close() errors here;
+   * we should revise this.
+   */
   if(es->fd != -1){
     if(server_type_serial_device(es))
       ser_close_port(es->fd);
+    else if(server_type_infeed(es))
+      infeed_close_fifo(es->fd, es->ip);
     else
       close(es->fd);
 
@@ -348,9 +359,11 @@ void release_server_list(void){
     return;
 
   for(i = 0; i < es_list.allocated; ++i){
-    if(es_list.server[i].fd != -1)
-      close(es_list.server[i].fd);
-
+    if(es_list.server[i].fd != -1){
+      /* close(es_list.server[i].fd); */
+      close_server(&es_list.server[i]);
+    }
+    
     if(es_list.server[i].ip != NULL){      
       free(es_list.server[i].ip);
     }

@@ -37,6 +37,7 @@ int putc_unlocked(int c, FILE *stream);
 #include "ser.h"
 #include "bb.h"
 #include "wx14.h"
+#include "infeed.h"
 #include "emwin.h"
 #include "defaults.h"
 
@@ -145,6 +146,9 @@ int open_emwin_server_infeed(char *fpath, char *mode_str){
    * fd
    * -1 system error
    * -2 error from infeed_open_fifo (invalid mode_str)
+   *
+   * Contrary to the serial device (and network) there is no need
+   * to sync the devive here.
    */
   int fd;
 
@@ -236,7 +240,7 @@ int get_emwin_packet_wx14_raw(int f, struct emwin_packet *ep){
 
 int get_emwin_packet_serial(int f, struct emwin_packet *ep){
   /*
-   * Call fill_packet_struct_serial(ep, bbdata, datasize);
+   * Calls fill_packet_struct_serial(ep, bbdata, datasize);
    */
   int status = 0;
   ssize_t datasize;
@@ -262,6 +266,17 @@ int get_emwin_packet_serial(int f, struct emwin_packet *ep){
     ep->bbtype = BB_PACKET_TYPE_DATA;
     status = fill_packet_struct_serial(ep, serialdata, (int)datasize);
   }
+
+  return(status);
+}
+
+int get_emwin_packet_infeed(int f, struct emwin_packet *ep){
+  /*
+   * Handle it the same way as reading from a serial device
+   */
+  int status = 0;
+
+  status = get_emwin_packet_serial(f, ep);
 
   return(status);
 }

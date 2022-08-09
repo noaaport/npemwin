@@ -189,11 +189,12 @@ int init_lock(void){
 void cleanup(void){
 
   terminate_server();
+
   /*
    * There are no shared queues, otherwise they would be cleared here.
    */
 
-  release_server_list();
+  release_server_list(); /* this also closes the input devices and/or servers */
   release_confoptions();
   destroy_emwin_qfiles();
 
