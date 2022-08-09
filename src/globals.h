@@ -110,6 +110,37 @@ struct npemwin_globals {
   int  f_ndaemon;	/* do not become daemon */
   int  f_verbose;
   int  f_server_enabled;  /* set to 1 if protocol was set to other than NONE */
-} g;
+};
+
+/*
+  This note is borrowed from the nbsp src -
+  
+  June 2022 - Added this note (for debian 11) because gcc was complaining
+  about multiple defintions of "g".
+
+  [https://stackoverflow.com/questions/69908418/ \
+  multiple-definition-of-first-defined-here-on-gcc-10-2-1-but-not-gcc-8-3-0]
+
+  In C a definition of a global variable that does not initialise the variable
+  is considered "tentative". You can have multiple tentative definitions of a
+  variable in the same compilation unit. Multiple tentative defintions in
+  different compilation units are not allowed in standard C, but were
+  historically allowed by C compilers on unix systems.
+
+  Older versions of gcc would allow multiple tenative definitions (but not
+  multiple non-tentative definitions) of a global variable in different
+  compilation units by default. gcc-10 does not. You can restore the old
+  behavior with the command line option "-fcommon" but this is discouraged.
+*/
+
+/* 
+ * Aug 2022 - to solve the above problem added this
+ * (and defined NPEMWIN_GLOBALS_DEF in main.c and nowehere else)
+ */
+#ifdef NPEMWIN_GLOBALS_DEF
+struct npemwin_globals g;
+#else
+extern struct npemwin_globals g;
+#endif
 
 #endif
