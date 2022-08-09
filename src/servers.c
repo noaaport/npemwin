@@ -18,6 +18,7 @@
 #include "emwin.h"
 #include "ser.h"
 #include "infeed.h"
+#include "err.h"  /* perhaps the functions that log should be in another file */
 #include "servers.h"
 
 #define EMWIN_SERVERS_TABLE_GROW	5
@@ -147,6 +148,27 @@ struct emwin_server *get_next_server(void){
   }
 
   return(es);
+}
+
+static void close_server(struct emwin_server *es){
+
+  int status = 0;
+
+  if(es->fd != -1) {
+    if(server_type_serial_device(es))
+      status = ser_close_port(es->fd);
+    else if(server_type_infeed(es))
+      status = infeed_close_fifo(es->fd, es->ip);
+    else
+      status = close(es->fd);
+
+    es->fd = -1;
+  }
+
+  es->f_up = 0;	/* mark it as down */
+
+  if(status != 0)
+    log_err2("Error closing %s: ", es->ip);
 }
 
 static int switch_server(struct emwin_server *es){
@@ -315,24 +337,6 @@ static void init_server(struct emwin_server *es){
   init_server_stats(es);
 }
 
-static void close_server(struct emwin_server *es){
-  /*
-   * We are ignoring the possible close() errors here;
-   * we should revise this.
-   */
-  if(es->fd != -1){
-    if(server_type_serial_device(es))
-      ser_close_port(es->fd);
-    else if(server_type_infeed(es))
-      infeed_close_fifo(es->fd, es->ip);
-    else
-      close(es->fd);
-
-    es->fd = -1;
-  }
-  es->f_up = 0;	/* mark it as down */
-}
-
 static void init_server_stats(struct emwin_server *es){
 
   es->stats.connect = 0;
@@ -360,7 +364,6 @@ void release_server_list(void){
 
   for(i = 0; i < es_list.allocated; ++i){
     if(es_list.server[i].fd != -1){
-      /* close(es_list.server[i].fd); */
       close_server(&es_list.server[i]);
     }
     
