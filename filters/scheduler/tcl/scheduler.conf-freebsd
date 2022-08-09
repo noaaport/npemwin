@@ -80,3 +80,7 @@ lappend schedule {
 lappend schedule {
   H01/1:newsyslog -r -f $confdir/newsyslog.conf &
 }
+
+### lappend schedule {
+###   M/2:/var/npemwin/emftp.sh &
+### }

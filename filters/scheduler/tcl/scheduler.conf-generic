@@ -80,3 +80,7 @@ lappend schedule {
 lappend schedule {
   H01/1:logrotate -s $logdir/logrotate.status $confdir/logrotate.conf &
 }
+
+### lappend schedule {
+###   M/2:/var/npemwin/emftp.sh &
+### }
