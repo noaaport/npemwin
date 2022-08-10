@@ -119,6 +119,8 @@ static int process_packets(struct emwin_server *emserver){
     status = get_emwin_packet_wx14_raw(server_fd, &ep);
   else if(server_type_serial_device(emserver))
     status = get_emwin_packet_serial(server_fd, &ep);
+  else if(server_type_infeed(emserver))
+    status = get_emwin_packet_infeed(server_fd, &ep);
   else
     status = get_emwin_packet_bb(server_fd, &ep);
 
@@ -141,11 +143,13 @@ static int process_packets(struct emwin_server *emserver){
     }
   } else {
     /*
-     * This applies to both the wx14 raw device and a serial device,
+     * This applies to the wx14 raw device, the serial device, the infeed fifo
      * and the internet "device".
      *
      *    server_type_wx14_raw_device(emserver)
      *    server_type_serial_device(emserver)
+     *    server_type_infeed(emserver)
+     *    server_type_bbserver(emserver)
      */
     if(status == -1)
       log_err2("Error reading packet from", emserver->ip);

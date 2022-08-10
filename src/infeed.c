@@ -23,9 +23,22 @@ int infeed_open_fifo(char *fpath, char *mode_str) {
   mode_t mode;
   int fd = -1;
   int status = 0;
+  unsigned short r;
 
-  if(sscanf(mode_str, "%o", &mode) != 1)
+  /*
+   * In FreeBSD mode_t is unsigned short but in linux it s unsigned int.
+   * Thus in FreeBSD the compiler complains of this
+   *
+   * if(sscanf(mode_str, "%o", &mode) != 1)
+   *   return(-2);
+   *
+   * and in Linux it complains if we use "%ho"
+   */
+  
+  if(sscanf(mode_str, "%ho", &r) != 1)
     return(-2);
+
+  mode = r;
   
   (void)unlink(fpath);
   status = mkfifo(fpath, mode);

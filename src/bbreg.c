@@ -62,7 +62,7 @@ static void bbserver_close(void){
     return;
 
   if(pclose(g.bbserverfp) == -1)
-    log_err("Error closing bbserver registrat.");
+    log_err("Error closing bbserver registrar.");
   else
     log_info("Stoped bbserver registrar.");
 

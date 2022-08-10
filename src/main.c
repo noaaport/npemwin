@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <tcl.h>	/* Tcl_FindExecutable to init tcl */
-#include "globals.h"
 #include "const.h"
 #include "signal.h"
 #include "err.h"
@@ -19,11 +18,13 @@
 #include "emwin.h"
 #include "httpd.h"
 #include "bbreg.h"
-#include "conf.h"
 #include "init.h"
 #include "loop.h"
 #include "per.h"
 #include "exec.h"
+#define NPEMWIN_GLOBALS_DEF
+#include "globals.h"
+#include "conf.h"
 
 static int parse_args(int argc, char **argv);
 

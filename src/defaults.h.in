@@ -139,7 +139,7 @@
  * Whether to register with the NWS master host and the parameters
  * related to that.
  */
-#define BBSERVER_ENABLE		1
+#define BBSERVER_ENABLE		0
 #define BBSERVER		"%MYLIBEXECDIR%/bbserver"
 
 /* The various lists received from the NWS master host */
