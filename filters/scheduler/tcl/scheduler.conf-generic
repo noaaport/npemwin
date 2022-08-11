@@ -82,5 +82,5 @@ lappend schedule {
 }
 
 ### lappend schedule {
-###   M/2:/var/npemwin/emftp.sh &
+###   M/2:/usr/local/libexec/npemwin/emftp &
 ### }

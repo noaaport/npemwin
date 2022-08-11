@@ -99,7 +99,7 @@
  * seconds waiting in a read() for a packet from the server, and how many
  * more times to try.
  */
-#define READ_TIMEOUT_SECS	10
+#define READ_TIMEOUT_SECS	120
 #define READ_TIMEOUT_RETRY	2
 
 /* seconds waiting writing to clients and how many more times to try */
@@ -111,9 +111,10 @@
 
 /* 
  * When to process the queue. It will be processed after this number of
- * packets are received. 
+ * packets are received or this number of seconds hace passed since the
+ * last run.
  */
-#define QRUN_PERIOD		20
+#define QRUN_PERIOD		120
 
 /* inform when the queue has been processed after this number of times */
 #define QRUN_REPORT_PERIOD	100
