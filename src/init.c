@@ -127,6 +127,7 @@ void init_globals(void){
   /*
    * internal variables
    */
+  g.runq_last_time = 0;
   g.packet_count = 0;
   g.qrun_count = 0;
   g.qrunner_pid = -1;

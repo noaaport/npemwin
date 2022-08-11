@@ -137,12 +137,22 @@ void periodic(void){
    */
   pid = wait_qrunner();
 
+  if(pid >= 0)
+    return;
+      
   /*
    * Execute the qrunner as specified.
-   */
-  if((g.packet_count >= g.qrunperiod) && (pid < 0)){
+   *
+   if(g.packet_count >= g.qrunperiod){
+     g.packet_count = 0;
+     runq();
+   }
+  */
+
+  if((now - g.runq_last_time) >= g.qrunperiod){
+    runq();
     g.packet_count = 0;
-      runq();
+    g.runq_last_time = time(NULL);
   }
 }
 

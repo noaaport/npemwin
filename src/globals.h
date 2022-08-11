@@ -95,6 +95,7 @@ struct npemwin_globals {
   /*
    * internal variables
    */
+  time_t runq_last_time; /* last time(NULL) that runq was run */
   int  packet_count;	/* # of packets received  - determines when to runq */
   int  qrun_count;	/* number of times the que has been processed. */
   pid_t qrunner_pid;   /* pid of last qrunner executed */

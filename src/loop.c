@@ -54,6 +54,7 @@ int loop(void){
   int status = 0;
   struct emwin_server *es;
 
+  /* Open the connection to one of the servers, device, or infeed */
   es = get_next_server();
 
   if(es == NULL){
@@ -81,7 +82,7 @@ int loop(void){
       log_errx("Could not get packet from %s", es->ip);
 
     status = 1;
-  }else{    
+  }else{
     log_info("Connected to %s @ %s", es->ip, es->port);
   }
 

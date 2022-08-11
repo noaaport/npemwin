@@ -248,7 +248,7 @@ do
 	    $UNZIP -qq -L -o -d ${tmp_dirname}/$name ${tmp_dirname}/$filename
 	    rm ${tmp_dirname}/$filename
 
-	    [ $verbose -eq 1 ] && echo "unziped $filename"
+	    [ $verbose -eq 1 ] && logger -t qrunner "unziped $filename"
 
 	    _flist=`ls ${tmp_dirname}/$name`
 	    _flistdir=${tmp_dirname}/$name
@@ -265,7 +265,7 @@ do
 
 	    # An empty $subdir signals an error (See the function).
 	    [ -z "$subdir" ] && \
-		{ echo "Corrupted header in ${_flistdir}/${_f}";
+		{ logger -t qrunner "Corrupted header in ${_flistdir}/${_f}";
 		  rm ${_flistdir}/${_f};
 		  break;
 		}
