@@ -153,6 +153,7 @@ gtime="`date -u +%H%M`"           # for entry in inv file
 # Nbsp and Npemwin processing
 #
 npemwin_enable=1
+gnpemwin_infifo="/var/run/npemwin/infeed.fifo"
 gnpemwininsert="/usr/local/bin/npemwininsert"
 #
 nbsp_enable=0
@@ -279,7 +280,7 @@ do
     #
     if [ $npemwin_enable -eq 1 ]
     then
-	$gnpemwininsert $rc_emname $emfpath
+	$gnpemwininsert -f $gnpemwin_infifo $rc_emname $emfpath
     fi
 
     if [ $nbsp_enable -eq 1 ]
