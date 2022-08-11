@@ -1,0 +1,279 @@
+FOCA52 TJSJ 052031
+PFMSJU
+
+POINT FORECAST MATRICES
+NATIONAL WEATHER SERVICE SAN JUAN PR
+431 PM AST Fri Aug 5 2022
+
+PRZ001-060830-
+LUIS MUNOZ MARIN INTERNATIONAL AIRPORT-SAN JUAN
+18.43N  66.00W ELEV. 9 FT
+431 PM AST Fri Aug 5 2022
+
+DATE           08/05/22      SAT 08/06/22            SUN 08/07/22            MON
+AST 3HRLY     17 20 23 02 05 08 11 14 17 20 23 02 05 08 11 14 17 20 23 02 05 08
+UTC 3HRLY     21 00 03 06 09 12 15 18 21 00 03 06 09 12 15 18 21 00 03 06 09 12
+
+MIN/MAX                      79          90          79          89          77
+TEMP          87 83 81 80 80 86 89 90 87 82 81 80 80 85 88 89 85 81 79 78 78 84
+DEWPT         75 75 75 75 75 76 76 75 76 76 76 76 76 76 76 76 76 76 76 76 77 77
+RH            68 77 82 85 85 72 66 62 70 82 85 88 88 75 68 66 75 85 91 94 97 80
+WIND DIR       E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E
+WIND SPD      14 12 12 11 11 13 17 16 16 13 13 12 13 14 18 17 16 12 12 12 11 13
+CLOUDS        B1 SC SC SC SC SC SC SC B1 B2 B1 B1 B1 B1 B1 B1 B1 B2 B2 B1 B1 SC
+POP 12HR                     40          60          60          50          50
+QPF 12HR                   0.11        0.24        0.41        0.38        0.16
+RAIN SHWRS     C  S  C  C  C  C  C  S  C  L  C  C  C  C  C  C  C  C  C  C  C  C
+TSTMS                                     S     S  S  S  S        S  S         
+HEAT INDEX    96 90 87 85 85 96100101 98 89 87 86 86 94 99100 94 87          94
+MAX HEAT         98    89    96   101    99    87    94   100    99    86    94
+
+
+DATE           08/08  TUE 08/09/22  WED 08/10/22  THU 08/11/22  FRI 08/12/22
+AST 6HRLY     14 20   02 08 14 20   02 08 14 20   02 08 14 20   02 08 14 20
+UTC 6HRLY     18 00   06 12 18 00   06 12 18 00   06 12 18 00   06 12 18 00
+
+MAX/MIN          89      79    88      79    89      79    89      79    87
+TEMP          89 82   80 85 88 82   80 85 89 82   80 85 89 82   80 84 87 82
+DEWPT         76 76   76 76 76 76   75 76 76 76   76 76 76 76   76 76 76 76
+PWIND DIR         E       E     E       E     E       E     E       E     E
+WIND CHAR        BZ      GN    GN      GN    GN      GN    GN      GN    GN
+AVG CLOUDS    SC SC   FW FW SC FW   SC SC SC SC   SC SC FW SC   FW FW SC SC
+POP 12HR         30      20    20      30    40      40    20      20    20
+RAIN SHWRS     C  S    S  S  S  S    S  C  C  C    C  C  S  S    S  S  S  S
+
+$$
+
+PRZ002-060830-
+ROOSEVELT ROADS NAVAL AIRSTATION-CEIBA PR
+18.25N  65.63W ELEV. 39 FT
+431 PM AST Fri Aug 5 2022
+
+DATE           08/05/22      SAT 08/06/22            SUN 08/07/22            MON
+AST 3HRLY     17 20 23 02 05 08 11 14 17 20 23 02 05 08 11 14 17 20 23 02 05 08
+UTC 3HRLY     21 00 03 06 09 12 15 18 21 00 03 06 09 12 15 18 21 00 03 06 09 12
+
+MIN/MAX                      79          90          79          90          79
+TEMP          87 83 81 80 80 86 89 90 87 82 81 80 80 86 89 90 87 83 81 80 80 85
+DEWPT         77 76 76 76 76 76 77 77 77 78 78 78 77 78 78 78 77 77 78 78 77 78
+RH            72 80 85 88 88 72 68 66 72 88 91 94 91 77 70 68 72 82 91 94 91 80
+WIND DIR       E  E  E  E  E  E  E  E  E NE  E  E  E  E  E  E  E  E  E  E  E  E
+WIND SPD      13 12 14 13 13 16 16 16 16 14 16 16 16 18 18 17 16 14 14 13 13 14
+CLOUDS        B1 SC B1 SC B1 SC SC SC B1 B2 B1 B2 B2 B2 B2 B1 B1 B1 B1 B1 B1 SC
+POP 12HR                     40          40          60          70          60
+QPF 12HR                   0.12        0.23        0.44        0.59        0.18
+RAIN SHWRS     C  C  C  C  C  C  C  S  C  C  C  C  C  L  L  L  L  L  L  C  C  S
+TSTMS                                     S     S  S  S  S  S  S  S  S         
+HEAT INDEX    99 91 87 86 86 96102103 99 91 89 87 87 98103105 99 92 89 87 87 97
+MAX HEAT        100    89    96   103   102    91    98   105   102    91    97
+
+
+DATE           08/08  TUE 08/09/22  WED 08/10/22  THU 08/11/22  FRI 08/12/22
+AST 6HRLY     14 20   02 08 14 20   02 08 14 20   02 08 14 20   02 08 14 20
+UTC 6HRLY     18 00   06 12 18 00   06 12 18 00   06 12 18 00   06 12 18 00
+
+MAX/MIN          89      78    89      79    88      79    89      79    88
+TEMP          89 82   79 85 89 82   80 85 88 82   80 85 89 82   80 85 88 83
+DEWPT         78 77   78 78 78 77   77 78 78 78   78 77 78 77   77 78 78 78
+PWIND DIR         E       E     E       E     E       E     E       E     E
+WIND CHAR        BZ      GN    GN      GN    GN      GN    GN      GN    GN
+AVG CLOUDS    SC FW   FW FW SC SC   SC SC SC SC   SC SC SC SC   FW FW SC SC
+POP 12HR         20      20    20      30    30      30    30      20    40
+RAIN SHWRS     S  S    S  S  S  S    S  C  C  C    C  C  C  C    S  S  C  C
+
+$$
+
+PRZ007-060830-
+MERCEDITA AIRPORT-PONCE PR
+18.02N  66.56W ELEV. 26 FT
+431 PM AST Fri Aug 5 2022
+
+DATE           08/05/22      SAT 08/06/22            SUN 08/07/22            MON
+AST 3HRLY     17 20 23 02 05 08 11 14 17 20 23 02 05 08 11 14 17 20 23 02 05 08
+UTC 3HRLY     21 00 03 06 09 12 15 18 21 00 03 06 09 12 15 18 21 00 03 06 09 12
+
+MIN/MAX                      76          90          74          91          73
+TEMP          86 81 79 77 77 85 89 90 85 79 77 75 76 85 90 91 85 79 76 74 75 84
+DEWPT         70 71 70 70 70 70 70 70 68 71 71 71 70 70 69 70 70 71 71 72 71 71
+RH            59 72 74 79 79 61 54 52 57 77 82 87 82 61 50 50 61 77 85 93 87 65
+WIND DIR       E  E NE NE NE  E  E  E  E NE NE NE NE  E  E  E  E  E  E  E  E  E
+WIND SPD      13  8  5  5  5  6 17 20 14  8  6  5  6 10 17 17 16  9  8  6  5  9
+WIND GUST                       28 34 25                28 28 26               
+CLOUDS        SC FW SC SC SC FW FW SC FW SC SC SC SC B1 B1 B1 B1 B2 B2 B1 B1 FW
+POP 12HR                     10          20          20          30          30
+QPF 12HR                   0.01        0.16        0.04        0.16        0.09
+RAIN SHWRS     S              S  S  S  S  S     S  S  S  S  S  S  C  C  C  C  S
+HEAT INDEX    91 85          90 94 96 88             90 95 97 90             89
+MAX HEAT         94    83    90    96    94          90    97    96          89
+
+
+DATE           08/08  TUE 08/09/22  WED 08/10/22  THU 08/11/22  FRI 08/12/22
+AST 6HRLY     14 20   02 08 14 20   02 08 14 20   02 08 14 20   02 08 14 20
+UTC 6HRLY     18 00   06 12 18 00   06 12 18 00   06 12 18 00   06 12 18 00
+
+MAX/MIN          90      74    90      74    91      75    91      74    89
+TEMP          90 79   75 84 90 79   75 85 91 80   76 85 91 80   75 83 89 80
+DEWPT         72 72   71 68 69 72   71 70 71 72   71 69 71 73   70 66 73 73
+PWIND DIR         E       E     E       E     E       E     E       E     E
+WIND CHAR        BZ      LT    GN      LT    GN      LT    GN      LT    GN
+AVG CLOUDS    SC SC   FW FW FW FW   FW FW SC SC   FW FW FW SC   FW FW FW FW
+POP 12HR         30      10    10      20    20      10    20      10    10
+RAIN SHWRS     C  C    S  S  S  S    S  S  S  S    S  S  S  S    S  S  S  S
+
+$$
+
+PRZ008-060830-
+RAFAEL HERNANDEZ AIRPORT-AGUADILLA PR
+18.50N  67.13W ELEV. 237 FT
+431 PM AST Fri Aug 5 2022
+
+DATE           08/05/22      SAT 08/06/22            SUN 08/07/22            MON
+AST 3HRLY     17 20 23 02 05 08 11 14 17 20 23 02 05 08 11 14 17 20 23 02 05 08
+UTC 3HRLY     21 00 03 06 09 12 15 18 21 00 03 06 09 12 15 18 21 00 03 06 09 12
+
+MIN/MAX                      76          90          75          89          74
+TEMP          86 81 79 77 77 85 89 90 85 79 77 76 76 84 88 89 84 79 77 75 76 83
+DEWPT         73 74 74 74 73 74 74 75 74 74 76 75 74 75 75 76 74 74 76 75 75 75
+RH            65 79 85 90 87 70 61 62 70 85 97 97 94 74 66 66 72 85 97100 97 77
+WIND DIR       E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E
+WIND SPD      20 23 18 17 13 16 20 21 23 23 18 17 16 18 20 26 26 25 19 14 16 18
+CLOUDS        B1 B1 B1 FW SC SC SC SC SC B1 B1 SC SC SC SC B2 B2 B2 B2 B1 B1 FW
+POP 12HR                     20          30          30          60          50
+QPF 12HR                   0.02        0.12        0.06        0.42        0.10
+RAIN SHWRS     S  S  S        S  S  S  S  C  S  S     S  S  L  L  C  C  S  S  S
+TSTMS                                                       S  S  S  S         
+HEAT INDEX    93 86          93 98101 93             92 98100 91             90
+MAX HEAT         96    84    93   101    98          92   100    98          90
+
+
+DATE           08/08  TUE 08/09/22  WED 08/10/22  THU 08/11/22  FRI 08/12/22
+AST 6HRLY     14 20   02 08 14 20   02 08 14 20   02 08 14 20   02 08 14 20
+UTC 6HRLY     18 00   06 12 18 00   06 12 18 00   06 12 18 00   06 12 18 00
+
+MAX/MIN          89      75    89      75    89      76    88      75    86
+TEMP          89 80   76 84 89 80   76 84 89 80   77 83 88 79   76 82 86 79
+DEWPT         76 74   75 74 75 74   75 74 75 74   75 74 75 75   75 75 75 74
+PWIND DIR         E       E     E       E     E       E     E       E     E
+WIND CHAR        BZ      BZ    BZ      BZ    GN      GN    GN      GN    GN
+AVG CLOUDS    SC SC   FW FW SC SC   FW FW SC SC   SC SC FW SC   FW FW FW FW
+POP 12HR         20      10    40      20    50      20    20      10    10
+RAIN SHWRS     S  S    S  S  C  C    S  S  C  C    S  S  S  S    S  S  S  S
+
+$$
+
+PRZ010-060830-
+EUGENIO MARIA DE HOSTO AIRPORT-MAYAGUEZ PR
+18.27N  67.15W ELEV. 28 FT
+431 PM AST Fri Aug 5 2022
+
+DATE           08/05/22      SAT 08/06/22            SUN 08/07/22            MON
+AST 3HRLY     17 20 23 02 05 08 11 14 17 20 23 02 05 08 11 14 17 20 23 02 05 08
+UTC 3HRLY     21 00 03 06 09 12 15 18 21 00 03 06 09 12 15 18 21 00 03 06 09 12
+
+MIN/MAX                      77          90          75          89          73
+TEMP          86 81 79 78 78 85 89 90 85 79 77 76 76 84 88 89 84 78 76 74 75 84
+DEWPT         76 76 75 74 73 76 76 77 77 76 76 75 74 76 78 77 77 76 76 74 74 77
+RH            72 85 88 88 85 75 66 66 77 91 97 97 94 77 72 68 80 94100100 97 80
+WIND DIR       E  E  E  E  E  E  E  E NE NE NE NE  E  E  E  E  E  E  E  E  E  E
+WIND SPD       9 11 10  8  5  6  3  4 10 12 11  9  8  6  3  3  6  6 11  8  8  9
+CLOUDS        B2 B1 B1 FW FW FW FW SC B1 B1 B1 SC FW SC SC OV OV B2 B2 SC SC FW
+POP 12HR                     30          30          20          80          60
+QPF 12HR                   0.02        0.20        0.02        0.66        0.12
+RAIN SHWRS     L  C  S              C  C  S     S           D  D  L  L  C  C  S
+TSTMS          S                                            C  C  S  S         
+HEAT INDEX    96 87          94100103 96             93102102 94             94
+MAX HEAT         99    87    94   103   102          93   103   100          94
+
+
+DATE           08/08  TUE 08/09/22  WED 08/10/22  THU 08/11/22  FRI 08/12/22
+AST 6HRLY     14 20   02 08 14 20   02 08 14 20   02 08 14 20   02 08 14 20
+UTC 6HRLY     18 00   06 12 18 00   06 12 18 00   06 12 18 00   06 12 18 00
+
+MAX/MIN          90      75    90      75    90      76    90      75    89
+TEMP          90 80   76 84 90 80   76 84 90 81   77 85 90 80   76 84 89 80
+DEWPT         78 77   75 76 78 77   75 76 78 77   75 76 78 77   75 76 78 77
+PWIND DIR         E       E     E       E     E       E     E       E     E
+WIND CHAR        LT      GN    LT      GN    LT      LT    LT      LT    LT
+AVG CLOUDS    SC SC   FW FW SC SC   FW FW SC B1   FW FW SC SC   FW FW SC B1
+POP 12HR         50      10    50      10    60      10    50      10    60
+RAIN SHWRS     C  C    S  S  C  C    S  S  L  L    S  S  C  C    S  S  L  L
+TSTMS          S  S          S  S          S  S                        S  S
+
+$$
+
+VIZ001-060830-
+CYRIL E. KING AIRPORT-ST THOMAS USVI
+18.33N  64.97W ELEV. 23 FT
+431 PM AST Fri Aug 5 2022
+
+DATE           08/05/22      SAT 08/06/22            SUN 08/07/22            MON
+AST 3HRLY     17 20 23 02 05 08 11 14 17 20 23 02 05 08 11 14 17 20 23 02 05 08
+UTC 3HRLY     21 00 03 06 09 12 15 18 21 00 03 06 09 12 15 18 21 00 03 06 09 12
+
+MIN/MAX                      80          94          79          91          78
+TEMP          90 85 83 81 81 89 93 94 89 84 82 80 80 86 90 91 87 82 80 79 79 85
+DEWPT         74 74 74 74 74 74 74 74 75 75 76 75 75 75 75 75 75 75 76 76 75 75
+RH            60 70 74 79 79 61 54 53 64 74 82 85 85 70 62 60 68 79 88 91 88 72
+WIND DIR       E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E
+WIND SPD      18 19 20 20 20 20 18 20 20 21 23 24 24 23 23 20 19 19 20 20 19 21
+CLOUDS        SC SC SC SC SC SC SC SC B1 B1 B1 SC SC SC SC B1 B1 SC SC B1 B1 SC
+POP 12HR                     30          40          30          30          40
+QPF 12HR                   0.09        0.18        0.18        0.19        0.10
+RAIN SHWRS     S  C  S  S  S  C  S  S  C  C  S  S  S  S  S  S  S  C  C  S  S  C
+HEAT INDEX    99 93 90 86 86 98103105 99 92 89 85 85 95101102 96 89 86       94
+MAX HEAT        102    91    98   105   103    90    95   102   101    89    94
+
+
+DATE           08/08  TUE 08/09/22  WED 08/10/22  THU 08/11/22  FRI 08/12/22
+AST 6HRLY     14 20   02 08 14 20   02 08 14 20   02 08 14 20   02 08 14 20
+UTC 6HRLY     18 00   06 12 18 00   06 12 18 00   06 12 18 00   06 12 18 00
+
+MAX/MIN          90      79    90      79    90      80    90      79    89
+TEMP          90 83   80 86 90 83   80 86 90 83   81 86 90 83   80 85 89 82
+DEWPT         75 74   75 75 75 75   75 75 75 75   75 75 75 75   75 75 74 75
+PWIND DIR         E       E     E       E     E       E     E       E     E
+WIND CHAR        BZ      BZ    BZ      BZ    BZ      BZ    BZ      BZ    BZ
+AVG CLOUDS    SC SC   FW FW SC SC   SC SC SC SC   FW FW FW FW   FW FW FW FW
+POP 12HR         40      10    30      30    40      10    10      10    20
+RAIN SHWRS     C  S    S  S  S  C    C  C  C  C    S  S  S  S    S  S  S  S
+
+$$
+
+VIZ002-060830-
+HENRY E. ROHLSEN AIRPORT-ST CROIX USVI
+17.70N  64.80W ELEV. 74 FT
+431 PM AST Fri Aug 5 2022
+
+DATE           08/05/22      SAT 08/06/22            SUN 08/07/22            MON
+AST 3HRLY     17 20 23 02 05 08 11 14 17 20 23 02 05 08 11 14 17 20 23 02 05 08
+UTC 3HRLY     21 00 03 06 09 12 15 18 21 00 03 06 09 12 15 18 21 00 03 06 09 12
+
+MIN/MAX                      77          91          78          91          77
+TEMP          87 82 80 78 78 86 90 91 87 82 80 79 79 86 90 91 87 82 80 78 78 84
+DEWPT         74 74 74 75 74 75 74 75 75 75 76 76 75 75 75 76 75 75 76 76 76 76
+RH            65 77 82 91 88 70 60 60 68 79 88 91 88 70 62 62 68 79 88 94 94 77
+WIND DIR       E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E  E
+WIND SPD      19 17 18 18 18 18 18 19 19 18 20 20 20 21 21 21 20 19 18 18 16 19
+CLOUDS        SC SC SC SC SC SC SC B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 B1 SC
+POP 12HR                     30          40          40          40          40
+QPF 12HR                   0.06        0.23        0.28        0.24        0.11
+RAIN SHWRS     S  S  S  S  S  C  S  C  C  C  C  C  C  C  C  S  S  C  C  C  C  C
+TSTMS                                     S                       S  S         
+HEAT INDEX    95 88 84       95 99102 96 89 86       95101103 96 89 86       93
+MAX HEAT         98    86    95   102   101    87    95   103   102    87    93
+
+
+DATE           08/08  TUE 08/09/22  WED 08/10/22  THU 08/11/22  FRI 08/12/22
+AST 6HRLY     14 20   02 08 14 20   02 08 14 20   02 08 14 20   02 08 14 20
+UTC 6HRLY     18 00   06 12 18 00   06 12 18 00   06 12 18 00   06 12 18 00
+
+MAX/MIN          89      78    89      77    91      79    90      77    90
+TEMP          89 82   79 85 89 81   78 86 91 83   80 86 90 81   78 85 90 82
+DEWPT         76 75   75 76 75 75   75 75 76 75   76 75 75 75   75 75 75 76
+PWIND DIR         E       E     E       E     E       E     E       E     E
+WIND CHAR        BZ      BZ    BZ      BZ    BZ      BZ    BZ      BZ    BZ
+AVG CLOUDS    SC FW   FW SC SC SC   SC SC SC SC   FW FW SC FW   FW FW FW SC
+POP 12HR         40      30    50      50    50      20    20      10    30
+RAIN SHWRS     C  S    S  C  C  C    C  C  C  C    S  S  S  S    S  S  S  C
+
+$$

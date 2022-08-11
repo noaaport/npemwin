@@ -1,0 +1,66 @@
+
+#
+# $Id$
+#
+@include@ @q@../../Makefile.inc@q@
+
+SUBDIRS =
+
+INSOURCES =
+INOBJECTS =
+
+SOURCES =	main.c \
+		emwin.c err.c fifo.c file.c io.c util.c
+OBJECTS =	main.o \
+		emwin.o err.o fifo.o file.o io.o util.o
+HEADERS = 	emwin.h err.h fifo.h io.h util.h
+
+
+ALLOBJECTS =	${OBJECTS} ${INOBJECTS}
+
+PROGRAM =	npemwininsert
+TARGET =	${PROGRAM}
+
+LIBOBJECTS =
+
+INCDIRS =
+LIBDIRS =
+LIBS =
+INSTALL =	@INSTALL@
+CC =		@CC@
+DEBUGFLAGS =
+
+DEBUGFLAGS +=	-g -ggdb
+# for enabling -D command line option for debug mode(s)
+DEBUGFLAGS +=	-DDEBUG 
+#DEBUGFLAGS +=	-DNDEBUG
+
+# standard flags
+CCWFLAGS =      @CCWFLAGS@
+CFLAGS +=	-c ${CCWFLAGS} ${DEBUGFLAGS} ${INCDIRS}
+LDFLAGS +=	${LIBDIRS} ${LIBS}
+
+all: ${TARGET}
+
+lib:
+	for dir in ${SUBDIRS}; do \
+	(cd $$dir; ${MAKE} DEBUGFLAGS="${DEBUGFLAGS}") \
+	done
+
+@SUFFIXRULES@ ${HEADERS}
+	${CC} ${CFLAGS} -o $*.o $< 
+
+${PROGRAM}: ${OBJECTS} lib
+	${CC} -o $@ ${OBJECTS} ${LIBOBJECTS} ${LDFLAGS}
+
+install:
+	${INSTALL} -m 755 ${PROGRAM} ${BINDIR}
+	for dir in ${SUBDIRS}; do \
+	(cd $$dir; ${MAKE} install) \
+	done
+
+clean:
+	rm -f *~ ${ALLOBJECTS} ${TARGET} Makefile
+	for dir in ${SUBDIRS}; do \
+	(cd $$dir; ${MAKE} clean) \
+	done

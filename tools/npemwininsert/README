@@ -1,0 +1,36 @@
+- Files
+
+The auxiliary files
+
+err.{c,h} - nbsp/filters/filterlib/c
+file.{c,h}, util.{c,h} - nbsp/src
+
+are trimmed down versions of the corresponding files in the
+indicated nbsp directories.
+
+The file
+
+io.{c,h}
+
+mimicks the correspondig file in "nbsp/filters/filterlib/c",
+but adapted for the present case.
+
+The files
+
+emwin.{c,h}
+
+are also borrowed from the corresponding ones in "nbsp/src",
+adapted to use the npemwin fifo as output.
+
+- Implementation
+
+1) emftp downloads, unzip, and save renamed files in its spool
+2) instead of calling nbspinsert, calls "npemwininsert":
+
+   npemwininsert <emwinname> <fpath> (with same options as nbspinsert), and
+
+     emwinname = xxxyyyzz.<ext> (.e.g, fwmilmnc.txt)
+
+
+3) npemwinsert (a C program) - based on nbsp/emwin.{c,h} splits
+   the file in emwin packets and writes them to the npemwin fifo.

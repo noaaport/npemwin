@@ -1,0 +1,61 @@
+#
+# Optional configuration files
+#
+## gconffile="emftp.conf"
+## gconfdir="/usr/local/etc/npemwin"
+## gconfoptdirs="${gconfdir}/defaults ${gconfdir}/site"
+
+#
+# input configuration
+#
+## gurl="https://tgftp.nws.noaa.gov/SL.us008001/CU.EMWIN/DF.xt/DC.gsatR/OPS"
+## ginputfilename="txtmin02.zip"
+
+#
+# options
+#
+
+## gbackground=1
+
+# The individual files (after unziping the downloaded file) are saved under
+#   ``/var/noaaport/emftp/emftp/spool/txt/<station>''
+# in the default configuration.  They can be removed here, or
+# a schedule must be set to remove them periodically. The default is here.
+#
+## gremove_emfpath=1
+
+# Maintain the inventory of downloaded files, and a queue of files in the spool
+## gwrite_inv=0
+
+## gworkdir="/var/npemwin/emftp"
+## ginputssubdir="inputs"
+## gspoolsubdir="spool"
+## ginvsubdir="inv"
+## glocksubdir="lock"
+## gtmpsubdir="tmp"
+## gmd5keyfile="md5.txt"
+## ginvfilename="`date -u +%H`.txt"
+## glockfilename="emftp.lock"
+## gtime="`date -u +%H%M`"           # for entry in inv file
+
+#
+# Nbsp and Npemwin processing
+#
+## npemwin_enable=0
+## gnpemwininsert="/usr/local/bin/npemwininsert"
+#
+## nbsp_enable=0
+## gnbsp_spooldir="/var/noaaport/nbsp/spool"
+## gnbsp_infifo="/var/run/nbsp/infeed.fifo"
+
+#
+# Read the optional configuration files
+#
+if [ -n "$gconfoptdirs" ]
+then
+   for _d in $gconfoptdirs
+   do
+	_f=${_d}/${gconffile}
+	[ -f ${_f} ] && . ${_f}
+   done
+fi
