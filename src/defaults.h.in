@@ -97,12 +97,14 @@
 
 /* 
  * seconds waiting in a read() for a packet from the server, and how many
- * more times to try. With the current (aug2022) infeed.fifo (emftp) mechanism
- * we get the bunch of packets every two minutes, so after a minute
- * we will get a read timeout.
+ * more times to retry before giving a timeout message.
+ * With the current (aug2022) infeed.fifo (emftp) mechanism
+ * the (total) timeout period should not be less than two minutes.
+ * We use a READ_TIMEOUT_SECS of 20 so that the program has a chance
+ * to do other things after each 20 seconds wait.
  */
-#define READ_TIMEOUT_SECS	60
-#define READ_TIMEOUT_RETRY	2
+#define READ_TIMEOUT_SECS	20
+#define READ_TIMEOUT_RETRY	6
 
 /* seconds waiting writing to clients and how many more times to try */
 #define WRITE_TIMEOUT_SECS	1

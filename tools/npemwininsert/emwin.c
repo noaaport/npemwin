@@ -94,8 +94,7 @@ int build_emwin_packet(struct emwin_packet_st *ep){
     return(-1);
 
   /*
-   * The checksum is calculated from the data part (1024 bvytes)
-   * and p now points to it.
+   * The checksum is calculated from the data part and p now points to it.
    */
   ep->checksum = calc_checksum(p, data_size);
   status = build_emwin_header(ep);
@@ -124,7 +123,8 @@ int build_emwin_packet(struct emwin_packet_st *ep){
    *
    * But here we do not imitate the old BB servers. We leave the data
    * as it used to be transmitted (and received ny Npemwin) from a
-   * serial wx12 device.
+   * serial wx12 device. Moreover, we do not fill the data portion of the
+   * last frame with NULLS to complete 1024 bytes if it is smaller than that.
    */
 
   return(status);
