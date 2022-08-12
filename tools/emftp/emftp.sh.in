@@ -1,13 +1,19 @@
 #!%SHELL%
 #
-# usage: emftp [-c] [-f userconffile]
+# usage: emftp [-c] [-i] [-f userconffile]
 #
 # The [-c] option will create the working directories used by emftp,
 # as defined in the configuration file, and exit.
-#        
-# The original names are of the form
+#
+# The [-i] option will download the image files; otherwise the txt files.
+#
+# The original txt file names are of the form
 #
 #       A_FNUS82KILM111849_C_KWIN_20200311184946_406176-3-FWMILMNC.TXT
+#
+# and it is renamed as
+#
+#       fwmilmnc.20200311.184946.txt
 #
 # This file has:
 #       FNUS82 KILM 111849
@@ -15,9 +21,22 @@
 #
 # The names are constructed as:
 #       nbsp name: kilm_fnus82-fwmilm.406176.txt
-#       npemwin name: fwmilmnc.406176.txt
 #	bbfbasename: fwmilmnc.txt
 #
+# For the images, the original names are
+#
+# Z_QAEA00TJSJ041130_C_KWIN_20220804233035_529673-3-RADALLPR.GIF
+# Z_EIPU00KWBC041130_C_KWIN_20220804233034_529667-4-IMGSJUPR.JPG
+# Z_QGTA98KWNS041130_C_KWIN_20220804233034_529668-4-IMGWWAUS.PNG
+#
+# They are renamed as
+#
+# radallpr.20220804.233035.gif
+# imgsjupr.20220804.233034.jpg
+# imgwwaus.20220804.233034.png
+#
+#       nbsp name: none because these are not sent to nbsp
+#	bbfbasename: imgwwaus.png
 
 #
 # functions
@@ -71,25 +90,41 @@ get_parts(){
 
     rc_yyyymmdd=`echo $_second_component | cut -c 1-8`
     rc_hhmmss=`echo $_second_component | cut -c 9-14`
+
+    if [ $rc_ext == "txt" ]
+    then
+	rc_ftype="txt"
+    else
+	rc_ftype="img"
+    fi
+}
+
+get_ftype(){
+
+    echo $rc_ftype
 }
 
 get_parentsubdir(){
 
     # must be used after calling get_parts()
-
-    echo ${rc_ext}/${rc_wmostation}
+    
+    # CHANGED FOR IMG
+    echo ${rc_ftype}/${rc_wmostation}
 }
 
 get_emfbasename(){
     
     # must be used after calling get_parts()
 
-    echo ${rc_emname}.${rc_seqnum}.${rc_ext}
+    # CHANGED FOR IMG
+
+    # echo ${rc_emname}.${rc_seqnum}.${rc_ext}
+    echo ${rc_emname}.${rc_yyyymmdd}.${rc_hhmmss}.${rc_ext}
 }
 
 get_bbfbasename(){
 
-    # e.g., fwmilmnc.txt
+    # e.g., fwmilmnc.txt, imgwwaus.png
     
     echo ${rc_bbfbasename}
 }
@@ -136,7 +171,8 @@ gconfoptdirs="${gconfdir}/defaults ${gconfdir}/site"
 # input configuration
 #
 gurl="https://tgftp.nws.noaa.gov/SL.us008001/CU.EMWIN/DF.xt/DC.gsatR/OPS"
-ginputfilename="txtmin02.zip"
+ginputfilename_txt="txtmin02.zip"
+ginputfilename_img="imgmin15.zip"  # CHANGED IMG
 
 #
 # options
@@ -176,11 +212,13 @@ gnbspinsert="/usr/local/bin/nbspinsert"
 
 option_c=0
 option_f=0
-while getopts ":cf:" option
+option_i=0
+while getopts ":cfi:" option
 do
     case $option in
 	c) option_c=1;;
         f) userconffile=$OPTARG; option_f=1;;
+	i) option_i=1;;
         \?) echo "Unsupported option $OPTARG"; exit 1;;
 	:) echo "Missing value option $OPTARG"; exit 1;;
     esac
@@ -207,6 +245,13 @@ then
     done
 
     return
+fi
+
+if [ $option_i -eq 1 ]
+then
+    ginputfilename=${ginputfilename_img}
+else
+    ginputfilename=${ginputfilename_txt} # default
 fi
 
 # variables
@@ -294,7 +339,7 @@ do
 	$gnpemwininsert -b -f $gnpemwin_infifo $bbfbasename $emfpath
     fi
 
-    if [ $nbsp_enable -eq 1 ]
+    if [ $nbsp_enable -eq 1 -a $ftype == "txt" ]
     then
 	nbspfbasename=`get_nbspfbasename`
 	nbspfname=`get_nbspfname`

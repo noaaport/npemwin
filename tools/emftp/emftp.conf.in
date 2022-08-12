@@ -9,22 +9,24 @@
 # input configuration
 #
 ## gurl="https://tgftp.nws.noaa.gov/SL.us008001/CU.EMWIN/DF.xt/DC.gsatR/OPS"
-## ginputfilename="txtmin02.zip"
+## ginputfilename_txt="txtmin02.zip"
+## ginputfilename_img="imgmin15.zip"  # CHANGED IMG
 
 #
 # options
 #
 
+# Whether this script is running in the background or executed manually
 ## gbackground=1
 
 # The individual files (after unziping the downloaded file) are saved under
-#   ``/var/noaaport/emftp/emftp/spool/txt/<station>''
+# ``/var/npemwin/emftp/spool/<type>/<station>''
 # in the default configuration.  They can be removed here, or
 # a schedule must be set to remove them periodically. The default is here.
 #
 ## gremove_emfpath=1
 
-# Maintain the inventory of downloaded files, and a queue of files in the spool
+# Maintain the inventory of downloaded files
 ## gwrite_inv=0
 
 ## gworkdir="/var/npemwin/emftp"
