@@ -118,6 +118,7 @@ etc/npemwin/dist/startstop.rc-sample
 etc/npemwin/dist/start-cleanup.conf-sample
 etc/npemwin/dist/logrotate.conf-sample
 etc/npemwin/dist/newsyslog.conf-sample
+etc/npemwin/dist/emftp.conf-sample
 etc/npemwin/dist/metarplot-templates.tgz
 etc/npemwin/dist/track-templates.tgz
 man/man1/npemwind.1.gz

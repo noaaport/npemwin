@@ -97,9 +97,11 @@
 
 /* 
  * seconds waiting in a read() for a packet from the server, and how many
- * more times to try.
+ * more times to try. With the current (aug2022) infeed.fifo (emftp) mechanism
+ * we get the bunch of packets every two minutes, so after a minute
+ * we will get a read timeout.
  */
-#define READ_TIMEOUT_SECS	120
+#define READ_TIMEOUT_SECS	60
 #define READ_TIMEOUT_RETRY	2
 
 /* seconds waiting writing to clients and how many more times to try */
@@ -110,8 +112,10 @@
 #define QRUNNER_PROGRAM		"%MYLIBEXECDIR%/qrunner"
 
 /* 
- * When to process the queue. It will be processed after this number of
- * packets are received or this number of seconds hace passed since the
+ * When to process the queue. The original interpretation was:
+ * "It will be processed after this number of  packets are received".
+ * The new (emftp version) is:
+ * It will be processed after this number of seconds have passed since the
  * last run.
  */
 #define QRUN_PERIOD		120

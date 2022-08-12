@@ -11,7 +11,8 @@
 #include <sys/types.h>
 #include <stdint.h>
 
-uint32_t calc_checksum(void *data, size_t size);
+/* uint32_t calc_checksum(void *data, size_t size); */
+int calc_checksum(void *data, size_t size);
 int valid_str(char *s);
 
 #endif

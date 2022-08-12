@@ -143,11 +143,11 @@ void periodic(void){
   /*
    * Execute the qrunner as specified.
    *
-   if(g.packet_count >= g.qrunperiod){
-     g.packet_count = 0;
-     runq();
-   }
-  */
+   * if(g.packet_count >= g.qrunperiod){
+   *   g.packet_count = 0;
+   *   runq();
+   *  }
+   */
 
   if((now - g.runq_last_time) >= g.qrunperiod){
     runq();

@@ -16,6 +16,7 @@
 # The names are constructed as:
 #       nbsp name: kilm_fnus82-fwmilm.406176.txt
 #       npemwin name: fwmilmnc.406176.txt
+#	bbfbasename: fwmilmnc.txt
 #
 
 #
@@ -61,6 +62,7 @@ get_parts(){
     rc_seqnum=`echo $_last_component | cut -c 1-6`
     rc_emname=`echo $_last_component | cut -c 10-17`
     rc_ext=`echo $_last_component | cut -c 19-21`
+    rc_bbfbasename=`echo $_last_component | cut -c 10-21`
     rc_awips=`echo $rc_emname | cut -c 1-6`
     
     rc_wmoid=`echo $_first_component | cut -c 1-6`
@@ -83,6 +85,13 @@ get_emfbasename(){
     # must be used after calling get_parts()
 
     echo ${rc_emname}.${rc_seqnum}.${rc_ext}
+}
+
+get_bbfbasename(){
+
+    # e.g., fwmilmnc.txt
+    
+    echo ${rc_bbfbasename}
 }
 
 get_nbspfbasename(){
@@ -272,6 +281,8 @@ do
     parentdir=${gspooldir}/${parentsubdir}
     emfpath=${parentdir}/${emfbasename}
 
+    bbfbasename=`get_bbfbasename`
+
     mkdir -p $parentdir
     mv $f $emfpath
     
@@ -280,7 +291,7 @@ do
     #
     if [ $npemwin_enable -eq 1 ]
     then
-	$gnpemwininsert -f $gnpemwin_infifo $rc_emname $emfpath
+	$gnpemwininsert -b -f $gnpemwin_infifo $bbfbasename $emfpath
     fi
 
     if [ $nbsp_enable -eq 1 ]

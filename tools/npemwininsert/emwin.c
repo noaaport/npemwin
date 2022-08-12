@@ -93,6 +93,10 @@ int build_emwin_packet(struct emwin_packet_st *ep){
   if(n != data_size)
     return(-1);
 
+  /*
+   * The checksum is calculated from the data part (1024 bvytes)
+   * and p now points to it.
+   */
   ep->checksum = calc_checksum(p, data_size);
   status = build_emwin_header(ep);
   if(status != 0)

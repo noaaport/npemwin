@@ -116,6 +116,7 @@
 /usr/local/etc/npemwin/dist/start-cleanup.conf-sample
 /usr/local/etc/npemwin/dist/logrotate.conf-sample
 /usr/local/etc/npemwin/dist/newsyslog.conf-sample
+/usr/local/etc/npemwin/dist/emftp.conf-sample
 /usr/local/etc/npemwin/dist/metarplot-templates.tgz
 /usr/local/etc/npemwin/dist/track-templates.tgz
 /usr/local/man/man1/npemwind.1.gz

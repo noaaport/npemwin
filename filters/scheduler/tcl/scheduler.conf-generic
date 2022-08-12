@@ -81,6 +81,7 @@ lappend schedule {
   H01/1:logrotate -s $logdir/logrotate.status $confdir/logrotate.conf &
 }
 
-### lappend schedule {
-###   M/2:/usr/local/libexec/npemwin/emftp &
-### }
+# This now (aug2022) the default master feed
+lappend schedule {
+  M/2:/usr/local/libexec/npemwin/emftp &
+}

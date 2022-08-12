@@ -81,6 +81,7 @@ lappend schedule {
   H01/1:newsyslog -r -f $confdir/newsyslog.conf &
 }
 
-### lappend schedule {
-###   M/2:/usr/local/libexec/npemwin/emftp &
-### }
+# This now (aug2022) the default master feed
+lappend schedule {
+  M/2:/usr/local/libexec/npemwin/emftp &
+}

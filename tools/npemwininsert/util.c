@@ -10,6 +10,7 @@
 #include <ctype.h>
 #include "util.h"
 
+/*
 uint32_t calc_checksum(void *data, size_t size){
 
   size_t i;
@@ -22,6 +23,20 @@ uint32_t calc_checksum(void *data, size_t size){
     cs += p[i];
 
   return(cs);
+}
+*/
+
+int calc_checksum(void *data, size_t size){
+
+  size_t i;
+  u_char *p;
+  int c = 0;
+
+  p = (u_char*)data;
+  for(i = 0; i < size; ++i)
+    c += p[i];
+
+  return(c);
 }
 
 int valid_str(char *s){

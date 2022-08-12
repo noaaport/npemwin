@@ -23,7 +23,7 @@ struct emwin_packet_st {
   char header_date[EMWIN_HEADER_DATESIZE + 1];
   char packet[EMWIN_PACKET_SIZE];
   int packet_size;
-  int  fd;		/* fd of the data file */
+  int fd;		/* fd of the data file */
   int parts_total;
   int last_part_size;
   int part_number;
