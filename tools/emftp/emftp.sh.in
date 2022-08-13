@@ -210,15 +210,17 @@ gnbspinsert="/usr/local/bin/nbspinsert"
 # main
 #
 
+usage="usage: emftp [-c] [-i] [-f userconffile]"
 option_c=0
-option_f=0
 option_i=0
-while getopts ":cfi:" option
+option_f=0
+while getopts ":hcif:" option
 do
     case $option in
+	h) echo "$usage"; exit 0;;
 	c) option_c=1;;
-        f) userconffile=$OPTARG; option_f=1;;
 	i) option_i=1;;
+	f) userconffile=$OPTARG; option_f=1;;
         \?) echo "Unsupported option $OPTARG"; exit 1;;
 	:) echo "Missing value option $OPTARG"; exit 1;;
     esac
@@ -322,6 +324,7 @@ do
     # These functions need the rc_xxx variables
     emfbasename=`get_emfbasename`
     parentsubdir=`get_parentsubdir`
+    ftype=`get_ftype`
 
     parentdir=${gspooldir}/${parentsubdir}
     emfpath=${parentdir}/${emfbasename}
