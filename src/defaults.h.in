@@ -97,10 +97,14 @@
 
 /* 
  * seconds waiting in a read() for a packet from the server, and how many
- * more times to try.
+ * more times to retry before giving a timeout message.
+ * With the current (aug2022) infeed.fifo (emftp) mechanism
+ * the (total) timeout period should not be less than two minutes.
+ * We use a READ_TIMEOUT_SECS of 20 so that the program has a chance
+ * to do other things after each 20 seconds wait.
  */
-#define READ_TIMEOUT_SECS	10
-#define READ_TIMEOUT_RETRY	2
+#define READ_TIMEOUT_SECS	20
+#define READ_TIMEOUT_RETRY	6
 
 /* seconds waiting writing to clients and how many more times to try */
 #define WRITE_TIMEOUT_SECS	1
@@ -110,10 +114,13 @@
 #define QRUNNER_PROGRAM		"%MYLIBEXECDIR%/qrunner"
 
 /* 
- * When to process the queue. It will be processed after this number of
- * packets are received. 
+ * When to process the queue. The original interpretation was:
+ * "It will be processed after this number of  packets are received".
+ * The new (emftp version) is:
+ * It will be processed after this number of seconds have passed since the
+ * last run.
  */
-#define QRUN_PERIOD		20
+#define QRUN_PERIOD		120
 
 /* inform when the queue has been processed after this number of times */
 #define QRUN_REPORT_PERIOD	100
@@ -139,7 +146,7 @@
  * Whether to register with the NWS master host and the parameters
  * related to that.
  */
-#define BBSERVER_ENABLE		1
+#define BBSERVER_ENABLE		0
 #define BBSERVER		"%MYLIBEXECDIR%/bbserver"
 
 /* The various lists received from the NWS master host */

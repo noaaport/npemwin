@@ -79,10 +79,12 @@ void destroy_emwin_qfiles(void);
 int open_emwin_server_network(int type, char *ip_or_host_str, char *port,
 			      int *gai_code);
 int open_emwin_server_serial(char *device, char *settings_str);
+int open_emwin_server_infeed(char *fpath, char *mode_str);
 int get_emwin_packet_bb(int f, struct emwin_packet *ep);
 int get_emwin_packet_wx14_msg(int f, struct emwin_packet *ep);
 int get_emwin_packet_wx14_raw(int f, struct emwin_packet *ep);
 int get_emwin_packet_serial(int f, struct emwin_packet *ep);
+int get_emwin_packet_infeed(int f, struct emwin_packet *ep);
 int save_emwin_packet(struct emwin_packet *ep);
 int save_server_list(struct emwin_packet *ep);
 

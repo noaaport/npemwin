@@ -127,6 +127,7 @@ void init_globals(void){
   /*
    * internal variables
    */
+  g.runq_last_time = 0;
   g.packet_count = 0;
   g.qrun_count = 0;
   g.qrunner_pid = -1;
@@ -189,11 +190,12 @@ int init_lock(void){
 void cleanup(void){
 
   terminate_server();
+
   /*
    * There are no shared queues, otherwise they would be cleared here.
    */
 
-  release_server_list();
+  release_server_list(); /* this also closes the input devices and/or servers */
   release_confoptions();
   destroy_emwin_qfiles();
 

@@ -4,7 +4,7 @@
 #
 
 # This script is designed to be opened as a pipe. Periodically
-# (e.g., every minute) it can be be sent a "report" command to
+# (e.g., every minute) it can be sent a "report" command to
 # instruct it to send the status update to the master host, but
 # it has an internal periodic event for that too. It will
 # also receive the "Server list" and it will produce a file for
@@ -87,6 +87,11 @@ if {[info exists bbserver(socket)]} {
 # main
 #
 bbserver_configure;
+
+if {$bbserver(configured) == 0} {
+    return 0;
+}
+
 bbserver_open_connection;
 bbserver_main_loop;
 bbserver_close_connection;

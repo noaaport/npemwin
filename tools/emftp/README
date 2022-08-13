@@ -1,0 +1,36 @@
+The simplest way to install is to put the following line
+in /etc/local/nbsp/site/scheduler.conf:
+
+schedule M/2 /usr/local/libexec/npemwin/emftp
+
+or the following in /etc/local/npemwin/site/scheduler.conf:
+
+lappend schedule {
+  M/2:/usr/local/libexec/npemwin/emftp &
+}
+
+There are two alternatives for enabling nbsp processing 
+
+1) Do not enable nbsp processing here, but enable npemwin processing, and 
+   install the nbspfilter in npemwin.
+
+2) Enable nbsp processing here, but do not install the nbspfilter in npemwin,
+   or disable npemwin processing here.
+
+NOTES:
+
+1) This script calls "nbspinsert". If other programs (e.g. ldm via the
+craftfilter) also calls nbspinsert then the nbsp/spool directory
+must have permissions 662 so this instance of nbspinsert can write files
+to the station directories that the other nbspinsert instances (e.g. ldm)
+may create.
+
+2) If there are other programs that also use "nbspinsert" (as mentioned in [2])
+then it is a good idea to configure "nbspinsert" to use locking. This is
+accomplsihed by calling "nbspinsert -l" once, which will create the lock
+file (by default "/var/run/nbsp/infeed.fifo.lock") that is subsequently
+used by "nbspinsert" each time it is invoked.
+
+3) This script calls npemwininsert (C) , and the same comments in (1) and (2)
+above apply also. But as of this moment (10 aug 2022), locking is not yet
+implemented in npemwinsert.

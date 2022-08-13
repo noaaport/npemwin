@@ -54,6 +54,7 @@ int loop(void){
   int status = 0;
   struct emwin_server *es;
 
+  /* Open the connection to one of the servers, device, or infeed */
   es = get_next_server();
 
   if(es == NULL){
@@ -81,7 +82,7 @@ int loop(void){
       log_errx("Could not get packet from %s", es->ip);
 
     status = 1;
-  }else{    
+  }else{
     log_info("Connected to %s @ %s", es->ip, es->port);
   }
 
@@ -119,6 +120,8 @@ static int process_packets(struct emwin_server *emserver){
     status = get_emwin_packet_wx14_raw(server_fd, &ep);
   else if(server_type_serial_device(emserver))
     status = get_emwin_packet_serial(server_fd, &ep);
+  else if(server_type_infeed(emserver))
+    status = get_emwin_packet_infeed(server_fd, &ep);
   else
     status = get_emwin_packet_bb(server_fd, &ep);
 
@@ -141,11 +144,13 @@ static int process_packets(struct emwin_server *emserver){
     }
   } else {
     /*
-     * This applies to both the wx14 raw device and a serial device,
+     * This applies to the wx14 raw device, the serial device, the infeed fifo
      * and the internet "device".
      *
      *    server_type_wx14_raw_device(emserver)
      *    server_type_serial_device(emserver)
+     *    server_type_infeed(emserver)
+     *    server_type_bbserver(emserver)
      */
     if(status == -1)
       log_err2("Error reading packet from", emserver->ip);
@@ -390,6 +395,7 @@ static void reload_servers_list(void){
   int status = 0;
 
   release_server_list();
+  
   status = get_server_list(g.serverslistfile);
   if(status == -1){
     log_err2("Error reading", g.serverslistfile);

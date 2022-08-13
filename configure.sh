@@ -2,7 +2,7 @@
 
 . ./configure.inc
 
-config_dirs="conf doc filters scripts src tclhttpd tclmetar/"
+config_dirs="conf doc filters scripts src tools tclhttpd tclmetar/"
 
 configure_default
 configure_default Makefile.inc

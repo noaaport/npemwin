@@ -61,14 +61,6 @@ proc bbserver_send_status_update {} {
 
     global bbserver;
 
-    if {$bbserver(configured) == 0} {
-	bbserver_configure;
-    }
-
-    if {$bbserver(configured) == 0} {
-	return;
-    }
-
     # Check that the connection is open, and try to open it if it is closed.
     if {[bbserver_open_connection] != 0} {
 	return;

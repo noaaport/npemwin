@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2004-2012 Jose F. Nieves <nieves@ltp.uprrp.edu>
+ * Copyright (c) 2004-2022 Jose F. Nieves <nieves@ltp.uprrp.edu>
  *
  * See LICENSE
  *
@@ -17,6 +17,8 @@
 #include "util.h"
 #include "emwin.h"
 #include "ser.h"
+#include "infeed.h"
+#include "err.h"  /* perhaps the functions that log should be in another file */
 #include "servers.h"
 
 #define EMWIN_SERVERS_TABLE_GROW	5
@@ -113,23 +115,23 @@ struct emwin_server *get_next_server(void){
       es->stats.consecutive_packets = 0;
     }
   }    
-
+    
   if(server_type_serial_device(es))
     es->fd = open_emwin_server_serial(es->ip, es->port);
-  else{
-    if(server_type_wx14_msg_device(es) || server_type_wx14_raw_device(es))
+  else if(server_type_infeed(es))
+    es->fd = open_emwin_server_infeed(es->ip, es->port);
+  else if(server_type_wx14_msg_device(es) || server_type_wx14_raw_device(es))
       es->fd = open_emwin_server_network(es->type,
 					 es->ip, es->port, &es->gai_code);
-    else
-      es->fd = open_emwin_server_network(EMWIN_SERVER_TYPE_BB,
+  else
+    es->fd = open_emwin_server_network(EMWIN_SERVER_TYPE_BB,
 					 es->ip, es->port, &es->gai_code);
-  }
 
   if(es->fd < 0){
     ++es->stats.bad_packet_count;
     es->stats.error = -1;
     ++es_list.refused_connections;
-  }else{
+  } else {
     es_list.refused_connections = 0;	/* reset counter */
     ++es->stats.connections;
     es->f_up = 1;
@@ -146,6 +148,27 @@ struct emwin_server *get_next_server(void){
   }
 
   return(es);
+}
+
+static void close_server(struct emwin_server *es){
+
+  int status = 0;
+
+  if(es->fd != -1) {
+    if(server_type_serial_device(es))
+      status = ser_close_port(es->fd);
+    else if(server_type_infeed(es))
+      status = infeed_close_fifo(es->fd, es->ip);
+    else
+      status = close(es->fd);
+
+    es->fd = -1;
+  }
+
+  es->f_up = 0;	/* mark it as down */
+
+  if(status != 0)
+    log_err2("Error closing %s: ", es->ip);
 }
 
 static int switch_server(struct emwin_server *es){
@@ -213,7 +236,7 @@ int get_server_list(char *fname){
 
       break;
 
-    }else if((tsvargc() != 0) && (tsvargv(0)[0] != '#')){
+    } else if((tsvargc() != 0) && (tsvargv(0)[0] != '#')){
       /*
        * The if() above, first checks that the line is non-blank,
        * and then that it does not start with a '#'. Do not invert
@@ -266,14 +289,21 @@ static int read_next_server(struct emwin_server *server){
 
   argv0 = tsvargv(0);
 
-  if(argv0[0] == '/')
-    server->type = EMWIN_SERVER_TYPE_SERIAL;
-  else if((argv0[0] == '@') && (argv0[1] == '@')){
-    server->type = EMWIN_SERVER_TYPE_WX14_RAW;
-    ++argv0; ++argv0;
+  if(argv0[0] == '/') {
+    if(argv0[1] == '/') {
+	server->type = EMWIN_SERVER_TYPE_INFEED;
+	++argv0;
+    } else {
+      server->type = EMWIN_SERVER_TYPE_SERIAL;
+    }
   } else if(argv0[0] == '@'){
-    server->type = EMWIN_SERVER_TYPE_WX14_MSG;
-    ++argv0;
+      if(argv0[1] == '@'){
+	server->type = EMWIN_SERVER_TYPE_WX14_RAW;
+	++argv0; ++argv0;
+      } else {
+	server->type = EMWIN_SERVER_TYPE_WX14_MSG;
+	++argv0;
+      }
   } else {
     server->type = EMWIN_SERVER_TYPE_BB;
   }
@@ -307,19 +337,6 @@ static void init_server(struct emwin_server *es){
   init_server_stats(es);
 }
 
-static void close_server(struct emwin_server *es){
-
-  if(es->fd != -1){
-    if(server_type_serial_device(es))
-      ser_close_port(es->fd);
-    else
-      close(es->fd);
-
-    es->fd = -1;
-  }
-  es->f_up = 0;	/* mark it as down */
-}
-
 static void init_server_stats(struct emwin_server *es){
 
   es->stats.connect = 0;
@@ -346,9 +363,10 @@ void release_server_list(void){
     return;
 
   for(i = 0; i < es_list.allocated; ++i){
-    if(es_list.server[i].fd != -1)
-      close(es_list.server[i].fd);
-
+    if(es_list.server[i].fd != -1){
+      close_server(&es_list.server[i]);
+    }
+    
     if(es_list.server[i].ip != NULL){      
       free(es_list.server[i].ip);
     }
@@ -484,6 +502,19 @@ int server_type_wx14_raw_device(struct emwin_server *server){
    */
 
   if(server->type == EMWIN_SERVER_TYPE_WX14_RAW)
+    return(1);
+
+  return(0);
+}
+
+int server_type_infeed(struct emwin_server *server){
+  /*
+   * An entry that starts with two "//" characters in the serverslist file
+   * is assumed to be the path to a fifo file . The corresponding
+   * "port" entry is then the creation mode string (e.g., 0664).
+   */
+
+  if(server->type == EMWIN_SERVER_TYPE_INFEED)
     return(1);
 
   return(0);

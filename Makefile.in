@@ -3,7 +3,7 @@
 #
 @include@ @q@Makefile.inc@q@
 
-DIRS = conf doc filters scripts src tclhttpd tclmetar
+DIRS = conf doc filters scripts src tools tclhttpd tclmetar
 
 all: 
 	for dir in ${DIRS}; do \

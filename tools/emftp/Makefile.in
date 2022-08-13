@@ -1,0 +1,31 @@
+#
+# $Id$
+#
+@include@ @q@../../Makefile.inc@q@
+
+INSTALL =	@INSTALL@
+SHELL =		@SHELL@
+
+SAMPLES =	emftp.conf-sample
+LIBTOOLS =	emftp
+TARGET =	${LIBTOOLS} ${SAMPLES}
+
+all: ${TARGET}
+
+emftp: emftp.sh.in
+	sed -e "/%SHELL%/s##${SHELL}#" \
+	emftp.sh.in > emftp
+
+emftp.conf-sample: emftp.conf.in
+	sed -e "/%PATH%/s##${PATH}#" \
+	emftp.conf.in > emftp.conf-sample
+
+#emftp.conf-site-sample: emftp.conf-site
+#	 cp emftp.conf-site emftp.conf-site-sample
+
+install:
+	${INSTALL} -m 0644 ${SAMPLES} ${MYCONFDIR}
+	${INSTALL} -m 0755 ${LIBTOOLS} ${MYLIBEXECDIR}
+
+clean:
+	rm -f *~ ${TARGET} Makefile

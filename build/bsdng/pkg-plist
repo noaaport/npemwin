@@ -19,6 +19,7 @@ bin/npemwin-nntpsend
 bin/npemwin-rsscreate
 bin/npemwintrackdata
 bin/npemwintrackplot
+bin/npemwininsert
 libexec/npemwin/npemwind.init
 libexec/npemwin/qrunner
 libexec/npemwin/scheduler
@@ -52,6 +53,7 @@ libexec/npemwin/pkgIndex.tcl
 libexec/npemwin/errx.tcl
 libexec/npemwin/syslog.tcl
 libexec/npemwin/archive.init
+libexec/npemwin/emftp
 libexec/npemwin/tclmetar/metar.tcl
 libexec/npemwin/tclmetar/pkgIndex.tcl
 etc/npemwin/dist/README
@@ -116,6 +118,7 @@ etc/npemwin/dist/startstop.rc-sample
 etc/npemwin/dist/start-cleanup.conf-sample
 etc/npemwin/dist/logrotate.conf-sample
 etc/npemwin/dist/newsyslog.conf-sample
+etc/npemwin/dist/emftp.conf-sample
 etc/npemwin/dist/metarplot-templates.tgz
 etc/npemwin/dist/track-templates.tgz
 man/man1/npemwind.1.gz
