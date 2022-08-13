@@ -91,7 +91,7 @@ get_parts(){
     rc_yyyymmdd=`echo $_second_component | cut -c 1-8`
     rc_hhmmss=`echo $_second_component | cut -c 9-14`
 
-    if [ $rc_ext == "txt" ]
+    if [ $rc_ext = "txt" ]
     then
 	rc_ftype="txt"
     else
@@ -342,7 +342,7 @@ do
 	$gnpemwininsert -b -f $gnpemwin_infifo $bbfbasename $emfpath
     fi
 
-    if [ $nbsp_enable -eq 1 -a $ftype == "txt" ]
+    if [ $nbsp_enable -eq 1 -a $ftype = "txt" ]
     then
 	nbspfbasename=`get_nbspfbasename`
 	nbspfname=`get_nbspfname`
