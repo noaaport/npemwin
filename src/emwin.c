@@ -249,7 +249,8 @@ int get_emwin_packet_serial(int f, struct emwin_packet *ep){
   ep->bbtype = BB_PACKET_TYPE_UNKNOWN;
 
   assert(g.readtimeout_s >= 0);
-  datasize = readn(f, serialdata, EMWIN_PACKET_SIZE, g.readtimeout_s, 0);
+  datasize = readn(f, serialdata, EMWIN_PACKET_SIZE,
+		   g.readtimeout_s, g.readtimeout_retry);
 
   if(datasize != EMWIN_PACKET_SIZE){
     if(datasize == -1)
