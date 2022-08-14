@@ -1,6 +1,11 @@
 #
 # $Id$
 #
+3.0.p1 -
+======
+
+- Implemented reading from the infeed fifo using the emftp and
+  npemwininsert tools
 
 2.1.r1 -
 ======

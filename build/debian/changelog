@@ -1,3 +1,10 @@
+npemwin (3.0.1p1-1) oneiric; urgency=low
+
+  * Implemented reading from the infeed fifo using the emftp and
+    npemwininsert tools
+
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Sat, 13 Aug 2022 20:12:39 -0400
+
 npemwin (2.4.13p1-1) oneiric; urgency=low
 
   * Added nbspfilter to insert the files in an nbspd process.

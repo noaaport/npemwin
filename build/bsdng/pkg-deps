@@ -1,6 +1,7 @@
 deps: {
-  tcl86: {origin: "lang/tcl86", version: "8.6.7"},
+  tcl86: {origin: "lang/tcl86", version: "8.6"},
   tcllib: {origin: "devel/tcllib", version: "1.18"},
-  db5: {origin: "databases/db5", version: "5.3.28"},
+  db5: {origin: "databases/db5", version: "5.3"},
   gnuplot: {origin: "math/gnuplot", version: "5.4"}
+  curl: {origin: "ftp/curl", version: "7.7"}
 }

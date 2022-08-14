@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# The defaults are for debian-7
+# The defaults are for debian-11
 ID=debian
-VERSION_ID="7"
+VERSION_ID="11"
 
 if [ -f /etc/os-release ]
 then
