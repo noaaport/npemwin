@@ -301,6 +301,10 @@ fi
 unzip -d $gtmpdir $ginputfpath > /dev/null 2>&1
 [ $? -ne 0 ] && { log_err "Error from unzip"; }
 
+# Some text files are sent compressed (.zip). The npemwin qrunner will
+# accept those and handle them. But nbsp expects the txt uncompressed files.
+# For uniformity we decpmpress them once and for all here.
+#
 _savedir=`pwd`
 cd $gtmpdir
 _zipfilelist=`find . -name "*.ZIP"`

@@ -238,10 +238,12 @@ do
 
 	# If it is a zip file, unzip in its own tmp dir and process
 	# each file found in that dir.
+	# aug2022 - in the old bb days the extension was ".zis";
+	# now ".zip" is used.
 	name=${filename%.*}
 	ext=${filename#*.}
 	_deldir=
-	if [ $ext = zis ]
+	if [ $ext = "zis" -o $ext = "zip" ]
 	then
 	    mkdir ${tmp_dirname}/$name
 	    _deldir=${tmp_dirname}/$name
