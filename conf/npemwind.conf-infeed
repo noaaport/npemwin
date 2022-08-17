@@ -21,4 +21,4 @@ set qrunperiod	120
 
 # List of servers to try
 #
-set serverslist		"/usr/local/etc/npemwin/site/servers.conf"
+set serverslistfile	"/usr/local/etc/npemwin/site/servers.conf"
