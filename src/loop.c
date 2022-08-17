@@ -154,15 +154,9 @@ static int process_packets(struct emwin_server *emserver){
      */
     if(status == -1)
       log_err2("Error reading packet from", emserver->ip);
-    else if(status == -2) {
-      /* 
-       * Don't treat timeout errors from the infeed fifo as errors
-       * since that is probably not a continuous feed (e.g., emftp).
-       */
-      if(server_type_infeed(emserver) == 0) {
-	log_errx("Timedout trying to get packet from %s.", emserver->ip);
-      }
-    } else if(status == -3)
+    else if(status == -2)
+	log_errx("Timeout trying to get packet from %s.", emserver->ip);
+    else if(status == -3)
       log_info("Connection closed by %s.", emserver->ip);
     else if(status == 1)
       log_errx("Short read from %s.", emserver->ip);

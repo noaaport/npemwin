@@ -23,11 +23,6 @@ set readtimeout			120
 #
 set serverslist		"/usr/local/etc/npemwin/site/servers.conf"
 
-# The queue will be processed when the number of packets received
-# reaches this number
-#
-set qrunperiod		200
-
 # Do not send anything to the nbsp master
 #
 set bbclientid	""

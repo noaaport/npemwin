@@ -19,6 +19,8 @@ SAMPLES =	servers.conf-sample \
 		servers.conf-noaaport-sample \
 		npemwind.conf-noaaport-sample \
 		npemwind.conf-noserver-sample \
+		servers.conf-infeed-sample \
+		npemwind.conf-infeed-sample \
 		logrotate.conf-sample \
 		newsyslog.conf-sample
 
@@ -46,6 +48,12 @@ npemwind.conf-noaaport-sample: npemwind.conf-noaaport
 
 npemwind.conf-noserver-sample: npemwind.conf-noserver
 	cp npemwind.conf-noserver npemwind.conf-noserver-sample
+
+servers.conf-infeed-sample: servers.conf-infeed
+	cp servers.conf-infeed servers.conf-infeed-sample
+
+npemwind.conf-infeed-sample: npemwind.conf-infeed
+	cp npemwind.conf-infeed npemwind.conf-infeed-sample
 
 newsyslog.conf-sample: newsyslog.conf
 	cp newsyslog.conf newsyslog.conf-sample

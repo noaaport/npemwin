@@ -96,16 +96,17 @@
 #define CONNECT_TIMEOUT_SECS	10
 
 /* 
- * seconds waiting in a read() for a packet from the server, and how many
+ * Seconds waiting in a read() for a packet from the server, and how many
  * more times to try before retturning a timeout status.
- * With the current (aug2022) infeed.fifo (emftp) mechanism
+ * With the infeed.fifo (emftp) mechanism (aug2022)
  * the (total) timeout period should not be less than two minutes.
  * But that would not let the program do other things after each 2 minute
- * timeout. Currently, in loop.c, we are not treating reading timeouts
- * from the infeed fifo as errors.
+ * timeout. We leave the default for a "bb" server.
+ * (In the case of the infeed fifo, more appropriate values could be
+ * 20 and 6 respectively.)
  */
 #define READ_TIMEOUT_SECS	5
-#define READ_TIMEOUT_RETRY	1
+#define READ_TIMEOUT_RETRY	2
 
 /* seconds waiting writing to clients and how many more times to try */
 #define WRITE_TIMEOUT_SECS	1
