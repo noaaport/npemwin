@@ -59,8 +59,10 @@
 /usr/local/etc/npemwin/dist/servers.conf-sample
 /usr/local/etc/npemwin/dist/features.conf-sample
 /usr/local/etc/npemwin/dist/npemwind.conf-noaaport-sample
-/usr/local/etc/npemwin/dist/npemwind.conf-noserver-sample
 /usr/local/etc/npemwin/dist/servers.conf-noaaport-sample
+/usr/local/etc/npemwin/dist/npemwind.conf-noserver-sample
+/usr/local/etc/npemwin/dist/npemwind.conf-infeed-sample
+/usr/local/etc/npemwin/dist/servers.conf-infeed-sample
 /usr/local/etc/npemwin/dist/filters.conf-sample
 /usr/local/etc/npemwin/dist/filters.conf-site-sample
 /usr/local/etc/npemwin/dist/archive.conf-sample
