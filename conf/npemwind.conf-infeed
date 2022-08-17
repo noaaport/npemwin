@@ -14,6 +14,11 @@
 set readtimeout		20
 set readtimeoutretry	 6
 
+# The queue will be processed when this number of seconds
+# have passed since the last run.
+#
+### set qrunperiod	120
+
 # List of servers to try
 #
 set serverslist		"/usr/local/etc/npemwin/site/servers.conf"

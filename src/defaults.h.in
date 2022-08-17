@@ -118,13 +118,13 @@
 /* 
  * When to process the queue. The original interpretation was:
  * "It will be processed after this number of  packets are received".
- * The new (emftp version) is:
+ * The new (aug2022) interpretation is:
  * It will be processed after this number of seconds have passed since the
- * last run.
+ * last run. For emftp/infeed, it should be set to 120.
  */
-#define QRUN_PERIOD		120
+#define QRUN_PERIOD		20
 
-/* inform when the queue has been processed after this number of times */
+/* Inform when the queue has been processed after this number of times */
 #define QRUN_REPORT_PERIOD	100
 
 /* external pre-filter (there is no default) */
