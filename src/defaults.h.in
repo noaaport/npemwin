@@ -97,16 +97,17 @@
 
 /* 
  * Seconds waiting in a read() for a packet from the server, and how many
- * more times to try before retturning a timeout status.
- * With the infeed.fifo (emftp) mechanism (aug2022)
- * the (total) timeout period should not be less than two minutes.
- * But that would not let the program do other things after each 2 minute
- * timeout. We leave the default for a "bb" server.
- * (In the case of the infeed fifo, more appropriate values could be
- * 120 and 0 respectively.)
+ * more times to try before returning a timeout status.
+ * With the emftp (via the infeed.fifo) mechanism (aug2022) packets
+ * arrive every two minutes, but setting the (total) timeout period
+ * to two minutes would not let the program do other things after each
+ * 2 minute timeout (e.g., running the runq and periodic functions like
+ * the scheduler (via runq and the postfilter). We leave the default
+ * for a "bb" server. (In the case of the infeed fifo, more appropriate
+ * values could be 20 and 2 respectively.)
  */
 #define READ_TIMEOUT_SECS	5
-#define READ_TIMEOUT_RETRY	2
+#define READ_TIMEOUT_RETRY	1
 
 /* seconds waiting writing to clients and how many more times to try */
 #define WRITE_TIMEOUT_SECS	1
@@ -120,9 +121,9 @@
  * "It will be processed after this number of  packets are received".
  * The new (aug2022) interpretation is:
  * It will be processed after this number of seconds have passed since the
- * last run. For emftp/infeed, it should be set to 120.
+ * last run.
  */
-#define QRUN_PERIOD		20
+#define QRUN_PERIOD		10
 
 /* Inform when the queue has been processed after this number of times */
 #define QRUN_REPORT_PERIOD	100
