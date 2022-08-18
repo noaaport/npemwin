@@ -103,7 +103,7 @@
  * But that would not let the program do other things after each 2 minute
  * timeout. We leave the default for a "bb" server.
  * (In the case of the infeed fifo, more appropriate values could be
- * 20 and 6 respectively.)
+ * 120 and 0 respectively.)
  */
 #define READ_TIMEOUT_SECS	5
 #define READ_TIMEOUT_RETRY	2
