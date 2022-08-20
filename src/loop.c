@@ -86,12 +86,13 @@ int loop(void){
     log_info("Connected to %s @ %s", es->ip, es->port);
   }
 
+  /* Make this call before entering the loop and then the last call inside */
+  status = process_packets(es);
+
   while((status == 0) && (get_quit_flag() == 0)){
     if(g.f_server_enabled == 1)
       server_loop();
-
-    status = process_packets(es);
-
+       
     periodic();
 
     if(get_reload_servers_list_flag())
@@ -99,6 +100,8 @@ int loop(void){
 
     if(get_send_bbclientid_flag())
       bb_send_clientid(es);
+
+    status = process_packets(es);
   }
 
   if(get_quit_flag() != 0)
