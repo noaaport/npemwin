@@ -29,7 +29,7 @@ int init_emwin_packet_st(struct emwin_packet_st *ep,
 			 char *fpath, char *emwinfname){
   /*
    * emwinfname is the name that will be used in the header, while
-   * path is full path of the file. 
+   * path is the full path of the file. 
    */
   off_t fsize;
   int status = 0;

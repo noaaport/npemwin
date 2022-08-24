@@ -43,7 +43,7 @@
 #
 # Nbsp and Npemwin processing
 #
-## npemwin_enable=0
+## npemwin_enable=1
 ## gnpemwin_infifo="/var/run/npemwin/infeed.fifo"
 ## gnpemwininsert="/usr/local/bin/npemwininsert"
 #

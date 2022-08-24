@@ -176,9 +176,11 @@ static int process_file(void) {
 				g.opt_input_emwinfname);
 
   if(status == -1)
-    log_err(0, "%s\n", "Error from init_emwin_packet.");
+    log_err(0, "%s: %s - %s\n", "Error from init_emwin_packet",
+	    g.opt_input_fpath, g.opt_input_emwinfname);
   else if(status != 0)
-      log_errx(0, "%s\n", "Error from init_emwin_packet.");
+    log_errx(0, "%s: %s - %s\n", "Error from init_emwin_packet",
+	    g.opt_input_fpath, g.opt_input_emwinfname);
 
   if(status != 0)
     return(status);
