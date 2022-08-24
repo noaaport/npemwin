@@ -148,7 +148,7 @@ int open_emwin_server_infeed(char *fpath, char *mode_str){
    * -2 error from infeed_open_fifo (invalid mode_str)
    *
    * Contrary to the serial device (and network) there is no need
-   * to sync the devive here.
+   * to sync the device here.
    */
   int fd;
 
