@@ -61,11 +61,14 @@ int loop(void){
     status = 1;
     log_errx("No servers available.");
     log_info("Waiting %d seconds.", g.retrysleep);
+    /*
+     * sleep(g.retrysleep);
+     */
     for(i = 0; i <= g.retrysleep; ++i){
       sleep(1);
       if(get_quit_flag() != 0)
 	break;
-    }
+    }    
     log_info("Trying server list again."); 
   }else if(es->fd == -1){
     if(es->gai_code != 0){
@@ -87,7 +90,8 @@ int loop(void){
   }
 
   /* Make this call before entering the loop and then the last call inside */
-  status = process_packets(es);
+  if((status == 0) && (get_quit_flag() == 0))
+    status = process_packets(es);
 
   while((status == 0) && (get_quit_flag() == 0)){
     if(g.f_server_enabled == 1)

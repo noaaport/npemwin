@@ -168,7 +168,7 @@ static void close_server(struct emwin_server *es){
   es->f_up = 0;	/* mark it as down */
 
   if(status != 0)
-    log_err2("Error closing %s: ", es->ip);
+    log_err2("Error closing:", es->ip);
 }
 
 static int switch_server(struct emwin_server *es){
