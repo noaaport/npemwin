@@ -89,16 +89,16 @@ int loop(void){
     log_info("Connected to %s @ %s", es->ip, es->port);
   }
 
-  /* Make this call before entering the loop and then the last call inside */
-  if((status == 0) && (get_quit_flag() == 0))
+  /* Make thse calls before entering the loop and then the last call inside */
+  if((status == 0) && (get_quit_flag() == 0)) {
     status = process_packets(es);
-
+    periodic();
+  }
+  
   while((status == 0) && (get_quit_flag() == 0)){
     if(g.f_server_enabled == 1)
       server_loop();
-       
-    periodic();
-
+    
     if(get_reload_servers_list_flag())
       reload_servers_list();
 
@@ -106,6 +106,7 @@ int loop(void){
       bb_send_clientid(es);
 
     status = process_packets(es);
+    periodic();
   }
 
   if(get_quit_flag() != 0)
