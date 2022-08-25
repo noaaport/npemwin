@@ -25,6 +25,8 @@ static int get_last_part_size(off_t fsize);
 static int build_header_date(struct emwin_packet_st *ep);
 static int build_emwin_header(struct emwin_packet_st *ep);
 
+static int test_save_emwin_packet(struct emwin_packet_st *ep);
+
 int init_emwin_packet_st(struct emwin_packet_st *ep,
 			 char *fpath, char *emwinfname){
   /*
@@ -142,6 +144,37 @@ int send_emwin_packet(int fd, struct emwin_packet_st *ep){
   int status = 0;
   ssize_t n = 0;
 
+  status = test_save_emwin_packet(ep);
+  return(status);
+  
+  n = write(fd, ep->packet, ep->packet_size);
+
+  if(n == -1)
+    status = -1;
+  else if(n != ep->packet_size)
+    status = 1;
+
+  /*
+   * debug: log_info("f:%d", status);
+   */
+
+  return(status);
+}
+
+static int test_save_emwin_packet(struct emwin_packet_st *ep){
+   /* 
+   * Returns:
+   * -1 => write error
+   *  0 => no errors
+   *  1 => could not write all
+   */
+  int fd;
+  int status = 0;
+  ssize_t n = 0;
+  char filename[12];
+  
+  snprintf(filename, 12, "%d", ep->part_number);
+  fd = open(filename, O_WRONLY | O_CREAT);
   n = write(fd, ep->packet, ep->packet_size);
 
   if(n == -1)
@@ -172,7 +205,7 @@ static int get_last_part_size(off_t fsize){
   int size;
   
   size = fsize % EMWIN_DATA_SIZE;
-  if(size  == 0)
+  if(size == 0)
     size = EMWIN_DATA_SIZE;
 
   return(size);
