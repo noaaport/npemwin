@@ -196,7 +196,7 @@ static int process_file(void) {
 
     if(status == 0)
       status = send_emwin_packet(g.output_fifo_fd, &gep);
-
+    
     if(status == -1)
       log_err(0, "Could not send emwin packet %s", gep.fname);
     else if(status == 1)
@@ -204,6 +204,12 @@ static int process_file(void) {
 
     if(status != 0)
       break;
+
+    /*
+     * Give the fifo a break.  There should be a better way to control
+     * the flow to the fifo.
+     */
+    usleep(1000);
   }
 
   clean_emwin_packet_st(&gep);

@@ -273,13 +273,14 @@ int get_emwin_packet_serial(int f, struct emwin_packet *ep){
 
 int get_emwin_packet_infeed(int f, struct emwin_packet *ep){
   /*
-   * Handle it the same way as reading from a serial device
+   * Handled it the same way as reading from a serial device
+   *
    */
   int status = 0;
 
   status = get_emwin_packet_serial(f, ep);
 
-  return(status);
+  return(status); 
 }
 
 static int emwin_sync_device(int fd){

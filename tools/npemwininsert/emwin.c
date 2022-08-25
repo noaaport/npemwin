@@ -102,6 +102,8 @@ int build_emwin_packet(struct emwin_packet_st *ep){
     return(status);
 
   /*
+   * This comment is taken from nbsp.
+   *
    * This will leave the first and last six bytes unencrypted.
    *
    * int header_and_data_size;
@@ -122,7 +124,7 @@ int build_emwin_packet(struct emwin_packet_st *ep){
    * }
    *
    * But here we do not imitate the old BB servers. We leave the data
-   * as it used to be transmitted (and received ny Npemwin) from a
+   * as it used to be transmitted (and received by Npemwin) from a
    * serial wx12 device. Moreover, we do not fill the data portion of the
    * last frame with NULLS to complete 1024 bytes if it is smaller than that.
    */
