@@ -27,7 +27,8 @@ int get_seqnum_key(char *key){
    * 
    * char key[SEQNUM_SIZE + 1];
    */
-  
+  int n;
+
   if(g_seqnum_key == SEQNUMKEY_LAST)
     g_seqnum_key = SEQNUMKEY_FIRST;
   else
