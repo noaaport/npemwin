@@ -15,7 +15,6 @@ OBJECTS =	main.o \
 		emwin.o err.o fifo.o file.o io.o util.o
 HEADERS = 	emwin.h err.h fifo.h io.h util.h
 
-
 ALLOBJECTS =	${OBJECTS} ${INOBJECTS}
 
 PROGRAM =	npemwininsert

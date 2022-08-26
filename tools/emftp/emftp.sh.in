@@ -70,6 +70,12 @@ cleanup(){
     rm -f $glockfpath
 }
 
+get_number_parts(){
+
+    # This should be 6
+    echo $1 | tr "_" "\n" | wc -l
+}
+
 get_parts(){
 
     _name=`echo $1 | tr A-Z a-z`
@@ -322,6 +328,13 @@ cd ${_savedir}
 
 for f in $gtmpdir/*
 do
+    number_parts=`get_number_parts $f`
+    if [ $number_parts -ne 6 ]
+    then
+	log_msg "Invalid file name: $f"	
+	continue
+    fi
+    
     # Define the rc_xxx variables
     get_parts `basename $f`
 

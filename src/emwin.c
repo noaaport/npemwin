@@ -274,8 +274,7 @@ int get_emwin_packet_serial(int f, struct emwin_packet *ep){
 int get_emwin_packet_infeed(int f, struct emwin_packet *ep){
   /*
    * Handled it the same way as reading from a serial device
-   *
-   */
+    */
   int status = 0;
 
   status = get_emwin_packet_serial(f, ep);
