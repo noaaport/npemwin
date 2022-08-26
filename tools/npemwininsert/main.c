@@ -141,7 +141,13 @@ static int open_output_fifo(void) {
   if(status != 0)
     return(status);
 
-  fd = open(g.opt_fifo_fpath, O_WRONLY | O_NONBLOCK);
+  /*
+   * Open it in blocking mode so that the write() is blocked until npemwin
+   * has read enough from the pipe to make space for the write(). Otherwise
+   * we will get errors like "Resource tempoarily unvailable" 
+   * and loss of packets when the pipe gets full.
+   */
+  fd = open(g.opt_fifo_fpath, O_WRONLY);
   if(fd == -1)
     log_err(0, "Error from open: %s\n", g.opt_fifo_fpath);
 
@@ -204,12 +210,6 @@ static int process_file(void) {
 
     if(status != 0)
       break;
-
-    /*
-     * Give the fifo a break.  There should be a better way to control
-     * the flow to the fifo.
-     */
-    usleep(1000);
   }
 
   clean_emwin_packet_st(&gep);
