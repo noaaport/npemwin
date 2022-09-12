@@ -307,6 +307,7 @@ do
 	    	then
 		    echo "$fbasename is retransmitting $md5fbasename."
 		    _duplicate=1
+		    rm ${out_dirname}/$subdir/$fbasename
 	    	else
 		    mv ${out_dirname}/$subdir/$fbasename \
 			${out_dirname}/$subdir/$md5fbasename
