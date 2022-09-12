@@ -1,0 +1,3 @@
+11sep2022
+
+Revise qrunner.sh handling of duplicates: it seems that, when a duplicate is detected, the (new, duplicate) file is not deleted and it is left with the seqnumkey name.
