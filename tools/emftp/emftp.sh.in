@@ -331,7 +331,8 @@ do
     number_parts=`get_number_parts $f`
     if [ $number_parts -ne 6 ]
     then
-	log_msg "Invalid file name: $f"	
+	log_msg "Invalid file name: unexpected number of parts: $f"
+	rm $f
 	continue
     fi
     
@@ -342,11 +343,20 @@ do
     emfbasename=`get_emfbasename`
     parentsubdir=`get_parentsubdir`
     ftype=`get_ftype`
+    bbfbasename=`get_bbfbasename`
 
     parentdir=${gspooldir}/${parentsubdir}
     emfpath=${parentdir}/${emfbasename}
 
-    bbfbasename=`get_bbfbasename`
+    # Minimal check that the file name has the correct form
+    echo $${emfbasename} | grep -q -v "[^[:alnum:]\.]" -
+    _status=$?
+    if [ ${_status} -eq 0 ]
+    then
+	log_msg "Invalid file name: unexpected characters: $f"
+	rm $f
+	continue
+    fi
 
     mkdir -p $parentdir
     mv $f $emfpath
