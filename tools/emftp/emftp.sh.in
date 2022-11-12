@@ -349,12 +349,13 @@ do
     emfpath=${parentdir}/${emfbasename}
 
     # Minimal check that the file name has the correct form
-    echo $${emfbasename} | grep -q -v "[^[:alnum:]\.]" -
+    echo ${emfbasename} | grep -q -v "[^[:alnum:]\.]" -
     _status=$?
     if [ ${_status} -eq 0 ]
     then
 	log_msg "Invalid file name: unexpected characters: $f"
-	rm $f
+	mv $f /var/npemwin/spool
+	# rm $f
 	continue
     fi
 
