@@ -84,10 +84,22 @@ get_parts(){
     _second_component=`echo $_name | cut -d "_" -f 5`
     _last_component=`echo $_name | cut -d "_" -f 6`
 
-    rc_seqnum=`echo $_last_component | cut -c 1-6`
-    rc_emname=`echo $_last_component | cut -c 10-17`
-    rc_ext=`echo $_last_component | cut -c 19-21`
-    rc_bbfbasename=`echo $_last_component | cut -c 10-21`
+    # The components are things like
+    # first: qgti98kwnh120115
+    # second: 20221112131522
+    # last: 706008-4-mod96fbw.gif
+
+    ## Old - Delete
+    # rc_seqnum=`echo $_last_component | cut -c 1-6`
+    # rc_bbfbasename=`echo $_last_component | cut -c 10-21`
+    # rc_emname=`echo $_last_component | cut -c 10-17`
+    # rc_ext=`echo $_last_component | cut -c 19-21`
+    ## 
+
+    rc_seqnum=`echo $_last_component | cut -d "-" -f 1`
+    rc_bbfbasename=`echo $_last_component | cut -d "-" -f 3`
+    rc_emname=${rc_bbfbasename%.*}
+    rc_ext=${rc_bbfbasename##*.}
     rc_awips=`echo $rc_emname | cut -c 1-6`
     
     rc_wmoid=`echo $_first_component | cut -c 1-6`
@@ -164,6 +176,32 @@ sanity_check(){
 	eval _dir=\$g${_d}dir
 	[ ! -d ${_dir} ] && { log_err "${_dir} does not exist"; }
     done
+}
+
+check_name(){
+
+    _status=0
+    
+    # Minimal check that the file name has the correct form
+
+    echo ${rc_emname} | grep -q "[^[:alnum:]]" -
+    if [ $? -eq 0 ]
+    then
+	log_msg "Invalid file name: unexpected characters: $rc_emname"
+	#mv $f /var/npemwin/spool
+	# rm $f
+
+	return 1
+    fi
+
+    if [ ${#rc_emname} -ne 8 -o ${#rc_bbfbasename} -ne 12 ]
+    then
+	log_msg "Invalid file name: wrong number of characters: $rc_bbfbasename"
+
+	return 1
+    fi
+
+    return ${_status}
 }
 
 #
@@ -349,11 +387,10 @@ do
     emfpath=${parentdir}/${emfbasename}
 
     # Minimal check that the file name has the correct form
-    echo ${emfbasename} | grep -q -v "[^[:alnum:]\.]" -
+    check_name
     _status=$?
-    if [ ${_status} -eq 0 ]
+    if [ ${_status} -ne 0 ]
     then
-	log_msg "Invalid file name: unexpected characters: $f"
 	mv $f /var/npemwin/spool
 	# rm $f
 	continue
@@ -368,6 +405,11 @@ do
     if [ $npemwin_enable -eq 1 ]
     then
 	$gnpemwininsert -b -f $gnpemwin_infifo $bbfbasename $emfpath
+	_status=$?
+	if [ ${_status} -ne 0 ]
+	then
+	    log_msg "Error from npemwininsert processing $emfpath"
+	fi
     fi
 
     if [ $nbsp_enable -eq 1 -a $ftype = "txt" ]
@@ -380,7 +422,12 @@ do
 	mkdir -p $nbspparentdir
 	echo -n "000000000000000000000000" > $nbspfpath
 	cat $emfpath >> $nbspfpath
-	[ -f $nbspfpath ] && $gnbspinsert -f $gnbsp_infifo $_finfo
+	$gnbspinsert -f $gnbsp_infifo $_finfo
+	_status=$?
+	if [ ${_status} -ne 0 ]
+	then
+	    log_msg "Error from nbspinsert processing $emfpath"
+	fi
     fi
 
     #

@@ -241,7 +241,7 @@ do
 	# aug2022 - in the old bb days the extension was ".zis";
 	# now ".zip" is used.
 	name=${filename%.*}
-	ext=${filename#*.}
+	ext=${filename##*.}
 	_deldir=
 	if [ $ext = "zis" -o $ext = "zip" ]
 	then
