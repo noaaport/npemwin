@@ -66,8 +66,8 @@ log_err(){
 
 cleanup(){
 
+    unlock_dir $glockdirpath
     log_msg "emftp script finished"
-    rm -f $glockfpath
 }
 
 get_number_parts(){
@@ -204,6 +204,29 @@ check_name(){
     return ${_status}
 }
 
+lock_dir(){
+
+    lockdir=$1
+    sleepsecs=$2
+    
+    mkdir $lockdir > /dev/null 2>&1
+    status=$?
+    while [ $status -ne 0 ]
+    do
+	echo sleeping
+	sleep $sleepsecs
+	mkdir $lockdir > /dev/null 2>&1
+	status=$?
+    done
+}
+
+unlock_dir(){
+
+    lockdir=$1
+    
+    [ -d $lockdir ] && rmdir $lockdir
+}
+
 #
 # configuration file
 #
@@ -230,11 +253,12 @@ gworkdir="/var/npemwin/emftp"
 ginputssubdir="inputs"
 gspoolsubdir="spool"
 ginvsubdir="inv"
-glocksubdir="lock"
 gtmpsubdir="tmp"
+glocksubdir="lock"
+glockname="emftp.lock"		# name of dir we will use for locking
+glocksleepsecs=5
 gmd5keyfile="md5.txt"
 ginvfilename="`date -u +%H`.txt"
-glockfilename="emftp.lock"
 gqueuefilename="`date -u +%H%M`.q"
 gtime="`date -u +%H%M`"           # for entry in inv file
 
@@ -310,7 +334,7 @@ gtmpdir=${gworkdir}/${gtmpsubdir}
 ginputfpath=${ginputsdir}/${ginputfilename}
 gmd5keyfpath=${ginputsdir}/${gmd5keyfile}
 ginvfpath=${ginvdir}/${ginvfilename}
-glockfpath=${glockdir}/${glockfilename}
+glockdirpath=${glockdir}/${glockname}
 #
 
 # to ensure that other callers to nbspinsert can write to the directories
@@ -321,10 +345,9 @@ umask 002
 sanity_check
 
 # run once
-[ -f $glockfpath ] && { log_msg_quit "queue is locked"; }
+lock_dir $glockdirpath $glocksleepsecs
 
 trap cleanup HUP INT QUIT ABRT KILL ALRM TERM EXIT
-touch $glockfpath
 
 log_msg "emftp script starting"
 
