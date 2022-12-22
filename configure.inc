@@ -40,7 +40,7 @@ then
    flavor=opensuse
 elif [ -f /etc/redhat-release ] 
 then
-   flavor=centos
+   flavor=redhat
 elif [ -f /etc/debian_version ] 
 then
    flavor=debian
@@ -71,15 +71,16 @@ case $os in
 	EXCLUDE="--exclude "
 
 	TCL_INCDIR=
-	TCL_LIB="tcl8.5"
-	TCLSH=/usr/bin/tclsh8.5
+	TCL_LIB="tcl8.6"
+	TCLSH=/usr/bin/tclsh8.6
 	DB_INCDIR=
 	DB_LIB="db-5.3"
 	LOCAL_INCDIR=
 	LOCAL_LIBDIR=
 
-	if [ $flavor = centos ]
+	if [ $flavor = redhat ]
 	then
+	   # alma linux 8
 	   TCL_INCDIR=
            TCL_LIB="tcl8.5"
            TCLSH=/usr/bin/tclsh8.5
@@ -87,12 +88,7 @@ case $os in
            DB_LIB="db-5.3"
 	elif [ $flavor = debian ]
 	then
-	   # debian 7
-	   TCL_INCDIR="-I /usr/include/tcl8.5"
-	   TCL_LIB="tcl8.5"
-	   TCLSH=/usr/bin/tclsh8.5
-	   DB_INCDIR=
-	   DB_LIB="db-5.1"
+	   # debian 10 or 11
 	   if [ $debian = "10" -o $debian = "11" ]
 	   then
 		TCL_INCDIR="-I /usr/include/tcl8.6"

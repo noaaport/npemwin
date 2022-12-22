@@ -3,7 +3,7 @@
 #
 include ../../VERSION
 
-# The defaults in spec.in are for SL, and the overrides are other
+# The defaults in spec.in are for Alma, and the overrides for other
 # flavors are below.
 #
 requires = $(shell grep -v "^\#" rpm-requires)
