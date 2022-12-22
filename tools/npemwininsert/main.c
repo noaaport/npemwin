@@ -25,13 +25,12 @@ static struct {
   char *opt_input_emwinfname;
   char *opt_input_fpath;
   char *opt_fifo_fpath; /* [-f] */
-  char *opt_lock_fpath; /* [-l] */
   int opt_C;            /* check and exit */
   int opt_background;
   /* variables */
   int output_fifo_fd;
   struct emwin_packet_st *ep;
-} g = {NULL, NULL, NULL, NULL, 0, 0, -1, NULL};
+} g = {NULL, NULL, NULL, 0, 0, -1, NULL};
 
 static struct emwin_packet_st gep;
 
@@ -44,8 +43,7 @@ static int process_file(void);
 int main(int argc, char **argv){
 
   char *optstr = "bCf:l:";
-  char *usage = "npemwininsert [-C] [-b] [-f <fifo>] [-l <lock>]"
-	" <emwinfname> <fpath>";
+  char *usage = "npemwininsert [-C] [-b] [-f <fifo>] <emwinfname> <fpath>";
   int c;
   int status = 0;
   
@@ -53,7 +51,6 @@ int main(int argc, char **argv){
 
   /* defaults */
   g.opt_fifo_fpath = OUTPUT_FIFO_FPATH;
-  g.opt_lock_fpath = OUTPUT_LOCK_FPATH;
 
   while((status == 0) && ((c = getopt(argc, argv, optstr)) != -1)){
     switch(c){
@@ -65,9 +62,6 @@ int main(int argc, char **argv){
       break;
     case 'f':
       g.opt_fifo_fpath = optarg;
-      break;
-    case 'l':
-      g.opt_lock_fpath = optarg;
       break;
     case 'h':
     default:
@@ -118,7 +112,6 @@ static void check(void){
   fprintf(stdout, "opt_input_emwinfname: %s\n", g.opt_input_emwinfname);
   fprintf(stdout, "opt_input_fpath: %s\n", g.opt_input_fpath);
   fprintf(stdout, "opt_fifo_fpath: %s\n", g.opt_fifo_fpath);
-  fprintf(stdout, "opt_lock_fpath: %s\n", g.opt_lock_fpath);
 
   fprintf(stdout, "opt_C: %d\n", g.opt_C);
   fprintf(stdout, "opt_background: %d\n", g.opt_background);
