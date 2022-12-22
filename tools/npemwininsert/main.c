@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/file.h>	/* flock() */
 #include <fcntl.h>
 #include <errno.h>
 #include "err.h"
@@ -19,7 +20,6 @@
 
 /* defaults */
 #define OUTPUT_FIFO_FPATH	"/var/run/npemwin/infeed.fifo"
-#define OUTPUT_LOCK_FPATH	"/var/run/npemwin/infeed.fifo.lock"
 
 static struct {
   char *opt_input_emwinfname;
@@ -148,12 +148,21 @@ static int open_output_fifo(void) {
    * and loss of packets when the pipe gets full.
    */
   fd = open(g.opt_fifo_fpath, O_WRONLY);
-  if(fd == -1)
+  if(fd == -1) {
     log_err(0, "Error from open: %s\n", g.opt_fifo_fpath);
-
-  if(fd == -1)
     return(-1);
+  }
 
+  status = flock(fd, LOCK_EX);
+  if(status == -1) {
+    log_err(0, "Error from flock: %s\n", g.opt_fifo_fpath);
+
+    if(close(fd) == -1)
+      log_err(0, "Error from close: %s\n", g.opt_fifo_fpath);
+    
+    return(-1);
+  }
+  
   g.output_fifo_fd = fd;
 
   return(0);
@@ -166,6 +175,10 @@ static void close_output_fifo(void) {
   if(g.output_fifo_fd == -1)
     return;
 
+  status = flock(g.output_fifo_fd, LOCK_UN);
+  if(status == -1)
+    log_err(0, "Error unlocking emwin fifo: %s\n", g.opt_fifo_fpath);
+  
   status = close(g.output_fifo_fd);
   g.output_fifo_fd = -1;
 

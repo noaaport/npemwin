@@ -66,8 +66,8 @@ log_err(){
 
 cleanup(){
 
+    unlock_dir $glockdirpath
     log_msg "emftp script finished"
-    rm -f $glockfpath
 }
 
 get_number_parts(){
@@ -84,10 +84,22 @@ get_parts(){
     _second_component=`echo $_name | cut -d "_" -f 5`
     _last_component=`echo $_name | cut -d "_" -f 6`
 
-    rc_seqnum=`echo $_last_component | cut -c 1-6`
-    rc_emname=`echo $_last_component | cut -c 10-17`
-    rc_ext=`echo $_last_component | cut -c 19-21`
-    rc_bbfbasename=`echo $_last_component | cut -c 10-21`
+    # The components are things like
+    # first: qgti98kwnh120115
+    # second: 20221112131522
+    # last: 706008-4-mod96fbw.gif
+
+    ## Old - Delete
+    # rc_seqnum=`echo $_last_component | cut -c 1-6`
+    # rc_bbfbasename=`echo $_last_component | cut -c 10-21`
+    # rc_emname=`echo $_last_component | cut -c 10-17`
+    # rc_ext=`echo $_last_component | cut -c 19-21`
+    ## 
+
+    rc_seqnum=`echo $_last_component | cut -d "-" -f 1`
+    rc_bbfbasename=`echo $_last_component | cut -d "-" -f 3`
+    rc_emname=${rc_bbfbasename%.*}
+    rc_ext=${rc_bbfbasename##*.}
     rc_awips=`echo $rc_emname | cut -c 1-6`
     
     rc_wmoid=`echo $_first_component | cut -c 1-6`
@@ -166,6 +178,55 @@ sanity_check(){
     done
 }
 
+check_name(){
+
+    _status=0
+    
+    # Minimal check that the file name has the correct form
+
+    echo ${rc_emname} | grep -q "[^[:alnum:]]" -
+    if [ $? -eq 0 ]
+    then
+	log_msg "Invalid file name: unexpected characters: $rc_emname"
+	#mv $f /var/npemwin/spool
+	# rm $f
+
+	return 1
+    fi
+
+    if [ ${#rc_emname} -ne 8 -o ${#rc_bbfbasename} -ne 12 ]
+    then
+	log_msg "Invalid file name: wrong number of characters: $rc_bbfbasename"
+
+	return 1
+    fi
+
+    return ${_status}
+}
+
+lock_dir(){
+
+    lockdir=$1
+    sleepsecs=$2
+    
+    mkdir $lockdir > /dev/null 2>&1
+    status=$?
+    while [ $status -ne 0 ]
+    do
+	echo sleeping
+	sleep $sleepsecs
+	mkdir $lockdir > /dev/null 2>&1
+	status=$?
+    done
+}
+
+unlock_dir(){
+
+    lockdir=$1
+    
+    [ -d $lockdir ] && rmdir $lockdir
+}
+
 #
 # configuration file
 #
@@ -192,11 +253,12 @@ gworkdir="/var/npemwin/emftp"
 ginputssubdir="inputs"
 gspoolsubdir="spool"
 ginvsubdir="inv"
-glocksubdir="lock"
 gtmpsubdir="tmp"
+glocksubdir="lock"
+glockname="emftp.lock"		# name of dir we will use for locking
+glocksleepsecs=5
 gmd5keyfile="md5.txt"
 ginvfilename="`date -u +%H`.txt"
-glockfilename="emftp.lock"
 gqueuefilename="`date -u +%H%M`.q"
 gtime="`date -u +%H%M`"           # for entry in inv file
 
@@ -272,7 +334,7 @@ gtmpdir=${gworkdir}/${gtmpsubdir}
 ginputfpath=${ginputsdir}/${ginputfilename}
 gmd5keyfpath=${ginputsdir}/${gmd5keyfile}
 ginvfpath=${ginvdir}/${ginvfilename}
-glockfpath=${glockdir}/${glockfilename}
+glockdirpath=${glockdir}/${glockname}
 #
 
 # to ensure that other callers to nbspinsert can write to the directories
@@ -283,10 +345,9 @@ umask 002
 sanity_check
 
 # run once
-[ -f $glockfpath ] && { log_msg_quit "queue is locked"; }
+lock_dir $glockdirpath $glocksleepsecs
 
 trap cleanup HUP INT QUIT ABRT KILL ALRM TERM EXIT
-touch $glockfpath
 
 log_msg "emftp script starting"
 
@@ -331,7 +392,8 @@ do
     number_parts=`get_number_parts $f`
     if [ $number_parts -ne 6 ]
     then
-	log_msg "Invalid file name: $f"	
+	log_msg "Invalid file name: unexpected number of parts: $f"
+	rm $f
 	continue
     fi
     
@@ -342,11 +404,20 @@ do
     emfbasename=`get_emfbasename`
     parentsubdir=`get_parentsubdir`
     ftype=`get_ftype`
+    bbfbasename=`get_bbfbasename`
 
     parentdir=${gspooldir}/${parentsubdir}
     emfpath=${parentdir}/${emfbasename}
 
-    bbfbasename=`get_bbfbasename`
+    # Minimal check that the file name has the correct form
+    check_name
+    _status=$?
+    if [ ${_status} -ne 0 ]
+    then
+	mv $f /var/npemwin/spool
+	# rm $f
+	continue
+    fi
 
     mkdir -p $parentdir
     mv $f $emfpath
@@ -357,6 +428,11 @@ do
     if [ $npemwin_enable -eq 1 ]
     then
 	$gnpemwininsert -b -f $gnpemwin_infifo $bbfbasename $emfpath
+	_status=$?
+	if [ ${_status} -ne 0 ]
+	then
+	    log_msg "Error from npemwininsert processing $emfpath"
+	fi
     fi
 
     if [ $nbsp_enable -eq 1 -a $ftype = "txt" ]
@@ -369,7 +445,12 @@ do
 	mkdir -p $nbspparentdir
 	echo -n "000000000000000000000000" > $nbspfpath
 	cat $emfpath >> $nbspfpath
-	[ -f $nbspfpath ] && $gnbspinsert -f $gnbsp_infifo $_finfo
+	$gnbspinsert -f $gnbsp_infifo $_finfo
+	_status=$?
+	if [ ${_status} -ne 0 ]
+	then
+	    log_msg "Error from nbspinsert processing $emfpath"
+	fi
     fi
 
     #

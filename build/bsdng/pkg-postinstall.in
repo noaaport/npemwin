@@ -35,9 +35,9 @@ userdirs="/var/run/npemwin
 /var/npemwin/tmp
 /var/npemwin/emftp/inputs
 /var/npemwin/emftp/inv
-/var/npemwin/emftp/lock
 /var/npemwin/emftp/spool
-/var/npemwin/emftp/tmp"
+/var/npemwin/emftp/tmp
+/var/npemwin/emftp/lock"
 #
 rootdirs="/usr/local/etc/npemwin/defaults
 /usr/local/etc/npemwin/site

@@ -33,12 +33,13 @@
 ## ginputssubdir="inputs"
 ## gspoolsubdir="spool"
 ## ginvsubdir="inv"
-## glocksubdir="lock"
 ## gtmpsubdir="tmp"
+## glocksubdir="lock"
+## glockname="emftp.lock"		# name of dir we will use for locking
+## glocksleepsecs=5
 ## gmd5keyfile="md5.txt"
 ## ginvfilename="`date -u +%H`.txt"
-## glockfilename="emftp.lock"
-## gtime="`date -u +%H%M`"           # for entry in inv file
+## gtime="`date -u +%H%M`"		# for entry in inv file
 
 #
 # Nbsp and Npemwin processing
