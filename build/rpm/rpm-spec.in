@@ -12,6 +12,8 @@ Requires: @requires@
 %description
 Noaaport Emwin ByteBlaster server
 
+%global debug_package %{nil}
+
 %prep
 
 %setup
