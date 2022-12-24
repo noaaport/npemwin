@@ -124,6 +124,7 @@
 /usr/local/man/man1/npemwind.1.gz
 /usr/local/share/doc/npemwin/filter.sh-sample
 /usr/local/share/doc/npemwin/npemwind.sh-sample
+/usr/local/share/doc/npemwin/npemwin.service-generic
 /usr/local/share/doc/npemwin/macosx-launchd.plist-sample
 /usr/local/share/doc/npemwin/prefilter/prefilter.conf-sample
 /usr/local/share/doc/npemwin/prefilter/prefilter.rc-sample

@@ -13,6 +13,7 @@ sed -e "/@include@/s||$INCLUDE|" \
     -e "/@RCINIT@/s||$RCINIT|" \
     -e "/@RCFPATH@/s||$RCFPATH|" \
     -e "/@RCCONF@/s||$RCCONF|" \
+    -e "/@SYSTEMDCONF@/s||$SYSTEMDCONF|" \
     -e "/@HOURLYCONF@/s||$HOURLYCONF|" \
     -e "/@STARTCLEANCONF@/s||$STARTCLEANCONF|" \
     -e "/@STARTSTOPRC@/s||$STARTSTOPRC|" \

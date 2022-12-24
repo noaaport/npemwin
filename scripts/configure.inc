@@ -9,6 +9,7 @@ RCCONF=
 HOURLYCONF=hourly-cleanup.conf-freebsd
 STARTCLEANCONF=start-cleanup.conf-freebsd
 STARTSTOPRC=startstop.rc-freebsd
+SYSTEMDCONF=
 PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
 
 case $os in
@@ -24,9 +25,9 @@ case $os in
     	;;
     Linux)
 	RCINIT=npemwind.sh-${flavor}
-	RCFPATH=/etc/init.d/npemwind
-	HOURLYCONF=hourly-cleanup.conf-generic
 	STARTCLEANCONF=start-cleanup.conf-generic
+	RCFPATH=/etc/init.d/npemwind
+	SYSTEMDCONF=npemwin.service-generic
 
 	[ $flavor = debian ] && STARTSTOPRC=startstop.rc-debian
 	[ $flavor = debian ] && RCCONF=npemwind.sh.conf-debian

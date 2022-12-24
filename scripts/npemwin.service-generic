@@ -1,0 +1,16 @@
+[Unit]
+Description=Emwin server
+After=network.target
+
+[Service]
+Type=forking
+TimeoutSec=infinity
+PIDFile=/var/run/npemwin/npemwind.pid
+ExecStart=/etc/init.d/npemwind start
+ExecStop=/etc/init.d/npemwind stop
+
+[Install]
+WantedBy=multi-user.target
+# The alias prevents systemctl to generate a systemd script in
+# /var/run/systemd/generator.late based on /etc/init.d/npemwind
+Alias=npemwind.service

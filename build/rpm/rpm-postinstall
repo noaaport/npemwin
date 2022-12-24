@@ -49,7 +49,17 @@ rootdirs="/usr/local/etc/npemwin/defaults
 /usr/local/etc/npemwin/rc.d/msg
 /usr/local/libexec/npemwin/site
 /usr/local/libexec/npemwin/tclhttpd/site"
+#
+# target directories for optional files
+#
+docdir=/usr/local/share/doc/npemwin
+confdir=/usr/local/etc/npemwin
+rcdir=/etc/init.d
+systemddir=/usr/local/lib/systemd/system
 
+#
+# noaaport user
+#
 useradd -M -d $home $user > /dev/null 2>&1
 status=$?
 if [ $status -ne 9 -a $status -ne 0 ]
@@ -71,10 +81,6 @@ done
 #
 # install optional files from doc directory
 #
-docdir=/usr/local/share/doc/npemwin
-confdir=/usr/local/etc/npemwin
-rcdir=/etc/init.d
-
 install -m 0755 $docdir/npemwind.sh-sample $rcdir/npemwind
 if [ -n "`which chkconfig`" ]
 then
@@ -83,6 +89,10 @@ elif [ -n "`which update-rc.d`" ]
 then
 	update-rc.d npemwind defaults 99
 fi
+
+[ -d $systemddir ] || mkdir -p $systemddir
+install -m 0644 $docdir/npemwin.service-generic $systemddir/npemwin.service
+systemctl enable npemwin
 
 #
 # configure default

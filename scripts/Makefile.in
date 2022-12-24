@@ -10,8 +10,9 @@ PATH =		@PATH@
 FIND =		@FIND@
 UNZIP =		@UNZIP@
 RCINIT =	@RCINIT@
-RCFPATH = 	@RCFPATH@
 RCCONF =    	@RCCONF@
+RCFPATH = 	@RCFPATH@
+SYSTEMDCONF =	@SYSTEMDCONF@
 HOURLYCONF =	@HOURLYCONF@
 STARTCLEANCONF = @STARTCLEANCONF@
 STARTSTOPRC =	@STARTSTOPRC@
@@ -23,7 +24,7 @@ LIBTOOLS =	qrunner startstop
 BINTOOLS =	npemwincleanup npemwinversion npemwinctl npemwinstatcounters
 LIBFILES =      npemwind-start.tcl npemwind-stop.tcl
 DOCS =		filter.sh-sample npemwind.sh-sample
-EXTRA_DOCS =	${RCCONF}
+EXTRA_DOCS =	${RCCONF} ${SYSTEMDCONF}
 TARGET =	${SAMPLES} ${BINTOOLS} ${LIBTOOLS} ${DOCS}
 
 all: ${TARGET}
