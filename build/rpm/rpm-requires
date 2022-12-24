@@ -1,6 +1,6 @@
 libdb
 libdb-utils
-tcp_wrappers
+tcp_wrappers-libs
 tcl
 tcllib
 gnuplot
