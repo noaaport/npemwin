@@ -48,15 +48,15 @@ LIBDIRS =	@LIBDIRS@
 LIBS =		@LIBS@
 INSTALL =	@INSTALL@
 CC =		@CC@
+CCWFLAGS =      @CCWFLAGS@
 DEBUGFLAGS =
 
-DEBUGFLAGS +=	-g -ggdb
 # for enabling -D command line option for debug mode(s)
-DEBUGFLAGS +=	-DDEBUG 
+DEBUGFLAGS +=	-DDEBUG
+#DEBUGFLAGS +=	-g -ggdb
 #DEBUGFLAGS +=	-DNDEBUG
 
 # standard flags
-CCWFLAGS =      @CCWFLAGS@
 CFLAGS +=	-c ${CCWFLAGS} ${DEBUGFLAGS} ${INCDIRS}
 LDFLAGS +=	${LIBDIRS} ${LIBS}
 

@@ -1,3 +1,11 @@
+#
+# This is the same as the rpm-spec.in exept for the additional line
+# "%global debug_package %{nil}".  I found out that if the DEBUG
+# flags -g -gdbd are used in src/Makefile, then rpm complaints but
+# if this setting is used the rpm builds. I leave this here only
+# for ocumentation. I don't use those debug flags in the final version
+# from which the package is built.
+
 Name: @name@
 Version: @version@
 Release:  @rpmrelease@%{?dist}
@@ -11,6 +19,8 @@ Requires: @requires@
 
 %description
 Noaaport Emwin ByteBlaster server
+
+%global debug_package %{nil}
 
 %prep
 
