@@ -18,7 +18,7 @@ options=
 [ -x $daemon ] || exit 0
 
 case "$1" in
-    start)
+  start)
     # If /var/run is a tmpfs, /var/run/<subdir> must be recreated
     [ ! -d $rundir ] && install -d -m 755 -o $owner -g $group $rundir
 
@@ -44,4 +44,3 @@ case "$1" in
 esac
 
 exit 0
-
