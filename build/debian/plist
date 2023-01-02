@@ -112,6 +112,7 @@
 /usr/local/etc/npemwin/dist/qrunner.conf-site-sample
 /usr/local/etc/npemwin/dist/hourly-cleanup.conf-sample
 /usr/local/etc/npemwin/dist/scheduler.conf-sample
+/usr/local/etc/npemwin/dist/scheduler.conf-infeed-sample
 /usr/local/etc/npemwin/dist/bbserver.conf-sample
 /usr/local/etc/npemwin/dist/bbserver-pool.conf-ex
 /usr/local/etc/npemwin/dist/startstop.rc-sample

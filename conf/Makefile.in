@@ -11,6 +11,8 @@ SOURCES =	servers.conf \
 		servers.conf-noaaport \
 		npemwind.conf-noaaport \
 		npemwind.conf-noserver \
+		servers.conf-infeed \
+		npemwind.conf-infeed \
 		logrotate.conf \
 		newsyslog.conf
 

@@ -1,0 +1,19 @@
+Sun 01 Jan 2023 07:11:48 PM AST
+
+Setting npemwin to fetch the files by ftp [actually https from
+  https://tgftp.nws.noaa.gov/SL.us008001/CU.EMWIN/DF.xt/DC.gsatR/OPS
+]
+
+After the emwin service was decomissioned, one option is to download
+the files from the url mentioned above, using what we call the
+"infeed". To configure npemwin this way, copy the files
+
+   dist/npemwind.conf-infeed-sample
+   dist/servers.conf-infeed-sample
+   dist/scheduler.conf-infeed-sample
+
+   to the npemwin "site" configuration directory:
+
+   site/npemwind.conf
+   site/servers.conf
+   site/scheduler.conf

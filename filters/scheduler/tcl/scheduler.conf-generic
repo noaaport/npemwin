@@ -80,12 +80,3 @@ lappend schedule {
 lappend schedule {
   H01/1:logrotate -s $logdir/logrotate.status $confdir/logrotate.conf &
 }
-
-## To use the emftp infeed
-# lappend schedule {
-#   M/2:/usr/local/libexec/npemwin/emftp &
-# }
-#
-# lappend schedule {
-#   M/15:/usr/local/libexec/npemwin/emftp -i &
-# }

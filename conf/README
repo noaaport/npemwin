@@ -44,4 +44,8 @@ follow the instructions in serial.README.
 npemwin can be configured instead as a client of a Noaaport nbsp server.
 The dist directory contains two *-noaaport-sample files that can be
 copied to the site subdirectory and will enable this mode of operation.
--
+
+After the emwin service was decomissioned, one option is to download
+the files from the url mentioned above, using what we call the
+"infeed". To configure npemnwin this way follow the instructions
+in emftp.README.

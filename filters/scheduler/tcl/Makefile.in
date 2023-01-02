@@ -9,7 +9,7 @@
 
 TCLTARGET =	scheduler
 TCLSOURCES =	scheduler.tcl
-SAMPLES =	scheduler.conf-sample
+SAMPLES =	scheduler.conf-sample scheduler.conf-infeed-sample
 
 TARGET =	${TCLTARGET} ${SAMPLES}
 
@@ -24,6 +24,10 @@ ${TCLTARGET}: ${TCLTARGET}.tcl
 
 scheduler.conf-sample: ${SCHEDCONF}
 	cp ${SCHEDCONF} scheduler.conf-sample
+
+scheduler.conf-infeed-sample: scheduler.conf-sample scheduler.conf.infeed.in
+	cat scheduler.conf-sample scheduler.conf.infeed.in > \
+		scheduler.conf-infeed-sample
 
 install: ${TARGET}
 	${INSTALL} -m 755 ${TCLTARGET} ${MYLIBEXECDIR}
