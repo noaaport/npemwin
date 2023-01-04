@@ -308,8 +308,8 @@ then
     mkdir ${gworkdir}
     cd ${gworkdir}
 
-    for d in $ginputssubdir $ginvsubdir $glocksubdir $gspoolsubdir \
-	     $gtmpsubdir $gqueuesubdir
+    for d in $ginputssubdir $ginvsubdir $gspoolsubdir \
+	     $gtmpsubdir $glocksubdir
     do
 	mkdir $d
     done
