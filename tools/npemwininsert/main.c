@@ -42,7 +42,7 @@ static int process_file(void);
 
 int main(int argc, char **argv){
 
-  char *optstr = "bCf:l:";
+  char *optstr = "bCf:";
   char *usage = "npemwininsert [-C] [-b] [-f <fifo>] <emwinfname> <fpath>";
   int c;
   int status = 0;
