@@ -82,10 +82,14 @@ proc process {prodname fpathin} {
     # nbspinsert seq type cat code npchidx fname fpath
     #
     # Whence the invocation of this version of nbspinsert must be done
-    # now with separate aerguments, or with eval, i.e.,
+    # now with eval if we insist on using a finfo string, or call it
+    # with separate arguments
     #
-    # eval exec nbspinsert $finfo
-    # 
+    # eval exec nbspinsert finfo
+    # exec nbspinsert seq type cat code npchidx fname fpath
+    #
+    # We use the latter.
+    #
     global nbspfilter;
 
     filterlib_get_rcvars rc $prodname $fpathin;
@@ -123,7 +127,12 @@ proc process {prodname fpathin} {
     append fbasename $fname "." $dhm "_" $seq;
     set fpathout [file join $fpathout_parentdir $fbasename];
 
-    set finfo "$seq 0 0 0 0 $fname $fpathout";
+    ##  finfo no longer used
+    # set finfo "$seq 0 0 0 0 $fname $fpathout";
+    set type 0;
+    set cat 0;
+    set code 0;
+    set npchidx 0;
 
     # The spooldir must exist
     if {[file isdirectory $spooldir] == 0} {
@@ -137,12 +146,13 @@ proc process {prodname fpathin} {
 	log_msg "Inserting: $fpathout";
     }
 
-    # see note above for the reason of using eval exec with nbspinsert
+    # see note above for the reason of using nbspinsert with separate args
     set status [catch {
 	file mkdir $fpathout_parentdir;
 	proc_nbsp_insert_ccb $fpathin $fpathout;
-	## exec nbspinsert -f $nbspfilter(nbspd_infifo) $finfo;
-	eval exec nbspinsert -f $nbspfilter(nbspd_infifo) $finfo;
+	## exec nbspinsert -f $nbspfilter(nbspd_infifo) $finfo; (old nbspinsert)
+	exec nbspinsert -f $nbspfilter(nbspd_infifo) \
+	    $seq $type $cat $code $npchidx $fname fpathout
     } errmsg];
  
     if {$status != 0} {
