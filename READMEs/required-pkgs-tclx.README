@@ -1,0 +1,9 @@
+#
+# $Id$
+#
+In contrast to nbsp, npemwin does not need additional packages
+beyond what is specified in the buid directories (bsdng, rpm, debian).
+In particular tclx is not required.
+
+However, if the nbspfilter is used (it is not installed by default),
+then the tclx package must be installed because nbsfilter uses it.
