@@ -67,12 +67,12 @@ proc main {} {
 
 proc process {prodname fpathin} {
     #
-    # This scripts executes the nbsp program "nbspinsert",
+    # This script executes the nbsp program "nbspinsert",
     # which was originally a tcl script. The script was invoked as
     #
     # exec nbspinsert $finfo
     #
-    # and so that the finfo was passed as a string and the script was
+    # and therefore the finfo was passed as a string and the script was
     # responsible for splitting the string into the various elements.
     # In jan2023 the nbspinsert program was replaced by a C program
     # (to ease the implementation of locking the fifo) and that new
@@ -152,7 +152,7 @@ proc process {prodname fpathin} {
 	proc_nbsp_insert_ccb $fpathin $fpathout;
 	## exec nbspinsert -f $nbspfilter(nbspd_infifo) $finfo; (old nbspinsert)
 	exec nbspinsert -f $nbspfilter(nbspd_infifo) \
-	    $seq $type $cat $code $npchidx $fname fpathout
+	    $seq $type $cat $code $npchidx $fname $fpathout
     } errmsg];
  
     if {$status != 0} {
