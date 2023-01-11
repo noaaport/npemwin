@@ -3,4 +3,4 @@
 #
 # Copy this file to site/filters.conf
 
-lappend gf(filterlist) [file join $gf(localfilterdir) "nbspfilter.tcl"];
+lappend gf(filterlist) [file join $gf(localfilterdir) "nbspfilter"];

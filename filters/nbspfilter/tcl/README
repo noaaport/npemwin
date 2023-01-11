@@ -2,8 +2,11 @@
 # $Id$
 #
 
-install -m 0755 nbspfilter.tcl /usr/local/libexec/npemwin/site
-install -m 0644 filters.conf /usr/local/etc/npemwin/site
+install -m 0755 nbspfilter.tcl /usr/local/libexec/npemwin/site/nbspfilter
+install -m 0644 filters.conf-site /usr/local/etc/npemwin/site/filters.conf
 
 # optional
 install -m 0644 nbspfilter.conf /usr/local/etc/npemwin
+
+NOTE: The nbspfilter script requires tclx which is not installed
+by default.

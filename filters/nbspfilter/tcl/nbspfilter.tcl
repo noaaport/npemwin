@@ -28,7 +28,7 @@ set nbspfilter(confdirs) $gf(localconfdirs);
 #
 set nbspfilter(nbspd_spooldir) "/var/noaaport/nbsp/spool";
 set nbspfilter(nbspd_infifo) "/var/run/nbsp/infeed.fifo";
-set nbspfilter(umask) "002";
+set nbspfilter(umask) "002";  # requires tclx
 #
 set nbspfilter(verbose) 0;
 
@@ -66,7 +66,26 @@ proc main {} {
 }
 
 proc process {prodname fpathin} {
-
+    #
+    # This scripts executes the nbsp program "nbspinsert",
+    # which was originally a tcl script. The script was invoked as
+    #
+    # exec nbspinsert $finfo
+    #
+    # and so that the finfo was passed as a string and the script was
+    # responsible for splitting the string into the various elements.
+    # In jan2023 the nbspinsert program was replaced by a C program
+    # (to ease the implementation of locking the fifo) and that new
+    # nbspinsert expects the elements of finfo to be passed as
+    # separate arguments, not as one string; i.e.
+    #
+    # nbspinsert seq type cat code npchidx fname fpath
+    #
+    # Whence the invocation of this version of nbspinsert must be done
+    # now with separate aerguments, or with eval, i.e.,
+    #
+    # eval exec nbspinsert $finfo
+    # 
     global nbspfilter;
 
     filterlib_get_rcvars rc $prodname $fpathin;
@@ -117,10 +136,13 @@ proc process {prodname fpathin} {
     if {$nbspfilter(verbose) == 1} {
 	log_msg "Inserting: $fpathout";
     }
+
+    # see note above for the reason of using eval exec with nbspinsert
     set status [catch {
 	file mkdir $fpathout_parentdir;
 	proc_nbsp_insert_ccb $fpathin $fpathout;
-	exec nbspinsert -f $nbspfilter(nbspd_infifo) $finfo;
+	## exec nbspinsert -f $nbspfilter(nbspd_infifo) $finfo;
+	eval exec nbspinsert -f $nbspfilter(nbspd_infifo) $finfo;
     } errmsg];
  
     if {$status != 0} {
