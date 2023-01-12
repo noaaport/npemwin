@@ -1,13 +1,13 @@
 The simplest way to install is to put the following line
-in /etc/local/nbsp/site/scheduler.conf:
-
-schedule M/2 /usr/local/libexec/npemwin/emftp
-
-or the following in /etc/local/npemwin/site/scheduler.conf:
+in /etc/local/npemwin/site/scheduler.conf:
 
 lappend schedule {
   M/2:/usr/local/libexec/npemwin/emftp &
 }
+
+or the following in /etc/local/nbsp/site/scheduler.conf:
+
+schedule M/2 /usr/local/libexec/npemwin/emftp
 
 There are two alternatives for enabling nbsp processing 
 
@@ -25,17 +25,5 @@ must have permissions 662 so this instance of nbspinsert can write files
 to the station directories that the other nbspinsert instances (e.g. ldm)
 may create.
 
-2) If there are other programs that also use "nbspinsert" (as mentioned in [1])
-then it is a good idea to configure "nbspinsert" to use locking. This is
-accomplisihed by manually executing  "nbspinsert -l" once, which will create
-the lock file (by default "/var/run/nbsp/infeed.fifo.lock") that is subsequently
-used by "nbspinsert" each time it is invoked.
-
-3) This script calls npemwininsert (C program), and the same comments in (1)
-and (2) above apply. But in contrast to nbspinsert (which is a tcl script
-and in that case the tclx flock is implemented via fcntl which does
-not work in fifos in freebsd), npemwininsert is a C program.
-Therefore, we use locking on the fifo via flock() (which does work on freebsd).
-In addition, emftp takes care of locking itself. 
-
-
+2) This script calls npemwininsert (C program), and the same comments in (1)
+apply.

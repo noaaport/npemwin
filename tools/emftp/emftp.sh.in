@@ -441,11 +441,10 @@ do
 	nbspfname=`get_nbspfname`
 	nbspparentdir=${gnbsp_spooldir}/${rc_wmostation}
 	nbspfpath=${nbspparentdir}/${nbspfbasename}
-	_finfo="$rc_seqnum 0 0 0 0 $nbspfname $nbspfpath"
 	mkdir -p $nbspparentdir
 	echo -n "000000000000000000000000" > $nbspfpath
 	cat $emfpath >> $nbspfpath
-	$gnbspinsert -f $gnbsp_infifo $_finfo
+	$gnbspinsert -f $gnbsp_infifo $rc_seqnum 0 0 0 0 $nbspfname $nbspfpath
 	_status=$?
 	if [ ${_status} -ne 0 ]
 	then
