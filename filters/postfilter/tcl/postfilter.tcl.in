@@ -11,8 +11,10 @@
 #
 # 	cfwsjupr /var/npemwin/files/txt/tjsj/cfwsjupr.<seqnumber>.txt
 #
-# This script in turn calls all the filters that are defined in the
-# postfilter.conf file.
+# This script in turn calls all the filters that are enabled in
+# ``features.{init,conf}''. This script reads its configuration
+# file `filters.conf'', which in turn reads ``features.init''
+# (which reads ``features.conf'').
 
 ## The common defaults
 set defaultsfile "/usr/local/etc/npemwin/filters.conf";
