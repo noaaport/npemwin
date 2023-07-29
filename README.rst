@@ -52,16 +52,16 @@ Another option is to download the files from the url
 
 using what we call the "infeed". To configure npemwin this way, copy the files
 
-   dist/npemwind.conf-infeed-sample
-   dist/servers.conf-infeed-sample
-   dist/scheduler.conf-infeed-sample
+   * dist/npemwind.conf-infeed-sample
+   * dist/servers.conf-infeed-sample
+   * dist/scheduler.conf-infeed-sample
 
 in the main npemwin configuration directory **/usr/local/etc/npemwin**,
 to the npemwin "site" configuration directory:
 
-   site/npemwind.conf
-   site/servers.conf
-   site/scheduler.conf
+   * site/npemwind.conf
+   * site/servers.conf
+   * site/scheduler.conf
 
 
 Fri Oct 25 08:34:29 AST 2013
