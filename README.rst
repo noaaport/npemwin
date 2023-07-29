@@ -36,8 +36,36 @@ Binary packages are available from
 What's New
 ==========
 
+Sun Jan 01 19:11:48 AST 2023
+----------------------------
+
+After the emwin service was decomissioned in 2019, one option is to configure
+npemwin to connect to the Wxmessage bb server. See
+
+  * https://www.weathermessage.com/
+
+This is now the default configuration of npemwin.
+ 
+Another option is to download the files from the url
+
+  * https://tgftp.nws.noaa.gov/SL.us008001/CU.EMWIN/DF.xt/DC.gsatR/OPS
+
+using what we call the "infeed". To configure npemwin this way, copy the files
+
+   dist/npemwind.conf-infeed-sample
+   dist/servers.conf-infeed-sample
+   dist/scheduler.conf-infeed-sample
+
+in the main npemwin configuration directory **/usr/local/etc/npemwin**,
+to the npemwin "site" configuration directory:
+
+   site/npemwind.conf
+   site/servers.conf
+   site/scheduler.conf
+
+
 Fri Oct 25 08:34:29 AST 2013
----------------------------
+----------------------------
 
 An android application **EmwinMobi** is available for beta testing
 from
