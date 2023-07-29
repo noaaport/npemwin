@@ -1,0 +1,5 @@
+Sat 29 Jul 2023 05:58:30 PM AST
+
+See the ``Trailing blanks NOTE'' in emftp.sh.in regarding the
+trailing blanks (padding) that are included in many txt files
+(at least those containing tabular data).
