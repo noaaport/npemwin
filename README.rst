@@ -44,25 +44,33 @@ npemwin to connect to the Wxmessage bb server. See
 
   * https://www.weathermessage.com/
 
-This is now the default configuration of npemwin.
+This is now the default configuration of npemwin,
+version **npemwin_3.0.1p1-1**.
  
-Another option is to download the files from the url
+However, another option is to download the files from the url
 
   * https://tgftp.nws.noaa.gov/SL.us008001/CU.EMWIN/DF.xt/DC.gsatR/OPS
 
-using what we call the "infeed". To configure npemwin this way, copy the files
+using what we call the "infeed". A "live" instance of this version is
+
+  * http://lin1.volkron.net:8016
+
+To configure npemwin this way, copy the files
 
    * dist/npemwind.conf-infeed-sample
    * dist/servers.conf-infeed-sample
    * dist/scheduler.conf-infeed-sample
 
 in the main npemwin configuration directory **/usr/local/etc/npemwin**,
-to the npemwin "site" configuration directory:
+to the npemwin "site" (instead of the "dist") directory:
 
    * site/npemwind.conf
    * site/servers.conf
    * site/scheduler.conf
 
+Packages for this version (**npemwin_3.0.1p1-1**) are available from
+
+  * http://www.noaaport.net
 
 Fri Oct 25 08:34:29 AST 2013
 ----------------------------
