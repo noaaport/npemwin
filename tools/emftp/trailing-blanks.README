@@ -1,5 +1,32 @@
 Sat 29 Jul 2023 05:58:30 PM AST
 
-See the ``Trailing blanks NOTE'' in emftp.sh.in regarding the
-trailing blanks (padding) that are included in many txt files
-(at least those containing tabular data).
+This is a note with regard to the command
+
+     mv $f $emfpath
+
+that appears near line #420 in emftp.sh.in.
+
+The txt files come with the lines padded with trailing spaces; while
+the files from the bb servers are not. If we keep them as is, the md5
+checksums will not be coincide. This is not a big deal, but if we want
+to compare the files received by ftp vs those from a bb server
+(for example by looking at the files received in the npemwin web page)
+the names will not coincide. Instead of using the "mv" command above
+we could use the one below to remove the padding blanks (for txt files),
+except that:
+(1) as written the sed command does not work because the txt files
+come from with DOS endings (\r\n) rather than just \n.
+(2) even if we take care of the \r\n ending (by using the second form
+in the commented line), I am not sure what lines
+have the extra blanks; I have seen files with extra lines in
+the tabulated data, but also in pure text lines.
+
+if [ $ftype = "txt" ]
+then
+  sed 's/[[:blank:]]*$//' < $f > $emfpath
+  # sed 's/[[:blank:]]*\r/\r/' < $f > $emfpath
+else
+  mv $f $emfpath
+fi
+
+So muy decision is to leave them as they come.
