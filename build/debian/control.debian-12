@@ -1,0 +1,21 @@
+Source: npemwin
+Section: unknown
+Priority: extra
+Maintainer: Jose F Nieves <nieves@ltp.uprrp.edu>
+Build-Depends: debhelper (>= 5)
+Standards-Version: 3.7.2
+
+Package: npemwin
+Architecture: any
+Depends: ${shlibs:Depends}, libwrap0, libdb5.3, tcl, tcllib, gnuplot-nox,
+ unzip, curl
+Description: Emwin server
+ Npemwin will connect to a list of EMWIN servers and save all
+ files into a directory based on file type and WFO ID. Extensive
+ facilities allow to call a script for each complete file received
+ for post-processing (alarms/notifications, database insertion, and more).
+ It can in turn serve any number of byte blaster clients
+ (including other instances of npemwin itself).
+ Alternatively, it can connect to a NOAAPort nbsp server and get the data
+ that way. It can also be configured to injest from a directly
+ attached serial device.
