@@ -35,6 +35,7 @@ userdirs="/var/run/npemwin
 /var/npemwin/archive/inv/digatmos
 /var/npemwin/www
 /var/npemwin/tmp
+/var/npemwin/emftp
 /var/npemwin/emftp/inputs
 /var/npemwin/emftp/inv
 /var/npemwin/emftp/spool

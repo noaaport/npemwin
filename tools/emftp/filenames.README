@@ -1,0 +1,56 @@
+Mon Aug 12 20:58:21 AST 2024
+
+One drawback of emftp is that the names of the files are sometimes
+not transparent. One particularly anoying case has to do with
+the hurricane files, like TCPAT, TCDAT, and so on.
+
+For example emftp receives files that it saves in
+
+/var/npemwin/emftp/spool/txt/knhc/
+
+as (for reference the files are stored in ``filenames.tgz'')
+
+hadt45us.20240812.204600.txt
+hapt35us.20240812.235601.txt
+tcvat5fl.20240812.204812.txt
+tcvat5fl.20240812.235703.txt
+
+The original names of these files are the long names explained
+in emftp.sh, with the hadt45us taken from the last component
+of those long names.
+
+But the point we want to make here is that those names do not
+reflect the contents. The first lines of the first two examples files are
+
+hadt45us.20240812.204600.txt:
+
+WTNT45 KNHC 122045
+TCDAT5
+
+Tropical Storm Ernesto Discussion Number   5
+NWS National Hurricane Center Miami FL       AL052024
+500 PM AST Mon Aug 12 2024
+
+hapt35us.20240812.235601.txt:
+
+WTNT35 KNHC 122355
+TCPAT5
+
+BULLETIN
+Tropical Storm Ernesto Intermediate Advisory Number 5A
+NWS National Hurricane Center Miami FL       AL052024
+800 PM AST Mon Aug 12 2024
+
+The end result is that looking at the names of the files saved
+in the "latest" subdirectory (by the stdfilter, which does not modify these
+names) in many cases do not indicate the awips of the file.
+This contrasts with the names produced by the dafilter (for example)
+which saves the files with the awips keyword in the name;
+for example tcdat5.<seqnumber>, tcpat5.<seqnumber>,
+(in this case in the nwx/hurricane subdirectory).
+
+
+
+
+
+
