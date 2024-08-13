@@ -2,7 +2,7 @@ Mon Aug 12 20:58:21 AST 2024
 
 One drawback of emftp is that the names of the files are sometimes
 not transparent. One particularly anoying case has to do with
-the hurricane files, like TCPAT, TCDAT, and so on.
+the hurricane files, like TCPAT, TCDAT, and so on (at least sometimes).
 
 For example emftp receives files that it saves in
 
@@ -17,7 +17,7 @@ tcvat5fl.20240812.235703.txt
 
 The original names of these files are the long names explained
 in emftp.sh, with the hadt45us taken from the last component
-of those long names.
+of those long names. (In npemwin, that is component is called the "prodname").
 
 But the point we want to make here is that those names do not
 reflect the contents. The first lines of the first two examples files are
@@ -41,11 +41,16 @@ Tropical Storm Ernesto Intermediate Advisory Number 5A
 NWS National Hurricane Center Miami FL       AL052024
 800 PM AST Mon Aug 12 2024
 
-The end result is that looking at the names of the files, as received
-and produces by emftp, in many cases do not indicate the awips of the file.
+The end result is that looking at the last component of the
+names of the files (the prodname), as received
+by emftp, in some cases does not contain the awips of the file.
 Once the emftp inserts the files into the npemwin infeed, then the qrunner
-takes care of producing "standard" filenames for the filters, such as the
-stdfilter (e.g., the "latest" set) or  by the dafilter (for example)
-which save the files with the awips keyword in the name. For example,
-in the case of the dafilter, tcdat5.<seqnumber>, tcpat5.<seqnumber>,
-(in this case in the nwx/hurricane subdirectory).
+takes care of producing "standard" filenames for the filters, for erxample
+the dafilter, which save the files with the awips keyword in the name.
+In the case of the dafilter, tcdat5.<seqnumber>, tcpat5.<seqnumber>,
+which are saved in the nwx/hurricane subdirectory. But in the case of
+the stdfilter (e.g., the "latest" set), it uses the "prodname" as the
+basis to set the basename of the file, the name would not reflect
+the awips of the contents of the file.  We have seen to be the case
+sometimes, as explained in the example files mentioned above, and
+even in the case of those files, not always.
