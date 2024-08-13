@@ -18,9 +18,9 @@ There are two alternatives for enabling nbsp processing
    or disable npemwin processing here.
 
 ==================================================================
-The directory ``lin1-debian10'' contains the configuration files |
-that were used in ``lin1.volkron.net'' using the alternative (1)|
-above.                                                           |
+The directory ``sample-conf'' contains the configuration files   |
+that were used in ``lin1.volkron.net'' (debian-10) using the     |
+alternative (1) above.                                           |
 ==================================================================
 
 NOTES:
