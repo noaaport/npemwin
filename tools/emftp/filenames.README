@@ -41,16 +41,11 @@ Tropical Storm Ernesto Intermediate Advisory Number 5A
 NWS National Hurricane Center Miami FL       AL052024
 800 PM AST Mon Aug 12 2024
 
-The end result is that looking at the names of the files saved
-in the "latest" subdirectory (by the stdfilter, which does not modify these
-names) in many cases do not indicate the awips of the file.
-This contrasts with the names produced by the dafilter (for example)
-which saves the files with the awips keyword in the name;
-for example tcdat5.<seqnumber>, tcpat5.<seqnumber>,
+The end result is that looking at the names of the files, as received
+and produces by emftp, in many cases do not indicate the awips of the file.
+Once the emftp inserts the files into the npemwin infeed, then the qrunner
+takes care of producing "standard" filenames for the filters, such as the
+stdfilter (e.g., the "latest" set) or  by the dafilter (for example)
+which save the files with the awips keyword in the name. For example,
+in the case of the dafilter, tcdat5.<seqnumber>, tcpat5.<seqnumber>,
 (in this case in the nwx/hurricane subdirectory).
-
-
-
-
-
-
