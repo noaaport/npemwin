@@ -300,7 +300,7 @@ static int check_subdir(char *dir, char *subdir){
 
   size = strlen(dir) + strlen(subdir) + 2;
   if((fullname = malloc(size)) == NULL){
-    err(1, "Error checking %s.", fullname);
+    err(1, "Error checking %s/%s.", dir, subdir);
     return(-1);
   }
 

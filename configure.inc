@@ -60,16 +60,25 @@ case $os in
     OpenBSD) 
 	;;
     NetBSD)
-	PREFIX=usr/pkg
-	DB_INCDIR="-I /usr/pkg/include/db46"
 	CCWFLAGS="-Wall -Wno-char-subscripts -fno-strict-aliasing"
+	# add the next ones to avoid spurious warnings about strlen
+	CCWFLAGS="${CCWFLAGS} -Wno-stringop-overflow -Wno-stringop-truncation"
+	#PREFIX=usr/pkg
+        TCL_INCDIR="-I /usr/pkg/include"
+        TCL_LIB="tcl86"
+        TCLSH=/usr/pkg/bin/tclsh
+        DB_INCDIR="-I /usr/pkg/include/db5"
+        DB_LIB="db5"
+	# See the note in build/netbsd about this setting
+	DB_BINDIR=/usr/pkg/bin/db5
+        LOCAL_LIBDIR="-L /usr/pkg/lib"
+	LOCAL_INCDIR="-I /usr/pkg/include"
 	;;
     Linux)
 	INCLUDE="include"
 	Q=	
 	SUFFIXRULES="%.o: %.c"
 	EXCLUDE="--exclude "
-
 	TCL_INCDIR=
 	TCL_LIB="tcl8.6"
 	TCLSH=/usr/bin/tclsh8.6
