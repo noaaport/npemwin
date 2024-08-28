@@ -1,5 +1,6 @@
-usr/local/etc/npemwin/dist
 usr/local/etc/rc.d
+usr/local/etc/npemwin
+usr/local/etc/npemwin/dist
 usr/local/sbin
 usr/local/bin
 usr/local/libexec/npemwin
