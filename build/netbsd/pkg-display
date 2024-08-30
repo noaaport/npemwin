@@ -1,10 +1,13 @@
--
 To start the npemwind daemon automatically out of the local rc.d directory,
 set the variable
 
-npemwind_enable=1
+npemwind=1
 
-in /etc/rc.conf.local.
+in /etc/rc.conf, and a line such as
+
+[ -x /usr/local/etc/rc.d/npemwind ] && /usr/local/etc/rc.d/npemwind start
+
+in the file /etc/rc.local.
 
 The configuration files are installed in
 
