@@ -10,6 +10,8 @@ case $os in
     FreeBSD) 
         # use the defaults
 	;;
+    NetBSD) 
+	;;
     OpenBSD) 
 	;;
     SunOS)

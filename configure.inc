@@ -57,8 +57,6 @@ fi
 case $os in
     FreeBSD) 
 	;;
-    OpenBSD) 
-	;;
     NetBSD)
 	CCWFLAGS="-Wall -Wno-char-subscripts -fno-strict-aliasing"
 	# add the next ones to avoid spurious warnings about strlen
@@ -73,6 +71,8 @@ case $os in
 	DB_BINDIR=/usr/pkg/bin/db5
         LOCAL_LIBDIR="-L /usr/pkg/lib"
 	LOCAL_INCDIR="-I /usr/pkg/include"
+	;;
+    OpenBSD) 
 	;;
     Linux)
 	INCLUDE="include"

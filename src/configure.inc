@@ -15,6 +15,9 @@ case $os in
     FreeBSD) 
         # use the defaults
 	;;
+    NetBSD)
+	# use the deualts
+	;;
     OpenBSD) 
 	LIBS="$COMMON_LIBS -lutil -l${TCL_LIB} -l${DB_LIB}"
 	;;

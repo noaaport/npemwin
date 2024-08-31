@@ -15,6 +15,9 @@ PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
 case $os in
     FreeBSD) 
     	;;
+    NetBSD)
+	RCINIT=npemwind.sh-netbsd
+	;;
     OpenBSD) 
 	RCINIT=npemwind.sh-generic
     	;;

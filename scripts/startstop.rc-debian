@@ -36,7 +36,7 @@ lappend start {
 # appear in the init script.
 #
 # lappend start {
-#   file mkdir $nbsprundir;
+#   file mkdir $rundir;
 # }
 
 #

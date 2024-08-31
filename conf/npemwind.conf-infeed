@@ -5,7 +5,7 @@
 # when saved as "site/npemwind.conf", overrides some of the variables
 # that are specified in the npemwind.conf file in the main directory.
 # The file "site/servers.conf" specified below must exist also
-# (he sample file "servers.conf-infeed" can be used as ""site/servers.conf".)
+# (The sample file "servers.conf-infeed" can be used as ""site/servers.conf".)
 # If the emftp mechanism will be used, then the scheduler.conf file
 # should be edited to activate emftp (the sample file
 # "scheduler.conf-infeed-sample" can be used as "site/scheduler.conf").
