@@ -46,6 +46,25 @@ The dist directory contains two *-noaaport-sample files that can be
 copied to the site subdirectory and will enable this mode of operation.
 
 After the emwin service was decomissioned, one option is to download
+the files  using what we call the ``infeed''. To configure npemwin this way
+follow the instructions in ``READMEs/emftp.README'', reproduced below.
+-
+Sun 01 Jan 2023 07:11:48 PM AST -
+Setting npemwin to fetch the files by ftp
+[actually by https from
+   https://tgftp.nws.noaa.gov/SL.us008001/CU.EMWIN/DF.xt/DC.gsatR/OPS
+]
+After the emwin service was decomissioned, one option is to download
 the files from the url mentioned above, using what we call the
-"infeed". To configure npemnwin this way follow the instructions
-in emftp.README.
+``infeed''. To configure npemwin this way, copy the files
+
+   dist/npemwind.conf-infeed-sample
+   dist/servers.conf-infeed-sample
+   dist/scheduler.conf-infeed-sample
+
+   to the npemwin "site" configuration directory:
+
+   site/npemwind.conf
+   site/servers.conf
+   site/scheduler.conf
+-

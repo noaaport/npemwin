@@ -1,4 +1,9 @@
 #
+# This is the default emftp confifuration file, but with a couple
+# of the default settings changed mostly for debuging purposes.
+#
+
+#
 # Optional configuration files
 #
 ## gconffile="emftp.conf"
