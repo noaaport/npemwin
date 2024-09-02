@@ -195,7 +195,7 @@ sanity_check(){
     #
 
     # checks
-    for _d in inputs spool inv lock queue tmp
+    for _d in inputs spool inv lock tmp
     do
 	eval _dir=\$g${_d}dir
 	[ ! -d ${_dir} ] && { log_err "${_dir} does not exist"; }
@@ -258,7 +258,6 @@ glockname="emftp.lock"		# name of dir we will use for locking
 glocksleepsecs=5
 gmd5keyfile="md5.txt"
 ginvfilename="`date -u +%H`.txt"
-gqueuefilename="`date -u +%H%M`.q"
 gtime="`date -u +%H%M`"           # for entry in inv file
 
 #
