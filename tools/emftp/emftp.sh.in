@@ -70,6 +70,30 @@ cleanup(){
     log_msg "emftp script finished"
 }
 
+
+lock_dir(){
+
+    lockdir=$1
+    sleepsecs=$2
+    
+    mkdir $lockdir > /dev/null 2>&1
+    status=$?
+    while [ $status -ne 0 ]
+    do
+	log_msgsleeping
+	sleep $sleepsecs
+	mkdir $lockdir > /dev/null 2>&1
+	status=$?
+    done
+}
+
+unlock_dir(){
+
+    lockdir=$1
+    
+    [ -d $lockdir ] && rmdir $lockdir
+}
+
 get_number_parts(){
 
     # This should be 6
@@ -200,29 +224,6 @@ check_name(){
     fi
 
     return ${_status}
-}
-
-lock_dir(){
-
-    lockdir=$1
-    sleepsecs=$2
-    
-    mkdir $lockdir > /dev/null 2>&1
-    status=$?
-    while [ $status -ne 0 ]
-    do
-	echo sleeping
-	sleep $sleepsecs
-	mkdir $lockdir > /dev/null 2>&1
-	status=$?
-    done
-}
-
-unlock_dir(){
-
-    lockdir=$1
-    
-    [ -d $lockdir ] && rmdir $lockdir
 }
 
 #
