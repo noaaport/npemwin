@@ -68,6 +68,8 @@ cleanup(){
 
     unlock_dir $glockdirpath
     log_msg "emftp script finished"
+
+    exit 0
 }
 
 
@@ -302,14 +304,13 @@ fi
 
 if [ $option_c -eq 1 ]
 then
-    rm -rf ${gworkdir}
-    mkdir ${gworkdir}
+    mkdir -p ${gworkdir}
     cd ${gworkdir}
 
     for d in $ginputssubdir $ginvsubdir $gspoolsubdir \
 	     $gtmpsubdir $glocksubdir
     do
-	mkdir $d
+	mkdir -p $d
     done
 
     return
