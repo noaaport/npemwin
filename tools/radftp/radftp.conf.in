@@ -1,0 +1,39 @@
+#
+# Optional configuration files
+#
+## gconffile="radftp.conf"
+## gconfdir="/usr/local/etc/npemwin"
+## gconfoptdirs="${gconfdir}/defaults ${gconfdir}/site"
+#
+
+# input configuration
+## gurl="ftp://tgftp.nws.noaa.gov"
+
+# options
+## gbackground=0
+#
+## gworkdir="/var/npewin/radftp"
+## gspoolsubdir="spool"
+## gtmpsubdir="tmp"
+## glocksubdir="lock"
+## glockname="radftp.lock"		# name of dir we will use for locking
+## glocksleepsecs=5
+## glftprc="lftp.rc"
+#
+## gradftpslist="${gconfdir}/radftp.slist"    # station list
+## gradftpplist="${gconfdir}/radftp.plist"    # product list
+#
+## gdatadir="/var/npemwin/digatmos/nexrad/nids"
+
+#
+# Read the optional configuration files
+#
+if [ -z "$source_radftp_conf_defined" ]
+then	
+    source_radftp_conf_defined=1
+    for _d in $gconfoptdirs
+    do
+	_f=${_d}/${gconffile}
+	[ -r ${_f} ] && . ${_f}
+    done
+fi

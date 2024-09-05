@@ -55,11 +55,12 @@
 #
 # Read the optional configuration files
 #
-if [ -n "$gconfoptdirs" ]
-then
-   for _d in $gconfoptdirs
-   do
+if [ -z "$source_emftp_conf_defined" ]
+then	
+    source_emftp_conf_defined=1
+    for _d in $gconfoptdirs
+    do
 	_f=${_d}/${gconffile}
-	[ -f ${_f} ] && . ${_f}
-   done
+	[ -r ${_f} ] && . ${_f}
+    done
 fi

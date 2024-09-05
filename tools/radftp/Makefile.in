@@ -1,0 +1,38 @@
+#
+# $Id$
+#
+@include@ @q@../../Makefile.inc@q@
+
+INSTALL =	@INSTALL@
+SHELL =		@SHELL@
+
+SAMPLES =	radftp.conf-sample radftp.plist-sample radftp.slist-sample
+LIBTOOLS =	radftp
+TARGET =	${LIBTOOLS} ${SAMPLES}
+DEPS =		radftp_get_datetime.bsd radftp_get_datetime.linux
+
+GET_DATETIME =	@GET_DATETIME@
+
+all: ${TARGET}
+
+radftp: radftp.sh.in ${DEPS}
+	sed -e "/%SHELL%/s##${SHELL}#" \
+	-e "/%GET_DATETIME%/r ${GET_DATETIME}" \
+	-e "/%GET_DATETIME%/d" \
+	radftp.sh.in > radftp
+
+radftp.conf-sample: radftp.conf.in
+	cp radftp.conf.in radftp.conf-sample
+
+radftp.plist-sample: radftp.plist
+	cp radftp.plist radftp.plist-sample
+
+radftp.slist-sample: radftp.slist
+	cp radftp.slist radftp.slist-sample
+
+install:
+	${INSTALL} -m 0644 ${SAMPLES} ${MYCONFDIR}
+	${INSTALL} -m 0755 ${LIBTOOLS} ${MYLIBEXECDIR}
+
+clean:
+	rm -f *~ ${TARGET} Makefile

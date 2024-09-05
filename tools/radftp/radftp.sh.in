@@ -1,0 +1,241 @@
+#!%SHELL%
+#
+# usage: radftp [-b] [-c] [-d datadir] [-w workdir] [-f userconffile] 
+#
+# The [-b] option runs in background mode (error reports to syslog)
+#
+# The [-c] option will create the working directories used by radftp,
+# as defined in the configuration file, and exit.
+#
+# The [-d] option overrides the setting of the data dir to save the
+# final with the final (nbsp convention names).
+#
+# The [-w] option overrides the radftp working directory
+#
+
+#
+# functions
+#
+log_msg(){
+
+    if [ $gbackground -eq 1 ]
+    then
+	logger -t emftp "$1"
+    else
+	echo "$1"
+    fi
+}
+
+log_msg_quit(){
+
+    log_msg "$1"
+    exit 0
+}
+
+log_err(){
+
+    log_msg "$1"
+    exit 1
+}
+
+cleanup(){
+
+    unlock_dir $glockdirpath
+    log_msg "radftp script finished"
+
+    exit 0
+}
+
+lock_dir(){
+
+    lockdir=$1
+    sleepsecs=$2
+    
+    mkdir $lockdir > /dev/null 2>&1
+    status=$?
+    while [ $status -ne 0 ]
+    do
+	log_msg sleeping
+	sleep $sleepsecs
+	mkdir $lockdir > /dev/null 2>&1
+	status=$?
+    done
+}
+
+unlock_dir(){
+
+    lockdir=$1
+    
+    [ -d $lockdir ] && rmdir $lockdir
+}
+
+sanity_check(){
+
+    # checks
+    for _d in spool tmp lock data
+    do
+	eval _dir=\$g${_d}dir
+	[ ! -d ${_dir} ] && { log_err "${_dir} does not exist"; }
+    done
+}
+
+get_remote_path(){
+    #
+    # The arguments to this function are the station and the
+    # three elements of the plist (e.g., tjua 56rm0 sdus54 n0s)
+    # Only the station and the first (p) are used.
+    #
+    _station=$1
+    _p=$2
+    _wmo=$3
+    _awips1=$4
+
+    _path="SL.us008001/DF.of/DC.radar/DS.${p}/SI.${_station}/sn.last"
+
+    echo ${_path}
+}
+
+get_local_path(){
+    #
+    # The same arguments as in get_remote_path()
+    #
+    _station=$1
+    _p=$2
+    _wmo=$3
+    _awips1=$4
+    
+    _path="${gspooldir}/${station}/${awips1}/last.nids"
+
+    echo ${_path}
+}
+
+%GET_DATETIME%
+
+#
+# configuration file(s)
+#
+gconffile="radftp.conf"
+gconfdir="/usr/local/etc/npemwin"
+gconfoptdirs="${gconfdir}/defaults ${gconfdir}/site"
+
+# input configuration
+gurl="ftp://tgftp.nws.noaa.gov"
+
+# options
+gbackground=0
+#
+gworkdir="/var/npewin/radftp"
+gspoolsubdir="spool"
+gtmpsubdir="tmp"
+glocksubdir="lock"
+glockname="radftp.lock"		# name of dir we will use for locking
+glocksleepsecs=5
+glftprc="lftp.rc"
+#
+gradftpslist="${gconfdir}/radftp.slist"    # station list
+gradftpplist="${gconfdir}/radftp.plist"    # product list
+#
+gdatadir="/var/npemwin/digatmos/nexrad/nids"
+
+#
+# main
+#
+
+usage="usage: radftp [-b] [-c] [-d datadir] [-w workdir] [-f userconffile]"
+option_c=0
+option_d=0
+option_w=0
+option_f=0
+while getopts ":hbcd:w:f:" option
+do
+    case $option in
+	h) echo "$usage"; exit 0;;
+	c) option_c=1;;
+	d) gdatadir=$OPTARG; option_d=1;;
+	w) gworkdir=$OPTARG; option_w=1;;
+	f) userconffile=$OPTARG; option_f=1;;
+        \?) echo "Unsupported option $OPTARG"; exit 1;;
+	:) echo "Missing value option $OPTARG"; exit 1;;
+    esac
+done
+shift $((OPTIND-1))
+
+if [ $option_f -eq 1 ]
+then
+    . $userconffile
+else
+    [ -f ${gconfdir}/${gconffile} ] && . ${gconfdir}/${gconffile}
+fi
+
+if [ $option_c -eq 1 ]
+then
+    mkdir -p ${gworkdir}
+    cd ${gworkdir}
+
+    for d in $gspoolsubdir $gtmpsubdir $glocksubdir
+    do
+	mkdir -p $d
+    done
+
+    return
+fi
+
+# variables
+gspooldir=${gworkdir}/${gspoolsubdir}
+glockdir=${gworkdir}/${glocksubdir}
+gtmpdir=${gworkdir}/${gtmpsubdir}
+#
+glockdirpath=${glockdir}/${glockname}
+glftprcpath=${gtmpdir}/${glftprc}
+#
+
+# To ensure that other callers to nbspinsert can write to the directories
+# (e.g., directories within the nbsp/spool) that this script may create
+umask 002
+
+# checks
+sanity_check
+
+# run once
+lock_dir $glockdirpath $glocksleepsecs
+
+trap cleanup HUP INT QUIT ABRT KILL ALRM TERM EXIT
+
+log_msg "radftp script starting"
+
+# Create the lftp script
+echo "open $gurl" > $glftprcpath
+grep -v '^#\|^$' $gradftpslist | while read station
+do
+    grep -v '^#\|^$' $gradftpplist | while read p wmo awips1
+    do
+	remotepath=`get_remote_path $station $p $wmo $awips1`
+	localpath=`get_local_path $station $p $wmo $awips1`
+	mkdir -p `dirname $localpath`
+	echo "get $remotepath -o ${localpath}" >> $glftprcpath
+    done
+done
+echo "exit" >> $glftprcpath
+
+lftp -f $glftprcpath
+
+# rename
+grep -v '^#\|^$' $gradftpslist | while read station
+do
+    station3=${station#?}    # remove first letter from the station name
+    grep -v '^#\|^$' $gradftpplist | while read p wmo awips1
+    do	
+	fspool=`get_local_path $station $p $wmo $awips1`
+	seconds=`nbspradinfo -t ${fspool}`
+	if [ $? -eq 0 ]
+	then
+	    datetime=`get_datetime`
+	    fdataname="${awips1}${station3}_${datetime}.nids"
+	    fdata=${gdatadir}/${station3}/${awips1}/${fdataname}
+	    mkdir -p `dirname $fdata`
+	    mv ${fspool} ${fdata}
+	else
+	    rm $f
+	fi   
+    done
+done
