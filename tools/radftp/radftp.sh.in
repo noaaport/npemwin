@@ -72,7 +72,7 @@ unlock_dir(){
 sanity_check(){
 
     # checks
-    for _d in spool tmp lock data
+    for _d in spool tmp lock
     do
 	eval _dir=\$g${_d}dir
 	[ ! -d ${_dir} ] && { log_err "${_dir} does not exist"; }
@@ -124,7 +124,7 @@ gurl="ftp://tgftp.nws.noaa.gov"
 # options
 gbackground=0
 #
-gworkdir="/var/npewin/radftp"
+gworkdir="/var/npemwin/radftp"
 gspoolsubdir="spool"
 gtmpsubdir="tmp"
 glocksubdir="lock"
@@ -135,7 +135,7 @@ glftprc="lftp.rc"
 gradftpslist="${gconfdir}/radftp.slist"    # station list
 gradftpplist="${gconfdir}/radftp.plist"    # product list
 #
-gdatadir="/var/npemwin/digatmos/nexrad/nids"
+gdatadir="/var/npemwin/data/digatmos/nexrad/nids"
 
 #
 # main
