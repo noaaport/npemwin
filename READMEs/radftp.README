@@ -26,3 +26,5 @@ To enable this,
 lappend schedule {
   M/10:/usr/local/libexec/npemwin/radftp &
 }
+
+3) NOTE: radftp requires ``nbsp'' because it uses the ``nbspradinfo'' tool
