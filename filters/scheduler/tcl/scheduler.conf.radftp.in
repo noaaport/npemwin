@@ -1,0 +1,5 @@
+
+## To use the radftp feed
+lappend schedule {
+  M/10:/usr/local/libexec/npemwin/radftp &
+}

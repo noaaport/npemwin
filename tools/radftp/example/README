@@ -1,0 +1,8 @@
+1) /usr/local/libexec/npemwin/radftp -c -f radftp.conf
+2) mkdir -p radftp/digatmos/nexrad/nids
+2) /usr/local/libexec/npemwin/radftp -f radftp.conf
+
+To use it without installing it, replace
+  /usr/local/libexec/npemwin/radftp
+by
+  ../radftp

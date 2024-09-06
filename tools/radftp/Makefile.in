@@ -6,7 +6,8 @@
 INSTALL =	@INSTALL@
 SHELL =		@SHELL@
 
-SAMPLES =	radftp.conf-sample radftp.plist-sample radftp.slist-sample
+SAMPLES =	radftp.conf-sample radftp.plist-sample radftp.slist-sample \
+		radftp.plist-site-sample radftp.slist-site-sample \
 LIBTOOLS =	radftp
 TARGET =	${LIBTOOLS} ${SAMPLES}
 DEPS =		radftp_get_datetime.bsd radftp_get_datetime.linux
@@ -29,6 +30,12 @@ radftp.plist-sample: radftp.plist
 
 radftp.slist-sample: radftp.slist
 	cp radftp.slist radftp.slist-sample
+
+radftp.plist-site-sample: radftp.plist-site
+	cp radftp.plist-site radftp.plist-site-sample
+
+radftp.slist-site-sample: radftp.slist-site
+	cp radftp.slist-site radftp.slist-site-sample
 
 install:
 	${INSTALL} -m 0644 ${SAMPLES} ${MYCONFDIR}

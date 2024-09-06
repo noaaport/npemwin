@@ -1,0 +1,28 @@
+Thu Sep  5 19:43:32 AST 2024
+ 
+Enabling the ``radftp'' tool to fetch radar files from
+[
+    ftp://tgftp.nws.noaa.gov"
+]
+
+To enable this,
+
+1) copy the files
+
+   dist/radftp.conf-site-sample
+   dist/radftp.slist-site-sample
+   dist/radftp.plist-site-sample
+
+   to the npemwin "site" configuration directory:
+
+   site/radftp.conf
+   site/radftp.slist
+   site/radftp.plist
+
+2) Enable radftp by adding the following lines to ``scheduler.conf'',
+   (or ``site/scheduler.conf'' if the emftp tool as been enabled
+   explained in emftp.README)
+
+lappend schedule {
+  M/10:/usr/local/libexec/npemwin/radftp &
+}
