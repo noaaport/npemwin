@@ -11,3 +11,4 @@ do
 done
 
 echo "Check ${sitedir}/scheduler.conf to enable radftp"
+echo "Remember that radftp requires nbsp because it uses nbspradinfo"
