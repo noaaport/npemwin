@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2004-2012 Jose F. Nieves <nieves@ltp.uprrp.edu>
+ * Copyright (c) 2004-2012,2024 Jose F. Nieves <nieves@ltp.uprrp.edu>
  *
  * See LICENSE
  *
@@ -25,14 +25,16 @@
 #include "err.h"
 #include "conf.h"
 #include "globals.h"
+#include "const.h"
 #include "init.h"	/* cleanup() */
 #include "server_priv.h"
 #include "per.h"
-#include "loop.h"
+#include "npemwin.h"
+#include "server.h"
 
 /*
  * These are not mutex protected since they are used only within
- * the server thread (the only thread in npemwin, apart from the
+ * the npemwin thread (the only thread in npemwin, apart from the
  * client threads.
  */
 static int greload_servers_list_flag = 0;
@@ -48,7 +50,112 @@ static void log_errx_header(void *rawdata);
 static void exec_qrunner(void);
 static int exec_filter(char *filename);
 
-int loop(void){
+/* npemwin thread */
+static int create_npemwin_thread(void);
+static void *npemwin_main(void*);
+static int init_npemwin(void);
+static void terminate_npemwin(void *arg);
+static int npemwin_loop(void);
+
+int spawn_npemwin(void){
+  /*
+   * This is the entry to the npemwin module. It is called by main after
+   * forking to spawn the main npemwin thread.
+   */
+  int status = 0;
+
+  status = create_npemwin_thread();
+
+  return(status);
+}
+
+void kill_npemwin_thread(void){
+  /*
+   * This "joins" the npemwin thread.
+   */
+  
+  if(g.f_npemwin_thread_created == 0)
+    return;
+
+  pthread_join(g.npemwin_thread_id, NULL);
+  log_info("Finished npemwin server.");
+}
+
+static int create_npemwin_thread(void){
+
+  int status = 0;
+  pthread_t t_id;
+  pthread_attr_t attr;
+
+  status = pthread_attr_init(&attr);
+
+  /*
+  if(status == 0)
+    status = set_thread_priority_low(&attr);
+  */
+
+  /*
+  if(status == 0)
+    status = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+  */
+
+  if(status == 0)
+    status = pthread_create(&t_id, &attr, npemwin_main, NULL);
+
+  if(status != 0){
+    log_err("Cannot create npemwin thread.");
+  }else{
+    g.npemwin_thread_id = t_id;
+    g.f_npemwin_thread_created = 1;
+    log_info("Spawned npemwin thread.");
+  }
+
+  return(status);
+}
+
+static int init_npemwin(void) {
+  /*
+   * In npemwin, all the initialization of the related to the emwin
+   * masters and/or ingest feeds are done in the npemwin loop.
+   * Here only the network server (for clients) is initialized.
+   */
+  int status = 0;
+
+  /* the network server */
+  if(g.serverprotocol != PROTOCOL_NONE) {
+    g.f_server_enabled = 1;
+    status = init_server();
+  }
+  
+  return(status);
+}
+
+static void terminate_npemwin(void *arg __attribute__ ((unused))){
+
+  terminate_server();	/* terminate the network server */
+  release_server_list(); /* this also closes the input devices and/or servers */
+}
+
+static void *npemwin_main(void *data __attribute__((unused))){
+
+  int status;
+
+  pthread_cleanup_push(terminate_npemwin, NULL);
+
+  status = init_npemwin();
+  if(status != 0)
+    set_quit_flag();
+
+  while(get_quit_flag() == 0){
+    status = npemwin_loop();
+  }
+
+  pthread_cleanup_pop(1);
+
+  return(NULL);
+}
+
+int npemwin_loop(void){
 
   int i;
   int status = 0;

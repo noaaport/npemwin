@@ -109,6 +109,9 @@
 #define READ_TIMEOUT_SECS	5
 #define READ_TIMEOUT_RETRY	1
 
+/* main loop sleep interval */
+#define MAINLOOP_SLEEP_SECS	5
+
 /* seconds waiting writing to clients and how many more times to try */
 #define WRITE_TIMEOUT_SECS	1
 #define WRITE_TIMEOUT_RETRY	2

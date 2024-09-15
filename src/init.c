@@ -138,11 +138,12 @@ void init_globals(void){
   g.ct = NULL;
   g.qfiles = NULL;
   /* wx14_init() is called in emwin.c */
+  /* pthread_t npemwin_thread_id */
+  g.f_npemwin_thread_created = 0;
   g.f_lock = 0;
   g.f_debug = 0;
   g.f_ndaemon = 0;
   g.f_verbose = 0;
-
   g.f_server_enabled = 0;
 }
   
@@ -189,13 +190,10 @@ int init_lock(void){
 
 void cleanup(void){
 
-  terminate_server();
-
   /*
    * There are no shared queues, otherwise they would be cleared here.
    */
 
-  release_server_list(); /* this also closes the input devices and/or servers */
   release_confoptions();
   destroy_emwin_qfiles();
 
