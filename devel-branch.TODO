@@ -1,5 +1,0 @@
-Separate the the main server loop function in a separate thread, and leave
-only periodic() in the main loop. The file serverm.c should contain
-
-1) the thread functions to create the main server loop.
-2) The functions that are now in loop.c
