@@ -9,7 +9,8 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-int init_server(void);
-void terminate_server(void);
+int init_network_server(void);
+void terminate_network_server(void);
+void network_server_loop(void);
 
 #endif

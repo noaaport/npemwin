@@ -27,10 +27,10 @@
 #include "globals.h"
 #include "const.h"
 #include "init.h"	/* cleanup() */
-#include "server_priv.h"
 #include "per.h"
 #include "npemwin.h"
 #include "server.h"
+#include "server_priv.h"
 
 /*
  * These are not mutex protected since they are used only within
@@ -124,7 +124,7 @@ static int init_npemwin(void) {
   /* the network server */
   if(g.serverprotocol != PROTOCOL_NONE) {
     g.f_server_enabled = 1;
-    status = init_server();
+    status = init_network_server();
   }
   
   return(status);
@@ -132,7 +132,7 @@ static int init_npemwin(void) {
 
 static void terminate_npemwin(void *arg __attribute__ ((unused))){
 
-  terminate_server();	/* terminate the network server */
+  terminate_network_server();	/* terminate the network server */
   release_server_list(); /* this also closes the input devices and/or servers */
 }
 
@@ -198,7 +198,7 @@ int npemwin_loop(void){
   
   while((status == 0) && (get_quit_flag() == 0)){
     if(g.f_server_enabled == 1)
-      server_loop();
+      network_server_loop();
     
     if(get_reload_servers_list_flag())
       reload_servers_list();
