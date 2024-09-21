@@ -13,8 +13,8 @@
 # How long (seconds) to wait for a packet from the infeed fifo,
 # and how many more times to try, before returning a timeout status.
 #
-set readtimeout		30
-set readtimeoutretry	 1
+set readtimeout		120
+set readtimeoutretry	1
 
 # The queue will be processed when this number of seconds
 # have passed since the last run.

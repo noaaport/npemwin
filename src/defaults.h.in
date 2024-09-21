@@ -97,17 +97,19 @@
 
 /* 
  * Seconds waiting in a read() for a packet from the server, and how many
- * more times to try before returning a timeout status.
+ * more times to try before returning a timeout status. Originally,
+ * with several (bb) servers we used to have here 5 and 1, respectively.
  * With the emftp (via the infeed.fifo) mechanism (aug2022) packets
- * arrive every two minutes, but setting the (total) timeout period
- * to two minutes would not let the program do other things after each
- * 2 minute timeout (e.g., running the runq and periodic functions like
- * the scheduler (via runq and the postfilter). We leave the default
- * for a "bb" server. (In the case of the infeed fifo, more appropriate
- * values could be 20 and 2 respectively.)
+ * arrive every two minutes. In this case, more appropriate
+ * values could be 20 and 2 respectively. We will set them to
+ * 5 and 2, respectively, assuming there is only one "bb" server
+ * (e.g., the weathermessage server).
  */
 #define READ_TIMEOUT_SECS	5
-#define READ_TIMEOUT_RETRY	1
+#define READ_TIMEOUT_RETRY	2
+
+/* main loop sleep interval */
+#define MAINLOOP_SLEEP_SECS	5
 
 /* seconds waiting writing to clients and how many more times to try */
 #define WRITE_TIMEOUT_SECS	1

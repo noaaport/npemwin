@@ -16,8 +16,7 @@
  */
 void *client_thread_main(void *arg);
 
-/* Defined in serverm.c and used in loop.c */
-void server_loop(void);
+/* Defined in serverm.c and used in npemwin.c */
 int server_send_client_queues(struct emwin_packet *ep);
 
 /* Defined in serverm.c and used in per.c */

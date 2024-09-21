@@ -69,7 +69,7 @@ static void print_client_connections(FILE *fp);
 static int get_report_client_connections_flag(void);
 static void report_client_connections(void);
 
-int init_server(void){
+int init_network_server(void){
   /*
    * Opens the socket for network clients (via the libconn library).
    */
@@ -130,7 +130,7 @@ int init_server(void){
   return(status);
 }
 
-void terminate_server(void){
+void terminate_network_server(void){
   /*
    * When each g.ct->ce element is released, the corresponding client thread
    * is also killed by the callback function ce->thkillproc (defined in
@@ -148,7 +148,7 @@ void terminate_server(void){
   }
 }
 
-void server_loop(void){
+void network_server_loop(void){
 
   if(get_process_connections_flag()){
     process_connections();
