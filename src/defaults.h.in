@@ -125,7 +125,7 @@
  * It will be processed after this number of seconds have passed since the
  * last run.
  */
-#define QRUN_PERIOD		20
+#define QRUN_PERIOD		10
 
 /* Inform when the queue has been processed after this number of times */
 #define QRUN_REPORT_PERIOD	100
