@@ -130,19 +130,19 @@ proc npemwin/status/received_last_24hours {received_minute_tml} {
 # List of products received in the last 24 hours.
 #
     set now [clock seconds]
-    set hh_now [clock format $now -gmt true -format "%H"]
+    set hh_now [clock format $now -format "%H" -gmt true]
 
     # Current hour
     set hh [clock format $now -format "%H" -gmt true]
     set mm [clock format $now -format "%M" -gmt true]
-    set result [npemwin_received_hour $hh $mm]   
+    set result [npemwin_received_hour $received_minute_tml $hh $mm]   
 
     set t $now;
     set done 0;
     while {$done == 0} {
 	incr t -3600;
-	set hh [clock format $t -gmt true -format "%H"]; 
-	if {$hh eq $hh_now} {
+	set hh [clock format $t -format "%H" -gmt true]; 
+	if {$hh == $hh_now} {
 	    set done 1;
 	} else {
 	    append result [npemwin_received_hour $received_minute_tml $hh]
