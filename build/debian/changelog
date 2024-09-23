@@ -1,3 +1,10 @@
+npemwin (3.1.1p1-1) oneiric; urgency=low
+
+  * Implemented putting the npemwin feed loop in its own thread,
+    leaving only periodic in the main thread (like nbsp)
+
+ -- Jose F Nieves <nieves@ltp.uprrp.edu>  Fri, 20 Sep 2024 21:29:39 -0400
+
 npemwin (3.0.1p1-1) oneiric; urgency=low
 
   * Implemented reading from the infeed fifo using the emftp and
