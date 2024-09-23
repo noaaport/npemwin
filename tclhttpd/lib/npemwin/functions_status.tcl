@@ -185,33 +185,30 @@ proc npemwin_received {file} {
     return $result
 }
 
-proc npemwin_received_hour {received_minute_tml hh {mm 59}} {
+proc npemwin_received_hour {received_minute_tml hh {mm 60}} {
 #
 # The mm argument, if given, determines the maximum minute to include. It is
-# used when the function is called for the current hour.
+# used when the function is called for the current hour. In that
+# case it is set to the current minute, which should be excluded from
+# the list returned because that minute has not been completed.    
 #
     global Config;
 
     set fulllist [lsort [glob -tails -nocomplain \
 			     -directory $Config(npemwininvdir) \
 			     ${hh}*$Config(npemwininvfext)]];
-    if {$mm == 59} {
+    if {$mm == 60} {
 	set flist $fulllist;
     } else {
+	incr mm -1;          # exclude the current minute
 	set flist [list];
 	set max_hhmm ${hh}${mm};
 	foreach file $fulllist {
-	    lappend flist $file;
 	    set hhmm [file rootname $file];
-	    #
-	    # If the fulllist has some hhmm missing (files not received
-	    # every minute), then the max_hhmm may be missed if the comparisson
-	    # is made with $hhmm == $max_hhmm.
-	    # (We discovered this with the emftp infeed - sep2024)
-	    #
-	    if {$hhmm >= $max_hhmm} {
+	    if {$hhmm > $max_hhmm} {
 		break;
 	    }
+	    lappend flist $file;
 	}
     }
 
