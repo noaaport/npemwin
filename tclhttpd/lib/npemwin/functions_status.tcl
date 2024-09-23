@@ -195,7 +195,7 @@ proc npemwin_received_hour {received_minute_tml hh {mm 59}} {
     set fulllist [lsort [glob -tails -nocomplain \
 			     -directory $Config(npemwininvdir) \
 			     ${hh}*$Config(npemwininvfext)]];
-    if {$mm eq "59"} {
+    if {$mm == 59} {
 	set flist $fulllist;
     } else {
 	set flist [list];
@@ -203,7 +203,13 @@ proc npemwin_received_hour {received_minute_tml hh {mm 59}} {
 	foreach file $fulllist {
 	    lappend flist $file;
 	    set hhmm [file rootname $file];
-	    if {$hhmm eq $max_hhmm} {
+	    #
+	    # If the fulllist has some hhmm missing (files not received
+	    # every minute), then the max_hhmm may be missed if the comparisson
+	    # is made with $hhmm == $max_hhmm.
+	    # (We discovered this with the emftp infeed - sep2024)
+	    #
+	    if {$hhmm >= $max_hhmm} {
 		break;
 	    }
 	}
