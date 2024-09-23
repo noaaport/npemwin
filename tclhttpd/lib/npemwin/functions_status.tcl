@@ -189,8 +189,10 @@ proc npemwin_received_hour {received_minute_tml hh {mm 60}} {
 #
 # The mm argument, if given, determines the maximum minute to include. It is
 # used when the function is called for the current hour. In that
-# case it is set to the current minute, which should be excluded from
-# the list returned because that minute has not been completed.    
+# case it is set to the current minute. We could exclude that file from
+# the list returned since that minute has not been completed,
+# or return the list as "it is" at the moment of call, understanding
+# that it is incomplete for the current minute.    
 #
     global Config;
 
@@ -200,7 +202,7 @@ proc npemwin_received_hour {received_minute_tml hh {mm 60}} {
     if {$mm == 60} {
 	set flist $fulllist;
     } else {
-	incr mm -1;          # exclude the current minute
+	# incr mm -1;          # exclude the current minute
 	set flist [list];
 	set max_hhmm ${hh}${mm};
 	foreach file $fulllist {
