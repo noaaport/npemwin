@@ -82,7 +82,7 @@ lock_dir(){
     status=$?
     while [ $status -ne 0 ]
     do
-	log_msgsleeping
+	log_msg "Waiting for release of $lockdir."
 	sleep $sleepsecs
 	mkdir $lockdir > /dev/null 2>&1
 	status=$?
