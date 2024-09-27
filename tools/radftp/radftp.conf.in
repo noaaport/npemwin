@@ -18,6 +18,7 @@
 ## glocksubdir="lock"
 ## glockname="radftp.lock"		# name of dir we will use for locking
 ## glocksleepsecs=5
+## glockmaxloops=3
 ## glftprc="lftp.rc"
 #
 ## gradftpslist="${gconfdir}/radftp.slist"    # station list

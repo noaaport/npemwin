@@ -50,16 +50,25 @@ lock_dir(){
 
     lockdir=$1
     sleepsecs=$2
+    maxloops=$3
     
     mkdir $lockdir > /dev/null 2>&1
     status=$?
-    while [ $status -ne 0 ]
+    nloop=1
+    while [ $status -ne 0 -a $nloop -le $maxloops ]
     do
+	nloop=`expr $nloop + 1`
 	log_msg sleeping
 	sleep $sleepsecs
 	mkdir $lockdir > /dev/null 2>&1
 	status=$?
     done
+
+    if [ $status -ne 0 ]
+    then
+	log_err "Cannot lock $lockdir"
+    fi
+
 }
 
 unlock_dir(){
@@ -130,6 +139,7 @@ gtmpsubdir="tmp"
 glocksubdir="lock"
 glockname="radftp.lock"		# name of dir we will use for locking
 glocksleepsecs=5
+glockmaxloops=3			# max number of tries to get the lock
 glftprc="lftp.rc"
 #
 gradftpslist="${gconfdir}/radftp.slist"    # station list
@@ -197,7 +207,7 @@ umask 002
 sanity_check
 
 # run once
-lock_dir $glockdirpath $glocksleepsecs
+lock_dir $glockdirpath $glocksleepsecs $glockmaxloops
 
 trap cleanup HUP INT QUIT ABRT KILL ALRM TERM EXIT
 
