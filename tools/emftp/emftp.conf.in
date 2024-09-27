@@ -37,6 +37,7 @@
 ## glocksubdir="lock"
 ## glockname="emftp.lock"		# name of dir we will use for locking
 ## glocksleepsecs=5
+## glockmaxloops=3			# max number of tries to get the lock
 ## gmd5keyfile="md5.txt"
 ## ginvfilename="`date -u +%H`.txt"
 ## gtime="`date -u +%H%M`"		# for entry in inv file

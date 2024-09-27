@@ -77,16 +77,24 @@ lock_dir(){
 
     lockdir=$1
     sleepsecs=$2
+    maxloops=$3
     
     mkdir $lockdir > /dev/null 2>&1
     status=$?
-    while [ $status -ne 0 ]
+    nloop=1
+    while [ $status -ne 0 -a $nloop -le $maxloops ]
     do
-	log_msg "Waiting for release of $lockdir."
+	nloop=`expr $nloop + 1`
+	log_msg "Waiting for release of $lockdir"
 	sleep $sleepsecs
 	mkdir $lockdir > /dev/null 2>&1
 	status=$?
     done
+
+    if [ $status -ne 0 ]
+    then
+	log_err "Cannot lock $lockdir"
+    fi
 }
 
 unlock_dir(){
@@ -258,6 +266,7 @@ gtmpsubdir="tmp"
 glocksubdir="lock"
 glockname="emftp.lock"		# name of dir we will use for locking
 glocksleepsecs=5
+glockmaxloops=3			# max number of tries to get the lock
 gmd5keyfile="md5.txt"
 ginvfilename="`date -u +%H`.txt"
 gtime="`date -u +%H%M`"           # for entry in inv file
@@ -344,7 +353,7 @@ umask 002
 sanity_check
 
 # run once
-lock_dir $glockdirpath $glocksleepsecs
+lock_dir $glockdirpath $glocksleepsecs $glockmaxloops
 
 trap cleanup HUP INT QUIT ABRT KILL ALRM TERM EXIT
 
