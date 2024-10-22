@@ -1,5 +1,5 @@
-The simplest way to install is to put the following line
-in /etc/local/npemwin/site/scheduler.conf:
+1) The simplest way to install is to put the following line
+   in /etc/local/npemwin/site/scheduler.conf:
 
 lappend schedule {
   M/2:/usr/local/libexec/npemwin/emftp &
@@ -9,27 +9,16 @@ or the following in /etc/local/nbsp/site/scheduler.conf:
 
 schedule M/2 /usr/local/libexec/npemwin/emftp
 
-There are two alternatives for enabling nbsp processing 
+NOTE: for txt it is safer to run every minute rather than every two (M/2):
+lappend schedule {
+  M:/usr/local/libexec/npemwin/emftp &
+}
 
-1) Do not enable nbsp processing here, but enable npemwin processing, and 
-   install the nbspfilter in npemwin.
+2) Nbsp processing is not enable by default. It can be enabled in
+   the "emftp.conf" file.
 
-2) Enable nbsp processing here, but do not install the nbspfilter in npemwin,
-   or disable npemwin processing here.
 
 ==================================================================
 The directory ``sample-site-conf'' contains the configuration    |
-files that were used in ``lin1.volkron.net'' (debian-10) using   |
-the alternative (1) above.                                       |
+files that were used in ``lin1.volkron.net'' (debian-10).        |
 ==================================================================
-
-NOTES:
-
-1) This script calls "nbspinsert". If other programs (e.g. ldm via the
-craftfilter) also calls nbspinsert then the nbsp/spool directory
-must have permissions 662 so this instance of nbspinsert can write files
-to the station directories that the other nbspinsert instances (e.g. ldm)
-may create.
-
-2) This script calls npemwininsert (C program), and the same comments in (1)
-apply.

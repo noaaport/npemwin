@@ -53,5 +53,4 @@ gwrite_inv=1
 ## gnpemwininsert="/usr/local/bin/npemwininsert"
 #
 ## nbsp_enable=0
-## gnbsp_spooldir="/var/noaaport/nbsp/spool"
-## gnbsp_infifo="/var/run/nbsp/infeed.fifo"
+## gnbspmcast="/usr/local/bin/nbspmcast"

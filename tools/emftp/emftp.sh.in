@@ -16,11 +16,12 @@
 #       fwmilmnc.20200311.184946.txt
 #
 # This file has:
+#
 #       FNUS82 KILM 111849
 #       FWMILM
 #
 # The names are constructed as:
-#       nbsp name: kilm_fnus82-fwmilm.406176.txt
+#
 #	bbfbasename: fwmilmnc.txt
 #
 # For the images, the original names are
@@ -35,7 +36,6 @@
 # imgsjupr.20220804.233034.jpg
 # imgwwaus.20220804.233034.png
 #
-#       nbsp name: none because these are not sent to nbsp
 #	bbfbasename: imgwwaus.png
 
 #
@@ -181,22 +181,6 @@ get_bbfbasename(){
     echo ${rc_bbfbasename}
 }
 
-get_nbspfbasename(){
-
-    # must be used after calling get_parts
- 
-    _nbspfrootname=${rc_wmostation}_${rc_wmoid}-${rc_awips}.${rc_seqnum}
-    echo ${_nbspfrootname}.${rc_ext}
-}
-
-get_nbspfname(){
-
-    # must be used after calling get_parts
- 
-    _nbspfname=${rc_wmostation}_${rc_wmoid}-${rc_awips}
-    echo ${_nbspfname}
-}
-
 sanity_check(){
 
     #
@@ -279,9 +263,7 @@ gnpemwin_infifo="/var/run/npemwin/infeed.fifo"
 gnpemwininsert="/usr/local/bin/npemwininsert"
 #
 nbsp_enable=0
-gnbsp_spooldir="/var/noaaport/nbsp/spool"
-gnbsp_infifo="/var/run/nbsp/infeed.fifo"
-gnbspinsert="/usr/local/bin/nbspinsert"
+gnbspmcast="/usr/local/bin/nbspmcast"
 
 #
 # main
@@ -344,10 +326,6 @@ gmd5keyfpath=${ginputsdir}/${gmd5keyfile}
 ginvfpath=${ginvdir}/${ginvfilename}
 glockdirpath=${glockdir}/${glockname}
 #
-
-# to ensure that other callers to nbspinsert can write to the directories
-# (e.g., directories within the nbsp/spool) that this script may create
-umask 002
 
 # checks
 sanity_check
@@ -444,18 +422,11 @@ do
 
     if [ $nbsp_enable -eq 1 -a $ftype = "txt" ]
     then
-	nbspfbasename=`get_nbspfbasename`
-	nbspfname=`get_nbspfname`
-	nbspparentdir=${gnbsp_spooldir}/${rc_wmostation}
-	nbspfpath=${nbspparentdir}/${nbspfbasename}
-	mkdir -p $nbspparentdir
-	echo -n "000000000000000000000000" > $nbspfpath
-	cat $emfpath >> $nbspfpath
-	$gnbspinsert -f $gnbsp_infifo $rc_seqnum 0 0 0 0 $nbspfname $nbspfpath
+	$gnbspmcast -b -s $rc_seqnum $emfpath
 	_status=$?
 	if [ ${_status} -ne 0 ]
 	then
-	    log_msg "Error from nbspinsert processing $emfpath"
+	    log_msg "Error from nbspmcast processing $emfpath"
 	fi
     fi
 
