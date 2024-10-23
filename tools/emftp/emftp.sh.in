@@ -352,7 +352,7 @@ then
 fi
 
 unzip -d $gtmpdir $ginputfpath > /dev/null 2>&1
-[ $? -ne 0 ] && { log_err "Error from unziping $ginputfpath"; }
+[ $? -ne 0 ] && { log_err "Error unziping $ginputfpath"; }
 
 # Some files are sent compressed (.zip). The npemwin qrunner will
 # accept those and handle them. But nbsp expects the txt uncompressed files.
@@ -367,7 +367,7 @@ then
     do
 	#[ "${_f}" = "" ] && break
 	unzip ${_f} > /dev/null 2>&1
-	[ $? -ne 0 ] && { log_err "Error from unziping ${_f};" }
+	[ $? -ne 0 ] && { log_err "Error unziping ${_f}"; }
 	rm ${_f}
     done
 fi
