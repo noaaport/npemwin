@@ -1,0 +1,98 @@
+general status of the the radar message
+Base reflectivity - 124 nmi Range (angle = 0.5°)
+Base reflectivity - 248 nmi Range (angle = 0.5°)
+Base Radial Velocity - 124 nmi Range (angle = 0.5°)
+Base Spectrum Width - 124 nmi Range (angle = 0.5°)
+Digital Hybrid Scan Reflectivity
+Clutter Filter Control (Segment 1)
+Clutter Filter Control (Segment 2)
+Clutter Filter Control (Segment 3)
+Clutter Filter Control (Segment 4)
+Clutter Filter Control (Segment 5)
+Composite Reflectivity - 16 levels, 124 nmi range
+Composite Reflectivity - 16 levels, 248 nmi range
+Echo Tops
+Velocity Azimuth Dispaly (VAD) Wind Profile
+Storm Relative Mean radial velocity map (angle = 0.5°)
+Storm Relative Mean radial velocity map (angle = 1.3°/1.5°)
+Storm Relative Mean radial velocity map (angle = 2.4°/2.5°)
+Storm Relative Mean radial velocity map (angle = 3.1°/3.4°/3.5°)
+Vertical Integrated Liquid
+Storm Tracking Information
+Hail Index
+Tornadic Vortex Signature
+Storm Structure
+Layer Composite Reflectivity Maximum (middle level)
+Layer Composite Reflectivity with AP removed
+Radar Coded message
+Free Text message
+Surface rainfall accums - one hr Total
+Surface rainfall accums - three hr Total
+Surface rainfall accums - storm total
+Hourly digital precip array
+Supplemental precip data
+Layer composite reflectivity max - high level
+Base reflectivity - 248 nmi Range (angle = 0.5°)
+Base reflectivity - 248 nmi Range (angle = 0.9°)
+Base reflectivity - 248 nmi Range (angle = 1.3°/1.5°)
+Base reflectivity - 248 nmi Range (angle = 1.8°)
+Base reflectivity - 248 nmi Range (angle = 2.4°/2.5°)
+Base reflectivity - 248 nmi Range (angle = 3.1°/3.4°/3.5°)
+Base Radial Velocity - 162 nmi Range (angle = 0.5°)
+Base Radial Velocity - 162 nmi Range (angle = 0.9°)
+Base Radial Velocity - 162 nmi Range (angle = 1.3°/1.5°)
+Base Radial Velocity - 162 nmi Range (angle = 1.8°)
+Base Radial Velocity - 162 nmi Range (angle = 2.4°/2.5°)
+Base Radial Velocity - 162 nmi Range (angle = 3.1°/3.4°/3.5°)
+Digital Vertical Integrated Liquid
+Enhanced Echo Tops
+Digital Storm Total Precipitation
+Mesocyclone
+Archive III Status Product
+Digital Differential Reflectivity (angle = 0.5°)
+Digital Differential Reflectivity (angle = 0.9°)
+Digital Differential Reflectivity (angle = 1.3°/1.5°)
+Digital Differential Reflectivity (angle = 1.8°)
+Digital Differential Reflectivity (angle = 2.4°/2.5°)
+Digital Differential Reflectivity (angle = 3.1°/3.4°/3.5°)
+Digital Correlation Coefficient (angle = 0.5°)
+Digital Correlation Coefficient (angle = 0.9°)
+Digital Correlation Coefficient (angle = 1.3°/1.5°)
+Digital Correlation Coefficient (angle = 1.8°)
+Digital Correlation Coefficient (angle = 2.4°/2.5°)
+Digital Correlation Coefficient (angle = 3.1°/3.4°/3.5°)
+Digital Specific Differential Phase (angle = 0.5°)
+Digital Specific Differential Phase (angle = 0.9°)
+Digital Specific Differential Phase (angle = 1.3°/1.5°)
+Digital Specific Differential Phase (angle = 1.8°)
+Digital Specific Differential Phase (angle = 2.4°/2.5°)
+Digital Specific Differential Phase (angle = 3.1°/3.4°/3.5°)
+Digital Hydrometeor Classification (angle = 0.5°)
+Digital Hydrometeor Classification (angle = 0.9°)
+Digital Hydrometeor Classification (angle = 1.3°/1.5°)
+Digital Hydrometeor Classification (angle = 1.8°)
+Digital Hydrometeor Classification (angle = 2.4°/2.5°)
+Digital Hydrometeor Classification (angle = 3.1°/3.4°/3.5°)
+Melting Layer (angle = 0.5°)
+Melting Layer (angle = 0.9°)
+Melting Layer (angle = 1.3°/1.5°)
+Melting Layer (angle = 1.8°)
+Melting Layer (angle = 2.4°/2.5°)
+Melting Layer (angle = 3.1°/3.4°/3.5°)
+One Hour Accum
+Digital Accum Array (unbiased)
+Storm Total Accum
+Digital Storm Total Accum
+Digital User-Selectable Accum: 3hr/hrly
+Digital User-Selectable Accum: 24hr/12Z
+Digital One Hour Difference Accum
+Digital Storm Total Difference Accum
+Digital Inst. Precip. Rate (in/hr)
+Hybrid Scan Hydrometeor Classification
+Base reflectivity - 48 nmi Range (angle = 0.1°-0.8°)
+Base reflectivity - 48 nmi Range (angle = 1.0°)
+Base reflectivity - 48 nmi Range (angle = 1.6°-3.7°)
+Base Radial Velocity - 48 nmi Range (angle = 0.1°-0.8°)
+Base Radial Velocity - 48 nmi Range (angle = 1.0°)
+Base Radial Velocity - 48 nmi Range (angle = 1.6°-3.7°)
+Long Range reflectivity - 225 nmi Range (angle = 0.6°)

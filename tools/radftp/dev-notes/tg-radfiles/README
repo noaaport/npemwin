@@ -1,0 +1,21 @@
+https://www.weather.gov/tg/radfiles/
+
+ftp://tgftp.nws.noaa.gov/
+SL.us008001/DF.of/DC.radar/DS.p94r0/SI.cccc/sn.nnnn
+
+ex: tgftp.nws.noaa.gov:/SL.us008001/DF.of/DC.radar/DS.p94r0/SI.tjua/sn.last
+
+The files are already uncompressed, and start with the WMO header.
+
+DS.p94r0 Base reflectivity - 248 nmi Range (angle = 0.5°)
+DS.p94ra Base reflectivity - 248 nmi Range (angle = 0.9°)
+DS.p94r1 Base reflectivity - 248 nmi Range (angle = 1.3°/1.5°)
+DS.p94rb Base reflectivity - 248 nmi Range (angle = 1.8°)
+DS.p94r2 Base reflectivity - 248 nmi Range (angle = 2.4°/2.5°)
+DS.p94r3 Base reflectivity - 248 nmi Range (angle = 3.1°/3.4°/3.5°)
+DS.p99v0 Base Radial Velocity - 162 nmi Range (angle = 0.5°)
+DS.p99va Base Radial Velocity - 162 nmi Range (angle = 0.9°)
+DS.p99v1 Base Radial Velocity - 162 nmi Range (angle = 1.3°/1.5°)
+DS.p99vb Base Radial Velocity - 162 nmi Range (angle = 1.8°)
+DS.p99v2 Base Radial Velocity - 162 nmi Range (angle = 2.4°/2.5°)
+DS.p99v3 Base Radial Velocity - 162 nmi Range (angle = 3.1°/3.4°/3.5°)

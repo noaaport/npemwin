@@ -1,0 +1,3 @@
+1) ../radftp.sh -c -f radftp.conf
+2) cd radftp
+2) ../radftp.sh -f radftp.conf

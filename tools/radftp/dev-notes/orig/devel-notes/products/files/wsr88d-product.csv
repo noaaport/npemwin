@@ -1,0 +1,98 @@
+DS.p2gsm, GSM, NXUS64, general status of the the radar message
+DS.p19r0, , , Base reflectivity - 124 nmi Range (angle = 0.5°)
+DS.p20-r, , , Base reflectivity - 248 nmi Range (angle = 0.5°)
+DS.p27v0, , , Base Radial Velocity - 124 nmi Range (angle = 0.5°)
+DS.p30sw, NSW, SDUS64, Base Spectrum Width - 124 nmi Range (angle = 0.5°)
+DS.32dhr, DHR, SDUS54, Digital Hybrid Scan Reflectivity
+DS.34cf1, , , Clutter Filter Control (Segment 1)
+DS.34cf2, , , Clutter Filter Control (Segment 2)
+DS.34cf3, , , Clutter Filter Control (Segment 3)
+DS.34cf4, , , Clutter Filter Control (Segment 4)
+DS.34cf5, , , Clutter Filter Control (Segment 5)
+DS.p37cr, NCR, SDUS54, Composite Reflectivity - 16 levels, 124 nmi range
+DS.p38cr, NCZ, SDUS64, Composite Reflectivity - 16 levels, 248 nmi range
+DS.p41et, NET, SDUS64, Echo Tops
+DS.48vwp, NVW, SDUS34, Velocity Azimuth Dispaly (VAD) Wind Profile
+DS.56rm0, N0S, SDUS54, Storm Relative Mean radial velocity map (angle = 0.5°)
+DS.56rm1, N1S, SDUS64, Storm Relative Mean radial velocity map (angle = 1.3°/1.5°)
+DS.56rm2, N2S, SDUS64, Storm Relative Mean radial velocity map (angle = 2.4°/2.5°)
+DS.56rm3, N3S, SDUS64, Storm Relative Mean radial velocity map (angle = 3.1°/3.4°/3.5°)
+DS.57vil, NVL, SDUS54, Vertical Integrated Liquid
+DS.58sti, NST, SDUS34, Storm Tracking Information
+DS.p59hi, NHI, SDUS64, Hail Index
+DS.61tvs, NTV, SDUS64, Tornadic Vortex Signature
+DS.p62ss, NSS, SDUS64, Storm Structure
+DS.66lrm, NML, SDUS64, Layer Composite Reflectivity Maximum (middle level)
+DS.67apr, NLA, SDUS64, Layer Composite Reflectivity with AP removed
+DS.74rcm, RCM, SDUS44, Radar Coded message
+DS.75ftm, FTM, NOUS64, Free Text message
+DS.78ohp, N1P, SDUS34, Surface rainfall accums - one hr Total
+DS.79thp, N3P, SDUS64, Surface rainfall accums - three hr Total
+DS.80stp, NTP, SDUS54, Surface rainfall accums - storm total
+DS.81dpr, DPA, SDUS54, Hourly digital precip array
+DS.82spd, SPD, SDUS64, Supplemental precip data
+DS.90lrm, NHL, SDUS64, Layer composite reflectivity max - high level
+DS.p94r0, N0Q, SDUS64, Base reflectivity - 248 nmi Range (angle = 0.5°)
+DS.p94ra, NAQ, SDUS64, Base reflectivity - 248 nmi Range (angle = 0.9°)
+DS.p94r1, N1Q, SDUS64, Base reflectivity - 248 nmi Range (angle = 1.3°/1.5°)
+DS.p94rb, NBQ, SDUS64, Base reflectivity - 248 nmi Range (angle = 1.8°)
+DS.p94r2, N2Q, SDUS64, Base reflectivity - 248 nmi Range (angle = 2.4°/2.5°)
+DS.p94r3, N3Q, SDUS64, Base reflectivity - 248 nmi Range (angle = 3.1°/3.4°/3.5°)
+DS.p99v0, N0U, SDUS64, Base Radial Velocity - 162 nmi Range (angle = 0.5°)
+DS.p99va, NAU, SDUS64, Base Radial Velocity - 162 nmi Range (angle = 0.9°)
+DS.p99v1, N1U, SDUS64, Base Radial Velocity - 162 nmi Range (angle = 1.3°/1.5°)
+DS.p99vb, NBU, SDUS24, Base Radial Velocity - 162 nmi Range (angle = 1.8°)
+DS.p99v2, N2U, SDUS24, Base Radial Velocity - 162 nmi Range (angle = 2.4°/2.5°)
+DS.p99v3, N3U, SDUS24, Base Radial Velocity - 162 nmi Range (angle = 3.1°/3.4°/3.5°)
+DS.134il, DVL, SDUS54, Digital Vertical Integrated Liquid
+DS.135et, EET, SDUS74, Enhanced Echo Tops
+DS.138dp, DSP, SDUS54, Digital Storm Total Precipitation
+DS.141md, NMD, SDUS34, Mesocyclone
+DS.152rs, RSL, SDUS64, Archive III Status Product
+DS.159x0, N0X, SDUS84, Digital Differential Reflectivity (angle = 0.5°)
+DS.159xa, NAX, SDUS84, Digital Differential Reflectivity (angle = 0.9°)
+DS.159x1, N1X, SDUS84, Digital Differential Reflectivity (angle = 1.3°/1.5°)
+DS.159xb, NBX, SDUS84, Digital Differential Reflectivity (angle = 1.8°)
+DS.159x2, N2X, SDUS84, Digital Differential Reflectivity (angle = 2.4°/2.5°)
+DS.159x3, N3X, SDUS84, Digital Differential Reflectivity (angle = 3.1°/3.4°/3.5°)
+DS.161c0, N0C, SDUS84, Digital Correlation Coefficient (angle = 0.5°)
+DS.161ca, NAC, SDUS84, Digital Correlation Coefficient (angle = 0.9°)
+DS.161c1, N1C, SDUS84, Digital Correlation Coefficient (angle = 1.3°/1.5°)
+DS.161cb, NBC, SDUS84, Digital Correlation Coefficient (angle = 1.8°)
+DS.161c2, N2C, SDUS84, Digital Correlation Coefficient (angle = 2.4°/2.5°)
+DS.161c3, N3C, SDUS84, Digital Correlation Coefficient (angle = 3.1°/3.4°/3.5°)
+DS.163k0, N0K, SDUS84, Digital Specific Differential Phase (angle = 0.5°)
+DS.163ka, NAK, SDUS84, Digital Specific Differential Phase (angle = 0.9°)
+DS.163k1, N1K, SDUS84, Digital Specific Differential Phase (angle = 1.3°/1.5°)
+DS.163kb, NBK, SDUS84, Digital Specific Differential Phase (angle = 1.8°)
+DS.163k2, N2K, SDUS84, Digital Specific Differential Phase (angle = 2.4°/2.5°)
+DS.163k3, N3K, SDUS84, Digital Specific Differential Phase (angle = 3.1°/3.4°/3.5°)
+DS.165h0, N0H, SDUS84, Digital Hydrometeor Classification (angle = 0.5°)
+DS.165ha, NAH, SDUS84, Digital Hydrometeor Classification (angle = 0.9°)
+DS.165h1, N1H, SDUS84, Digital Hydrometeor Classification (angle = 1.3°/1.5°)
+DS.165hb, NBH, SDUS84, Digital Hydrometeor Classification (angle = 1.8°)
+DS.165h2, N2H, SDUS84, Digital Hydrometeor Classification (angle = 2.4°/2.5°)
+DS.165h3, N3H, SDUS84, Digital Hydrometeor Classification (angle = 3.1°/3.4°/3.5°)
+DS.166m0, N0M, SDUS84, Melting Layer (angle = 0.5°)
+DS.166ma, NAM, SDUS84, Melting Layer (angle = 0.9°)
+DS.166m1, N1M, SDUS84, Melting Layer (angle = 1.3°/1.5°)
+DS.166mb, NBM, SDUS84, Melting Layer (angle = 1.8°)
+DS.166m2, N2M, SDUS84, Melting Layer (angle = 2.4°/2.5°)
+DS.166m3, N3M, SDUS84, Melting Layer (angle = 3.1°/3.4°/3.5°)
+DS.169oh, OHA, SDUS84, One Hour Accum
+DS.170aa, DAA, SDUS84, Digital Accum Array (unbiased)
+DS.171st, , , Storm Total Accum
+DS.172dt, DTA, SDUS84, Digital Storm Total Accum
+DS.173u1, DU3, SDUS84, Digital User-Selectable Accum: 3hr/hrly
+DS.173u3, DU6, SDUS84, Digital User-Selectable Accum: 24hr/12Z
+DS.174od, DOD, SDUS64, Digital One Hour Difference Accum
+DS.175sd, DSD, SDUS64, Digital Storm Total Difference Accum
+DS.176pr, DPR, SDUS84, Digital Inst. Precip. Rate (in/hr)
+DS.177hh, HHC, SDUS84, Hybrid Scan Hydrometeor Classification
+DS.181r0, , , Base reflectivity - 48 nmi Range (angle = 0.1°-0.8°)
+DS.181r1, , , Base reflectivity - 48 nmi Range (angle = 1.0°)
+DS.181r2, , , Base reflectivity - 48 nmi Range (angle = 1.6°-3.7°)
+DS.182v0, , , Base Radial Velocity - 48 nmi Range (angle = 0.1°-0.8°)
+DS.182v1, , , Base Radial Velocity - 48 nmi Range (angle = 1.0°)
+DS.182v2, , , Base Radial Velocity - 48 nmi Range (angle = 1.6°-3.7°)
+DS.186zl, , , Long Range reflectivity - 225 nmi Range (angle = 0.6°)

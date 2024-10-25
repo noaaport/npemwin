@@ -1,0 +1,14 @@
+Sun 01 Sep 2024 06:09:38 PM AST
+
+The names in nbsp (as saved in digatmos/nexrad/nids) are of the form
+
+n0qjua_20170222_1641.nids
+
+This can be constructed from the sn.last that is downloaded,
+or from the name as we save it (e.g. n0q.nids) as follows:
+
+seconds=`nbspradinfo -t sn.last`
+datetime=`date -d "@${seconds}" -u "+%Y%m%d_%H%M"`
+
+mv sn.last n0qjua_${datetime}.nids
+

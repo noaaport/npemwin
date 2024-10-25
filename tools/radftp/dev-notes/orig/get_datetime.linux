@@ -1,0 +1,7 @@
+get_datetime(){
+
+	#linux
+	_datetime=`date -d "@${seconds}" -u "+%Y%m%d_%H%M"`
+
+	echo "${_datetime}"
+}		

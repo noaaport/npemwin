@@ -1,0 +1,5 @@
+Wed Sep  4 20:11:28 AST 2024
+
+This is the standalone version of radftp, as I started to implement it.
+It can be (and was) used for testing, and served as the basis for
+the version incorporated in npemwin.

@@ -1,0 +1,13 @@
+TARGET = radftp.sh
+GET_DATETIME = @GET_DATETIME@
+
+all: ${TARGET}
+
+radftp.sh: radftp.sh.in ${GET_DATETIME}
+	sed -e "/%GET_DATETIME%/r ${GET_DATETIME}" \
+	-e "/%GET_DATETIME%/d" \
+	radftp.sh.in > radftp.sh
+
+clean:
+	rm -f *~
+	rm -f Makefile ${TARGET}

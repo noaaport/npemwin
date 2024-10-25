@@ -1,0 +1,6 @@
+15-mar-2023
+
+These scripts would download all the products, including
+all those that do not have an awips. They can be listed
+in the file ``list-all.txt'', constructed from the wsr88d-product-awips.txt
+file (by modifying the mklist.tcl script).
