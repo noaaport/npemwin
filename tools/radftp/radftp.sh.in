@@ -8,7 +8,7 @@
 # as defined in the configuration file, and exit.
 #
 # The [-d] option overrides the setting of the data dir to save the
-# final with the final (nbsp convention names).
+# files with the final (nbsp convention names).
 #
 # The [-w] option overrides the radftp working directory
 #
@@ -35,6 +35,11 @@ log_msg_quit(){
 log_err(){
 
     log_msg "$1"
+}
+
+log_err_quit(){
+
+    log_msg "$1"
     exit 1
 }
 
@@ -42,8 +47,6 @@ cleanup(){
 
     unlock_dir $glockdirpath
     log_msg "radftp script finished"
-
-    exit 0
 }
 
 lock_dir(){
@@ -148,6 +151,14 @@ gradftpplist="${gconfdir}/radftp.plist"    # product list
 gdatadir="/var/npemwin/data/digatmos/nexrad/nids"
 
 #
+# Nbsp and Npemwin processing
+#
+npemwin_enable=1
+#
+nbsp_enable=0
+gnbspmcast="/usr/local/bin/nbspmcast"
+
+#
 # main
 #
 
@@ -199,8 +210,8 @@ glockdirpath=${glockdir}/${glockname}
 glftprcpath=${gtmpdir}/${glftprc}
 #
 
-# To ensure that other callers to nbspinsert can write to the directories
-# (e.g., directories within the nbsp/spool) that this script may create
+# To ensure that other programs can write to the directories
+# that this script may create
 umask 002
 
 # checks
@@ -222,30 +233,37 @@ do
 	remotepath=`get_remote_path $station $p $wmo $awips1`
 	localpath=`get_local_path $station $p $wmo $awips1`
 	mkdir -p `dirname $localpath`
-	echo "get $remotepath -o ${localpath}" >> $glftprcpath
+	echo "get -e $remotepath -o ${localpath}" >> $glftprcpath
     done
 done
 echo "exit" >> $glftprcpath
 
+# exec lftp
 lftp -f $glftprcpath
-
+if [ $? -ne 0 ]
+then
+    log_err_quit "Error from lftp."
+fi
+   
 # rename
 grep -v '^#\|^$' $gradftpslist | while read station
 do
     station3=${station#?}    # remove first letter from the station name
     grep -v '^#\|^$' $gradftpplist | while read p wmo awips1
     do	
-	fspool=`get_local_path $station $p $wmo $awips1`
-	seconds=`nbspradinfo -t ${fspool}`
-	if [ $? -eq 0 ]
+	localpath=`get_local_path $station $p $wmo $awips1`
+	seconds=`nbspradinfo -t ${localpath}`
+
+	if [ $? -ne 0 ]
 	then
-	    datetime=`get_datetime`
-	    fdataname="${awips1}${station3}_${datetime}.nids"
-	    fdata=${gdatadir}/${station3}/${awips1}/${fdataname}
-	    mkdir -p `dirname $fdata`
-	    mv ${fspool} ${fdata}
-	else
-	    rm $f
-	fi   
+	    log_err "Error from nbspradinfo on: $localpath"
+	    rm $localpath
+	fi
+	
+	datetime=`get_datetime $seconds`
+	fbasename="${awips1}${station3}_${datetime}.nids"
+	fpath=${gdatadir}/${station3}/${awips1}/${fbasename}
+	mkdir -p `dirname $fpath`
+	mv $localpath $fpath
     done
 done

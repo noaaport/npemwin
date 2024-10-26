@@ -1,7 +1,9 @@
 get_datetime(){
 
+	_seconds=$1
+	
 	#bsd
-	_datetime=`date -r ${seconds} -u "+%Y%m%d_%H%M"`
+	_datetime=`date -r ${_seconds} -u "+%Y%m%d_%H%M"`
 
 	echo "${_datetime}"
 }		
