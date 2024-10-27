@@ -20,7 +20,7 @@ log_msg(){
 
     if [ $gbackground -eq 1 ]
     then
-	logger -t emftp "$1"
+	logger -t radftp "$1"
     else
 	echo "$1"
     fi
@@ -171,6 +171,7 @@ while getopts ":hbcd:w:f:" option
 do
     case $option in
 	h) echo "$usage"; exit 0;;
+	b) gbackground=1;;
 	c) option_c=1;;
 	d) gdatadir=$OPTARG; option_d=1;;
 	w) gworkdir=$OPTARG; option_w=1;;
@@ -245,7 +246,7 @@ then
     log_err_quit "Error from lftp."
 fi
    
-# rename
+# npemwin and nbsp processing
 grep -v '^#\|^$' $gradftpslist | while read station
 do
     station3=${station#?}    # remove first letter from the station name
@@ -263,7 +264,22 @@ do
 	datetime=`get_datetime $seconds`
 	fbasename="${awips1}${station3}_${datetime}.nids"
 	fpath=${gdatadir}/${station3}/${awips1}/${fbasename}
-	mkdir -p `dirname $fpath`
-	mv $localpath $fpath
+
+	if [ $nbsp_enable -eq 1 ]
+	then
+	    $gnbspmcast -b -r $localpath
+	fi
+
+	if [ $npemwin_enable -eq 1 ]
+	then
+	    mkdir -p `dirname $fpath`
+	    mv $localpath $fpath
+	    if [ $? -ne 0 ]
+	    then
+		log_err "Error copying $localpath to $fpath"
+	    fi
+	fi
+	
+	[ -f $localpath ] && { rm $localpath; }
     done
 done

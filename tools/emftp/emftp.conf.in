@@ -17,7 +17,7 @@
 #
 
 # Whether this script is running in the background or executed manually
-## gbackground=1
+## gbackground=0
 
 # The individual files (after unziping the downloaded file) are saved under
 # ``/var/npemwin/emftp/spool/<type>/<station>''

@@ -1,6 +1,8 @@
 #!%SHELL%
 #
-# usage: emftp [-c] [-i] [-f userconffile]
+# usage: emftp [-b] [-c] [-i] [-f userconffile]
+#
+# The [-b] option runs in background mode (error reports to syslog)
 #
 # The [-c] option will create the working directories used by emftp,
 # as defined in the configuration file, and exit.
@@ -243,7 +245,7 @@ ginputfilename_img="imgmin15.zip"  # CHANGED IMG
 # options
 #
 #
-gbackground=1
+gbackground=0
 gremove_emfpath=1
 gwrite_inv=0
 #
@@ -274,14 +276,15 @@ gnbspmcast="/usr/local/bin/nbspmcast"
 # main
 #
 
-usage="usage: emftp [-c] [-i] [-f userconffile]"
+usage="usage: emftp [b] [-c] [-i] [-f userconffile]"
 option_c=0
 option_i=0
 option_f=0
-while getopts ":hcif:" option
+while getopts ":hbcif:" option
 do
     case $option in
 	h) echo "$usage"; exit 0;;
+	b) gbackground=1;;
 	c) option_c=1;;
 	i) option_i=1;;
 	f) userconffile=$OPTARG; option_f=1;;
