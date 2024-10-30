@@ -7,8 +7,8 @@
 # The [-c] option will create the working directories used by radftp,
 # as defined in the configuration file, and exit.
 #
-# The [-d] option overrides the setting of the data dir to save the
-# files with the final (nbsp convention names).
+# The [-d] option overrides the setting of the noemwin data dir to save the
+# files with the final (nbsp convention) names.
 #
 # The [-w] option overrides the radftp working directory
 #
@@ -87,7 +87,7 @@ sanity_check(){
     for _d in spool tmp lock
     do
 	eval _dir=\$g${_d}dir
-	[ ! -d ${_dir} ] && { log_err "${_dir} does not exist"; }
+	[ ! -d ${_dir} ] && { log_err_quit "${_dir} does not exist"; }
     done
 }
 
