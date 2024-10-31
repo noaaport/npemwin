@@ -27,6 +27,14 @@
 ## gdatadir="/var/npemwin/data/digatmos/nexrad/nids"
 
 #
+# Nbsp and Npemwin processing
+#
+## npemwin_enable=1
+#
+## nbsp_enable=0
+## gnbspmcast="/usr/local/bin/nbspmcast"
+
+#
 # Read the optional configuration files
 #
 if [ -z "$source_radftp_conf_defined" ]
