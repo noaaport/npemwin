@@ -249,6 +249,7 @@ do
     fi
 
     echo "get -e $remote_path -o $local_path" >> $glftprcpath
+    echo $local_path >> $gfilelistpath
 
     rm $dirlist
 done
@@ -271,6 +272,8 @@ then
 	then
 	    log_err "Error from craftinsert: $file"
 	fi
+
+	[ -f $file ] && { rm $file; }
     done
 fi
 

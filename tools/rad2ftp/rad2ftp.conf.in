@@ -25,6 +25,7 @@
 
 #
 # Nbsp processing
+# (requires setting the feedmode in nbspd.conf to include the infeed)
 #
 ## nbsp_enable=1
 ## gcraftinsert="/usr/local/libexec/nbsp/craftinsert"
