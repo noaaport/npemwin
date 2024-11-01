@@ -42,7 +42,11 @@ userdirs="/var/run/npemwin
 /var/npemwin/radftp
 /var/npemwin/radftp/spool
 /var/npemwin/radftp/tmp
-/var/npemwin/radftp/lock"
+/var/npemwin/radftp/lock
+/var/npemwin/rad2ftp
+/var/npemwin/rad2ftp/spool
+/var/npemwin/rad2ftp/tmp
+/var/npemwin/rad2ftp/lock"
 #
 rootdirs="/usr/local/etc/npemwin/defaults
 /usr/local/etc/npemwin/site

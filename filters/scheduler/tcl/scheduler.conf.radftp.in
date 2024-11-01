@@ -3,3 +3,8 @@
 lappend schedule {
   M/5:/usr/local/libexec/npemwin/radftp -b &
 }
+
+# For level2
+lappend schedule {
+  M/5:/usr/local/libexec/npemwin/rad2ftp -b &
+}

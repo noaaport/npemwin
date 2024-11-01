@@ -1,5 +1,5 @@
 
-# To use the emftp infeed
+# To use the emftp feed
 # (for txt, every minute is safer than every two (M/2))
 lappend schedule {
   M:/usr/local/libexec/npemwin/emftp -b &
