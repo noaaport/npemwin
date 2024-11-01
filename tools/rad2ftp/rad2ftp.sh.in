@@ -245,11 +245,10 @@ do
     
     if [ -f $local_path ]
     then
-	log_msg "$local_path exists"
-    else
-	echo "get -e $remote_path -o $local_path" >> $glftprcpath
-	echo $local_path >> $gfilelistpath
+	log_msg "$local_path exists - downloading again"
     fi
+
+    echo "get -e $remote_path -o $local_path" >> $glftprcpath
 
     rm $dirlist
 done
