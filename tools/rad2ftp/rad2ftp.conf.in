@@ -1,0 +1,46 @@
+#
+# Optional configuration files
+#
+## gconffile="rad2ftp.conf"
+## gconfdir="/usr/local/etc/npemwin"
+## gconfoptdirs="${gconfdir}/defaults ${gconfdir}/site"
+#
+
+# input configuration
+## gurl="ftp://ftp.ncep.noaa.gov"
+## glevel2subdir="pub/data/nccf/radar/nexrad_level2"
+
+# options
+## gbackground=0
+#
+## gworkdir="/var/npemwin/rad2ftp"
+## gspoolsubdir="spool"
+## gtmpsubdir="tmp"
+## glocksubdir="lock"
+## glockname="rad2ftp.lock"	# name of dir we will use for locking
+## glocksleepsecs=5
+## glockmaxloops=3		# max number of tries to get the lock
+## glftprc="lftp.rc"
+## gfilelist="files.list"	# list of radar files downloaded
+
+#
+# Nbsp processing
+#
+## nbsp_enable=1
+## gcraftinsert="/usr/local/libexec/nbsp/craftinsert"
+
+# list of stations to process (they mus be specified in the conf file)
+## gstation_list=
+
+#
+# Read the optional configuration files
+#
+if [ -z "$source_radftp_conf_defined" ]
+then	
+    source_radftp_conf_defined=1
+    for _d in $gconfoptdirs
+    do
+	_f=${_d}/${gconffile}
+	[ -r ${_f} ] && . ${_f}
+    done
+fi

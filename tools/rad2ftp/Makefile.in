@@ -1,0 +1,31 @@
+#
+# $Id$
+#
+@include@ @q@../../Makefile.inc@q@
+
+INSTALL =	@INSTALL@
+SHELL =		@SHELL@
+
+SAMPLES =	rad2ftp.conf-sample rad2ftp.conf-site-sample
+LIBTOOLS =	rad2ftp
+TARGET =	${LIBTOOLS} ${SAMPLES}
+
+all: ${TARGET}
+
+rad2ftp: rad2ftp.sh.in
+	sed -e "/%SHELL%/s##${SHELL}#" \
+	rad2ftp.sh.in > rad2ftp
+
+rad2ftp.conf-sample: rad2ftp.conf.in
+	sed -e "/%PATH%/s##${PATH}#" \
+	rad2ftp.conf.in > rad2ftp.conf-sample
+
+rad2ftp.conf-site-sample: rad2ftp.conf-site
+	 cp rad2ftp.conf-site rad2ftp.conf-site-sample
+
+install:
+	${INSTALL} -m 0644 ${SAMPLES} ${MYCONFDIR}
+	${INSTALL} -m 0755 ${LIBTOOLS} ${MYLIBEXECDIR}
+
+clean:
+	rm -f *~ ${TARGET} Makefile

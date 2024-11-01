@@ -2,11 +2,38 @@
 # $Id$
 #
 
+NOTE - 01 Nov 2024
+
+This script is deprecated, kept here only for reference.
+
+The problem: the qrunner sends the files to the filters _after_
+striping the ending \r\r\n that the native files (the same as
+the noaaport-sbn files). Thus nbsp is not able to determine
+correctly the awips headers because uses the \r\r\n sequence as a guide.
+The solution: the qrunner itself calls nbspmcast, using the original
+native files as the source.
+
+The notes below are from the original README
+
+===========================================================================
 install -m 0755 nbspfilter.tcl /usr/local/libexec/npemwin/site/nbspfilter
 install -m 0644 filters.conf-site /usr/local/etc/npemwin/site/filters.conf
 
 # optional
 install -m 0644 nbspfilter.conf /usr/local/etc/npemwin
 
-NOTE: The nbspfilter script requires tclx which is not installed
-by default.
+- 30 Oct 2024
+
+The original version of this script used to call nbspinsert. In that case
+we used to have the following note:
+
+[ NOTE:
+  The nbspfilter script requires tclx which is not installed
+  by default.
+]
+
+The current version uses nbspmcast, and therefore this version does
+not need tclx.
+
+The original version of this script is maintained with the "-orig"
+suffix for reference.

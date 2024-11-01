@@ -1,0 +1,38 @@
+31 oct 2024
+
+The txt noaaport (sbn) files have the lines ending with \r\r\n, and that
+is what nbsp expects. In particular, the function split_wmo_headers()
+in sbn.c, assumes that format and uses it to determine whether there
+is an awips header and extract it.
+
+The emwin files downloaded with emftp have that format. Therefore,
+nbspcast can send them to nbsp, whether nbspmcast is called from
+emftp or the qrunner. (The qrunner calls nbspmcast after the files
+are assembled, but prior to striping the \r\r\n from the files
+that it send to the npemwin filters).
+
+The problem is that the files that come from the emwin wxessage
+do not have that format; (i) they arrive compressed, and (ii) when uncompressed
+they end with with only \r\n. In those cases nbsp cannot identify
+the awips (because it checks the \r\r\n ending), and then the filter rules
+that depend on the awips do not work.
+
+In the nbsp rstfilter, the \r\r\n are removed by the function filter_text.
+In the npemwin dafilter, the \r\n (one \r\n) is added to the
+emwin files as a concession to windows programs. This is done by
+setting the "-r" option in the function "filter_file {}" in dafilter.tcl,
+which ends up calling filterslib_file_save in filters.lib.
+
+But the question of what is the best way to send to nbsp the files received
+from the emwin wxmessage, remains. Any way to do it is really a hack.
+The only way would be for the qrunner to call a script instead of nbspmcast
+directly, the script would add the missing \r, and then pass the file
+to nbspmcast. Instead of a script, unix2dos can do the job of adding the
+extra \r unconditionally (if we are sure that all the files need it).
+The other way is a script (tcl) that deletes the trailing spaces
+and then adds the \r\r\n. (In any case all those are an ugly hack.) 
+
+The short story is that the files received from the emwin wxmessage cannot
+be send "as is" to nbsp via nbspmcast. I am inclined to stick to the emftp
+feed and forget the emwin wxmessage server, when we want to send the files
+to nbsp.

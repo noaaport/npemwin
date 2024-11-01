@@ -1,0 +1,278 @@
+#!%SHELL%
+#
+# This script downloads the files from ncep, and then calls craftinsert
+# to send them to nbsp (in a way similar to how we use it in ldm).
+#
+# usage: rad2ftp [-b] [-c] [-w workdir] [-f userconffile]
+#
+# The [-b] option runs in background mode (error reports to syslog)
+#
+# The [-c] option will create the working directories used by rad2ftp,
+# as defined in the configuration file, and exit.
+#
+# The [-w] option overrides the rad2ftp working directory
+#
+
+#
+# functions
+#
+log_msg(){
+
+    if [ $gbackground -eq 1 ]
+    then
+	logger -t rad2ftp "$1"
+    else
+	echo "$1"
+    fi
+}
+
+log_msg_quit(){
+
+    log_msg "$1"
+    exit 0
+}
+
+log_err(){
+
+    log_msg "$1"
+}
+
+log_err_quit(){
+
+    log_msg "$1"
+    exit 1
+}
+
+cleanup(){
+
+    unlock_dir $glockdirpath
+    log_msg "rad2ftp script finished"
+}
+
+lock_dir(){
+
+    lockdir=$1
+    sleepsecs=$2
+    maxloops=$3
+    
+    mkdir $lockdir > /dev/null 2>&1
+    status=$?
+    nloop=1
+    while [ $status -ne 0 -a $nloop -le $maxloops ]
+    do
+	nloop=`expr $nloop + 1`
+	log_msg sleeping
+	sleep $sleepsecs
+	mkdir $lockdir > /dev/null 2>&1
+	status=$?
+    done
+
+    if [ $status -ne 0 ]
+    then
+	log_err_quit "Cannot lock $lockdir"
+    fi
+
+}
+
+unlock_dir(){
+
+    lockdir=$1
+    
+    [ -d $lockdir ] && rmdir $lockdir
+}
+
+sanity_check(){
+
+    # checks
+    for _d in spool tmp lock
+    do
+	eval _dir=\$g${_d}dir
+	[ ! -d ${_dir} ] && { log_err_quit "${_dir} does not exist"; }
+    done
+}
+
+#
+# configuration file(s)
+#
+gconffile="rad2ftp.conf"
+gconfdir="/usr/local/etc/npemwin"
+gconfoptdirs="${gconfdir}/defaults ${gconfdir}/site"
+
+# input configuration
+gurl="ftp://ftp.ncep.noaa.gov"
+glevel2subdir="pub/data/nccf/radar/nexrad_level2"
+
+# options
+gbackground=0
+#
+gworkdir="/var/npemwin/rad2ftp"
+gspoolsubdir="spool"
+gtmpsubdir="tmp"
+glocksubdir="lock"
+glockname="rad2ftp.lock"	# name of dir we will use for locking
+glocksleepsecs=5
+glockmaxloops=3			# max number of tries to get the lock
+glftprc="lftp.rc"
+gfilelist="files.list"		# list of radar files downloaded
+
+#
+# Nbsp processing
+#
+nbsp_enable=1
+gcraftinsert="/usr/local/libexec/nbsp/craftinsert"
+
+#
+gstation_list=
+gstation_list="TJUA TSJU"	# for testing
+
+#
+# main
+#
+
+usage="usage: rad2ftp [-b] [-c] [-w workdir] [-f userconffile]"
+option_c=0
+option_w=0
+option_f=0
+
+while getopts ":hbcw:f:" option
+do
+    case $option in
+	h) echo "$usage"; exit 0;;
+	b) gbackground=1;;
+	c) option_c=1;;
+	w) gworkdir=$OPTARG; option_w=1;;
+	f) userconffile=$OPTARG; option_f=1;;
+        \?) echo "Unsupported option $OPTARG"; exit 1;;
+	:) echo "Missing value option $OPTARG"; exit 1;;
+    esac
+done
+shift $((OPTIND-1))
+
+if [ $option_f -eq 1 ]
+then
+    . $userconffile
+else
+    [ -f ${gconfdir}/${gconffile} ] && . ${gconfdir}/${gconffile}
+fi
+
+if [ $option_c -eq 1 ]
+then
+    mkdir -p ${gworkdir}
+    cd ${gworkdir}
+
+    for d in $gspoolsubdir $gtmpsubdir $glocksubdir
+    do
+	mkdir -p $d
+    done
+
+    return
+fi
+
+# variables
+gspooldir=${gworkdir}/${gspoolsubdir}
+glockdir=${gworkdir}/${glocksubdir}
+gtmpdir=${gworkdir}/${gtmpsubdir}
+#
+glockdirpath=${glockdir}/${glockname}
+glftprcpath=${gtmpdir}/${glftprc}
+#
+gfilelistpath=${gtmpdir}/${gfilelist}
+
+# If no stations are given quit
+if [ -z "$gstation_list" ]
+then
+    log_msg_quit "No stations specified."
+fi
+
+# To ensure that other programs can write to the directories
+# that this script may create
+umask 002
+
+# checks
+sanity_check
+
+# run once
+lock_dir $glockdirpath $glocksleepsecs $glockmaxloops
+
+trap cleanup HUP INT QUIT ABRT KILL ALRM TERM EXIT
+
+log_msg "rad2ftp script starting"
+
+# Download the dir.list for all the stations
+echo "open $gurl" > $glftprcpath
+
+for STATION in $gstation_list
+do
+    #station=`echo $STATION | tr A-Z a-z`
+    #stationdir=${gspooldir}/${station}
+    stationdir=${gspooldir}/${STATION}
+    remote_dirlist="${glevel2subdir}/${STATION}/dir.list"
+    local_dirlist="${stationdir}/dir.list"
+    [ ! -d $stationdir ] && { mkdir -p $stationdir; }
+    echo "get -e $remote_dirlist -o $local_dirlist" >> $glftprcpath
+done
+
+lftp -f $glftprcpath
+if [ $? -ne 0 ]
+then
+    log_err_quit "Error downloading dir.list"
+fi
+
+#
+# Download the last file from each station.
+# I believe the files are not bzip2 compressed, although they are stored
+# with that extension. We will save them without it (the ldm convention).
+#
+
+# Make sure the file that contains the list of downloaded files does not exist
+[ -f $gfilelistpath ]  && rm $gfilelistpath
+
+echo "open $gurl" > $glftprcpath
+for STATION in $gstation_list
+do
+    #station=`echo $STATION | tr A-Z a-z`
+    #stationdir=${gspooldir}/${station}
+    stationdir=${gspooldir}/${STATION}
+    dirlist="${stationdir}/dir.list"
+
+    lastfile=`tail -n 1 $dirlist | cut -d " " -f 2`
+    remote_path="${glevel2subdir}/${STATION}/${lastfile}"
+
+    # craftinsert expects the "tmp" extension or none at all
+    savename=`basename $lastfile ".bz2"`
+    #savename="${savename}.tmp"
+    local_path=${stationdir}/${savename}
+    
+    if [ -f $local_path ]
+    then
+	log_msg "$local_path exists"
+    else
+	echo "get -e $remote_path -o $local_path" >> $glftprcpath
+	echo $local_path >> $gfilelistpath
+    fi
+
+    rm $dirlist
+done
+
+lftp -f $glftprcpath
+
+if [ $? -ne 0 ]
+then
+    log_err "Error from lftp"
+fi
+
+rm $glftprcpath
+
+if [ $nbsp_enable -eq 1 -a -f $gfilelistpath ]
+then
+    for file in `cat $gfilelistpath`
+    do
+	$gcraftinsert $file
+	if [ $? -ne 0 ]
+	then
+	    log_err "Error from craftinsert: $file"
+	fi
+    done
+fi
+
+rm -f $gfilelistpath

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-subdirs="emftp radftp npemwininsert"
+subdirs="emftp radftp rad2ftp npemwininsert"
 
 for d in $subdirs
 do

@@ -7,7 +7,7 @@
 # The [-c] option will create the working directories used by radftp,
 # as defined in the configuration file, and exit.
 #
-# The [-d] option overrides the setting of the noemwin data dir to save the
+# The [-d] option overrides the setting of the npemwin data dir to save the
 # files with the final (nbsp convention) names.
 #
 # The [-w] option overrides the radftp working directory

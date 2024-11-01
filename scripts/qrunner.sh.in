@@ -41,6 +41,11 @@ postfilter_enable=1
 postfilter=/usr/local/libexec/npemwin/postfilter
 postfilterqfname=postfilter.q
 
+# Whether to send the txt files (raw, as received) to nbsp.
+# The files are sent as received, before the qrunner strips the \r,
+# which is what nbsp expects. (Requires nbspmcast).
+nbsp_enable=0
+
 # When the postprocessing filters are enabled, if this variable is 1, then 
 # the retransmissions will be detected and will not be sent to the filters.
 # A soft link is created for every file received. This does not take a
@@ -288,8 +293,11 @@ do
 		    tr -d '\001\003' < ${_flistdir}/${_f} > \
                         ${out_dirname}/$subdir/$fbasename
 		fi
+
+		# Send it to nbsp if enabled
+		[ $nbsp_enable -eq 1 ] && nbspmcast ${_flistdir}/${_f}
             fi
-	    [ $verbose -eq 1 ] && echo "created $fbasename"
+	    [ $verbose -eq 1 ] && logger -t qrunner "created $fbasename"
 
 	    _duplicate=0
 	    if [ $detect_duplicates -eq 1 ]
