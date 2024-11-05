@@ -54,7 +54,7 @@ rootdirs="/usr/local/etc/npemwin/defaults
 #
 docdir=/usr/local/share/doc/npemwin
 confdir=/usr/local/etc/npemwin
-rcdir=/etc/init.d
+rcdir=/etc/rc.d/init.d
 systemddir=/usr/local/lib/systemd/system
 
 #
@@ -82,13 +82,7 @@ done
 # install optional files from doc directory
 #
 install -m 0755 $docdir/npemwind.sh-sample $rcdir/npemwind
-if [ -n "`which chkconfig`" ]
-then
-	chkconfig --add npemwind
-elif [ -n "`which update-rc.d`" ]
-then
-	update-rc.d npemwind defaults 99
-fi
+#chkconfig --add npemwind
 
 [ -d $systemddir ] || mkdir -p $systemddir
 install -m 0644 $docdir/npemwin.service-generic $systemddir/npemwin.service
