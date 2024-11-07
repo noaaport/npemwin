@@ -17,7 +17,7 @@ BINDIR = ${DESTDIR}/bin
 SBINDIR = ${DESTDIR}/sbin
 CONFDIR = ${DESTDIR}/etc
 DOCDIR = ${DESTDIR}/share/doc
-MANDIR = ${DESTDIR}/man
+MANDIR = ${DESTDIR}/share/man
 LIBEXECDIR = ${DESTDIR}/libexec
 
 MANEXT = 1

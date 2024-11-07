@@ -135,7 +135,7 @@ etc/npemwin/dist/rad2ftp.conf-sample
 etc/npemwin/dist/rad2ftp.conf-site-sample
 etc/npemwin/dist/metarplot-templates.tgz
 etc/npemwin/dist/track-templates.tgz
-man/man1/npemwind.1.gz
+share/man/man1/npemwind.1.gz
 share/doc/npemwin/filter.sh-sample
 share/doc/npemwin/npemwind.sh-sample
 share/doc/npemwin/macosx-launchd.plist-sample
