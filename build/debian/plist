@@ -133,7 +133,7 @@
 /usr/local/etc/npemwin/dist/rad2ftp.conf-site-sample
 /usr/local/etc/npemwin/dist/metarplot-templates.tgz
 /usr/local/etc/npemwin/dist/track-templates.tgz
-/usr/local/man/man1/npemwind.1.gz
+/usr/local/share/man/man1/npemwind.1.gz
 /usr/local/share/doc/npemwin/filter.sh-sample
 /usr/local/share/doc/npemwin/npemwind.sh-sample
 /usr/local/share/doc/npemwin/npemwin.service-generic
