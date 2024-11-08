@@ -4,12 +4,12 @@
 . ../configure.inc
 
 COMMON_LIBDIRS="-L libconnth -L libqdb"
-COMMON_LIBS="-lconn -lqdb -lwrap -lz"
+COMMON_LIBS="-lconn -lqdb"
 
 # defaults (FreeBSD)
 INCDIRS="$TCL_INCDIR $DB_INCDIR"
 LIBDIRS="$COMMON_LIBDIRS $LOCAL_LIBDIR"
-LIBS="$COMMON_LIBS -lutil -l${TCL_LIB} -l${DB_LIB} -lpthread"
+OSLIBS="-lz -lpthread -lwrap -lutil"
 
 case $os in
     FreeBSD) 
@@ -18,21 +18,19 @@ case $os in
     NetBSD)
 	# use the deualts
 	;;
-    OpenBSD) 
-	LIBS="$COMMON_LIBS -lutil -l${TCL_LIB} -l${DB_LIB}"
+    OpenBSD)
+	OSLIBS="-lutil"
 	;;
     SunOS)
 	INSTALL=ginstall
 	CC=gcc
 	INCDIRS="-I /opt/sfw/include -I /usr/sfw/include"
 	LIBDIRS="$COMMON_LIBDIRS -L /opt/sfw/lib -L /usr/sfw/lib"
-	LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} \
-			   -lpthread -lsocket -lnsl -lresolv"
+	OSLIBS="-lz -lpthread -lwrap -lsocket -lnsl -lresolv"
 	;;
-    Linux)       
-	LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread -lrt"
-	[ $flavor = debian ] && \
-		LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread"
+    Linux)
+	[ $flavor = redhat ] && OSLIBS="-lz -lpthread -lrt"
+	[ $flavor = debian ] && OSLIBS="-lz -lpthread -lwrap"
 	#
 	# If we have to use a local db:
 	#
@@ -48,6 +46,8 @@ case $os in
 	INCDIRS="$DB_INCDIR" 
 	COMMON_LIBDIRS="-L./libconnth -L./libqdb"
 	LIBDIRS="$COMMON_LIBDIRS $LOCAL_LIBDIR"
-	LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} -lpthread"
+	OSLIBS="-lpthread"
 	;;	    
 esac
+
+LIBS="$COMMON_LIBS -l${TCL_LIB} -l${DB_LIB} $OSLIBS"
