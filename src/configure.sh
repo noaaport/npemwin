@@ -15,6 +15,12 @@ sed -e "/@include@/s||$INCLUDE|" \
     -e "/@SUFFIXRULES@/ s||$SUFFIXRULES|" \
     Makefile.in > Makefile
 
+# copy the config.h file appropriate for the OS
+cd config.h.d
+./configure.sh
+cd ..
+
+# the lib dirs
 for d in $config_subdirs
 do
   cd $d
