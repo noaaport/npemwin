@@ -52,6 +52,8 @@
 /usr/local/libexec/npemwin/syslog.tcl
 /usr/local/libexec/npemwin/archive.init
 /usr/local/libexec/npemwin/emftp
+/usr/local/libexec/npemwin/radftp
+/usr/local/libexec/npemwin/rad2ftp
 /usr/local/libexec/npemwin/tclmetar/metar.tcl
 /usr/local/libexec/npemwin/tclmetar/pkgIndex.tcl
 /usr/local/etc/npemwin/dist/README
@@ -113,6 +115,7 @@
 /usr/local/etc/npemwin/dist/hourly-cleanup.conf-sample
 /usr/local/etc/npemwin/dist/scheduler.conf-sample
 /usr/local/etc/npemwin/dist/scheduler.conf-infeed-sample
+/usr/local/etc/npemwin/dist/scheduler.conf-radftp-sample
 /usr/local/etc/npemwin/dist/bbserver.conf-sample
 /usr/local/etc/npemwin/dist/bbserver-pool.conf-ex
 /usr/local/etc/npemwin/dist/startstop.rc-sample
@@ -120,9 +123,17 @@
 /usr/local/etc/npemwin/dist/logrotate.conf-sample
 /usr/local/etc/npemwin/dist/newsyslog.conf-sample
 /usr/local/etc/npemwin/dist/emftp.conf-sample
+/usr/local/etc/npemwin/dist/radftp.conf-sample
+/usr/local/etc/npemwin/dist/radftp.slist-sample
+/usr/local/etc/npemwin/dist/radftp.plist-sample
+/usr/local/etc/npemwin/dist/radftp.conf-site-sample
+/usr/local/etc/npemwin/dist/radftp.slist-site-sample
+/usr/local/etc/npemwin/dist/radftp.plist-site-sample
+/usr/local/etc/npemwin/dist/rad2ftp.conf-sample
+/usr/local/etc/npemwin/dist/rad2ftp.conf-site-sample
 /usr/local/etc/npemwin/dist/metarplot-templates.tgz
 /usr/local/etc/npemwin/dist/track-templates.tgz
-/usr/local/man/man1/npemwind.1.gz
+/usr/local/share/man/man1/npemwind.1.gz
 /usr/local/share/doc/npemwin/filter.sh-sample
 /usr/local/share/doc/npemwin/npemwind.sh-sample
 /usr/local/share/doc/npemwin/npemwin.service-generic

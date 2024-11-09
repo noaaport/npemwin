@@ -6,8 +6,8 @@ After=network.target
 Type=forking
 TimeoutSec=infinity
 PIDFile=/var/run/npemwin/npemwind.pid
-ExecStart=/etc/init.d/npemwind start
-ExecStop=/etc/init.d/npemwind stop
+ExecStart=/etc/rc.d/init.d/npemwind start
+ExecStop=/etc/rc.d/init.d/npemwind stop
 
 [Install]
 WantedBy=multi-user.target

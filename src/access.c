@@ -75,7 +75,8 @@ int client_allow_nconn(int client_fd, char *ip, char *name){
 
 #else
 
-int client_allow_nconn(int client_fd, char *ip, char *name){
+int client_allow_nconn(__attribute__((unused)) int client_fd,
+			char *ip, char *name){
   /*
    * This is the function that we pass to libconn library in place
    * of the original one that was used with tcp_wrappers.
