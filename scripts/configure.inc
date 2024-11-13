@@ -34,6 +34,7 @@ case $os in
 
 	[ $flavor = debian ] && STARTSTOPRC=startstop.rc-debian
 	[ $flavor = debian ] && RCCONF=npemwind.sh.conf-debian
+	[ $flavor = redhat ] && SYSTEMDCONF=npemwin.service-redhat
     	;;
     Darwin)
 	RCINIT=npemwind.sh-macosx
