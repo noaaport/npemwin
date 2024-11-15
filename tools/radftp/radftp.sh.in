@@ -259,6 +259,7 @@ do
 	then
 	    log_err "Error from nbspradinfo on: $localpath"
 	    rm $localpath
+	    continue
 	fi
 	
 	datetime=`get_datetime $seconds`

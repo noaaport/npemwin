@@ -1,5 +1,16 @@
 #!/bin/sh
 
+#
+# deinstall optional files
+#
+rcdir=/etc/init.d
+defaultdir=/etc/default
+systemddir=/usr/local/lib/systemd/system
+logrotatedir=/etc/logrotate.d
+
+systemctl disable npemwin
+rm $systemddir/npemwin.service
+
 if [ -n "`which chkconfig`" ]
 then
 	chkconfig --del npemwind

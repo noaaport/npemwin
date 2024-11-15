@@ -1,4 +1,8 @@
-#p2gsm nxus64 gsm
+#
+# These are all the files available for a given site. In the application,
+# only the "sdusxx" files should be used (gsm and ftp should not be enabled).
+#
+#p2gsm nxus64 gsm (general status of the the radar message)
 #p30sw sdus64 nsw
 #32dhr sdus54 dhr
 #p37cr sdus54 ncr
@@ -17,7 +21,7 @@
 #66lrm sdus64 nml
 #67apr sdus64 nla
 #74rcm sdus44 rcm
-#75ftm nous64 ftm
+#75ftm nous64 ftm (free text message)
 #78ohp sdus34 n1p
 #79thp sdus64 n3p
 #80stp sdus54 ntp
