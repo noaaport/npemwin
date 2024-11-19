@@ -1,7 +1,7 @@
 /*
  * $Id$
  */
-#include "readn.h"
+#include "nreadn.h"
 #include "wx14.h"
 #include "wx14_private.h"
 

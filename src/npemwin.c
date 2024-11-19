@@ -17,7 +17,6 @@
 #include <string.h>
 #include <syslog.h>
 #include "signal.h"
-#include "readn.h"
 #include "util.h"
 #include "emwin.h"
 #include "servers.h"
@@ -26,7 +25,6 @@
 #include "conf.h"
 #include "globals.h"
 #include "const.h"
-#include "init.h"	/* cleanup() */
 #include "per.h"
 #include "npemwin.h"
 #include "server.h"

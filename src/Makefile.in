@@ -13,7 +13,7 @@ INOBJECTS =     conf.c defaults.h config.h
 SOURCES =	main.c access.c appdata.c \
 		bb.c breg.c conf.c emwin.c err.c exec.c file.c \
 		httpd.c init.c npemwin.c pid.c per.c \
-		pw.c readn.c servers.c serverm.c serverc.c signal.c solaris.c \
+		pw.c nreadn.c servers.c serverm.c serverc.c signal.c solaris.c \
 		seqnum.c ser.c stats.c strsplit.c tsv.c util.c tclevalfile.c \
 		v2.c \
 		wx14_private.c wx14.c wx14_init.c wx14_emwin.c wx14_ss.c \
@@ -22,7 +22,7 @@ SOURCES =	main.c access.c appdata.c \
 OBJECTS =	main.o access.o appdata.o \
 		bb.o bbreg.o conf.o emwin.o err.o exec.o file.o \
 		httpd.o init.o npemwin.o pid.o per.o \
-		pw.o readn.o servers.o serverm.o serverc.o signal.o solaris.o \
+		pw.o nreadn.o servers.o serverm.o serverc.o signal.o solaris.o \
 		seqnum.o ser.o stats.o strsplit.o tsv.o util.o tclevalfile.o \
 		v2.o \
 		wx14_private.o wx14.o wx14_init.o wx14_emwin.o wx14_ss.o \
@@ -32,7 +32,7 @@ HEADERS =	access.h appdata.h \
 		bb.h bbreg.h conf.h const.h config.h \
 		defaults.h globals.h emwin.h \
 		exec.h file.h httpd.h init.h npemwin.h pid.h per.h \
-		pw.h readn.h servers.h server.h server_priv.h \
+		pw.h nreadn.h servers.h server.h server_priv.h \
 		seqnum.h signal.h ser.h stats.h strsplit.h tsv.h util.h \
 		tclevalfile.h \
 		wx14_private.h wx14.h \

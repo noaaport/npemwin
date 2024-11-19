@@ -101,7 +101,7 @@
  * with several (bb) servers we used to have here 5 and 1, respectively.
  * With the emftp (via the infeed.fifo) mechanism (aug2022) packets
  * arrive every two minutes. In this case, more appropriate
- * values could be 20 and 2 respectively. We will set them to
+ * values could be 5 and 24 respectively. We will set them to
  * 5 and 2, respectively, assuming there is only one "bb" server
  * (e.g., the weathermessage server).
  */

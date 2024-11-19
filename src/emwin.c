@@ -32,7 +32,7 @@ int putc_unlocked(int c, FILE *stream);
 #include "libconnth/tcpsock.h"
 #include "util.h"
 #include "file.h"
-#include "readn.h"
+#include "nreadn.h"
 #include "globals.h"
 #include "ser.h"
 #include "bb.h"

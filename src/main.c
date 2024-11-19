@@ -19,6 +19,7 @@
 #include "httpd.h"
 #include "bbreg.h"
 #include "init.h"
+#include "nreadn.h"	/* to initialize the readn() retry interrupt func */
 #include "npemwin.h"	/* the "server": processor, network, and ingest */
 #include "per.h"
 #include "exec.h"
@@ -36,6 +37,9 @@ int main(int argc, char **argv){
 
   init_globals();
   atexit(cleanup);
+
+  /* the readn interrupt function */
+  init_readn(get_quit_flag);
 
   /*
    * PROBLEM

@@ -14,7 +14,7 @@
 #include <string.h>
 #include "globals.h"
 #include "err.h"
-#include "readn.h"
+#include "nreadn.h"
 #include "util.h"
 #include "bb.h"
 

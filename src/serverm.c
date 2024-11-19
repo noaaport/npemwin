@@ -21,7 +21,7 @@
 #include "libconnth/libconn.h"
 #include "access.h"
 #include "util.h"
-#include "readn.h"
+#include "nreadn.h"
 #include "globals.h"
 #include "err.h"
 #include "defaults.h"

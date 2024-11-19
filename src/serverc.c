@@ -17,7 +17,7 @@
 #include <pthread.h>
 #include "libconnth/libconn.h"
 #include "util.h"
-#include "readn.h"
+#include "nreadn.h"
 #include "globals.h"
 #include "err.h"
 #include "signal.h"

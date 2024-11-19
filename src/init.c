@@ -23,6 +23,7 @@
 #include "server.h"
 #include "httpd.h"
 #include "bbreg.h"
+#include "npemwin.h"	/* kill_npemwin_thread */
 #include "stats.h"
 #include "util.h"
 #include "strsplit.h"
@@ -194,9 +195,7 @@ void cleanup(void){
    * There are no shared queues, otherwise they would be cleared here.
    */
 
-  release_confoptions();
-  destroy_emwin_qfiles();
-
+  kill_npemwin_thread();	/* this also removes the fifo */
   kill_httpd_server();
   kill_bbregistrar();
 
@@ -206,6 +205,9 @@ void cleanup(void){
 
     g.f_lock = 0;
   }
+
+  release_confoptions();
+  destroy_emwin_qfiles();
 
   log_info("Stoped.");
   (void)exec_stopscript();
