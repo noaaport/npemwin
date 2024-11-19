@@ -6,6 +6,7 @@
  * $Id$
  */
 #include <sys/stat.h>
+#include "err.h"
 #include "fifo.h"
 
 int check_fifo(char *fpath) {
@@ -15,12 +16,16 @@ int check_fifo(char *fpath) {
   struct stat sb;
 
   status = stat(fpath, &sb);
-  if(status != 0)
-     return(-1);
+  if(status != 0) {
+    log_err(0, "Error from stat: %s", fpath);
+    return(-1);
+  }
   
   r = S_ISFIFO(sb.st_mode);
-  if(r == 0)
+  if(r == 0) {
+    log_errx(0, "Not a fifo: %s\n", fpath); 
     status = 1;
+  }
 
   return(status);
 }

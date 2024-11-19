@@ -16,6 +16,7 @@
 #include <errno.h>
 #include "err.h"
 #include "fifo.h"
+#include "io.h"
 #include "emwin.h"
 
 /* defaults */
@@ -36,8 +37,8 @@ static struct emwin_packet_st gep;
 
 static void cleanup(void);
 static void check(void);
-static int open_output_fifo(void);
-static void close_output_fifo(void);
+static int open_output(void);
+static void close_output(void);
 static int process_file(void);
 
 int main(int argc, char **argv){
@@ -79,20 +80,20 @@ int main(int argc, char **argv){
 
   g.opt_input_emwinfname = argv[optind++];
   g.opt_input_fpath = argv[optind++];
-
-  atexit(cleanup);
   
   if (g.opt_C == 1) {
     check();
     return(0);
   }
 
-  status = open_output_fifo();
+  atexit(cleanup);
+  
+  status = open_output();
   
   if(status == 0)
     status = process_file();
 
-  close_output_fifo();
+  close_output();
 
   return(status != 0 ? 1 : 0);
 }
@@ -104,7 +105,7 @@ static void cleanup(void) {
     g.ep = NULL;
   }
 
-  close_output_fifo();
+  close_output();
 }
 
 static void check(void){
@@ -117,66 +118,33 @@ static void check(void){
   fprintf(stdout, "opt_background: %d\n", g.opt_background);
 }
 
-static int open_output_fifo(void) {
+static int open_output(void) {
 
   int fd = -1;
   int status = 0;
 
-  status = check_fifo(g.opt_fifo_fpath);
-
-  if(status == -1)
-    log_err(0, "Error from stat: %s", g.opt_fifo_fpath);
-  else if(status != 0) {
-    status = 1;
-    log_errx(0, "Not a fifo: %s\n", g.opt_fifo_fpath); 
-  }
+  /* These two functiona log the errors themselves */
   
+  status = check_fifo(g.opt_fifo_fpath);  
   if(status != 0)
     return(status);
 
-  /*
-   * Open it in blocking mode so that the write() is blocked until npemwin
-   * has read enough from the pipe to make space for the write(). Otherwise
-   * we will get errors like "Resource tempoarily unvailable" 
-   * and loss of packets when the pipe gets full.
-   */
-  fd = open(g.opt_fifo_fpath, O_WRONLY);
-  if(fd == -1) {
-    log_err(0, "Error from open: %s\n", g.opt_fifo_fpath);
+  fd = open_output_fifo(g.opt_fifo_fpath);
+  if(fd == -1)
     return(-1);
-  }
-
-  status = flock(fd, LOCK_EX);
-  if(status == -1) {
-    log_err(0, "Error from flock: %s\n", g.opt_fifo_fpath);
-
-    if(close(fd) == -1)
-      log_err(0, "Error from close: %s\n", g.opt_fifo_fpath);
-    
-    return(-1);
-  }
   
   g.output_fifo_fd = fd;
 
   return(0);
 }
 
-static void close_output_fifo(void) {
+static void close_output(void) {
 
-  int status = 0;
-  
   if(g.output_fifo_fd == -1)
     return;
 
-  status = flock(g.output_fifo_fd, LOCK_UN);
-  if(status == -1)
-    log_err(0, "Error unlocking emwin fifo: %s\n", g.opt_fifo_fpath);
-  
-  status = close(g.output_fifo_fd);
+  close_output_fifo(g.output_fifo_fd);
   g.output_fifo_fd = -1;
-
-  if(status != 0)
-    log_err(0, "Error closing emwin fifo: %s\n", g.opt_fifo_fpath);
 }
 
 static int process_file(void) {
