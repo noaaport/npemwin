@@ -111,7 +111,7 @@ int write_output_fifo(int fd, void *buf, size_t size) {
   if(n == -1) {
     log_err(0, "Error writing to fifo: %s\n", s_output_filename);
     return(-1);
-  }else if (n >= 0){
+  }else if ((size_t)n != size){
     log_errx(0, "Incomplete write to fifo: %s\n", s_output_filename);
     return(1);
   }
