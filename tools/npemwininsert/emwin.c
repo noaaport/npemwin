@@ -146,7 +146,7 @@ int send_emwin_packet(int fd, struct emwin_packet_st *ep){
   ssize_t n = 0;
 
   /* this function is defined in io.c */
-  n = writen(fd, ep->packet, ep->packet_size);
+  n = writef(fd, ep->packet, ep->packet_size);
 
   if(n == -1)
     status = -1;

@@ -99,7 +99,7 @@ void close_output_fifo(int fd) {
     log_err(0, "Error closing emwin fifo: %s\n", s_output_filename);
 }
 
-ssize_t writen(int fd, void *buf, size_t size) {
+ssize_t writef(int fd, void *buf, size_t size) {
   /*
    * To be used when output is a (the npemwin) fifo
    */
