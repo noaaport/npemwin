@@ -9,9 +9,8 @@
 #define IO_H
 
 int open_input(char *fpath);
-int open_output_fifo(char *path);
+int open_output_fifo(char *path);	/* the npemwin fifo */
 void close_output_fifo(int fd);
-int read_page(int fd, void *page, size_t page_size);
-int write_page(int fd, void *page, size_t page_size);
+ssize_t writen(int fd, void *buf, size_t size); /* to the npemdin fifo */
 
 #endif

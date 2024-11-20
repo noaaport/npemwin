@@ -180,7 +180,7 @@ static int process_file(void) {
     if(status == -1)
       log_err(0, "Could not send emwin packet %s", gep.fname);
     else if(status == 1)
-      log_errx(0, "Could not send emwin packet %s", gep.fname);
+      log_err(0, "Could not send the entire emwin packet %s", gep.fname);
 
     if(status != 0)
       break;

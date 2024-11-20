@@ -18,6 +18,7 @@
 #include <ctype.h>
 #include "file.h"
 #include "util.h"
+#include "io.h"
 #include "emwin.h"
 
 static off_t get_parts_total(off_t fsize);
@@ -134,7 +135,7 @@ int build_emwin_packet(struct emwin_packet_st *ep){
 
 int send_emwin_packet(int fd, struct emwin_packet_st *ep){
   /*
-   * fd is the client socket.
+   * fd is the (npemwin) output fifo
    * 
    * Returns:
    * -1 => write error
@@ -144,7 +145,8 @@ int send_emwin_packet(int fd, struct emwin_packet_st *ep){
   int status = 0;
   ssize_t n = 0;
 
-  n = write(fd, ep->packet, ep->packet_size);
+  /* this function is defined in io.c */
+  n = writen(fd, ep->packet, ep->packet_size);
 
   if(n == -1)
     status = -1;

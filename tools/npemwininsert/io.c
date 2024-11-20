@@ -14,9 +14,6 @@
 static char *s_input_filename = NULL;
 static char *s_output_filename = NULL;
 
-/* local to this file */
-static ssize_t writen(int fd, void *buf, size_t size);
-
 int open_input(char *fpath){
 
   int fd;
@@ -102,35 +99,9 @@ void close_output_fifo(int fd) {
     log_err(0, "Error closing emwin fifo: %s\n", s_output_filename);
 }
 
-int read_page(int fd, void *page, size_t page_size){
-
-  ssize_t n;
-
-  n = read(fd, page, page_size);
-  if(n == -1){
-      log_errn_read(s_input_filename);
-  }
-
-  return(n);
-}
-
-int write_page(int fd, void *page, size_t page_size){
-
-  ssize_t n;
-
-  n = writen(fd, page, page_size);
-
-  if ((n >= 0) && ((size_t)n < page_size)) {
-    log_errn_write(s_output_filename);
-    n = -1;
-  }
-    
-  return(n);
-}
-
-static ssize_t writen(int fd, void *buf, size_t size) {
+ssize_t writen(int fd, void *buf, size_t size) {
   /*
-   * To be used when output is a fifo
+   * To be used when output is a (the npemwin) fifo
    */
   ssize_t n;		/* number of bytes in one write */
   size_t i = 0;		/* accumulated number of bytes writen */
