@@ -145,7 +145,11 @@ int send_emwin_packet(int fd, struct emwin_packet_st *ep){
   int status = 0;
   ssize_t n = 0;
 
-  /* this function is defined in io.c */
+  /*
+   * This function is defined in io.c - we could also use
+   * write_output_fifo (defined in io.c) which writes a log msg in case
+   * of error.
+   */
   n = writef(fd, ep->packet, ep->packet_size);
 
   if(n == -1)

@@ -9,11 +9,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/file.h>	/* flock() */
-#include <fcntl.h>
-#include <errno.h>
 #include "err.h"
 #include "fifo.h"
 #include "io.h"
@@ -123,7 +118,7 @@ static int open_output(void) {
   int fd = -1;
   int status = 0;
 
-  /* These two functiona log the errors themselves */
+  /* These two functions log the errors themselves */
   
   status = check_fifo(g.opt_fifo_fpath);  
   if(status != 0)

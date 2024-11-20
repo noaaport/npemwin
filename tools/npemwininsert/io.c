@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include "err.h"
+#include "fifo.h"
 #include "io.h"
 
 static char *s_input_filename = NULL;
@@ -72,6 +73,8 @@ int open_output_fifo(char *fpath){
    flags &= ~O_NONBLOCK;
    status = fcntl(fd, F_SETFL, flags);
    if(status == -1) {
+     log_err(0, "Error from fcntl: %s\n", fpath);
+     
      if(close(fd) == -1)
        log_err(0, "Error from close: %s\n", fpath);
 
@@ -97,6 +100,23 @@ void close_output_fifo(int fd) {
   status = close(fd);
   if(status == -1)
     log_err(0, "Error closing emwin fifo: %s\n", s_output_filename);
+}
+
+int write_output_fifo(int fd, void *buf, size_t size) {
+
+  ssize_t n;
+
+  n = writef(fd, buf, size);
+
+  if(n == -1) {
+    log_err(0, "Error writing to fifo: %s\n", s_output_filename);
+    return(-1);
+  }else if (n >= 0){
+    log_errx(0, "Incomplete write to fifo: %s\n", s_output_filename);
+    return(1);
+  }
+  
+  return(0);
 }
 
 ssize_t writef(int fd, void *buf, size_t size) {
