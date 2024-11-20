@@ -11,6 +11,6 @@
 int open_input(char *fpath);
 int open_output_fifo(char *path);	/* the npemwin fifo */
 void close_output_fifo(int fd);
-ssize_t writen(int fd, void *buf, size_t size); /* to the npemdin fifo */
+ssize_t writen(int fd, void *buf, size_t size); /* to the npemwin fifo */
 
 #endif
