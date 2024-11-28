@@ -240,10 +240,10 @@ done
 echo "exit" >> $glftprcpath
 
 # exec lftp
-lftp -f $glftprcpath
+errmsg=`lftp -f $glftprcpath 2>&1`
 if [ $? -ne 0 ]
 then
-    log_err_quit "Error from lftp."
+    log_err_quit "Error from lftp: $errmsg"
 fi
    
 # npemwin and nbsp processing

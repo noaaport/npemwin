@@ -212,10 +212,10 @@ do
     echo "get -e $remote_dirlist -o $local_dirlist" >> $glftprcpath
 done
 
-lftp -f $glftprcpath
+errmsg=`lftp -f $glftprcpath 2>&1`
 if [ $? -ne 0 ]
 then
-    log_err_quit "Error downloading dir.list"
+    log_err_quit "Error downloading dir.list: $errmsg"
 fi
 
 #
@@ -254,11 +254,11 @@ do
     rm $dirlist
 done
 
-lftp -f $glftprcpath
+errmsg=`lftp -f $glftprcpath 2>&1`
 
 if [ $? -ne 0 ]
 then
-    log_err "Error from lftp"
+    log_err "Error from lftp: $errmsg"
 fi
 
 rm $glftprcpath

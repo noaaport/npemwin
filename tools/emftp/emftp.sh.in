@@ -345,8 +345,9 @@ trap cleanup HUP INT QUIT ABRT KILL ALRM TERM EXIT
 
 log_msg "emftp script starting"
 
-curl -s -o ${ginputfpath} -m 20 --retry 1 ${gurl}/${ginputfilename}
-[ $? -ne 0 ] && { log_err_quit "Error from curl"; }
+errmsg=`curl -s -S -o ${ginputfpath} -m 20 --retry 1 ${gurl}/${ginputfilename} \
+2>&1`
+[ $? -ne 0 ] && { log_err_quit "Error from curl: $errmsg"; }
 
 oldmd5key=
 [ -f $gmd5keyfpath ] && { oldmd5key=`cat $gmd5keyfpath`; }
@@ -359,8 +360,8 @@ then
     log_msg_quit "Not a new file"
 fi
 
-unzip -d $gtmpdir $ginputfpath > /dev/null 2>&1
-[ $? -ne 0 ] && { log_err_quit "Error unziping $ginputfpath"; }
+errmsg=`unzip -d $gtmpdir $ginputfpath 2>&1`
+[ $? -ne 0 ] && { log_err_quit "Error unziping $ginputfpath: $errmsg"; }
 
 # Some files are sent compressed (.zip). The npemwin qrunner will
 # accept those and handle them. But nbsp expects the txt uncompressed files.
