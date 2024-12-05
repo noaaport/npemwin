@@ -17,8 +17,7 @@ rad2ftp: rad2ftp.sh.in
 	rad2ftp.sh.in > rad2ftp
 
 rad2ftp.conf-sample: rad2ftp.conf.in
-	sed -e "/%PATH%/s##${PATH}#" \
-	rad2ftp.conf.in > rad2ftp.conf-sample
+	cp rad2ftp.conf.in rad2ftp.conf-sample
 
 rad2ftp.conf-site-sample: rad2ftp.conf-site
 	 cp rad2ftp.conf-site rad2ftp.conf-site-sample

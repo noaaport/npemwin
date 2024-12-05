@@ -30,7 +30,7 @@
 ## nbsp_enable=1
 ## gcraftinsert="/usr/local/libexec/nbsp/craftinsert"
 
-# list of stations to process (they mus be specified in the conf file)
+# list of stations to process (they must be specified in the conf file)
 ## gstation_list=
 
 #

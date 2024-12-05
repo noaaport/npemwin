@@ -239,13 +239,24 @@ do
 done
 echo "exit" >> $glftprcpath
 
-# exec lftp
-errmsg=`lftp -f $glftprcpath 2>&1`
-if [ $? -ne 0 ]
-then
-    log_err_quit "Error from lftp: $errmsg"
-fi
-   
+# exec lftp (with retry)
+count=0
+while [ $count -le 2 ]
+do
+    count=`expr $count + 1`
+    errmsg=`lftp -f $glftprcpath 2>&1`
+    if [ $? -eq 0 ]
+    then
+        status=0
+	break
+    else
+        status=1	
+        log_err "Error from lftp: $errmsg"
+    fi
+done
+
+[ $status -ne 0 ] && { log_err_quit "Retrying lftp exhausted"; }
+
 # npemwin and nbsp processing
 grep -v '^#\|^$' $gradftpslist | while read station
 do
