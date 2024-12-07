@@ -239,9 +239,9 @@ do
 done
 echo "exit" >> $glftprcpath
 
-# exec lftp (with retry)
+# exec lftp (retry once)
 count=0
-while [ $count -le 2 ]
+while [ $count -le 1 ]
 do
     count=`expr $count + 1`
     errmsg=`lftp -f $glftprcpath 2>&1`
@@ -255,7 +255,7 @@ do
     fi
 done
 
-[ $status -ne 0 ] && { log_err_quit "Retrying lftp exhausted"; }
+[ $status -ne 0 ] && { log_err_quit "Retrying lftp failed"; }
 
 # npemwin and nbsp processing
 grep -v '^#\|^$' $gradftpslist | while read station

@@ -345,8 +345,10 @@ trap cleanup HUP INT QUIT ABRT KILL ALRM TERM EXIT
 
 log_msg "emftp script starting"
 
+# If curl gives an error, quit. If unzip gives an error, re-download and
+# retry unzip, once.
 count=0
-while [ $count -le 2 ]
+while [ $count -le 1 ]
 do
     count=`expr $count + 1`
     errmsg=`curl -s -S -o ${ginputfpath} -m 20 --retry 1 \
@@ -376,7 +378,7 @@ do
     fi
 done
 
-[ $status -ne 0 ] && { log_err_quit "Retrying unzip exhausted"; }
+[ $status -ne 0 ] && { log_err_quit "Retrying download and unzip failed"; }
 
 # Some files are sent compressed (.zip). The npemwin qrunner will
 # accept those and handle them. But nbsp expects the txt uncompressed files.
