@@ -276,7 +276,7 @@ gnbspmcast="/usr/local/bin/nbspmcast"
 # main
 #
 
-usage="usage: emftp [b] [-c] [-i] [-f userconffile]"
+usage="usage: emftp [-b] [-c] [-i] [-f userconffile]"
 option_c=0
 option_i=0
 option_f=0
