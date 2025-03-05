@@ -12,4 +12,4 @@ libexec/npemwin/tclmetar
 share/doc/npemwin
 share/doc/npemwin/prefilter
 share/doc/npemwin/panfilter
-man/man1
+share/man/man1
