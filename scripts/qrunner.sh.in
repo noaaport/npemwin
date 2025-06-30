@@ -75,6 +75,9 @@ UNZIP=%UNZIP%
 #
 translate_crlf=1
 
+# variables (june 2025)
+quit_flag=0		# set if a quit,... signal is received
+
 #
 # functions
 #
@@ -84,6 +87,15 @@ cleanup(){
     logger -t qrunner "qrunner script finished"
 
     rm -f $qrunner_lockfile
+}
+
+quit_handler(){
+
+    # We could call exit here, which could leave partially unprocessed files
+    # or ignore the signals, which is what we do.
+    # (june 2025)
+
+    quit_flag=1
 }
 
 get_file_parentsubdir(){
@@ -167,7 +179,9 @@ postfilterqfile=${spooldir}/${lockdir}/${postfilterqfname}.$$
 [ -f $qrunner_lockfile ] && \
     { logger -t qrunner "queue is locked"; exit 0; }
 
-trap cleanup HUP INT QUIT ABRT KILL ALRM TERM EXIT
+## trap cleanup HUP INT QUIT ABRT KILL ALRM TERM EXIT - revised june 2025
+trap cleanup EXIT
+trap quit_handler HUP INT QUIT ABRT KILL ALRM TERM
 touch $qrunner_lockfile
 
 logger -t qrunner "qrunner script starting"
@@ -175,7 +189,7 @@ logger -t qrunner "qrunner script starting"
 # Clean the queue and data directories of unprocessed (incomplete) files.
 # This is not put at the bottom because if the script exits with an error
 # (e.g., due to corrupt file) it would be possible that this portion
-# is never executed.
+# is never executed; or we could put it in the cleanup function.
 #
 for file in \
   `$FIND ${q_dirname} ${in_dirname} ${tmp_dirname} \
