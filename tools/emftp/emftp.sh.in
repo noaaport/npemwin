@@ -77,7 +77,7 @@ cleanup(){
     rm -f $gtmpdir/*
 
     unlock_dir $glockdirpath
-    log_msg "emftp script finished"
+    log_msg "finished"
 }
 
 lock_dir(){
