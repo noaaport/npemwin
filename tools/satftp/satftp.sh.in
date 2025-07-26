@@ -1,0 +1,265 @@
+#!%SHELL%
+#
+# Usage: satftp [-bv] [-f <conffile>]
+#
+# -b => background
+# -v => verbose
+# -f => use the specified configuration file instead of the default
+
+#
+# functions
+#
+log_msg(){
+
+    if [ $gbackground -eq 1 ]
+    then
+        logger -t $gname "$1"
+    else
+        echo "$1"
+    fi
+}
+
+log_verbose (){
+
+    [ $gverbose -eq 1 ] && log_msg "$1"
+}
+
+log_msg_quit(){
+
+    log_msg "$1"
+    exit 0
+}
+
+log_err(){
+
+    log_msg "$1"
+}
+
+log_err_quit(){
+
+    log_msg "$1"
+    exit 1
+}
+
+#
+# main functions
+#
+satftp_read_conffile () {
+
+    [ -f $gsatftp_conffile ] && . $gsatftp_conffile
+}
+
+satftp_init_dirs() {
+    
+    [ ! -d ${gsatftp_workdir} ] && \
+	{ echo "${gsatftp_workdir} does not exist."; exit 1; }
+
+    gqdir=${gsatftp_workdir}/${gqdir}
+
+    # create satftp subdirs
+    _savedir=`pwd`
+    cd ${gsatftp_workdir}
+    for d in $gsatftp_lockdir
+    do
+	[ ! -d $d ] && mkdir -p $d
+    done
+    cd ${_savedir}
+
+    # reset in case "gsatftp_workdir" was redefined in the conf file
+    gsatftp_lockpath=${gsatftp_workdir}/${gsatftp_lockdir}/${gsatftp_lockname}
+}
+
+satftp_exit() {
+
+    # normal cleanup
+    satftp_cleanup
+
+    # in case of error or interrupt clean partial files
+}
+
+satftp_quit() {
+
+    # response to a quit,... signal.
+    gquit=1
+    exit
+}
+
+satftp_cleanup() {
+
+    satftp_unlock_dir $gsatftp_lockpath
+    log_msg "finished"
+}
+
+satftp_lock_dir(){
+
+    lockdir=$1
+    sleepsecs=$2
+    maxloops=$3
+    
+    mkdir $lockdir > /dev/null 2>&1
+    status=$?
+    nloop=1
+    while [ $status -ne 0 -a $nloop -le $maxloops ]
+    do
+	nloop=`expr $nloop + 1`
+	log_msg "Waiting for release of $lockdir"
+	sleep $sleepsecs
+	mkdir $lockdir > /dev/null 2>&1
+	status=$?
+    done
+
+    if [ $status -ne 0 ]
+    then
+	log_err_quit "Cannot lock $lockdir"
+    fi
+}
+
+satftp_unlock_dir(){
+
+    lockdir=$1
+    
+    [ -d $lockdir ] && rmdir $lockdir
+}
+
+#
+# configuration
+#
+
+gname="`basename $0`"
+
+#
+# Optional configuration files
+#
+gsatftp_conffile="satftp.conf"
+gsatftp_confdir="/usr/local/etc/npemwin"
+gsatftp_confoptdirs="${gsatftp_confdir}/defaults ${gsatftp_confdir}/site"
+
+#
+# path to satrclone and satrcloneinsert
+#
+gsatftp_libdir="/usr/local/libexec/npemwin/satftp"
+gsatrclonebin="${gsatftp_libdir}/satrclone"
+gsatrcloneinsertbin="${gsatftp_libdir}/satrcloneinsert"
+
+# enable nbsp (call satrcloneinsert)
+nbsp_enable=1
+
+#
+# configuration options to pass to satrclone
+# (empty chlist => use default, which is 1-16)
+#
+gsatftp_workdir="/var/npemwin/satftp"
+gsatftp_erase_wdir=1	 # set [-e] in satrclone to clean the workdir at start
+gqdir="q"	# this is relative to the workdir
+gsatftp_zonefile="${gsatftp_confdir}/satftp-zonelist.conf"
+gsatftp_chlist=
+#
+# rclone conf file
+#
+gsatftp_rcloneconf="${gsatftp_confdir}/satftp-rclone.conf"
+
+#
+# configuration options to pass to satrcloneinsert
+# _nbspspooldir => passed to satrcloneinsert
+# _nbspinfifo => used by satrcloneinsert (which in turn passes it to nbspinsert)
+#  (if empty satrcloneinsert uses the default)
+#
+gsatftp_nbspspooldir=
+gsatftp_nbspinfifo=
+gsatftp_opt_i=0    # [-i] - if set passed to nbspinsert (via satrcloneinsert)
+
+# common options
+gverbose=0
+gbackground=0
+
+#
+# to run once
+#
+gsatftp_lockdir="lock"			# relative to workdir
+gsatftp_lockname="satftp.lock"		# name of dir we will use for locking
+gsatftp_locksleepsecs=30
+gsatftp_lockmaxloops=10			# max number of tries to get the lock
+
+# variables
+gquit=0
+gsatftp_user_conffile=
+gqfilelist=
+gsatftp_lockpath=${gsatftp_workdir}/${gsatftp_lockdir}/${gsatftp_lockname}
+
+#
+# main
+#
+usage="satftp [-bv] [-f <conffile>]"
+
+while getopts ":hbvf:" option
+do
+    case $option in
+        h) echo "$usage"; exit 0;;
+        b) gbackground=1;;
+	v) gverbose=1;;
+	f) gsatftp_user_conffile=$OPTARG
+	   [ ! -f $gsatftp_user_conffile ] && \
+	       { echo "$gsatftp_user_conffile not found"; exit 1; };;
+        \?) echo "Unsupported option $OPTARG"; exit 1;;
+	:) echo "Missing value option $OPTARG"; exit 1;;
+    esac
+done
+shift $((OPTIND-1))
+
+[ -n "$gsatftp_user_conffile" ] && gsatftp_conffile=$gsatftp_user_conffile
+
+# override default configuration
+satftp_read_conffile
+
+# redefine the working directories
+satftp_init_dirs
+
+# run once
+satftp_lock_dir $gsatftp_lockpath $gsatftp_locksleepsecs $gsatftp_lockmaxloops
+
+# exit clean
+trap satftp_exit EXIT
+trap satftp_quit HUP INT QUIT ABRT KILL ALRM TERM
+
+# satrclone downloads the nc files (one for each channel), then generates
+# the asc file for each one, and then "cuts" each asc file according to
+# the zones specified in the zones files.
+opts=
+[ $gbackground -eq 1 ] && opts="$opts -b"
+[ $gverbose -eq 1 ] && opts="$opts -v"
+[ $gsatftp_erase_wdir -eq 1 ] && opts="$opts -e"
+[ -n "$gsatftp_chlist" ] && opts="$opts -c $gsatftp_chlist"
+[ -n "$gsatftp_rcloneconf" ] && opts="$opts -f $gsatftp_rcloneconf"
+
+$gsatrclonebin $opts -w $gsatftp_workdir $gsatftp_zonefile
+
+[ $nbsp_enable -eq 1 ] || exit 0
+
+# satrcloneinsert inserts each zone asc file in the nbsp spool.
+# All the zone asc files produced by satrclone are listed in the
+# queue file that saterclone writes to the asc directory. Since
+# there could be other such queue files (e.g., from previous satrclone
+# runs that do not call satrcloneinsert) we try to process all them.
+
+# get the list of qfiles
+gqfilelist="`ls $gqdir/*.ascq`"
+
+opts=
+[ $gbackground -eq 1 ] && opts="$opts -b"
+[ $gverbose -eq 1 ] && opts="$opts -v"
+[ $gsatftp_opt_i -eq 1 ] && opts="$opts -i"
+[ -n "$gsatftp_nbspspooldir" ] && opts="$opts -d $gsatftp_nbspspooldir"
+[ -n "$gsatftp_nbspinfifo" ] && opts="$opts -f $gsatftp_nbspinfifo"
+
+for qfile in $gqfilelist
+do
+    while read line
+    do
+	fpath=$line
+	fname=`basename $line ".asc"`
+	log_verbose "processing $fname"
+	$gsatrcloneinsertbin $opts $fpath
+    done < $qfile
+
+    mv $qfile ${qfile}.i
+done

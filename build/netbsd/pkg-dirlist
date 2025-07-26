@@ -9,6 +9,7 @@ libexec/npemwin/tclhttpd/dist
 libexec/npemwin/tclhttpd/npemwin
 libexec/npemwin/tclhttpd/extensions
 libexec/npemwin/tclmetar
+libexec/npemwin/satftp
 share/doc/npemwin
 share/doc/npemwin/prefilter
 share/doc/npemwin/panfilter

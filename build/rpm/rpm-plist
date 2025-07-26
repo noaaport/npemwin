@@ -54,6 +54,11 @@
 /usr/local/libexec/npemwin/emftp
 /usr/local/libexec/npemwin/radftp
 /usr/local/libexec/npemwin/rad2ftp
+/usr/local/libexec/npemwin/satftp/satftp
+/usr/local/libexec/npemwin/satftp/satrclone
+/usr/local/libexec/npemwin/satftp/satrcloneasc
+/usr/local/libexec/npemwin/satftp/satrcloneinsert
+/usr/local/libexec/npemwin/satftp/satrcloneimg
 /usr/local/libexec/npemwin/tclmetar/metar.tcl
 /usr/local/libexec/npemwin/tclmetar/pkgIndex.tcl
 /usr/local/etc/npemwin/dist/README
@@ -131,6 +136,9 @@
 /usr/local/etc/npemwin/dist/radftp.plist-site-sample
 /usr/local/etc/npemwin/dist/rad2ftp.conf-sample
 /usr/local/etc/npemwin/dist/rad2ftp.conf-site-sample
+/usr/local/etc/npemwin/satftp.conf-sample
+/usr/local/etc/npemwin/satftp-rclone.conf-sample
+/usr/local/etc/npemwin/satftp-zonelist.conf-sample
 /usr/local/etc/npemwin/dist/metarplot-templates.tgz
 /usr/local/etc/npemwin/dist/track-templates.tgz
 /usr/local/share/man/man1/npemwind.1.gz

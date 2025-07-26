@@ -1,0 +1,150 @@
+#!%SHELL%
+#
+# Usage: satrcloneimg [-b] [-v] [-w <workdir>] [qfilelist]
+#
+# Processes the asc files produced by ``satrclone'' to generate
+# the corresponding png files.
+#
+# -b => run in the background
+# -v => verbose as it processes files
+# -w => specify a working directory (default is current dir)
+#       (the same set in ``setrclone'')
+# 
+
+log_msg(){
+
+    if [ $gbackground -eq 1 ]
+    then
+        logger -t $gname "$1"
+    else
+        echo "$1"
+    fi
+}
+
+log_verbose (){
+
+    [ $gverbose -eq 1 ] && log_msg "$1"
+}
+
+log_msg_quit(){
+
+    log_msg "$1"
+    exit 0
+}
+
+log_err(){
+
+    log_msg "$1"
+}
+
+log_err_quit(){
+
+    log_msg "$1"
+    exit 1
+}
+
+#
+# main functions
+#
+satrcloneimg_init_dirs() {
+
+    [ ! -d ${gworkdir} ] && { echo "${gworkdir} does not exist."; exit 1; }
+
+    [ $opt_w -eq 0 ] && return
+    
+    gascdir=${gworkdir}/${gascdir}
+    gimgdir=${gworkdir}/${gimgdir}
+    gqdir=${gworkdir}/${gqdir}
+}
+
+satrcloneimg_exit() {
+
+    # normal cleanup
+    satrcloneimg_cleanup
+
+    # in case of error or interrupt clean partial files
+}
+
+satrcloneimg_quit() {
+
+    # response to a quit,... signal.
+    gquit=1
+    exit
+}
+
+satrcloneimg_cleanup() {
+
+    # nothing for the moment
+    :
+}
+
+satrcloneimg() {
+
+    for qfile in $gqfilelist
+    do
+	while read line
+	do
+	    fbasename=`basename $line`
+	    fname=`basename $line ".asc"`
+	    log_verbose "processing $fname"
+	    nbspgoesrmap -a -o ${gimgdir}/${fname}.png $line
+	done < $qfile
+
+	mv $qfile ${qfile}.i
+    done
+}
+
+gname="`basename $0`"
+#
+# configuration
+#
+gworkdir="."
+# these are relative to gworkdir
+gascdir="asc"
+gimgdir="img"
+gqdir="q"
+
+# options
+gbackground=0	# [-b]
+gverbose=0	# [-v]
+opt_w=0		# set if [-w] is given
+
+# variables
+gquit=0		# set when if a quit,... signal is received, or error.
+gqfilelist=
+
+#
+# main
+#
+usage="satrcloneimg [-b] [-v] [-w <workdir>] [qfilelist]"
+
+while getopts ":hbvw:" option
+do
+    case $option in
+        h) echo "$usage"; exit 0;;
+        b) gbackground=1;;
+	v) gverbose=1;;
+	w) gworkdir=$OPTARG; opt_w=1;;
+        \?) echo "Unsupported option $OPTARG"; exit 1;;
+	:) echo "Missing value option $OPTARG"; exit 1;;
+    esac
+done
+shift $((OPTIND-1))
+
+# redefine the working directories
+satrcloneimg_init_dirs
+
+# get the list of qfiles
+if [ $# -ne 0 ]
+then
+    qfilelist="$*"
+else
+    gqfilelist="`ls $gqdir/*.ascq`"
+fi
+
+# exit clean
+trap satrcloneimg_exit EXIT
+trap satrcloneimg_quit HUP INT QUIT ABRT KILL ALRM TERM
+
+# process
+satrcloneimg

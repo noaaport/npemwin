@@ -1,0 +1,8 @@
+satrcloneinsert.sh z01.abi-l1b-radf-m6c03-g19.20250713_0130.asc
+
+spool: aw01/aw01_c03g19+z01.130130_70039278 (01 => or-abi-l1b-radf-m6)
+
+dafilter: sat/goesr/g19/c03/abi-l1b-radf-m6c03-g19-z01_20250713_0130.asc
+
+
+

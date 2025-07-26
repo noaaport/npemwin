@@ -1,0 +1,47 @@
+#
+# $Id$
+#
+@include@ @q@../../Makefile.inc@q@
+
+INSTALL =	@INSTALL@
+SHELL =		@SHELL@
+
+SAMPLES =	satftp.conf-sample satftp-rclone.conf-sample \
+		satftp-zonelist.conf-sample
+LIBTOOLS =	satftp satrclone satrcloneasc satrcloneinsert satrcloneimg
+TARGET =	${LIBTOOLS} ${SAMPLES}
+
+SATFTPLIBDIR = ${MYLIBEXECDIR}/satftp
+
+all: ${TARGET}
+
+satftp: satftp.sh.in
+	sed -e "/%SHELL%/s##${SHELL}#" satftp.sh.in > satftp
+
+satrclone: satrclone.sh.in
+	sed -e "/%SHELL%/s##${SHELL}#" satrclone.sh.in > satrclone
+
+satrcloneasc: satrcloneasc.sh.in
+	sed -e "/%SHELL%/s##${SHELL}#" satrcloneasc.sh.in > satrcloneasc
+
+satrcloneinsert: satrcloneinsert.sh.in
+	sed -e "/%SHELL%/s##${SHELL}#" satrcloneinsert.sh.in > satrcloneinsert
+
+satrcloneimg: satrcloneimg.sh.in
+	sed -e "/%SHELL%/s##${SHELL}#" satrcloneimg.sh.in > satrcloneimg
+
+satftp.conf-sample: satftp.conf.in
+	cp satftp.conf.in satftp.conf-sample
+
+satftp-rclone.conf-sample: satftp-rclone.conf.in
+	cp satftp-rclone.conf.in satftp-rclone.conf-sample
+
+satftp-zonelist.conf-sample: satftp-zonelist.conf.in
+	cp satftp-zonelist.conf.in satftp-zonelist.conf-sample
+
+install:
+	${INSTALL} -m 0644 ${SAMPLES} ${MYCONFDIR}
+	${INSTALL} -m 0755 ${LIBTOOLS} ${SATFTPLIBDIR}
+
+clean:
+	rm -f *~ ${TARGET} Makefile

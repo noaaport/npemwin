@@ -1,0 +1,178 @@
+#!%SHELL%
+#
+# Usage: satrcloneasc [-b] [-v] [-q qfilelist] [-w <workdir>] <zones.list>
+#
+# Processes the nc files produced by ``satrclone'' to generate
+# the corresponding asc files.
+#
+# -b => run in the background
+# -v => verbose as it processes files
+# -q => specify a qfile (or list of them) containing the nc files
+#       to process (default is all the ."ncq" files found)
+# -w => specify a working directory (default is current dir)
+#       (the same set in ``setrclone'')
+# 
+
+log_msg(){
+
+    if [ $gbackground -eq 1 ]
+    then
+        logger -t $gname "$1"
+    else
+        echo "$1"
+    fi
+}
+
+log_verbose (){
+
+    [ $gverbose -eq 1 ] && log_msg "$1"
+}
+
+log_msg_quit(){
+
+    log_msg "$1"
+    exit 0
+}
+
+log_err(){
+
+    log_msg "$1"
+}
+
+log_err_quit(){
+
+    log_msg "$1"
+    exit 1
+}
+
+#
+# main functions
+#
+satrcloneasc_init_dirs() {
+
+    [ ! -d ${gworkdir} ] && { echo "${gworkdir} does not exist."; exit 1; }
+
+    [ $opt_w -eq 0 ] && return
+
+    gncdir=${gworkdir}/${gncdir}
+    gascdir=${gworkdir}/${gascdir}
+    gtmpdir=${gworkdir}/${gtmpdir}
+    gqdir=${gworkdir}/${gqdir}
+    #
+    glocallist=${gworkdir}/${glocallist}
+}
+
+satrcloneasc_exit() {
+
+    # normal cleanup
+    satrcloneasc_cleanup
+
+    # in case of error or interrupt clean partial files
+}
+
+satrcloneasc_quit() {
+
+    # response to a quit,... signal.
+    gquit=1
+    exit
+}
+
+satrcloneasc_cleanup() {
+
+    # nothing for the moment
+    :
+}
+
+satrcloneasc() {
+
+    while read line
+    do
+	fbasename=`basename $line`
+	fname=`basename $line ".nc"`
+
+	log_verbose "generating asc for $fname"
+	nbspgoesrgis -r -a ${gascdir}/${fname}.asc ${gncdir}/${fname}.nc
+	if [ $? -eq 0 ]
+	then
+	    # Pass [-q] to output the name of each file produced
+	    log_verbose "cutting asc $fname"
+	    nbspgoesrasc -q -p ${gascdir}/z -s ".${fname}.asc" \
+			 ${gascdir}/${fname}.asc < $gzonelist >> $glocallist
+	fi
+    done < $gncqfile
+
+    # Rename the nc qlist file
+    mv $gncqfile "${gncqfile}.i"
+    
+    # Rename the q file of the asc files generated
+    mv $glocallist $gascqfile
+}
+
+gname="`basename $0`"
+#
+# configuration
+#
+gworkdir="."
+# these are relative to gworkdir
+gncdir="nc"
+gascdir="asc"
+gtmpdir="tmp"
+gqdir="q"
+#
+glocallist="${gtmpdir}/local.list"
+gzonelist=
+
+# options
+gbackground=0	# [-b]
+gverbose=0	# [-v]
+opt_w=0		# set if [-w] is given
+
+# variables
+gquit=0		# set when if a quit,... signal is received, or error.
+gqfilelist=
+
+#
+# main
+#
+usage="satrclonasc [-b] [-v] [-w <workdir>] [-q qfilelist] <zones.list>"
+
+while getopts ":hbvq:w:" option
+do
+    case $option in
+        h) echo "$usage"; exit 0;;
+        b) gbackground=1;;
+	v) gverbose=1;;
+	q) gqfilelist=$OPTARG;;
+	w) gworkdir=$OPTARG; opt_w=1;;
+        \?) echo "Unsupported option $OPTARG"; exit 1;;
+	:) echo "Missing value option $OPTARG"; exit 1;;
+    esac
+done
+shift $((OPTIND-1))
+
+[ $# -eq 0 ] && { echo "zone file?"; exit 1; }
+gzonelist=$1
+
+# sanity check
+[ -f $gzonelist ] || { echo "Not found: $gzonelist"; exit 1; }
+
+# redefine the working directories
+satrcloneasc_init_dirs
+
+# get the list of nc qfiles
+[ -n "$gqfilelist" ] ||  gqfilelist="`ls $gqdir/*.ncq`"
+[ -n "$gqfilelist" ] || { echo "No ncq files."; exit 1; }
+
+# exit clean
+trap satrcloneasc_exit EXIT
+trap satrcloneasc_quit HUP INT QUIT ABRT KILL ALRM TERM
+
+# process
+for qfile in $gqfilelist
+do
+    gncqfile=$qfile
+    fname=`basename $qfile ".ncq"`
+    gascqfile="`dirname $gncqfile`/${fname}.ascq"
+    
+    satrcloneasc
+done

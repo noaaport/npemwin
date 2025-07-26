@@ -6,7 +6,7 @@
 # $Id$
 #
 
-SUBDIRS = emftp radftp rad2ftp npemwininsert
+SUBDIRS = npemwininsert emftp radftp rad2ftp satftp
 
 all:
 	for dir in ${SUBDIRS}; do \

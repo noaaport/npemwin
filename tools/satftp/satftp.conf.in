@@ -1,0 +1,67 @@
+#
+# $Id$
+#
+# Optional configuration files
+#
+## gsatftp_conffile="satftp.conf"
+## gsatftp_confdir="/usr/local/etc/npemwin"
+## gsatftp_confoptdirs="${gsatftp_confdir}/defaults ${gsatftp_confdir}/site"
+
+#
+# path to satrclone and satrcloneinsert
+#
+## gsatftp_libdir="/usr/local/libexec/npemwin/satftp"
+## gsatrclonebin="${gsatftp_libdir}/satrclone"
+## gsatrcloneinsertbin="${gsatftp_libdir}/satrcloneinsert"
+
+# enable nbsp (call satrcloneinsert)
+## nbsp_enable=1
+
+#
+# configuration options to pass to satrclone
+# (empty chlist => use default, which is 1-16)
+#
+## gsatftp_workdir="/var/npemwin/satftp"
+## gsatftp_erase_wdir=1	 # set [-e] in satrclone to clean the workdir at start
+## gqdir="q"	# this is relative to the workdir
+## gsatftp_zonefile="${gsatftp_confdir}/satftp-zonelist.conf"
+## gsatftp_chlist=
+#
+# rclone conf file
+#
+## gsatftp_rcloneconf="${gsatftp_confdir}/satftp-rclone.conf"
+
+#
+# configuration options to pass to satrcloneinsert
+# (empty => satrcloneinsert will use the defaults)
+#
+## gsatftp_nbspspooldir=
+## gsatftp_nbspinfifo=
+## gsatftp_opt_i=0    # [-i] - if set passed to nbspinsert (via satrcloneinsert)
+
+#
+# common
+#
+## gverbose=0
+## gbackground=0
+
+#
+# to run once
+#
+## gsatftp_lockdir="lock"		# relative to workdir
+## gsatftp_lockname="satftp.lock"	# name of dir we will use for locking
+## gsatftp_locksleepsecs=30
+## gsatftp_lockmaxloops=10		# max number of tries to get the lock
+
+#
+# Read the optional configuration files
+#
+if [ -z "$source_satftp_conf_defined" ]
+then	
+    source_satftp_conf_defined=1
+    for _d in $gsatftp_confdirs
+    do
+	_f=${_d}/${gsatftp_conffile}
+	[ -r ${_f} ] && . ${_f}
+    done
+fi

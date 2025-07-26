@@ -8,6 +8,7 @@ usr/local/libexec/npemwin/tclhttpd/dist
 usr/local/libexec/npemwin/tclhttpd/npemwin
 usr/local/libexec/npemwin/tclhttpd/extensions
 usr/local/libexec/npemwin/tclmetar
+usr/local/libexec/npemwin/satftp
 usr/local/share/doc/npemwin
 usr/local/share/doc/npemwin/prefilter
 usr/local/share/doc/npemwin/panfilter

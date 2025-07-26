@@ -1,0 +1,3 @@
+[publicaws]
+type = s3
+provider = AWS

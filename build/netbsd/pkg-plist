@@ -61,6 +61,11 @@ libexec/npemwin/archive.init
 libexec/npemwin/emftp
 libexec/npemwin/radftp
 libexec/npemwin/rad2ftp
+libexec/npemwin/satftp/satftp
+libexec/npemwin/satftp/satrclone
+libexec/npemwin/satftp/satrcloneasc
+libexec/npemwin/satftp/satrcloneinsert
+libexec/npemwin/satftp/satrcloneimg
 libexec/npemwin/tclmetar/metar.tcl
 libexec/npemwin/tclmetar/pkgIndex.tcl
 etc/npemwin/dist/README
@@ -138,6 +143,9 @@ etc/npemwin/dist/radftp.slist-site-sample
 etc/npemwin/dist/radftp.plist-site-sample
 etc/npemwin/dist/rad2ftp.conf-sample
 etc/npemwin/dist/rad2ftp.conf-site-sample
+etc/npemwin/dist/satftp.conf-sample
+etc/npemwin/dist/satftp-rclone.conf-sample
+etc/npemwin/dist/satftp-zonelist.conf-sample
 etc/npemwin/dist/metarplot-templates.tgz
 etc/npemwin/dist/track-templates.tgz
 share/man/man1/npemwind.1.gz

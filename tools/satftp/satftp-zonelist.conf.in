@@ -1,0 +1,12 @@
+#
+# Example zones list file
+#
+# 1 pr
+# 2 antillas menores
+# 3 conus
+# 4 texas
+#
+-70,14,-60,24,1
+-67,8,-58,16,2
+-124,25,-70,50,3
+-106,25,-93,36,4

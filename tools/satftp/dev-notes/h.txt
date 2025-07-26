@@ -1,0 +1,7 @@
+<ccb>TIRE10 KNES 211331 PAB\r\r\n
+\211HDF\r\n
+<ccb><wmoid> KNES <ddhhmm> <bbb>\r\r\n
+
+<ccb>C01G19 AW01 212310 Z03\r\r\n
+aw01_c01g19+z03.212310_70238273
+
