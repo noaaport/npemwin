@@ -13,18 +13,22 @@ LIBTOOLS =	radftp
 TARGET =	${LIBTOOLS} ${SAMPLES}
 DEPS =		radftp_get_datetime.bsd radftp_get_datetime.linux
 
+RADFTPCONFDIR = ${MYCONFDIR}
+
 GET_DATETIME =	@GET_DATETIME@
 
 all: ${TARGET}
 
 radftp: radftp.sh.in ${DEPS}
 	sed -e "/%SHELL%/s##${SHELL}#" \
+	-e "/%RADFTPCONFDIR%/s##${RADFTPCONFDIR}#" \
 	-e "/%GET_DATETIME%/r ${GET_DATETIME}" \
 	-e "/%GET_DATETIME%/d" \
 	radftp.sh.in > radftp
 
 radftp.conf-sample: radftp.conf.in
-	cp radftp.conf.in radftp.conf-sample
+	sed -e "/%RADFTPCONFDIR%/s##${RADFTPCONFDIR}#" \
+	radftp.conf.in > radftp.conf-sample
 
 radftp.plist-sample: radftp.plist
 	cp radftp.plist radftp.plist-sample

@@ -131,13 +131,13 @@ gname="`basename $0`"
 # Optional configuration files
 #
 gsatftp_conffile="satftp.conf"
-gsatftp_confdir="/usr/local/etc/npemwin"
+gsatftp_confdir="%SATFTPCONFDIR%"
 gsatftp_confoptdirs="${gsatftp_confdir}/defaults ${gsatftp_confdir}/site"
 
 #
 # path to satrclone and satrcloneinsert
 #
-gsatftp_libdir="/usr/local/libexec/npemwin/satftp"
+gsatftp_libdir="%SATFTPLIBDIR%"
 gsatrclonebin="${gsatftp_libdir}/satrclone"
 gsatrcloneinsertbin="${gsatftp_libdir}/satrcloneinsert"
 

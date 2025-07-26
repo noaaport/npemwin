@@ -127,7 +127,7 @@ get_local_path(){
 # configuration file(s)
 #
 gconffile="radftp.conf"
-gconfdir="/usr/local/etc/npemwin"
+gconfdir="%RADFTPCONFDIR%"
 gconfoptdirs="${gconfdir}/defaults ${gconfdir}/site"
 
 # input configuration
@@ -156,7 +156,7 @@ gdatadir="/var/npemwin/data/digatmos/nexrad/nids"
 npemwin_enable=1
 #
 nbsp_enable=0
-gnbspmcast="/usr/local/bin/nbspmcast"
+gnbspmcast="nbspmcast"	# assume nbspmcast is in PATH
 
 #
 # main

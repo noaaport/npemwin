@@ -231,7 +231,7 @@ check_name(){
 # configuration file
 #
 gconffile="emftp.conf"
-gconfdir="/usr/local/etc/npemwin"
+gconfdir="%EMFTPCONFDIR%"
 gconfoptdirs="${gconfdir}/defaults ${gconfdir}/site"
 
 #
@@ -267,10 +267,10 @@ gtime="`date -u +%H%M`"           # for entry in inv file
 #
 npemwin_enable=1
 gnpemwin_infifo="/var/run/npemwin/infeed.fifo"
-gnpemwininsert="/usr/local/bin/npemwininsert"
+gnpemwininsert="npemwininsert"	# assume it is in PATH
 #
 nbsp_enable=0
-gnbspmcast="/usr/local/bin/nbspmcast"
+gnbspmcast="nbspmcast"		# assume it is in PATH
 
 #
 # main

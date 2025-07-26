@@ -2,7 +2,7 @@
 # Optional configuration files
 #
 ## gconffile="rad2ftp.conf"
-## gconfdir="/usr/local/etc/npemwin"
+## gconfdir="%RAD2FTPCONFDIR"
 ## gconfoptdirs="${gconfdir}/defaults ${gconfdir}/site"
 #
 
@@ -28,7 +28,7 @@
 # (requires setting the feedmode in nbspd.conf to include the infeed)
 #
 ## nbsp_enable=1
-## gcraftinsert="/usr/local/libexec/nbsp/craftinsert"
+## gcraftinsert="nbspcraftinsert"		# assume is in PATH
 
 # list of stations to process (they must be specified in the conf file)
 ## gstation_list=

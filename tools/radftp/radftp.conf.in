@@ -2,7 +2,7 @@
 # Optional configuration files
 #
 ## gconffile="radftp.conf"
-## gconfdir="/usr/local/etc/npemwin"
+## gconfdir="%RADFTPCONFDIR%"
 ## gconfoptdirs="${gconfdir}/defaults ${gconfdir}/site"
 #
 
@@ -32,7 +32,7 @@
 ## npemwin_enable=1
 #
 ## nbsp_enable=0
-## gnbspmcast="/usr/local/bin/nbspmcast"
+## gnbspmcast="nbspmcast"	# assume nbspmcast is in PATH
 
 #
 # Read the optional configuration files

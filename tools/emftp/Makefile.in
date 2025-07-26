@@ -10,14 +10,17 @@ SAMPLES =	emftp.conf-sample
 LIBTOOLS =	emftp
 TARGET =	${LIBTOOLS} ${SAMPLES}
 
+EMFTPCONFDIR = ${MYCONFDIR}
+
 all: ${TARGET}
 
 emftp: emftp.sh.in
 	sed -e "/%SHELL%/s##${SHELL}#" \
+	-e "/%EMFTPCONFDIR%/s##${EMFTPCONFDIR}#" \
 	emftp.sh.in > emftp
 
 emftp.conf-sample: emftp.conf.in
-	sed -e "/%PATH%/s##${PATH}#" \
+	-e "/%EMFTPCONFDIR%/s##${EMFTPCONFDIR}#" \
 	emftp.conf.in > emftp.conf-sample
 
 #emftp.conf-site-sample: emftp.conf-site

@@ -95,7 +95,7 @@ sanity_check(){
 # configuration file(s)
 #
 gconffile="rad2ftp.conf"
-gconfdir="/usr/local/etc/npemwin"
+gconfdir="%RAD2FTPCONFDIR"
 gconfoptdirs="${gconfdir}/defaults ${gconfdir}/site"
 
 # input configuration
@@ -119,7 +119,7 @@ gfilelist="files.list"		# list of radar files downloaded
 # Nbsp processing
 #
 nbsp_enable=1
-gcraftinsert="/usr/local/libexec/nbsp/craftinsert"
+gcraftinsert="nbspcraftinsert"		# assume is in PATH
 
 # list of stations to process (they must be specified in the conf file)
 ## gstation_list="TJUA TSJU"	# for testing

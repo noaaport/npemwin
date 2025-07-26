@@ -2,7 +2,7 @@
 # Optional configuration files
 #
 ## gconffile="emftp.conf"
-## gconfdir="/usr/local/etc/npemwin"
+## gconfdir="%EMFTPCONFDIR%"
 ## gconfoptdirs="${gconfdir}/defaults ${gconfdir}/site"
 
 #

@@ -12,11 +12,14 @@ LIBTOOLS =	satftp satrclone satrcloneasc satrcloneinsert satrcloneimg
 TARGET =	${LIBTOOLS} ${SAMPLES}
 
 SATFTPLIBDIR = ${MYLIBEXECDIR}/satftp
+SATFTPCONFDIR = ${MYCONFDIR}
 
 all: ${TARGET}
 
 satftp: satftp.sh.in
-	sed -e "/%SHELL%/s##${SHELL}#" satftp.sh.in > satftp
+	sed -e "/%SHELL%/s##${SHELL}#" \
+	-e "/%SATFTPLIBDIR%/s##${SATFTPLIBDIR}#" \
+	-e "/%SATFTPCONFDIR%/s##${SATFTPCONFDIR}#" satftp.sh.in > satftp
 
 satrclone: satrclone.sh.in
 	sed -e "/%SHELL%/s##${SHELL}#" satrclone.sh.in > satrclone
@@ -31,7 +34,9 @@ satrcloneimg: satrcloneimg.sh.in
 	sed -e "/%SHELL%/s##${SHELL}#" satrcloneimg.sh.in > satrcloneimg
 
 satftp.conf-sample: satftp.conf.in
-	cp satftp.conf.in satftp.conf-sample
+	sed -e "/%SATFTPLIBDIR%/s##${SATFTPLIBDIR}#" \
+	-e "/%SATFTPCONFDIR%/s##${SATFTPCONFDIR}#" \
+	satftp.conf.in > satftp.conf-sample
 
 satftp-rclone.conf-sample: satftp-rclone.conf.in
 	cp satftp-rclone.conf.in satftp-rclone.conf-sample

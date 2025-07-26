@@ -10,6 +10,8 @@ SAMPLES =	rad2ftp.conf-sample rad2ftp.conf-site-sample
 LIBTOOLS =	rad2ftp
 TARGET =	${LIBTOOLS} ${SAMPLES}
 
+RAD2FTPCONFDIR = ${MYCONFDIR}
+
 all: ${TARGET}
 
 rad2ftp: rad2ftp.sh.in
