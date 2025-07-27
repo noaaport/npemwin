@@ -49,6 +49,7 @@ userdirs="/var/run/npemwin
 /var/npemwin/rad2ftp/spool
 /var/npemwin/rad2ftp/tmp
 /var/npemwin/rad2ftp/lock
+/var/npemwin/satftp
 /var/npemwin/satftp/nc
 /var/npemwin/satftp/asc
 /var/npemwin/satftp/tmp
