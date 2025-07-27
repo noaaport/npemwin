@@ -45,8 +45,9 @@ log_err_quit(){
 # main functions
 #
 satftp_read_conffile () {
-
-    [ -f $gsatftp_conffile ] && . $gsatftp_conffile
+    
+    _f=${gsatftp_confdir}/${gsatftp_conffile}
+    [ -r ${_f} ] && . ${_f}
 }
 
 satftp_init_dirs() {

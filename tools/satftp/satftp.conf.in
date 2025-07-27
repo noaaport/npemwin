@@ -59,7 +59,7 @@
 if [ -z "$source_satftp_conf_defined" ]
 then	
     source_satftp_conf_defined=1
-    for _d in $gsatftp_confdirs
+    for _d in $gsatftp_confoptdirs
     do
 	_f=${_d}/${gsatftp_conffile}
 	[ -r ${_f} ] && . ${_f}
