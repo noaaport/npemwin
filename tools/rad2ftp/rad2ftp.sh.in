@@ -12,6 +12,13 @@
 #
 # The [-w] option overrides the rad2ftp working directory
 #
+# NOTE: The downloaded files have names like
+#
+#   TSJU_20250727_003719.bz2
+#
+# I believe the files are really not bzip2 compressed, although they are stored
+# with that extension. We will save them without it (the ldm convention).
+#
 
 #
 # functions
@@ -95,7 +102,7 @@ sanity_check(){
 # configuration file(s)
 #
 gconffile="rad2ftp.conf"
-gconfdir="%RAD2FTPCONFDIR"
+gconfdir="%RAD2FTPCONFDIR%"
 gconfoptdirs="${gconfdir}/defaults ${gconfdir}/site"
 
 # input configuration
@@ -219,9 +226,12 @@ then
 fi
 
 #
-# Download the last file from each station.
-# I believe the files are not bzip2 compressed, although they are stored
-# with that extension. We will save them without it (the ldm convention).
+# Download the last file from each station. The names are like
+#
+#   TSJU_20250727_003719.bz2
+#
+# I believe the files are really not bzip2 compressed (although they are stored
+# with that extension). We will save them without it (the ldm convention).
 #
 
 # Make sure the file that contains the list of downloaded files does not exist

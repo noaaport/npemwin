@@ -1,8 +1,14 @@
 #
+# For Nbsp processing it requires
+# (i) setting the feedmode in nbspd.conf to include the infeed,
+# (ii) installation of tclx [see craftinsert.README in nbsp READMEs
+#
+
+#
 # Optional configuration files
 #
 ## gconffile="rad2ftp.conf"
-## gconfdir="%RAD2FTPCONFDIR"
+## gconfdir="%RAD2FTPCONFDIR%"
 ## gconfoptdirs="${gconfdir}/defaults ${gconfdir}/site"
 #
 
@@ -25,7 +31,10 @@
 
 #
 # Nbsp processing
-# (requires setting the feedmode in nbspd.conf to include the infeed)
+# [Requires:
+#  (i) setting the feedmode in nbspd.conf to include the infeed,
+#  (ii) installation of tclx [see craftinsert.README in READMEs
+# ]
 #
 ## nbsp_enable=1
 ## gcraftinsert="nbspcraftinsert"		# assume is in PATH

@@ -16,10 +16,12 @@ all: ${TARGET}
 
 rad2ftp: rad2ftp.sh.in
 	sed -e "/%SHELL%/s##${SHELL}#" \
+	-e "/%RAD2FTPCONFDIR%/s##${RAD2FTPCONFDIR}#" \
 	rad2ftp.sh.in > rad2ftp
 
 rad2ftp.conf-sample: rad2ftp.conf.in
-	cp rad2ftp.conf.in rad2ftp.conf-sample
+	sed -e "/%RAD2FTPCONFDIR%/s##${RAD2FTPCONFDIR}#" \
+	rad2ftp.conf.in > rad2ftp.conf-sample
 
 rad2ftp.conf-site-sample: rad2ftp.conf-site
 	 cp rad2ftp.conf-site rad2ftp.conf-site-sample
