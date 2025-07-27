@@ -135,9 +135,9 @@
 /usr/local/etc/npemwin/dist/radftp.plist-site-sample
 /usr/local/etc/npemwin/dist/rad2ftp.conf-sample
 /usr/local/etc/npemwin/dist/rad2ftp.conf-site-sample
-/usr/local/etc/npemwin/satftp.conf-sample
-/usr/local/etc/npemwin/satftp-rclone.conf-sample
-/usr/local/etc/npemwin/satftp-zonelist.conf-sample
+/usr/local/etc/npemwin/dist/satftp.conf-sample
+/usr/local/etc/npemwin/dist/satftp-rclone.conf-sample
+/usr/local/etc/npemwin/dist/satftp-zonelist.conf-sample
 /usr/local/etc/npemwin/dist/metarplot-templates.tgz
 /usr/local/etc/npemwin/dist/track-templates.tgz
 /usr/local/share/man/man1/npemwind.1.gz

@@ -45,7 +45,7 @@ satftp-zonelist.conf-sample: satftp-zonelist.conf.in
 	cp satftp-zonelist.conf.in satftp-zonelist.conf-sample
 
 install:
-	${INSTALL} -m 0644 ${SAMPLES} ${MYCONFDIR}
+	${INSTALL} -m 0644 ${SAMPLES} ${SATFTPCONFDIR}
 	${INSTALL} -m 0755 ${LIBTOOLS} ${SATFTPLIBDIR}
 
 clean:
