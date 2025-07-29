@@ -49,7 +49,7 @@
 ## gnpemwin_infifo="/var/run/npemwin/infeed.fifo"
 ## gnpemwininsert="/usr/local/bin/npemwininsert"
 #
-## nbsp_enable=0
+## nbsp_enable=1
 ## gnbspmcast="/usr/local/bin/nbspmcast"
 #
 # Read the optional configuration files

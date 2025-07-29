@@ -128,11 +128,9 @@
 /usr/local/etc/npemwin/dist/newsyslog.conf-sample
 /usr/local/etc/npemwin/dist/emftp.conf-sample
 /usr/local/etc/npemwin/dist/radftp.conf-sample
-/usr/local/etc/npemwin/dist/radftp.slist-sample
-/usr/local/etc/npemwin/dist/radftp.plist-sample
+/usr/local/etc/npemwin/dist/radftp-slist.conf-sample
+/usr/local/etc/npemwin/dist/radftp-plist.conf-sample
 /usr/local/etc/npemwin/dist/radftp.conf-site-sample
-/usr/local/etc/npemwin/dist/radftp.slist-site-sample
-/usr/local/etc/npemwin/dist/radftp.plist-site-sample
 /usr/local/etc/npemwin/dist/rad2ftp.conf-sample
 /usr/local/etc/npemwin/dist/rad2ftp.conf-site-sample
 /usr/local/etc/npemwin/dist/satftp.conf-sample

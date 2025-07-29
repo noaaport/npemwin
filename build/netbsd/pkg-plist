@@ -135,11 +135,9 @@ etc/npemwin/dist/logrotate.conf-sample
 etc/npemwin/dist/newsyslog.conf-sample
 etc/npemwin/dist/emftp.conf-sample
 etc/npemwin/dist/radftp.conf-sample
-etc/npemwin/dist/radftp.slist-sample
-etc/npemwin/dist/radftp.plist-sample
+etc/npemwin/dist/radftp-slist.conf-sample
+etc/npemwin/dist/radftp-plist.conf-sample
 etc/npemwin/dist/radftp.conf-site-sample
-etc/npemwin/dist/radftp.slist-site-sample
-etc/npemwin/dist/radftp.plist-site-sample
 etc/npemwin/dist/rad2ftp.conf-sample
 etc/npemwin/dist/rad2ftp.conf-site-sample
 etc/npemwin/dist/satftp.conf-sample

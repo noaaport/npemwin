@@ -6,9 +6,10 @@
 INSTALL =	@INSTALL@
 SHELL =		@SHELL@
 
-SAMPLES =	radftp.conf-sample radftp.plist-sample radftp.slist-sample \
-		radftp.conf-site-sample \
-		radftp.plist-site-sample radftp.slist-site-sample
+SAMPLES =	radftp.conf-sample radftp.conf-site-sample \
+		radftp-plist.conf-sample \
+		radftp-slist.conf-sample
+
 LIBTOOLS =	radftp
 TARGET =	${LIBTOOLS} ${SAMPLES}
 DEPS =		radftp_get_datetime.bsd radftp_get_datetime.linux
@@ -30,20 +31,14 @@ radftp.conf-sample: radftp.conf.in
 	sed -e "/%RADFTPCONFDIR%/s##${RADFTPCONFDIR}#" \
 	radftp.conf.in > radftp.conf-sample
 
-radftp.plist-sample: radftp.plist
-	cp radftp.plist radftp.plist-sample
+radftp-plist.conf-sample: radftp-plist.conf
+	cp radftp-plist.conf radftp-plist.conf-sample
 
-radftp.slist-sample: radftp.slist
-	cp radftp.slist radftp.slist-sample
+radftp-slist.conf-sample: radftp-slist.conf
+	cp radftp-slist.conf radftp-slist.conf-sample
 
 radftp.conf-site-sample: radftp.conf-site
 	cp radftp.conf-site radftp.conf-site-sample
-
-radftp.plist-site-sample: radftp.plist-site
-	cp radftp.plist-site radftp.plist-site-sample
-
-radftp.slist-site-sample: radftp.slist-site
-	cp radftp.slist-site radftp.slist-site-sample
 
 install:
 	${INSTALL} -m 0644 ${SAMPLES} ${MYCONFDIR}

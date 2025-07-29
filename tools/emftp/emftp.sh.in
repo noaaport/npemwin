@@ -50,7 +50,7 @@ log_msg(){
     then
 	logger -t emftp "$1"
     else
-	echo "$1"
+	echo "emftp: $1"
     fi
 }
 
@@ -269,8 +269,11 @@ npemwin_enable=1
 gnpemwin_infifo="/var/run/npemwin/infeed.fifo"
 gnpemwininsert="npemwininsert"	# assume it is in PATH
 #
-nbsp_enable=0
-gnbspmcast="nbspmcast"		# assume it is in PATH
+# since we use mcast it is ok (will not give an error) to set this to 1
+# even if nbsp is not running
+#
+nbsp_enable=1		    
+gnbspmcast="nbspmcast"	    # assume it is in PATH
 
 #
 # main
@@ -343,7 +346,7 @@ lock_dir $glockdirpath $glocksleepsecs $glockmaxloops
 
 trap cleanup HUP INT QUIT ABRT KILL ALRM TERM EXIT
 
-log_msg "emftp script starting"
+log_msg "starting"
 
 # If curl gives an error, quit. If unzip gives an error, re-download and
 # retry unzip, once.

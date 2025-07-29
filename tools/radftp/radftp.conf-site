@@ -1,7 +1,5 @@
 #
 # site config
 #
-sitedir="/usr/local/etc/npemwin/site"
-#
-gradftpslist="${sitedir}/radftp.slist"    # station list
-gradftpplist="${sitedir}/radftp.plist"    # product list
+gradftpslist="${gconfdir}/site/radftp-slist.conf"    # station list
+gradftpplist="${gconfdir}/site/radftp-plist.conf"    # product list

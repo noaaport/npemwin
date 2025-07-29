@@ -39,7 +39,10 @@
 ## nbsp_enable=1
 ## gcraftinsert="nbspcraftinsert"		# assume is in PATH
 
-# list of stations to process (they must be specified in the conf file)
+# list of stations to process. The file "dist/rad2ftp.conf-site-sample"
+# contains example settings. That file can be saved as "site/rad2ftp.conf"
+# and edited there.
+#
 ## gstation_list=
 
 #

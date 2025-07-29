@@ -21,8 +21,8 @@
 ## glockmaxloops=3
 ## glftprc="lftp.rc"
 #
-## gradftpslist="${gconfdir}/radftp.slist"    # station list
-## gradftpplist="${gconfdir}/radftp.plist"    # product list
+## gradftpslist="${gconfdir}/radftp-slist.conf"    # station list
+## gradftpplist="${gconfdir}/radftp-plist.conf"    # product list
 #
 ## gdatadir="/var/npemwin/data/digatmos/nexrad/nids"
 
@@ -31,7 +31,7 @@
 #
 ## npemwin_enable=1
 #
-## nbsp_enable=0
+## nbsp_enable=1
 ## gnbspmcast="nbspmcast"	# assume nbspmcast is in PATH
 
 #
