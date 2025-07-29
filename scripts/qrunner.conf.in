@@ -56,7 +56,7 @@
 
 # Whether to send the txt files (raw, as received) to nbsp.
 # The files are sent as received, before the qrunner strips the \r,
-# which is what nbsp expects. (Requires nbspmcast).
+# which is what nbsp expects (uses nbspmcast, from nbsp).
 nbsp_enable=0
 
 # When the postprocessing filters are enabled, if this variable is 1, then 

@@ -49,6 +49,11 @@
 ## gnpemwin_infifo="/var/run/npemwin/infeed.fifo"
 ## gnpemwininsert="/usr/local/bin/npemwininsert"
 #
+# Since we use mcast it is ok (will not give an error) to set this to 1
+# even if nbsp is not running. Note that the "qrunner.conf" has a similar
+# setting (by default 0), so we could enabled that one instead of this one
+# (but not both).
+#
 ## nbsp_enable=1
 ## gnbspmcast="/usr/local/bin/nbspmcast"
 #

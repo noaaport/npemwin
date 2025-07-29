@@ -128,9 +128,9 @@ gfilelist="files.list"		# list of radar files downloaded
 nbsp_enable=1
 gcraftinsert="nbspcraftinsert"		# assume is in PATH
 
-# list of stations to process (they must be specified in the conf file)
-## gstation_list="TJUA TSJU"	# for testing
+# list of stations to process (they must be specified in "rad2ftp-slist.conf").
 gstation_list=
+gstation_list_file="rad2ftp-slist.conf"
 
 #
 # main
@@ -155,6 +155,7 @@ do
 done
 shift $((OPTIND-1))
 
+# read the configuration file
 if [ $option_f -eq 1 ]
 then
     . $userconffile

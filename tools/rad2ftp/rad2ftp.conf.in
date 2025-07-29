@@ -39,21 +39,25 @@
 ## nbsp_enable=1
 ## gcraftinsert="nbspcraftinsert"		# assume is in PATH
 
-# list of stations to process. The file "dist/rad2ftp.conf-site-sample"
-# contains example settings. That file can be saved as "site/rad2ftp.conf"
-# and edited there.
+# list of stations to process. The file "rad2ftp-slist.conf" contains example
+# and default settings. The desired configuration can be saved in the file
+# "site/rad2ftp-slist.conf" and edited there so that it is not overwritten
+# by new installs.
 #
 ## gstation_list=
+## gstation_list_file="rad2ftp-slist.conf"
+#
+[ -f ${gconfdir}/${gstation_list_file} ] && . ${gconfdir}/${gstation_list_file}
 
 #
 # Read the optional configuration files
 #
-if [ -z "$source_radftp_conf_defined" ]
+if [ -z "$source_rad2ftp_conf_defined" ]
 then	
-    source_radftp_conf_defined=1
+    source_rad2ftp_conf_defined=1
     for _d in $gconfoptdirs
     do
 	_f=${_d}/${gconffile}
-	[ -r ${_f} ] && . ${_f}
+	[ -f ${_f} ] && . ${_f}
     done
 fi

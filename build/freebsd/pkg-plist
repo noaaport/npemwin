@@ -134,7 +134,7 @@ etc/npemwin/dist/radftp-slist.conf-sample
 etc/npemwin/dist/radftp-plist.conf-sample
 etc/npemwin/dist/radftp.conf-site-sample
 etc/npemwin/dist/rad2ftp.conf-sample
-etc/npemwin/dist/rad2ftp.conf-site-sample
+etc/npemwin/dist/rad2ftp-slist.conf-sample
 etc/npemwin/dist/satftp.conf-sample
 etc/npemwin/dist/satftp-rclone.conf-sample
 etc/npemwin/dist/satftp-zonelist.conf-sample

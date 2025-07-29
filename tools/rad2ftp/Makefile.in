@@ -6,7 +6,7 @@
 INSTALL =	@INSTALL@
 SHELL =		@SHELL@
 
-SAMPLES =	rad2ftp.conf-sample rad2ftp.conf-site-sample
+SAMPLES =	rad2ftp.conf-sample rad2ftp-slist.conf-sample
 LIBTOOLS =	rad2ftp
 TARGET =	${LIBTOOLS} ${SAMPLES}
 
@@ -23,8 +23,8 @@ rad2ftp.conf-sample: rad2ftp.conf.in
 	sed -e "/%RAD2FTPCONFDIR%/s##${RAD2FTPCONFDIR}#" \
 	rad2ftp.conf.in > rad2ftp.conf-sample
 
-rad2ftp.conf-site-sample: rad2ftp.conf-site
-	 cp rad2ftp.conf-site rad2ftp.conf-site-sample
+rad2ftp-slist.conf-sample: rad2ftp-slist.conf
+	 cp rad2ftp-slist.conf rad2ftp-slist.conf-sample
 
 install:
 	${INSTALL} -m 0644 ${SAMPLES} ${MYCONFDIR}

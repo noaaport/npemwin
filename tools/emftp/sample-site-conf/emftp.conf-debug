@@ -1,28 +1,6 @@
 #
-# This is the default emftp confifuration file, but with a couple
-# of the default settings changed mostly for debuging purposes.
+# This file modifies some of the default settings for debuging purposes.
 #
-
-#
-# Optional configuration files
-#
-## gconffile="emftp.conf"
-## gconfdir="/usr/local/etc/npemwin"
-## gconfoptdirs="${gconfdir}/defaults ${gconfdir}/site"
-
-#
-# input configuration
-#
-## gurl="https://tgftp.nws.noaa.gov/SL.us008001/CU.EMWIN/DF.xt/DC.gsatR/OPS"
-## ginputfilename_txt="txtmin02.zip"
-## ginputfilename_img="imgmin15.zip"  # CHANGED IMG
-
-#
-# options
-#
-
-# Whether this script is running in the background or executed manually
-##gbackground=1
 
 # The individual files (after unziping the downloaded file) are saved under
 # ``/var/npemwin/emftp/spool/<type>/<station>''
@@ -33,24 +11,3 @@ gremove_emfpath=0
 
 # Maintain the inventory of downloaded files
 gwrite_inv=1
-
-## gworkdir="/var/npemwin/emftp"
-## ginputssubdir="inputs"
-## gspoolsubdir="spool"
-## ginvsubdir="inv"
-## glocksubdir="lock"
-## gtmpsubdir="tmp"
-## gmd5keyfile="md5.txt"
-## ginvfilename="`date -u +%H`.txt"
-## glockfilename="emftp.lock"
-## gtime="`date -u +%H%M`"           # for entry in inv file
-
-#
-# Nbsp and Npemwin processing
-#
-## npemwin_enable=1
-## gnpemwin_infifo="/var/run/npemwin/infeed.fifo"
-## gnpemwininsert="/usr/local/bin/npemwininsert"
-#
-## nbsp_enable=0
-## gnbspmcast="/usr/local/bin/nbspmcast"
