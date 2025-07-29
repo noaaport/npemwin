@@ -31,6 +31,8 @@
 #
 ## npemwin_enable=1
 #
+# Since we are using mcast it will not give error even is nbsp is not running
+#
 ## nbsp_enable=1
 ## gnbspmcast="nbspmcast"	# assume nbspmcast is in PATH
 
