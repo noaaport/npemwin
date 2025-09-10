@@ -30,7 +30,8 @@ case $os in
     	;;
     Linux)
 	RCINIT=npemwind.sh-${flavor}
-	STARTCLEANCONF=start-cleanup.conf-linux
+	HOURLYCONF=hourly-cleanup.conf-linux
+	STARTCLEANCONF=start-cleanup.conf-generic
 	RCFPATH=/etc/init.d/npemwind
 	SYSTEMDCONF=npemwin.service-generic
 
