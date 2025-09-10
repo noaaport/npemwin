@@ -17,9 +17,11 @@ case $os in
     	;;
     NetBSD)
 	RCINIT=npemwind.sh-netbsd
+	HOURLYCONF=hourly-cleanup.conf-bsd
 	;;
     OpenBSD) 
 	RCINIT=npemwind.sh-generic
+	HOURLYCONF=hourly-cleanup.conf-bsd
     	;;
     SunOS)
 	RCINIT=npemwind.sh-generic
@@ -28,7 +30,7 @@ case $os in
     	;;
     Linux)
 	RCINIT=npemwind.sh-${flavor}
-	STARTCLEANCONF=start-cleanup.conf-generic
+	STARTCLEANCONF=start-cleanup.conf-linux
 	RCFPATH=/etc/init.d/npemwind
 	SYSTEMDCONF=npemwin.service-generic
 
@@ -38,6 +40,7 @@ case $os in
     	;;
     Darwin)
 	RCINIT=npemwind.sh-macosx
+	HOURLYCONF=hourly-cleanup.conf-generic
 	STARTSTOPRC=startstop.rc-macosx
 	PATH="$PATH:/sw/bin:/sw/sbin"
 	;;
